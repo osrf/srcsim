@@ -170,6 +170,18 @@ endif()
 unset (CMAKE_C_FLAGS_ALL CACHE)
 unset (CMAKE_CXX_FLAGS CACHE)
 
+#################################################
+# OS Specific initialization
+if (UNIX)
+  srcsim_setup_unix()
+else (WIN32)
+  srcsim_setup_windows()
+endif()
+
+if(APPLE)
+  srcsim_setup_apple()
+endif()
+
 # Check if warning options are avaliable for the compiler and return WARNING_CXX_FLAGS variable
 # MSVC generates tons of warnings on gtest code.
 # Recommended to use /W4 instead of /Wall
@@ -186,18 +198,6 @@ filter_valid_compiler_warnings(${WARN_LEVEL} -Wextra -Wno-long-long
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}${WARNING_CXX_FLAGS}")
 if (DEFINED EXTRA_CMAKE_CXX_FLAGS)
   set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${EXTRA_CMAKE_CXX_FLAGS}")
-endif()
-
-#################################################
-# OS Specific initialization
-if (UNIX)
-  srcsim_setup_unix()
-else (WIN32)
-  srcsim_setup_windows()
-endif()
-
-if(APPLE)
-  srcsim_setup_apple()
 endif()
 
 #################################################
@@ -306,13 +306,13 @@ else (build_errors)
   # TODO: keep this instruction until we depend on CMake 3
   #       then change the first line from TARGETS ...  
   #       to EXPORT ... to match the format used in install(EXPORT
-  export(TARGETS ${PROJECT_LIBRARY_TARGET_NAME}
-         FILE  ${CMAKE_BINARY_DIR}/${cmake_targets_file})
+  #export(TARGETS ${PROJECT_LIBRARY_TARGET_NAME}
+  #       FILE  ${CMAKE_BINARY_DIR}/${cmake_targets_file})
 
   # Install *-targets.cmake file
-  install(EXPORT ${PROJECT_EXPORT_NAME}
-          DESTINATION ${CMAKE_CONFIG_INSTALL_DIR}
-          FILE ${cmake_targets_file})
+  #install(EXPORT ${PROJECT_EXPORT_NAME}
+  #        DESTINATION ${CMAKE_CONFIG_INSTALL_DIR}
+  #        FILE ${cmake_targets_file})
           
 
   ########################################

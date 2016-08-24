@@ -21,3 +21,10 @@ macro (check_gcc_visibility)
   include (CheckCXXCompilerFlag)
   check_cxx_compiler_flag(-fvisibility=hidden GCC_SUPPORTS_VISIBILITY)
 endmacro()
+
+#################################################
+# Find Gazebo
+find_package(gazebo REQUIRED)
+include_directories(${GAZEBO_INCLUDE_DIRS})
+link_directories(${GAZEBO_LIBRARY_DIRS})
+set(EXTRA_CMAKE_CXX_FLAGS "${EXTRA_CMAKE_CXX_FLAGS} ${GAZEBO_CXX_FLAGS}")

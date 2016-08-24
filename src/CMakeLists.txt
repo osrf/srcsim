@@ -1,10 +1,12 @@
 include (${project_cmake_dir}/Utils.cmake)
 
-set (sources
-)
+# set(CMAKE_CXX_FLAGS "${GAZEBO_CXX_FLAGS}")
+srcsim_add_executable(qual1 qual1.cc)
+target_link_libraries(qual1 ${GAZEBO_LIBRARIES})
 
-set (gtest_sources
-)
+if (UNIX)
+  target_link_libraries(qual1 pthread)
+endif()
 
 # srcsim_add_library(${PROJECT_LIBRARY_TARGET_NAME} ${sources})
 # 
