@@ -1,0 +1,3 @@
+// Automatically generated
+#include <srcsim/config.hh>
+${srcsim_headers}
