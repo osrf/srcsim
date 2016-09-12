@@ -28,3 +28,14 @@ find_package(gazebo REQUIRED)
 include_directories(${GAZEBO_INCLUDE_DIRS})
 link_directories(${GAZEBO_LIBRARY_DIRS})
 set(EXTRA_CMAKE_CXX_FLAGS "${EXTRA_CMAKE_CXX_FLAGS} ${GAZEBO_CXX_FLAGS}")
+
+#################################################
+# Find ignition transport
+find_package(ignition-transport2 QUIET)
+if (NOT ignition-transport2_FOUND)
+  BUILD_WARNING ("Missing: Ignition Transport (libignition-transport2-dev)")
+else()
+  set (EXTRA_CMAKE_CXX_FLAGS "${EXTRA_CMAKE_CXX_FLAGS} ${IGNITION-TRANSPORT_CXX_FLAGS}")
+  include_directories(${IGNITION-TRANSPORT_INCLUDE_DIRS})
+  link_directories(${IGNITION-TRANSPORT_LIBRARY_DIRS})
+endif()

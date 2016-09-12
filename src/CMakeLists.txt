@@ -2,7 +2,7 @@ include (${project_cmake_dir}/Utils.cmake)
 
 # set(CMAKE_CXX_FLAGS "${GAZEBO_CXX_FLAGS}")
 srcsim_add_executable(qual1 qual1.cc)
-target_link_libraries(qual1 ${GAZEBO_LIBRARIES})
+target_link_libraries(qual1 ${GAZEBO_LIBRARIES} ${IGNITION-TRANSPORT_LIBRARIES})
 
 if (UNIX)
   target_link_libraries(qual1 pthread)
