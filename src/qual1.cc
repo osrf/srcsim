@@ -55,32 +55,41 @@ class LightControl
             gazebo::msgs::Scene sceneMsg;
             sceneMsg.ParseFromString(_msg->serialized_data());
 
-            // std::cout << sceneMsg.DebugString() << std::endl;
-
+            // The following set of nested loops finds all the console
+            // lights that can be switched on/off.
             for (int i = 0; i < sceneMsg.model_size(); ++i)
             {
-              std::cout << "Model[" << sceneMsg.model(i).name() << "\n";
-              if (sceneMsg.model(i).name() == "console1")
+              // Find the console models
+              if (sceneMsg.model(i).name().find("console") == 0)
               {
+                std::string consoleName = sceneMsg.model(i).name();
+                int consoleNum = std::stoi(consoleName.substr(7));
+
+                // Loop through all links
                 for (int j = 0; j < sceneMsg.model(i).link_size(); ++j)
                 {
-                  std::cout << "Link[" <<sceneMsg.model(i).link(j).name() << "]\n";
-                  if (sceneMsg.model(i).link(j).name() == "console1::visuals")
+                  // Find the link that has the light visuals
+                  if (sceneMsg.model(i).link(j).name() ==
+                      consoleName + "::visuals")
                   {
-                    printf("Here\n");
+                    // Process each visual
                     for (int k = 0;
                          k < sceneMsg.model(i).link(j).visual_size(); ++k)
                     {
                       if (sceneMsg.model(i).link(j).visual(k).name().find(
-                            "console1::visuals::light") == 0)
+                            consoleName + "::visuals::light") == 0)
                       {
-                        int num = std::stoi(
+                        int lightNum = std::stoi(
                             sceneMsg.model(i).link(j).visual(k).name().substr(
                               24));
 
-                        if (this->lights.find(num) == this->lights.end())
+                        if (this->lights.find(consoleNum) == this->lights.end()
+                            || this->lights[consoleNum].find(lightNum) ==
+                               this->lights[consoleNum].end())
                         {
-                          this->lights[num] = gazebo::msgs::ConvertIgn(
+
+                          this->lights[consoleNum][lightNum] =
+                            gazebo::msgs::ConvertIgn(
                               sceneMsg.model(i).link(j).visual(k).pose());
                         }
                       }
@@ -93,11 +102,12 @@ class LightControl
             this->requestMsg = nullptr;
           }
 
-  public: void Switch(int console, int light, const gazebo::common::Color &_clr)
+  public: void Switch(int _console, int _light,
+                      const gazebo::common::Color &_clr)
           {
             std::ostringstream name, parent;
-            name << "console" << console << "::visuals::light" << light;
-            parent << "console" << console << "::visuals";
+            name << "console" << _console << "::visuals::light" << _light;
+            parent << "console" << _console << "::visuals";
 
             gazebo::msgs::Visual msg;
             msg.set_name(name.str());
@@ -106,11 +116,22 @@ class LightControl
             gazebo::msgs::Set(msg.mutable_material()->mutable_diffuse(), _clr);
             gazebo::msgs::Set(msg.mutable_material()->mutable_emissive(), _clr);
 
+            this->activeConsole = _console;
+            this->activeLight = _light;
+
             this->pub->Publish(msg);
           }
 
   public: void OnLight(const ignition::msgs::Vector3d &_msg)
           {
+            std::cout << "On Light Message[" << _msg.x() << " " << _msg.y()
+              << " " << _msg.z() << "]\n";
+
+            ignition::math::Vector3d diff =
+              ignition::msgs::Convert(_msg) -
+              this->lights[this->activeConsole][this->activeLight].Pos();
+
+            std::cout << "Diff[" << diff << "]\n";
           }
 
   private: ignition::transport::Node ignNode;
@@ -118,9 +139,12 @@ class LightControl
   private: gazebo::transport::PublisherPtr pub;
   private: gazebo::transport::PublisherPtr requestPub;
   private: gazebo::transport::SubscriberPtr responseSub;
-  private: gazebo::msgs::Request *requestMsg;
+  private: gazebo::msgs::Request *requestMsg = nullptr;
 
-  private: std::map<int, ignition::math::Pose3d> lights;
+  private: int activeConsole = 0;
+  private: int activeLight = 0;
+
+  private: std::map<int, std::map<int, ignition::math::Pose3d>> lights;
 };
 
 int main(int _argc, char **_argv)

@@ -8,6 +8,11 @@ if (UNIX)
   target_link_libraries(qual1 pthread)
 endif()
 
+add_library(Qual1Plugin SHARED Qual1Plugin.cc)
+target_link_libraries(Qual1Plugin ${GAZEBO_LIBRARIES}
+  ${IGNITION-TRANSPORT_LIBRARIES})
+install (TARGETS Qual1Plugin DESTINATION ${LIB_INSTALL_DIR} COMPONENT shlib)
+
 # srcsim_add_library(${PROJECT_LIBRARY_TARGET_NAME} ${sources})
 # 
 # # When the minimum CMake required version will be >= 3.1 

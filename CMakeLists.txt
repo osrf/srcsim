@@ -237,6 +237,8 @@ else (build_errors)
     "${INCLUDE_INSTALL_DIR_POSTFIX}/${PROJECT_NAME}"
     "${PROJECT_BINARY_DIR}/include/${PROJECT_NAME}/config.hh")
 
+  include_directories(${PROJECT_SOURCE_DIR}/include)
+
   link_directories(${PROJECT_BINARY_DIR}/src)
 
   if (DEFINED CMAKE_CXX_FLAGS)

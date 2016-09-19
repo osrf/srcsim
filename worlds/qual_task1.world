@@ -1,6 +1,8 @@
 <?xml version="1.0" ?>
 <sdf version="1.5">
   <world name="default">
+    <plugin name="qual1" filename="libQual1Plugin.so">
+    </plugin>
     <gui>
       <camera name="user_camera">
         <pose>-3.5 -3.5 3 0 0.34 0.588</pose>
@@ -19,7 +21,7 @@
         <linear>0.01</linear>
         <quadratic>0.001</quadratic>
       </attenuation>
-      <direction>0.5 0.1 -0.9</direction>
+      <direction>0.5 0.1 -0.7</direction>
     </light>
 
     <!-- A ground plane -->
@@ -57,6 +59,7 @@
           <material>
             <ambient>0 0 0 1</ambient>
             <diffuse>0 0 0 1</diffuse>
+            <emissive>0 0 0 1</emissive>
           </material>
         </visual>
 
