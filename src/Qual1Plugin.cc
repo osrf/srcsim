@@ -15,11 +15,14 @@
  *
 */
 
-#include "srcsim/Qual1Plugin.hh"
+#include <sstream>
+#include <ignition/math/Rand.hh>
+#include "gazebo/physics/World.hh"
 #include "gazebo/transport/Node.hh"
 #include "gazebo/common/Events.hh"
 #include "gazebo/transport/Publisher.hh"
 
+#include "srcsim/Qual1Plugin.hh"
 using namespace gazebo;
 
 GZ_REGISTER_WORLD_PLUGIN(Qual1Plugin)
@@ -30,39 +33,72 @@ Qual1Plugin::Qual1Plugin()
 }
 
 /////////////////////////////////////////////////
-void Qual1Plugin::Load(physics::WorldPtr /*_world*/, sdf::ElementPtr /*_sdf*/)
+void Qual1Plugin::Load(physics::WorldPtr _world, sdf::ElementPtr _sdf)
 {
-  this->node.reset(new gazebo::transport::Node());
+  // Output header information
+  this->Log("# switch <light_index> <r> <g> <b> <a> <sim_sec> <sim_nsec>",
+      false);
+  this->Log("# answer <x> <y> <z> <sim_sec> <sim_nsec>", false);
+
+  this->world = _world;
+
+  this->node = transport::NodePtr(new gazebo::transport::Node());
   this->node->Init();
-  this->pub = node->Advertise<gazebo::msgs::Visual>("~/visual");
 
-  this->requestPub =
-    this->node->Advertise<gazebo::msgs::Request>("~/request");
-
-  this->responseSub = this->node->Subscribe("~/response",
-      &Qual1Plugin::OnResponse, this, true);
+  // Wait for a subscriber to connect
+  this->pub = this->node->Advertise<gazebo::msgs::Visual>("~/visual");
+  this->pub->WaitForConnection();
 
   this->ignNode.Subscribe("/light", &Qual1Plugin::OnLight, this);
 
-  // Wait for a subscriber to connect
-  this->pub->WaitForConnection();
-
-  this->requestPub->WaitForConnection();
-  this->requestMsg = gazebo::msgs::CreateRequest("scene_info");
-  this->requestPub->Publish(*this->requestMsg);
-
   this->updateConnection = event::Events::ConnectWorldUpdateBegin(
       std::bind(&Qual1Plugin::OnUpdate, this));
+
+  this->prevLightTime = _world->GetSimTime();
+
+  int maxLight = 43;
+  int numLightSwitches = 10;
+  common::Time onDelay(1, 0);
+  common::Time offDelay(5, 0);
+
+  if (_sdf->HasElement("switch_count"))
+    numLightSwitches = _sdf->Get<int>("switch_count");
+
+  if (_sdf->HasElement("on_delay"))
+    onDelay.sec = _sdf->Get<int>("on_delay");
+
+  if (_sdf->HasElement("off_delay"))
+    offDelay.sec = _sdf->Get<int>("off_delay");
+
+  this->lightPattern.push_back({1, 44, {5, 0}, gazebo::common::Color::Yellow});
+  this->lightPattern.push_back({1, 44, {10, 0}, gazebo::common::Color::Blue});
+
+  // Generate random lights
+  for (int i = 0; i < numLightSwitches; ++i)
+  {
+    int light = ignition::math::Rand::IntUniform(1, maxLight);
+    int console = 1;
+
+    this->lightPattern.push_back({console, light, onDelay,
+        gazebo::common::Color::Red});
+    this->lightPattern.push_back({console, light, offDelay,
+        gazebo::common::Color::Black});
+  }
+  this->lightPattern.push_back({44, {1, 0}, gazebo::common::Color::Yellow});
+  this->lightPattern.push_back({44, {5, 0}, gazebo::common::Color::Black});
+
+  this->lightPatternIter = this->lightPattern.begin();
+
 }
 
 /////////////////////////////////////////////////
-void Qual1Plugin::Switch(int _console, int _light,
-                         const gazebo::common::Color &_clr)
+void Qual1Plugin::Switch(int _light, const gazebo::common::Color &_clr)
 {
   std::ostringstream name, parent;
-  name << "console" << _console << "::visuals::light" << _light;
-  parent << "console" << _console << "::visuals";
+  name << "console1::visuals::light" << _light;
+  parent << "console1::visuals";
 
+  // Construct light visual message.
   gazebo::msgs::Visual msg;
   msg.set_name(name.str());
   msg.set_parent_name(parent.str());
@@ -70,77 +106,55 @@ void Qual1Plugin::Switch(int _console, int _light,
   gazebo::msgs::Set(msg.mutable_material()->mutable_diffuse(), _clr);
   gazebo::msgs::Set(msg.mutable_material()->mutable_emissive(), _clr);
 
-  this->activeConsole = _console;
-  this->activeLight = _light;
-  // std::cout << "Switch[" << msg.DebugString() << "]\n";
-
+  // Change the light
   this->pub->Publish(msg);
 }
 
 /////////////////////////////////////////////////
-void Qual1Plugin::OnLight(const ignition::msgs::Vector3d &/*_msg*/)
+void Qual1Plugin::OnLight(const ignition::msgs::Vector3d &_msg)
 {
+  // Log the answer
+  std::ostringstream stream;
+  stream << "answer " << _msg.x() << " " << _msg.y() << " " << _msg.z();
+  this->Log(stream.str(), true);
 }
 
 /////////////////////////////////////////////////
-void Qual1Plugin::OnResponse(ConstResponsePtr &_msg)
+void Qual1Plugin::Log(const std::string &_string, const bool _stamp)
 {
-  if (!this->requestMsg || _msg->id() != this->requestMsg->id())
-    return;
-
-  gazebo::msgs::Scene sceneMsg;
-  sceneMsg.ParseFromString(_msg->serialized_data());
-
-  // The following set of nested loops finds all the console
-  // lights that can be switched on/off.
-  for (int i = 0; i < sceneMsg.model_size(); ++i)
+  std::lock_guard<std::mutex> lock(this->mutex);
+  std::cout << _string;
+  if (_stamp)
   {
-    // Find the console models
-    if (sceneMsg.model(i).name().find("console") == 0)
-    {
-      std::string consoleName = sceneMsg.model(i).name();
-      int consoleNum = std::stoi(consoleName.substr(7));
-
-      // Loop through all links
-      for (int j = 0; j < sceneMsg.model(i).link_size(); ++j)
-      {
-        // Find the link that has the light visuals
-        if (sceneMsg.model(i).link(j).name() ==
-            consoleName + "::visuals")
-        {
-          // Process each visual
-          for (int k = 0;
-              k < sceneMsg.model(i).link(j).visual_size(); ++k)
-          {
-            if (sceneMsg.model(i).link(j).visual(k).name().find(
-                  consoleName + "::visuals::light") == 0)
-            {
-              int lightNum = std::stoi(
-                  sceneMsg.model(i).link(j).visual(k).name().substr(
-                    24));
-
-              if (this->lights.find(consoleNum) == this->lights.end()
-                  || this->lights[consoleNum].find(lightNum) ==
-                  this->lights[consoleNum].end())
-              {
-
-                std::cout << "Console[" << consoleNum << "] LightNum[" << lightNum << "]\n";
-                this->lights[consoleNum][lightNum] =
-                  gazebo::msgs::ConvertIgn(
-                      sceneMsg.model(i).link(j).visual(k).pose());
-              }
-            }
-          }
-        }
-      }
-    }
+    std::cout << " " << this->world->GetSimTime().sec
+      << " " << this->world->GetSimTime().nsec;
   }
-
-  this->requestMsg = nullptr;
+  std::cout << std::endl;
 }
 
 /////////////////////////////////////////////////
 void Qual1Plugin::OnUpdate()
 {
-  this->Switch(1, 2, gazebo::common::Color::Red);
+  // Stop when the light pattern reaches the end
+  if (lightPatternIter == this->lightPattern.end())
+    return;
+
+  // Compute the time difference.
+  gazebo::common::Time dt = this->world->GetSimTime() - this->prevLightTime;
+
+  // Update the lights.
+  if (dt >= (*lightPatternIter).delay)
+  {
+    // Log light change data
+    std::ostringstream stream;
+    stream << "switch " << (*lightPatternIter).light << " "
+              << (*lightPatternIter).color;
+    this->Log(stream.str(), true);
+
+    // Switch the light
+    this->Switch((*lightPatternIter).light, (*lightPatternIter).color);
+
+    lightPatternIter++;
+    this->prevLightTime = this->world->GetSimTime();
+  }
 }

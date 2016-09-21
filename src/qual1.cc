@@ -154,7 +154,7 @@ int main(int _argc, char **_argv)
 
   LightControl ctrl;
 
-  ctrl.Switch(1, 2, gazebo::common::Color::Red);
+  ctrl.Switch(1, 1, gazebo::common::Color::Red);
 
   while(true)
     std::this_thread::sleep_for(std::chrono::milliseconds(100));

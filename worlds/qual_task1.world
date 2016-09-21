@@ -1,8 +1,14 @@
 <?xml version="1.0" ?>
-<sdf version="1.5">
+<sdf version="1.6">
   <world name="default">
+
+    <!-- Control plugin for qual task 1 -->
     <plugin name="qual1" filename="libQual1Plugin.so">
+      <switch_count>20</switch_count>
+      <on_delay>1</on_delay>
+      <off_delay>5</off_delay>
     </plugin>
+
     <gui>
       <camera name="user_camera">
         <pose>-3.5 -3.5 3 0 0.34 0.588</pose>
@@ -11,7 +17,7 @@
 
     <!-- A global light source -->
     <light type="directional" name="sun">
-      <cast_shadows>true</cast_shadows>
+      <cast_shadows>false</cast_shadows>
       <pose>0 0 10 0 0 0</pose>
       <diffuse>0.9 0.9 0.9 1</diffuse>
       <specular>0.2 0.2 0.2 1</specular>
@@ -21,7 +27,7 @@
         <linear>0.01</linear>
         <quadratic>0.001</quadratic>
       </attenuation>
-      <direction>0.5 0.1 -0.7</direction>
+      <direction>0.9 0.1 -0.7</direction>
     </light>
 
     <!-- A ground plane -->
@@ -30,7 +36,7 @@
     </include>
 
     <model name="console1">
-      <pose>3 1 0 0 0 -1.570796</pose>
+      <pose>3 0 0 0 0 -1.570796</pose>
       <static>true</static>
       <include>
         <uri>model://control_console</uri>
@@ -59,7 +65,6 @@
           <material>
             <ambient>0 0 0 1</ambient>
             <diffuse>0 0 0 1</diffuse>
-            <emissive>0 0 0 1</emissive>
           </material>
         </visual>
 
@@ -218,13 +223,6 @@
             <diffuse>0 0 0 1</diffuse>
           </material>
         </visual>
-
-
-
-
-
-
-
 
         <visual name="light15">
           <pose>0.49349 -0.24203 1.00454 0.42 0 0</pose>
@@ -555,8 +553,6 @@
           </material>
         </visual>
 
-
-
         <visual name="light41">
           <pose>0 -0.24231 1.74646 0.25 0 0</pose>
           <geometry>
@@ -608,15 +604,8 @@
             <diffuse>0 0 0 1</diffuse>
           </material>
         </visual>
-
       </link>
     </model>
-
-    <include>
-      <name>console2</name>
-      <pose>3 -1 0 0 0 -1.570796</pose>
-      <uri>model://control_console</uri>
-    </include>
 
     <model name="walls">
       <static>true</static>
@@ -673,5 +662,6 @@
         </collision>
       </link>
     </model>
+
   </world>
 </sdf>

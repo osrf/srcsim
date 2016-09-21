@@ -20,42 +20,80 @@
 #include <ignition/transport.hh>
 
 #include "gazebo/common/Plugin.hh"
+#include "gazebo/physics/PhysicsTypes.hh"
 #include "gazebo/msgs/msgs.hh"
 #include "gazebo/transport/TransportTypes.hh"
 
 namespace gazebo
 {
+  /// \brief Plugin that controls lights for SRC qual task 1.
   class GAZEBO_VISIBLE Qual1Plugin : public WorldPlugin
   {
     /// \brief Constructor
     public: Qual1Plugin();
 
+    /// \brief Load the plugin
+    /// \param[in] _world Pointer to the world.
+    /// \param[in] _sdf Pointer to the plugin's sdf element.
     public: virtual void Load(physics::WorldPtr _world, sdf::ElementPtr _sdf);
 
-    private: void OnResponse(ConstResponsePtr &_msg);
+    /// \brief Change the color of a light
+    /// \param[in] _light Number of the light (1-44)
+    /// \param[in] _clr Color for the light.
+    private: void Switch(int _light, const gazebo::common::Color &_clr);
 
-    private: void Switch(int _console, int _light,
-                         const gazebo::common::Color &_clr);
-
+    /// \brief Callback when a light answer is received from a competitor
+    /// \param[in] _msg The position of the light in Val's camera frame.
     private: void OnLight(const ignition::msgs::Vector3d &_msg);
 
     /// \brief Callback for World Update events.
     private: virtual void OnUpdate();
 
+    /// \brief Log information
+    /// \param[in] _string String to output
+    /// \param[in} _stamp True to output sim time with the _string
+    private: void Log(const std::string &_string, const bool _stamp);
+
+    /// \brief Ignition transport node
     private: ignition::transport::Node ignNode;
+
+    /// \brief Gazebo transport node
     private: gazebo::transport::NodePtr node;
+
+    /// \brief Gazebo publisher for updating visuals.
     private: gazebo::transport::PublisherPtr pub;
-    private: gazebo::transport::PublisherPtr requestPub;
-    private: gazebo::transport::SubscriberPtr responseSub;
-    private: gazebo::msgs::Request *requestMsg = nullptr;
-
-    private: int activeConsole = 0;
-    private: int activeLight = 0;
-
-    private: std::map<int, std::map<int, ignition::math::Pose3d>> lights;
 
     /// \brief Connection to World Update events.
     private: event::ConnectionPtr updateConnection;
+
+    /// \brief A class that contains light switching info
+    private: class LightCtrl
+             {
+               /// \brief The light index
+               public: int light;
+
+               /// \brief Delay time for the light change
+               public: gazebo::common::Time delay;
+
+               /// \brief Color to change the light to when the delay
+               /// has passed.
+               public: gazebo::common::Color color;
+             };
+
+    /// \brief The pattern of of light changes.
+    private: std::vector<LightCtrl> lightPattern;
+
+    /// \brief Iterator to lightPattern
+    private: std::vector<LightCtrl>::iterator lightPatternIter;
+
+    /// \brief Time of the last light change
+    private: gazebo::common::Time prevLightTime;
+
+    /// \brief Pointer to the world.
+    private: gazebo::physics::WorldPtr world;
+
+    /// \brief Mutex used to prevent interleaved messages.
+    private: std::mutex mutex;
   };
 }
 
