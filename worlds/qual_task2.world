@@ -1,0 +1,45 @@
+<?xml version="1.0" ?>
+<sdf version="1.5">
+  <world name="default">
+
+    <gui>
+      <camera name="user_camera">
+        <pose>-3.5 -3.5 3 0 0.34 0.588</pose>
+      </camera>
+    </gui>
+
+    <!-- A global light source -->
+    <light type="directional" name="sun">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>0.9 0.9 0.9 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>0.5 0.1 -0.7</direction>
+    </light>
+
+    <!-- A ground plane -->
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+    <!-- A doorway -->
+    <model name="src_doorway">
+
+      <include>
+        <uri>model://src_doorway</uri>
+      </include>
+
+      <plugin name="door_plugin" filename="libQual2Plugin.so">
+        <hinge_joint_name>src_doorway::hinge</hinge_joint_name>
+        <button_joint_name>src_doorway::button_mechanism</button_joint_name>
+      </plugin>
+    </model>
+
+  </world>
+</sdf>
