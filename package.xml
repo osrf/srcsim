@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format2.xsd"
+schematypens="http://www.w3.org/2001/XMLSchema"?>
+
+<package format="2">
+  <name>srcsim</name>
+  <version>0.0.1</version>
+  <description>Space Robotics Challenge</description>
+  <maintainer email="nate@osrfoundation.org">Nate Koenig</maintainer>
+  <license>Apache License 2.0</license>
+
+  <build_depend>gazebo_ros</build_depend>
+  <build_depend>protobuf-dev</build_depend>
+
+  <exec_depend>gazebo_ros</exec_depend>
+  <exec_depend>xacro</exec_depend>
+
+</package>
