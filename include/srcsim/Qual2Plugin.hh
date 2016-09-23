@@ -34,41 +34,41 @@ namespace gazebo
     public: virtual void Load(physics::ModelPtr _model, sdf::ElementPtr _sdf);
 
     /// \brief Whether the button is pressed.
-    protected: bool Pressed() const;
+    public: bool Pressed() const;
 
     /// \brief Open the door.
-    protected: void OpenTheDoor();
+    public: void OpenTheDoor();
 
     /// \brief Update plugin's function.
     private: void OnUpdate();
 
     /// \brief Pointer to the joint that actuates the button.
-    protected: physics::JointPtr buttonJoint;
+    private: physics::JointPtr buttonJoint;
 
     /// \brief Pointer to the joint that opens/closes the door (the hinge).
-    protected: physics::JointPtr hingeJoint;
+    private: physics::JointPtr hingeJoint;
 
     /// \brief Whether the button is pressed.
-    protected: bool pressed = false;
+    private: bool pressed = false;
 
     /// \brief Lower limit of the button's joint.
-    protected: double lowerLimit;
+    private: double lowerLimit;
 
     /// \brief Upper limit of the button's joint.
-    protected: double upperLimit;
+    private: double upperLimit;
 
     /// \brief The range of motion of the button's joint.
-    protected: double range;
+    private: double range;
 
     /// \brief The door is opening.
-    protected: bool opening = false;
+    private: bool opening = false;
 
     /// \brief Between 0% of the range and this value the button is considered
     /// not pressed. From this value to 100% the button is considered pressed.
-    protected: static const int kPercentageButtonPressed = 75;
+    private: static const int kPercentageButtonPressed = 75;
 
     /// \brief Connection to World Update events.
-    protected: event::ConnectionPtr updateConnection;
+    private: event::ConnectionPtr updateConnection;
   };
 }
 
