@@ -1,5 +1,17 @@
 <launch>
-  <include file="$(find gazebo_ros)/launch/empty_world.launch" pass_all_args="true">
+  <include file="$(find val_gazebo)/launch/val_sim_gazebo_sync.launch" pass_all_args="true">
+    <arg name="paused" value="false" />
+    <arg name="verbose" value="true" />
     <arg name="world_name" value="$(find srcsim)/worlds/qual1.world" />
+  </include>
+
+  <include file="$(find ihmc_valkyrie_ros)/launch/valkyrie_ros_api.launch" pass_all_args="true">
+    <arg name="use_local_build" value="true" />
+  </include>
+
+  <include file="$(find ihmc_valkyrie_ros)/launch/val_wholebody_control_gazebo.launch"/>
+
+  <include file="$(find ihmc_valkyrie_ros)/launch/remote_valkyrie_visualizer.launch" pass_all_args="true">
+    <arg name="use_local_build" value="true" />
   </include>
 </launch>
