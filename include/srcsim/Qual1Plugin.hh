@@ -69,6 +69,9 @@ namespace gazebo
     /// \brief A class that contains light switching info
     private: class LightCtrl
              {
+               /// \brief Console???
+               public: int console;
+
                /// \brief The light index
                public: int light;
 
