@@ -1,7 +1,7 @@
 #################################################
 macro (srcsim_build_tests)
-  # Find the Python interpreter for running the 
-  # check_test_ran.py script 
+  # Find the Python interpreter for running the
+  # check_test_ran.py script
   find_package(PythonInterp QUIET)
 
   # Build all the tests
@@ -15,19 +15,19 @@ macro (srcsim_build_tests)
 
     add_dependencies(${BINARY_NAME}
       srcsim${PROJECT_MAJOR_VERSION}
-      gtest gtest_main
+      gtest_${PROJECT_NAME} gtest_main_${PROJECT_NAME}
       )
 
     if (UNIX)
       target_link_libraries(${BINARY_NAME}
-         libgtest_main.a
-         libgtest.a
+         libgtest_main_${PROJECT_NAME}.a
+         libgtest_${PROJECT_NAME}.a
          pthread
 	       srcsim${PROJECT_MAJOR_VERSION})
     elseif(WIN32)
       target_link_libraries(${BINARY_NAME}
-         gtest.lib
-         gtest_main.lib
+         gtest_${PROJECT_NAME}.lib
+         gtest_main_${PROJECT_NAME}.lib
          srcsim${PROJECT_MAJOR_VERSION})
     else()
        message(FATAL_ERROR "Unsupported platform")

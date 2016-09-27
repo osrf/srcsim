@@ -262,7 +262,7 @@ else (build_errors)
   set (pkgconfig_files ${PROJECT_NAME_LOWER})
 
   foreach (pkgconfig ${pkgconfig_files})
-    configure_file(${CMAKE_SOURCE_DIR}/cmake/pkgconfig/${pkgconfig}.in
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/pkgconfig/${pkgconfig}.in
       ${CMAKE_CURRENT_BINARY_DIR}/cmake/pkgconfig/${pkgconfig}${PROJECT_MAJOR_VERSION}.pc @ONLY)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/cmake/pkgconfig/${pkgconfig}${PROJECT_MAJOR_VERSION}.pc
       DESTINATION ${LIB_INSTALL_DIR}/pkgconfig COMPONENT pkgconfig)
@@ -303,10 +303,10 @@ else (build_errors)
     ${CMAKE_CURRENT_BINARY_DIR}/${cmake_conf_file}
     ${CMAKE_CURRENT_BINARY_DIR}/${cmake_conf_version_file}
     DESTINATION ${CMAKE_CONFIG_INSTALL_DIR} COMPONENT cmake)
-    
+
   # Create *-targets.cmake file for build directory
   # TODO: keep this instruction until we depend on CMake 3
-  #       then change the first line from TARGETS ...  
+  #       then change the first line from TARGETS ...
   #       to EXPORT ... to match the format used in install(EXPORT
   #export(TARGETS ${PROJECT_LIBRARY_TARGET_NAME}
   #       FILE  ${CMAKE_BINARY_DIR}/${cmake_targets_file})
@@ -315,7 +315,7 @@ else (build_errors)
   #install(EXPORT ${PROJECT_EXPORT_NAME}
   #        DESTINATION ${CMAKE_CONFIG_INSTALL_DIR}
   #        FILE ${cmake_targets_file})
-          
+
 
   ########################################
   # If present, load platform-specific build hooks.  This system is used,
