@@ -1,8 +1,12 @@
 # Space Robotics Challenge Simulation
 
+SRCSIM is the software used by teams participating in the Space Robotics
+Challenge competition hosted by the Space Technology Mission Directorate (STMD)
+and NASA.
+
 ## Installation
 
-Standard installation can be performed in UNIX systems using the following 
+Standard installation can be performed in UNIX systems using the following
 steps:
 
  - mkdir build/
@@ -10,7 +14,7 @@ steps:
  - cmake ..
  - sudo make install
 
-## Uninstallation 
+## Uninstallation
 
 To uninstall the software installed with the previous steps:
 
