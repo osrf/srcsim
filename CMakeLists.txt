@@ -37,6 +37,26 @@ link_directories(
   ${IGNITION-TRANSPORT_LIBRARY_DIRS}
 )
 
+############
+## Common ##
+############
+
+# Create the libLogPlugin.so library.
+set(log_plugin_name LogPlugin)
+add_library(${log_plugin_name} src/LogPlugin.cc)
+target_link_libraries(${log_plugin_name}
+  ${catkin_LIBRARIES}
+  ${GAZEBO_LIBRARIES}
+  ${roscpp_LIBRARIES}
+)
+#add_dependencies(${log_plugin_name}
+#  ${${PROJECT_NAME}_EXPORTED_TARGETS}
+#)
+install(TARGETS ${log_plugin_name}
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin)
+
 ##########################
 ## Qualification task 1 ##
 ##########################
