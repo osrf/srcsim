@@ -17,24 +17,29 @@
 #ifndef GAZEBO_PLUGINS_LOGPLUGIN_HH_
 #define GAZEBO_PLUGINS_LOGPLUGIN_HH_
 
-#include <mutex>
+#include <fstream>
+#include <string>
 #include <boost/filesystem.hpp>
 #include <gazebo/common/Events.hh>
+#include <gazebo/common/Time.hh>
 #include <gazebo/common/Plugin.hh>
+#include <gazebo/common/UpdateInfo.hh>
 #include <gazebo/physics/PhysicsTypes.hh>
-#include <gazebo/transport/TransportTypes.hh>
 #include <sdf/sdf.hh>
 
 namespace gazebo
 {
   /// \brief Plugin that logs relevant information for scoring and
-  /// postprocessing.
+  /// task postprocessing.
   class GAZEBO_VISIBLE LogPlugin : public WorldPlugin
   {
-    /// \brief Constructor
+    /// \brief Constructor.
     public: LogPlugin();
 
-    /// \brief Load the plugin
+    /// \brief Destructor.
+    public: virtual ~LogPlugin();
+
+    /// \brief Load the plugin.
     /// \param[in] _world Pointer to the world.
     /// \param[in] _sdf Pointer to the plugin's sdf element.
     public: virtual void Load(physics::WorldPtr _world, sdf::ElementPtr _sdf);
@@ -44,23 +49,46 @@ namespace gazebo
     private: void CreateLogFile(const sdf::ElementPtr _sdf);
 
     /// \brief Callback for World Update events.
-    private: virtual void OnUpdate();
+    /// \param[in] _info Current world information.
+    private: virtual void OnUpdate(const common::UpdateInfo &_info);
 
-    /// \brief Write intermediate log data
-    /// \param _simTime Current simulation time
-    /// \param _wallTime Current wallclock time
-    /// \param _msg Log message to include
-    /// \param _force If true, write output; otherwise write output only if
-    /// enough time has passed since the last write.
+    /// \brief Write intermediate log data.
+    /// \param _simTime Current simulation time.
+    /// \param _wallTime Current wallclock time.
+    /// \param _msg Log message to include.
     private: void WriteLog(const gazebo::common::Time& _simTime,
-      const common::Time &_wallTime, const std::string &_msg,
-      const bool _force);
+      const common::Time &_wallTime, const std::string &_msg);
 
-    /// \brief Gazebo transport node
-    private: gazebo::transport::NodePtr node;
+    /// \brief Create a string with the specific data to log during qual #1.
+    /// \return A string representation of the specific data to log.
+    private: std::string LogQual1() const;
 
-    /// \brief Gazebo publisher for updating visuals.
-    private: gazebo::transport::PublisherPtr pub;
+    /// \brief Create a string with the specific data to log during qual #2.
+    /// \return A string representation of the specific data to log.
+    private: std::string LogQual2() const;
+
+    /// \brief Create a string with the specific data to log during final #1.
+    /// \return A string representation of the specific data to log.
+    private: std::string LogFinal1() const;
+
+    /// \brief Create a string with the specific data to log during final #2.
+    /// \return A string representation of the specific data to log.
+    private: std::string LogFinal2() const;
+
+    /// \brief Create a string with the specific data to log during final #3.
+    /// \return A string representation of the specific data to log.
+    private: std::string LogFinal3() const;
+
+    /// \brief The worlds that we might be logging; each one can be
+    /// slightly different.
+    private: enum WorldType
+             {
+               QUAL_1,
+               QUAL_2,
+               FINAL_1,
+               FINAL_2,
+               FINAL_3
+             };
 
     /// \brief Connection to World Update events.
     private: event::ConnectionPtr updateConnection;
@@ -74,11 +102,8 @@ namespace gazebo
     /// \brief The stream associated with logFilePath.
     private: std::ofstream logFileStream;
 
-    /// \brief When we last wrote log data to disk.
-    private: common::Time prevLogTime;
-
-    /// \brief Mutex used to prevent interleaved messages.
-    private: std::mutex mutex;
+    /// \brief Which type of world we're scoring
+    private: enum WorldType worldType;
   };
 }
 

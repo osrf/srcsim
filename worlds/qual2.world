@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <sdf version="1.6">
-  <world name="default">
+  <world name="SRC_qual2">
 
     <gui>
       <camera name="user_camera">
@@ -40,6 +40,9 @@
         <button_joint_name>src_doorway::button_mechanism</button_joint_name>
       </plugin>
     </model>
+
+    <!-- Load the SRC logging plugin -->
+    <plugin name="src_logging_plugin" filename="libLogPlugin.so"></plugin>
 
   </world>
 </sdf>

@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <sdf version="1.6">
-  <world name="default">
+  <world name="SRC_qual1">
 
     <!-- Control plugin for qual task 1 -->
     <plugin name="qual1" filename="libQual1Plugin.so">
@@ -197,7 +197,7 @@
             <diffuse>0 0 0 1</diffuse>
           </material>
         </visual>
- 
+
         <visual name="light13">
           <pose>-0.18713 -0.21716 1.01546 0.42 0 0</pose>
           <geometry>
@@ -379,7 +379,7 @@
             <diffuse>0 0 0 1</diffuse>
           </material>
         </visual>
- 
+
         <visual name="light27">
           <pose>0.18713 -0.21716 1.01546 0.42 0 0</pose>
           <geometry>
@@ -662,6 +662,9 @@
         </collision>
       </link>
     </model>
+
+    <!-- Load the SRC logging plugin -->
+    <plugin name="src_logging_plugin" filename="libLogPlugin.so"></plugin>
 
   </world>
 </sdf>

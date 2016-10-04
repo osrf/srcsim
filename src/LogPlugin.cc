@@ -17,8 +17,11 @@
 
 #include <cstdlib>
 #include <functional>
+#include <sstream>
 #include <boost/filesystem.hpp>
 #include <gazebo/common/Events.hh>
+#include <gazebo/common/Time.hh>
+#include <gazebo/physics/Model.hh>
 #include <gazebo/physics/World.hh>
 #include <gazebo/util/util.hh>
 #include <sdf/sdf.hh>
@@ -35,9 +38,30 @@ LogPlugin::LogPlugin()
 }
 
 /////////////////////////////////////////////////
+LogPlugin::~LogPlugin()
+{
+  if (this->logFileStream.is_open())
+    this->logFileStream.close();
+}
+
+
+/////////////////////////////////////////////////
 void LogPlugin::Load(physics::WorldPtr _world, sdf::ElementPtr _sdf)
 {
   this->world = _world;
+
+  gzlog << "SRC LogPlugin: world name is [" <<
+    this->world->GetName() << "]" << std::endl;
+  if (this->world->GetName() == "SRC_qual1")
+    this->worldType = QUAL_1;
+  else if (this->world->GetName() == "SRC_qual2")
+    this->worldType = QUAL_2;
+  else
+  {
+    gzerr << "SRC LogPlugin: unknown world name [" <<
+      this->world->GetName() << "]; no custom logging available.";
+    return;
+  }
 
   this->CreateLogFile(_sdf);
 
@@ -49,11 +73,18 @@ void LogPlugin::Load(physics::WorldPtr _world, sdf::ElementPtr _sdf)
     gzerr << "Failed to open log file :" << this->logFilePath << std::endl;
     return;
   }
-  gzlog << "Writing log data to " << this->logFilePath << std::endl;
+  std::cout << "[SRCLog plugin] Writing log data to " << this->logFilePath
+            << std::endl;
+
+  // Write the log file header.
+  this->logFileStream << "# Format: " << std::endl;
+  this->logFileStream << "# wallTime(sec) simTime(sec) "
+    "model_0_name model_0_pose ... model_N-1_name model_N-1_pose \"custom_log\""
+    << std::endl;
 
   // Listen to the update event. This event is broadcast every sim iteration.
   this->updateConnection = event::Events::ConnectWorldUpdateBegin(
-      std::bind(&LogPlugin::OnUpdate, this));
+      std::bind(&LogPlugin::OnUpdate, this, std::placeholders::_1));
 }
 
 /////////////////////////////////////////////////
@@ -75,8 +106,12 @@ void LogPlugin::CreateLogFile(const sdf::ElementPtr _sdf)
     else
       this->logFilePath = boost::filesystem::path(homePath);
 
-    this->logFilePath /= "logs";
-    this->logFilePath /= this->world->GetName() + "log";
+    std::string logTimeDir = gazebo::common::Time::GetWallTimeAsISOString();
+
+    this->logFilePath /= ".gazebo";
+    this->logFilePath /= "log";
+    this->logFilePath /= logTimeDir;
+    this->logFilePath /= this->world->GetName() + ".src.log";
   }
 
   // Create the log directory if needed.
@@ -85,31 +120,98 @@ void LogPlugin::CreateLogFile(const sdf::ElementPtr _sdf)
 }
 
 /////////////////////////////////////////////////
-void LogPlugin::OnUpdate()
+void LogPlugin::OnUpdate(const common::UpdateInfo &_info)
 {
+  // Collect timing information.
+  common::Time wallTime = common::Time::GetWallTime();
+  common::Time simTime = _info.simTime;
 
+  // Collect model information.
+  std::ostringstream modelInfo;
+  for (const auto model : this->world->GetModels())
+    modelInfo << " " << model->GetName() << " " << model->GetWorldPose();
+
+  // Collect custom information depending on the world (e.g.: SRC_qual1).
+  std::string customLog;
+  switch (this->worldType)
+  {
+    case QUAL_1:
+      customLog = this->LogQual1();
+      break;
+    case QUAL_2:
+      customLog = this->LogQual2();
+      break;
+    case FINAL_1:
+      customLog = this->LogFinal1();
+      break;
+    case FINAL_2:
+      customLog = this->LogFinal2();
+      break;
+    case FINAL_3:
+      customLog = this->LogFinal3();
+      break;
+    default:
+      GZ_ASSERT(false, "Unknown worldType");
+  }
+
+  std::string logEntry = modelInfo.str() + "\"" + customLog + "\"";
+
+  this->WriteLog(wallTime, simTime, logEntry);
 }
 
 /////////////////////////////////////////////////
-void LogPlugin::WriteLog(const common::Time &_simTime,
-  const common::Time &_wallTime, const std::string &_msg, const bool _force)
+void LogPlugin::WriteLog(const common::Time &_wallTime,
+  const common::Time &_simTime, const std::string &_msg)
 {
-  // Write at 1Hz.
-  if (!_force && (_simTime - this->prevLogTime).Double() < 1.0)
-    return;
-
-  // If we're being forced, that means that something interesting happened.
-  // Also force the gazebo state logger to write.
-  if (_force)
-  {
-    gzdbg << "LogPlugin forcing LogRecord to write" << std::endl;
-    util::LogRecord::Instance()->Notify();
-  }
-
   if (!this->logFileStream.is_open())
   {
     gzerr << "Log file stream is no longer open:" << this->logFilePath <<
         std::endl;
     return;
   }
+
+  this->logFileStream << std::fixed << std::setprecision(3)
+    << _wallTime.Double() << " "
+    << _simTime.Double()
+    << _msg << std::endl;
+}
+
+/////////////////////////////////////////////////
+std::string LogPlugin::LogQual1() const
+{
+  // Save the RGB value and position of LEDs in Valkerie's head.
+  std::string res;
+  return res;
+}
+
+/////////////////////////////////////////////////
+std::string LogPlugin::LogQual2() const
+{
+  // Save the position of the button.
+
+  // Save whether the door was opened.
+
+  std::string res;
+  return res;
+}
+
+/////////////////////////////////////////////////
+std::string LogPlugin::LogFinal1() const
+{
+  std::string res;
+  return res;
+}
+
+/////////////////////////////////////////////////
+std::string LogPlugin::LogFinal2() const
+{
+  std::string res;
+  return res;
+}
+
+/////////////////////////////////////////////////
+std::string LogPlugin::LogFinal3() const
+{
+  std::string res;
+  return res;
 }
