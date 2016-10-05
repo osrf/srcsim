@@ -11,7 +11,9 @@
 
   <include file="$(find ihmc_valkyrie_ros)/launch/val_wholebody_control_gazebo.launch"/>
 
+  <!--
   <include file="$(find ihmc_valkyrie_ros)/launch/remote_valkyrie_visualizer.launch" pass_all_args="true">
     <arg name="use_local_build" value="true" />
   </include>
+  -->
 </launch>
