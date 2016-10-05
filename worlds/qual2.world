@@ -52,7 +52,7 @@
 
     <!-- A doorway -->
     <model name="src_doorway">
-      <pose>3 0 0 0 0 0</pose>
+      <pose>3 0 0 0 0 -1.5708</pose>
       <include>
         <uri>model://src_doorway</uri>
       </include>
