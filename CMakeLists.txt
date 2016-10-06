@@ -100,6 +100,6 @@ install(DIRECTORY launch/
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch)
 
 # Install Misc. Scripts
-install(PROGRAMS scripts/init_robot.sh
+install(PROGRAMS scripts/init_robot.sh scripts/walk_test.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
   )

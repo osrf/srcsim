@@ -3,6 +3,7 @@
     <arg name="paused" value="false" />
     <arg name="verbose" value="true" />
     <arg name="world_name" value="$(find srcsim)/worlds/qual1.world" />
+    <arg name="init" value="false" />
   </include>
 
   <include file="$(find ihmc_valkyrie_ros)/launch/valkyrie_ros_api.launch" pass_all_args="true">
@@ -11,7 +12,9 @@
 
   <include file="$(find ihmc_valkyrie_ros)/launch/val_wholebody_control_gazebo.launch"/>
 
-  <node name="startup_robot" pkg="srcsim" type="init_robot.sh" args="" output="screen"/>
+  <group if="$(arg init)">
+    <node name="startup_robot" pkg="srcsim" type="init_robot.sh" args="" output="screen"/>
+  </group>
 
   <!--
   <include file="$(find ihmc_valkyrie_ros)/launch/remote_valkyrie_visualizer.launch" pass_all_args="true">

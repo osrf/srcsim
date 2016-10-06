@@ -29,4 +29,7 @@ rostopic pub -1 /valkyrie/harness/detach std_msgs/Bool true &
 sleep 1
 gz world -p 0
 
+echo "start walking"
+rosrun srcsim walk_test.py
+
 echo "done"
