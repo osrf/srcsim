@@ -2,13 +2,14 @@
   <arg name="paused" value="false" />
   <arg name="verbose" value="true" />
   <arg name="world_name" value="$(find srcsim)/worlds/qual1.world" />
+  <arg name="init" value="false" />
   <arg name="extra_gazebo_args" default=""/>
 
   <include file="$(find val_gazebo)/launch/val_sim_gazebo_sync.launch" pass_all_args="true">
     <arg name="paused" value="$(arg paused)" />
     <arg name="verbose" value="$(arg verbose)" />
     <arg name="world_name" value="$(arg world_name)" />
-    <arg name="init" value="false" />
+    <arg name="init" value="$(arg init)" />
     <arg name="extra_gazebo_args" default="$(arg extra_gazebo_args)"/>
   </include>
 
