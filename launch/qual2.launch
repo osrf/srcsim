@@ -4,7 +4,7 @@
          roslaunch srcsim qual2.launch init:=true
        to automatically lower robot harnessed, start high level controller and detach harness. -->
   <!-- set:
-         roslaunch srcsim qual1.launch init:=true walk_test:=walk
+         roslaunch srcsim qual2.launch init:=true walk_test:=walk
        to automatically walk forward after harness detach. -->
   <arg name="paused" default="false" />
   <arg name="verbose" default="true" />
