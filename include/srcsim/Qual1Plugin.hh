@@ -17,6 +17,8 @@
 #ifndef GAZEBO_PLUGINS_WINDPLUGIN_HH_
 #define GAZEBO_PLUGINS_WINDPLUGIN_HH_
 
+#include <fstream>
+
 #include <ros/ros.h>
 #include <std_msgs/Empty.h>
 #include <geometry_msgs/Vector3.h>

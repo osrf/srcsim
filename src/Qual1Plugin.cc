@@ -35,6 +35,16 @@ Qual1Plugin::Qual1Plugin()
 /////////////////////////////////////////////////
 void Qual1Plugin::Load(physics::WorldPtr _world, sdf::ElementPtr _sdf)
 {
+  char *homePath = getenv("HOME");
+  if (!homePath)
+  {
+    gzerr << "Unable to get HOME environment variable. Report this error to "
+      << "an SRC official.\n";
+    return;
+  }
+  std::string logpath = homePath;
+  logPath += "/src_qual1_" + common::Time::GetWallTimeAsISOString() + ".log";
+
   this->logStream.open(logPath.c_str(), std::ios::open);
   if (!this->logStream.is_open())
   {
