@@ -84,19 +84,17 @@ bool Qual2Plugin::Pressed() const
 ////////////////////////////////////////////////
 void Qual2Plugin::OpenTheDoor()
 {
-  auto current = this->hingeJoint->GetAngle(0);
-  auto limit = this->hingeJoint->GetUpperLimit(0);
-  if ((limit - current).Degree() > 2.0)
-  {
-    // Apply force on the hinge to open the door.
-    this->hingeJoint->SetForce(0, 3.0);
-  }
-  else
-  {
-    // The joint is already at its limit, disable the opening.
-    this->opening = false;
-  }
+  // Apply force on the hinge to open the door.
+  this->hingeJoint->SetForce(0, 10.0);
 }
+
+////////////////////////////////////////////////
+void Qual2Plugin::CloseTheDoor()
+{
+  // Apply force on the hinge to close the door.
+  this->hingeJoint->SetForce(0, -10.0);
+}
+
 
 /////////////////////////////////////////////////
 void Qual2Plugin::OnUpdate()
@@ -115,7 +113,9 @@ void Qual2Plugin::OnUpdate()
   if (this->pressed)
     this->opening = true;
 
-  // Keep opening the door.
+  // Open/close the door.
   if (this->opening)
     this->OpenTheDoor();
+  else
+    this->CloseTheDoor();
 }

@@ -39,6 +39,9 @@ namespace gazebo
     /// \brief Open the door.
     public: void OpenTheDoor();
 
+    /// \brief Close the door.
+    public: void CloseTheDoor();
+
     /// \brief Update plugin's function.
     private: void OnUpdate();
 
