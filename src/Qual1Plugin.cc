@@ -45,7 +45,7 @@ void Qual1Plugin::Load(physics::WorldPtr _world, sdf::ElementPtr _sdf)
   std::string logPath = homePath;
   logPath += "/src_qual1_" + common::Time::GetWallTimeAsISOString() + ".log";
 
-  this->logStream.open(logPath.c_str(), std::ios::open);
+  this->logStream.open(logPath.c_str(), std::ios::out);
   if (!this->logStream.is_open())
   {
     gzerr << "Unable to open log file[" << logPath << "].\n"
@@ -91,9 +91,9 @@ void Qual1Plugin::Load(physics::WorldPtr _world, sdf::ElementPtr _sdf)
 
   this->rosnode.reset(new ros::NodeHandle(robotNamespace));
 
-  this->lightSub = this->rosnode->subscribe("/srcsim/qual1/start",
+  this->lightSub = this->rosnode->subscribe("/srcsim/qual1/start", 10,
       &Qual1Plugin::OnStart, this);
-  this->startSub = this->rosnode->subscribe("/srcsim/qual1/light",
+  this->startSub = this->rosnode->subscribe("/srcsim/qual1/light", 10,
       &Qual1Plugin::OnLight, this);
 
   this->prevLightTime = _world->GetSimTime();
