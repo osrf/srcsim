@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <sdf version="1.6">
-  <world name="default">
+  <world name="SRC_qual2">
 
     <physics type="ode">
       <real_time_update_rate>1000.0</real_time_update_rate>
@@ -51,7 +51,7 @@
 
     <!-- A doorway -->
     <model name="src_doorway">
-      <pose>3 0 0 0 0 -1.5708</pose>
+      <pose>3.5 0 0 0 0 -1.5708</pose>
       <include>
         <uri>model://src_doorway</uri>
       </include>

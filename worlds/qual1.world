@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <sdf version="1.6">
-  <world name="default">
+  <world name="SRC_qual1">
 
     <physics type="ode">
       <real_time_update_rate>1000.0</real_time_update_rate>
