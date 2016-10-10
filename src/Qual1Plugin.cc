@@ -42,7 +42,7 @@ void Qual1Plugin::Load(physics::WorldPtr _world, sdf::ElementPtr _sdf)
       << "an SRC official.\n";
     return;
   }
-  std::string logpath = homePath;
+  std::string logPath = homePath;
   logPath += "/src_qual1_" + common::Time::GetWallTimeAsISOString() + ".log";
 
   this->logStream.open(logPath.c_str(), std::ios::open);
@@ -72,9 +72,28 @@ void Qual1Plugin::Load(physics::WorldPtr _world, sdf::ElementPtr _sdf)
   this->pub = this->node->Advertise<gazebo::msgs::Visual>("~/visual");
   this->pub->WaitForConnection();
 
-  this->lightSub = this->rosnode.subscribe("/srcsim/qual1/start",
+  // Make sure the ROS node for Gazebo has already been initialized
+  if (!ros::isInitialized())
+  {
+    ROS_FATAL_STREAM("A ROS node for Gazebo has not been initialized,"
+        << "unable to load plugin. Load the Gazebo system plugin "
+        << "'libgazebo_ros_api_plugin.so' in the gazebo_ros package)");
+    return;
+  }
+
+  // Load SDF parameters.
+  std::string robotNamespace = "";
+  if (_sdf->HasElement("robot_namespace"))
+  {
+    robotNamespace = _sdf->GetElement("robot_namespace")->Get<std::string>() +
+      "/";
+  }
+
+  this->rosnode.reset(new ros::NodeHandle(robotNamespace));
+
+  this->lightSub = this->rosnode->subscribe("/srcsim/qual1/start",
       &Qual1Plugin::OnStart, this);
-  this->startSub = this->rosnode.subscribe("/srcsim/qual1/light",
+  this->startSub = this->rosnode->subscribe("/srcsim/qual1/light",
       &Qual1Plugin::OnLight, this);
 
   this->prevLightTime = _world->GetSimTime();

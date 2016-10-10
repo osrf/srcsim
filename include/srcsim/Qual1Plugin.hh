@@ -18,6 +18,7 @@
 #define GAZEBO_PLUGINS_WINDPLUGIN_HH_
 
 #include <fstream>
+#include <memory>
 
 #include <ros/ros.h>
 #include <std_msgs/Empty.h>
@@ -108,7 +109,7 @@ namespace gazebo
     private: std::ofstream logStream;
 
     /// \brief Ros node handle
-    private: ros::NodeHandle rosnode;
+    private: std::unique_ptr<ros::NodeHandle> rosnode;
 
     /// \brief Ros light subscriber
     private: ros::Subscriber lightSub;
