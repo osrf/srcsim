@@ -166,7 +166,7 @@ void Qual1Plugin::OnLight(const geometry_msgs::Vector3ConstPtr &_msg)
 {
   // Log the answer
   std::ostringstream stream;
-  stream << "answer " << _msg.x << " " << _msg.y << " " << _msg.z;
+  stream << "answer " << _msg->x << " " << _msg->y << " " << _msg->z;
   this->Log(stream.str(), true);
 }
 
