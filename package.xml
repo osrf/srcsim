@@ -9,10 +9,13 @@ schematypens="http://www.w3.org/2001/XMLSchema"?>
   <maintainer email="nate@osrfoundation.org">Nate Koenig</maintainer>
   <license>Apache License 2.0</license>
 
-  <build_depend>gazebo_ros</build_depend>
-  <build_depend>protobuf-dev</build_depend>
+  <buildtool_depend>catkin</buildtool_depend>
 
-  <exec_depend>gazebo_ros</exec_depend>
+  <depend>gazebo_ros</depend>
+  <depend>roscpp</depend>
+  <depend>ignition-transport2</depend>
+
+  <build_depend>protobuf-dev</build_depend>
   <exec_depend>xacro</exec_depend>
 
 </package>
