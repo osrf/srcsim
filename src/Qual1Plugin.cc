@@ -53,11 +53,6 @@ void Qual1Plugin::Load(physics::WorldPtr _world, sdf::ElementPtr _sdf)
     return;
   }
 
-  std::cout << "!!! IMPORTANT !!!\n"
-            << "Include the following file in your qual 1 submission.\n\t"
-            << logPath << std::endl
-            << "!!!!!!!!!!!!!!!!!\n";
-
   // Output header information
   this->Log("# switch <light_index> <r> <g> <b> <a> <sim_sec> <sim_nsec>",
       false);
@@ -113,7 +108,7 @@ void Qual1Plugin::Load(physics::WorldPtr _world, sdf::ElementPtr _sdf)
     offDelay.sec = _sdf->Get<int>("off_delay");
 
   this->lightPattern.push_back({1, 44, {5, 0}, gazebo::common::Color::Yellow});
-  this->lightPattern.push_back({1, 44, {10, 0}, gazebo::common::Color::Blue});
+  this->lightPattern.push_back({1, 44, {5, 0}, gazebo::common::Color::Blue});
 
   // Generate random lights
   for (int i = 0; i < numLightSwitches; ++i)
