@@ -35,6 +35,19 @@ Qual1Plugin::Qual1Plugin()
 /////////////////////////////////////////////////
 void Qual1Plugin::Load(physics::WorldPtr _world, sdf::ElementPtr _sdf)
 {
+  this->logStream.open(logPath.c_str(), std::ios::open);
+  if (!this->logStream.is_open())
+  {
+    gzerr << "Unable to open log file[" << logPath << "].\n"
+      << "Make sure permissions are set correctly, and then retry.\n";
+    return;
+  }
+
+  std::cout << "!!! IMPORTANT !!!\n"
+            << "Include the following file in your qual 1 submission.\n\t"
+            << logPath << std::endl
+            << "!!!!!!!!!!!!!!!!!\n";
+
   // Output header information
   this->Log("# switch <light_index> <r> <g> <b> <a> <sim_sec> <sim_nsec>",
       false);
@@ -49,10 +62,10 @@ void Qual1Plugin::Load(physics::WorldPtr _world, sdf::ElementPtr _sdf)
   this->pub = this->node->Advertise<gazebo::msgs::Visual>("~/visual");
   this->pub->WaitForConnection();
 
-  this->ignNode.Subscribe("/light", &Qual1Plugin::OnLight, this);
-
-  this->updateConnection = event::Events::ConnectWorldUpdateBegin(
-      std::bind(&Qual1Plugin::OnUpdate, this));
+  this->lightSub = this->rosnode.subscribe("/srcsim/qual1/start",
+      &Qual1Plugin::OnStart, this);
+  this->startSub = this->rosnode.subscribe("/srcsim/qual1/light",
+      &Qual1Plugin::OnLight, this);
 
   this->prevLightTime = _world->GetSimTime();
 
@@ -111,11 +124,20 @@ void Qual1Plugin::Switch(int _light, const gazebo::common::Color &_clr)
 }
 
 /////////////////////////////////////////////////
-void Qual1Plugin::OnLight(const ignition::msgs::Vector3d &_msg)
+void Qual1Plugin::OnStart(const std_msgs::EmptyConstPtr & /*_msg*/)
+{
+  this->Log("start", true);
+
+  this->updateConnection = event::Events::ConnectWorldUpdateBegin(
+      std::bind(&Qual1Plugin::OnUpdate, this));
+}
+
+/////////////////////////////////////////////////
+void Qual1Plugin::OnLight(const geometry_msgs::Vector3ConstPtr &_msg)
 {
   // Log the answer
   std::ostringstream stream;
-  stream << "answer " << _msg.x() << " " << _msg.y() << " " << _msg.z();
+  stream << "answer " << _msg.x << " " << _msg.y << " " << _msg.z;
   this->Log(stream.str(), true);
 }
 
@@ -123,13 +145,13 @@ void Qual1Plugin::OnLight(const ignition::msgs::Vector3d &_msg)
 void Qual1Plugin::Log(const std::string &_string, const bool _stamp)
 {
   std::lock_guard<std::mutex> lock(this->mutex);
-  std::cout << _string;
+  this->logStream << _string;
   if (_stamp)
   {
-    std::cout << " " << this->world->GetSimTime().sec
+    this->logStream << " " << this->world->GetSimTime().sec
       << " " << this->world->GetSimTime().nsec;
   }
-  std::cout << std::endl;
+  this->logStream << std::endl;
 }
 
 /////////////////////////////////////////////////
