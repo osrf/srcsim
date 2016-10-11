@@ -17,7 +17,12 @@
 #ifndef GAZEBO_PLUGINS_WINDPLUGIN_HH_
 #define GAZEBO_PLUGINS_WINDPLUGIN_HH_
 
-#include <ignition/transport.hh>
+#include <fstream>
+#include <memory>
+
+#include <ros/ros.h>
+#include <std_msgs/Empty.h>
+#include <geometry_msgs/Vector3.h>
 
 #include "gazebo/common/Plugin.hh"
 #include "gazebo/physics/PhysicsTypes.hh"
@@ -42,9 +47,14 @@ namespace gazebo
     /// \param[in] _clr Color for the light.
     private: void Switch(int _light, const gazebo::common::Color &_clr);
 
+    /// \brief Callback when the competitor has signaled they are ready to
+    /// start.
+    /// \param[in] _msg Unused empty message.
+    private: void OnStart(const std_msgs::EmptyConstPtr &_msg);
+
     /// \brief Callback when a light answer is received from a competitor
     /// \param[in] _msg The position of the light in Val's camera frame.
-    private: void OnLight(const ignition::msgs::Vector3d &_msg);
+    private: void OnLight(const geometry_msgs::Vector3ConstPtr &_msg);
 
     /// \brief Callback for World Update events.
     private: virtual void OnUpdate();
@@ -53,9 +63,6 @@ namespace gazebo
     /// \param[in] _string String to output
     /// \param[in} _stamp True to output sim time with the _string
     private: void Log(const std::string &_string, const bool _stamp);
-
-    /// \brief Ignition transport node
-    private: ignition::transport::Node ignNode;
 
     /// \brief Gazebo transport node
     private: gazebo::transport::NodePtr node;
@@ -97,6 +104,18 @@ namespace gazebo
 
     /// \brief Mutex used to prevent interleaved messages.
     private: std::mutex mutex;
+
+    /// \brief Log file output stream;
+    private: std::ofstream logStream;
+
+    /// \brief Ros node handle
+    private: std::unique_ptr<ros::NodeHandle> rosnode;
+
+    /// \brief Ros light subscriber
+    private: ros::Subscriber lightSub;
+
+    /// \brief Ros start subscriber
+    private: ros::Subscriber startSub;
   };
 }
 

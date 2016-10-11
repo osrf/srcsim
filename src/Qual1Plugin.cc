@@ -35,6 +35,24 @@ Qual1Plugin::Qual1Plugin()
 /////////////////////////////////////////////////
 void Qual1Plugin::Load(physics::WorldPtr _world, sdf::ElementPtr _sdf)
 {
+  char *homePath = getenv("HOME");
+  if (!homePath)
+  {
+    gzerr << "Unable to get HOME environment variable. Report this error to "
+      << "an SRC official.\n";
+    return;
+  }
+  std::string logPath = homePath;
+  logPath += "/src_qual1_" + common::Time::GetWallTimeAsISOString() + ".log";
+
+  this->logStream.open(logPath.c_str(), std::ios::out);
+  if (!this->logStream.is_open())
+  {
+    gzerr << "Unable to open log file[" << logPath << "].\n"
+      << "Make sure permissions are set correctly, and then retry.\n";
+    return;
+  }
+
   // Output header information
   this->Log("# switch <light_index> <r> <g> <b> <a> <sim_sec> <sim_nsec>",
       false);
@@ -49,10 +67,29 @@ void Qual1Plugin::Load(physics::WorldPtr _world, sdf::ElementPtr _sdf)
   this->pub = this->node->Advertise<gazebo::msgs::Visual>("~/visual");
   this->pub->WaitForConnection();
 
-  this->ignNode.Subscribe("/light", &Qual1Plugin::OnLight, this);
+  // Make sure the ROS node for Gazebo has already been initialized
+  if (!ros::isInitialized())
+  {
+    ROS_FATAL_STREAM("A ROS node for Gazebo has not been initialized,"
+        << "unable to load plugin. Load the Gazebo system plugin "
+        << "'libgazebo_ros_api_plugin.so' in the gazebo_ros package)");
+    return;
+  }
 
-  this->updateConnection = event::Events::ConnectWorldUpdateBegin(
-      std::bind(&Qual1Plugin::OnUpdate, this));
+  // Load SDF parameters.
+  std::string robotNamespace = "";
+  if (_sdf->HasElement("robot_namespace"))
+  {
+    robotNamespace = _sdf->GetElement("robot_namespace")->Get<std::string>() +
+      "/";
+  }
+
+  this->rosnode.reset(new ros::NodeHandle(robotNamespace));
+
+  this->lightSub = this->rosnode->subscribe("/srcsim/qual1/start", 10,
+      &Qual1Plugin::OnStart, this);
+  this->startSub = this->rosnode->subscribe("/srcsim/qual1/light", 10,
+      &Qual1Plugin::OnLight, this);
 
   this->prevLightTime = _world->GetSimTime();
 
@@ -71,7 +108,7 @@ void Qual1Plugin::Load(physics::WorldPtr _world, sdf::ElementPtr _sdf)
     offDelay.sec = _sdf->Get<int>("off_delay");
 
   this->lightPattern.push_back({1, 44, {5, 0}, gazebo::common::Color::Yellow});
-  this->lightPattern.push_back({1, 44, {10, 0}, gazebo::common::Color::Blue});
+  this->lightPattern.push_back({1, 44, {5, 0}, gazebo::common::Color::Blue});
 
   // Generate random lights
   for (int i = 0; i < numLightSwitches; ++i)
@@ -111,11 +148,20 @@ void Qual1Plugin::Switch(int _light, const gazebo::common::Color &_clr)
 }
 
 /////////////////////////////////////////////////
-void Qual1Plugin::OnLight(const ignition::msgs::Vector3d &_msg)
+void Qual1Plugin::OnStart(const std_msgs::EmptyConstPtr & /*_msg*/)
+{
+  this->Log("start", true);
+
+  this->updateConnection = event::Events::ConnectWorldUpdateBegin(
+      std::bind(&Qual1Plugin::OnUpdate, this));
+}
+
+/////////////////////////////////////////////////
+void Qual1Plugin::OnLight(const geometry_msgs::Vector3ConstPtr &_msg)
 {
   // Log the answer
   std::ostringstream stream;
-  stream << "answer " << _msg.x() << " " << _msg.y() << " " << _msg.z();
+  stream << "answer " << _msg->x << " " << _msg->y << " " << _msg->z;
   this->Log(stream.str(), true);
 }
 
@@ -123,13 +169,13 @@ void Qual1Plugin::OnLight(const ignition::msgs::Vector3d &_msg)
 void Qual1Plugin::Log(const std::string &_string, const bool _stamp)
 {
   std::lock_guard<std::mutex> lock(this->mutex);
-  std::cout << _string;
+  this->logStream << _string;
   if (_stamp)
   {
-    std::cout << " " << this->world->GetSimTime().sec
+    this->logStream << " " << this->world->GetSimTime().sec
       << " " << this->world->GetSimTime().nsec;
   }
-  std::cout << std::endl;
+  this->logStream << std::endl;
 }
 
 /////////////////////////////////////////////////
