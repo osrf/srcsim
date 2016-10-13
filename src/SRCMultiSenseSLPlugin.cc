@@ -70,8 +70,6 @@ void SRCMultiSenseSL::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf)
 
   ROS_DEBUG("Loading MultiSense ROS node.");
 
-  gzerr << "\n\n\n\n\n\n MODEL PARENT[" << _parent->GetName() << "]\n\n\n\n\n";
-
   this->lastTime = this->world->GetSimTime();
 
   // Get imu link
@@ -118,7 +116,7 @@ void SRCMultiSenseSL::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf)
         sensors::SensorManager::Instance()->GetSensor("stereo_camera"));
 
   if (!this->multiCameraSensor)
-    gzerr << "\n\n\n\n\n\n\nmulticamera sensor not found\n\n\n\n\n\n\n\n\n\n";
+    gzerr << "multicamera sensor not found";
 
   // get default frame rate
 # if GAZEBO_MAJOR_VERSION >= 7
@@ -128,7 +126,7 @@ void SRCMultiSenseSL::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf)
 # endif
 
   if (!sensors::SensorManager::Instance()->GetSensor("head_hokuyo_sensor"))
-    gzerr << "\n\n\n\n\n\n\n\nlaser sensor not found\n\n\n\n\n\n\n\n\n";
+    gzerr << "laser sensor not found";
 
   if (!ros::isInitialized())
   {
