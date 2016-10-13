@@ -42,8 +42,8 @@ link_directories(
 ##########################
 
 # Create the libSRCMultisensPlugin.so library.
-set(src_multisense_sl_plugin_name SRCMultisenseSLPlugin)
-add_library(${src_multisense_sl_plugin_name} src/SRCMultisenseSLPlugin.cc)
+set(src_multisense_sl_plugin_name SRCMultiSenseSLPlugin)
+add_library(${src_multisense_sl_plugin_name} src/SRCMultiSenseSLPlugin.cc)
 target_link_libraries(${src_multisense_sl_plugin_name}
   ${GAZEBO_LIBRARIES}
   ${roscpp_LIBRARIES}

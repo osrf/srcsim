@@ -19,15 +19,14 @@
 #include <gazebo/rendering/Camera.hh>
 #include <sensor_msgs/Imu.h>
 
-#include "val_gazebo/GazeboCompat.hh"
-#include "val_gazebo/MultiSenseSLPlugin.h"
+#include "srcsim/SRCMultiSenseSLPlugin.hh"
 
-namespace gazebo
-{
+using namespace gazebo;
+
 // Register this plugin with the simulator
 GZ_REGISTER_MODEL_PLUGIN(SRCMultiSenseSL)
 
-////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////
 SRCMultiSenseSL::SRCMultiSenseSL()
 {
   /// \todo: hardcoded for now, make them into plugin parameters
@@ -38,10 +37,10 @@ SRCMultiSenseSL::SRCMultiSenseSL()
   this->spindleMinRPM = 0;
   this->multiCameraExposureTime = 0.001;
   this->multiCameraGain = 1.0;
-  // the parent link of the head_imu_sensor ends up being head after
-  // fixed joint reduction.  Offset of the imu_link is lumped into
+  // the parent link of the head_imu_sensor ends up being upperNeckPitchLink
+  // after fixed joint reduction.  Offset of the imu_link is lumped into
   // the <pose> tag in the imu_sensor block.
-  this->imuLinkName = "head";
+  this->imuLinkName = "upperNeckPitchLink";
 
   // change default imager mode to 1 (1Hz ~ 30Hz)
   // in simulation, we are using 800X800 pixels @30Hz
@@ -51,10 +50,9 @@ SRCMultiSenseSL::SRCMultiSenseSL()
   this->pmq = new PubMultiQueue();
 }
 
-////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////
 SRCMultiSenseSL::~SRCMultiSenseSL()
 {
-  event::Events::DisconnectWorldUpdateBegin(this->updateConnection);
   delete this->pmq;
   this->rosnode_->shutdown();
   this->queue_.clear();
@@ -63,42 +61,41 @@ SRCMultiSenseSL::~SRCMultiSenseSL()
   delete this->rosnode_;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////
 void SRCMultiSenseSL::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf)
 {
-  this->atlasModel = _parent;
+  this->valModel = _parent;
   this->world = _parent->GetWorld();
   this->sdf = _sdf;
 
   ROS_DEBUG("Loading MultiSense ROS node.");
 
+  gzerr << "\n\n\n\n\n\n MODEL PARENT[" << _parent->GetName() << "]\n\n\n\n\n";
+
   this->lastTime = this->world->GetSimTime();
 
   // Get imu link
-  this->imuLink = this->atlasModel->GetLink(this->imuLinkName);
+  this->imuLink = this->valModel->GetLink(this->imuLinkName);
   if (!this->imuLink)
-    gzerr << this->imuLinkName << " not found\n";
-
-  GAZEBO_DRCSIM_USING_DYNAMIC_POINTER_CAST;
+    gzerr << "IMU link name[" << this->imuLinkName << "] not found\n";
 
   // Get sensors
-  this->imuSensor = dynamic_pointer_cast<sensors::ImuSensor>
+  this->imuSensor = std::dynamic_pointer_cast<sensors::ImuSensor>
       (sensors::SensorManager::Instance()->GetSensor(
-        this->world->GetName() + "::" + this->atlasModel->GetScopedName()
-        + "::head::"
+        this->world->GetName() + "::" + this->imuLink->GetScopedName() + "::"
         "head_imu_sensor"));
   if (!this->imuSensor)
     gzerr << "head_imu_sensor not found\n" << "\n";
 
   // \todo: add ros topic / service to reset imu (imuReferencePose, etc.)
-  this->spindleLink = this->atlasModel->GetLink("atlas::hokuyo_link");
+  this->spindleLink = this->valModel->GetLink("valkyrie::hokuyo_link");
   if (!this->spindleLink)
   {
     gzerr << "spindle link not found, plugin will stop loading\n";
     return;
   }
 
-  this->spindleJoint = this->atlasModel->GetJoint("atlas::hokuyo_joint");
+  this->spindleJoint = this->valModel->GetJoint("valkyrie::hokuyo_joint");
   if (!this->spindleJoint)
   {
     gzerr << "spindle joint not found, plugin will stop loading\n";
@@ -116,10 +113,12 @@ void SRCMultiSenseSL::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf)
   //                                  siter != s.end(); ++siter)
   //   gzerr << (*siter)->GetName() << "\n";
 
-  this->multiCameraSensor = dynamic_pointer_cast<sensors::MultiCameraSensor>(
-    sensors::SensorManager::Instance()->GetSensor("stereo_camera"));
+  this->multiCameraSensor =
+    std::dynamic_pointer_cast<sensors::MultiCameraSensor>(
+        sensors::SensorManager::Instance()->GetSensor("stereo_camera"));
+
   if (!this->multiCameraSensor)
-    gzerr << "multicamera sensor not found\n";
+    gzerr << "\n\n\n\n\n\n\nmulticamera sensor not found\n\n\n\n\n\n\n\n\n\n";
 
   // get default frame rate
 # if GAZEBO_MAJOR_VERSION >= 7
@@ -129,7 +128,7 @@ void SRCMultiSenseSL::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf)
 # endif
 
   if (!sensors::SensorManager::Instance()->GetSensor("head_hokuyo_sensor"))
-    gzerr << "laser sensor not found\n";
+    gzerr << "\n\n\n\n\n\n\n\nlaser sensor not found\n\n\n\n\n\n\n\n\n";
 
   if (!ros::isInitialized())
   {
@@ -143,7 +142,7 @@ void SRCMultiSenseSL::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf)
     boost::bind(&SRCMultiSenseSL::LoadThread, this));
 }
 
-////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////
 void SRCMultiSenseSL::LoadThread()
 {
   // create ros node
@@ -152,24 +151,7 @@ void SRCMultiSenseSL::LoadThread()
   // publish multi queue
   this->pmq->startServiceThread();
 
-  int atlasVersion;
-  this->rosnode_->getParam("/atlas_version", atlasVersion);
-  if (atlasVersion == 1)
-  {
-    ROS_INFO("ros param /atlas_version == 1");
-    this->rosNamespace = "/multisense_sl";
-  }
-  else if (atlasVersion >= 3)
-  {
-    ROS_INFO("ros param /atlas_version == %d", atlasVersion);
-    this->rosNamespace = "/multisense";
-  }
-  else
-  {
-    ROS_WARN(
-        "/atlas_version not specified (1, 3, 4, or 5), assuming atlas v1.");
-    this->rosNamespace = "/multisense_sl";
-  }
+  this->rosNamespace = "/multisense_sl";
 
   // ros publications
   // publish joint states for tf (robot state publisher)
@@ -294,7 +276,7 @@ void SRCMultiSenseSL::LoadThread()
      boost::bind(&SRCMultiSenseSL::UpdateStates, this));
 }
 
-////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////
 void SRCMultiSenseSL::UpdateStates()
 {
   common::Time curTime = this->world->GetSimTime();
@@ -376,7 +358,7 @@ void SRCMultiSenseSL::UpdateStates()
   }
 }
 
-////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////
 void SRCMultiSenseSL::QueueThread()
 {
   static const double timeout = 0.01;
@@ -387,21 +369,21 @@ void SRCMultiSenseSL::QueueThread()
   }
 }
 
-////////////////////////////////////////////////////////////////////////////////
-bool SRCMultiSenseSL::SetSpindleSpeed(std_srvs::Empty::Request &req,
-                                   std_srvs::Empty::Response &res)
+/////////////////////////////////////////////////
+bool SRCMultiSenseSL::SetSpindleSpeed(std_srvs::Empty::Request &/*_req*/,
+                                   std_srvs::Empty::Response &/*res*/)
 {
   return true;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-bool SRCMultiSenseSL::SetSpindleState(std_srvs::Empty::Request &req,
-                                   std_srvs::Empty::Response &res)
+/////////////////////////////////////////////////
+bool SRCMultiSenseSL::SetSpindleState(std_srvs::Empty::Request &/*_req*/,
+                                   std_srvs::Empty::Response &/*_res*/)
 {
   return true;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////
 void SRCMultiSenseSL::SetSpindleSpeed(const std_msgs::Float64::ConstPtr &_msg)
 {
   this->spindleSpeed = static_cast<double>(_msg->data);
@@ -411,13 +393,13 @@ void SRCMultiSenseSL::SetSpindleSpeed(const std_msgs::Float64::ConstPtr &_msg)
     this->spindleSpeed = this->spindleMinRPM * 2.0*M_PI / 60.0;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////
 void SRCMultiSenseSL::SetSpindleState(const std_msgs::Bool::ConstPtr &_msg)
 {
   this->spindleOn = static_cast<double>(_msg->data);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////
 void SRCMultiSenseSL::SetMultiCameraFrameRateOld(const std_msgs::Float64::ConstPtr
                                           &_msg)
 {
@@ -425,7 +407,8 @@ void SRCMultiSenseSL::SetMultiCameraFrameRateOld(const std_msgs::Float64::ConstP
            " has been replaced by ~/mutlisense_sl/set_fps per issue 272.");
   this->SetMultiCameraFrameRate(_msg);
 }
-////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////
 void SRCMultiSenseSL::SetMultiCameraFrameRate(const std_msgs::Float64::ConstPtr
                                           &_msg)
 {
@@ -480,7 +463,7 @@ void SRCMultiSenseSL::SetMultiCameraFrameRate(const std_msgs::Float64::ConstPtr
   this->multiCameraSensor->SetUpdateRate(this->multiCameraFrameRate);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////
 void SRCMultiSenseSL::SetMultiCameraResolution(
   const std_msgs::Int32::ConstPtr &_msg)
 {
@@ -558,19 +541,18 @@ void SRCMultiSenseSL::SetMultiCameraResolution(
 # endif
 }
 
-////////////////////////////////////////////////////////////////////////////////
-void SRCMultiSenseSL::SetMultiCameraExposureTime(const std_msgs::Float64::ConstPtr
-                                          &_msg)
+/////////////////////////////////////////////////
+void SRCMultiSenseSL::SetMultiCameraExposureTime(
+    const std_msgs::Float64::ConstPtr &_msg)
 {
   this->multiCameraExposureTime = static_cast<double>(_msg->data);
   gzwarn << "setting camera exposure time in sim not implemented\n";
 }
 
-////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////
 void SRCMultiSenseSL::SetMultiCameraGain(const std_msgs::Float64::ConstPtr
                                           &_msg)
 {
   this->multiCameraGain = static_cast<double>(_msg->data);
   gzwarn << "setting camera gain in sim not implemented\n";
-}
 }
