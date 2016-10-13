@@ -149,7 +149,7 @@ void SRCMultiSenseSL::LoadThread()
   // publish multi queue
   this->pmq->startServiceThread();
 
-  this->rosNamespace = "/multisense_sl";
+  this->rosNamespace = "/multisense";
 
   // ros publications
   // publish joint states for tf (robot state publisher)
