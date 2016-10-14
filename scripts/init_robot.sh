@@ -1,11 +1,4 @@
 #!/bin/bash
-echo "setup gazebo paths"
-export tmp=/root/local
-export PKG_CONFIG_PATH=${tmp}/lib/pkgconfig:${tmp}/lib/x86_64-linux-gnu/pkgconfig:${PKG_CONFIG_PATH}
-export PATH=${tmp}/bin:${PATH}
-export LIBRARY_PATH=${tmp}/lib:${LIBRARY_PATH}
-export LD_LIBRARY_PATH=${tmp}/lib:${tmp}/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH}
-source ${tmp}/share/gazebo/setup.sh
 
 echo "wait 60s for system to load"
 sleep 60
