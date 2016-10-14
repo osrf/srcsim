@@ -11,6 +11,7 @@ schematypens="http://www.w3.org/2001/XMLSchema"?>
 
   <buildtool_depend>catkin</buildtool_depend>
 
+  <depend>gazebo_plugins</depend>
   <depend>gazebo_ros</depend>
   <depend>roscpp</depend>
   <depend>ignition-transport2</depend>

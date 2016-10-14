@@ -6,6 +6,7 @@ if(NOT WIN32)
 endif()
 
 find_package(catkin REQUIRED COMPONENTS
+  gazebo_plugins
   gazebo_ros
   roscpp
 )
