@@ -67,7 +67,7 @@ void Qual1Plugin::Load(physics::WorldPtr _world, sdf::ElementPtr _sdf)
   this->pub = this->node->Advertise<gazebo::msgs::Visual>("~/visual");
   this->pub->WaitForConnection();
 
-  // Make sure the ROS node for Gazebo has already been initialized if
+  // Make sure the ROS node for Gazebo has already been initialized
   if (!ros::isInitialized())
   {
     ROS_FATAL_STREAM("A ROS node for Gazebo has not been initialized,"
