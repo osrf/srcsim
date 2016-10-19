@@ -56,7 +56,7 @@ void Qual1Plugin::Load(physics::WorldPtr _world, sdf::ElementPtr _sdf)
   // Output header information
   this->Log("# switch <light_index> <r> <g> <b> <a> <sim_sec> <sim_nsec>",
       false);
-  this->Log("# answer <x> <y> <z> <sim_sec> <sim_nsec>", false);
+  this->Log("# answer <x> <y> <z> <r> <g> <b> <sim_sec> <sim_nsec>", false);
 
   this->world = _world;
 
@@ -104,11 +104,15 @@ void Qual1Plugin::Load(physics::WorldPtr _world, sdf::ElementPtr _sdf)
   if (_sdf->HasElement("on_delay"))
     onDelay.sec = _sdf->Get<int>("on_delay");
 
-  if (_sdf->HasElement("off_delay"))
-    offDelay.sec = _sdf->Get<int>("off_delay");
-
   this->lightPattern.push_back({1, 44, {5, 0}, gazebo::common::Color::Yellow});
-  this->lightPattern.push_back({1, 44, {5, 0}, gazebo::common::Color::Blue});
+  this->lightPattern.push_back({1, 44, {5, 0}, gazebo::common::Color::White});
+
+  std::vector<gazebo::common::Color> colors =
+  {
+    gazebo::common::Color::Red,
+    gazebo::common::Color::Blue,
+    gazebo::common::Color::Green,
+  };
 
   // Generate random lights
   for (int i = 0; i < numLightSwitches; ++i)
@@ -116,8 +120,11 @@ void Qual1Plugin::Load(physics::WorldPtr _world, sdf::ElementPtr _sdf)
     int light = ignition::math::Rand::IntUniform(1, maxLight);
     int console = 1;
 
+    int colorIdx = ignition::math::Rand::IntUniform(0, colors.size() - 1);
+
+    offDelay.sec = ignition::math::Rand::IntUniform(5, 10);
     this->lightPattern.push_back({console, light, onDelay,
-        gazebo::common::Color::Red});
+        colors[colorIdx]});
     this->lightPattern.push_back({console, light, offDelay,
         gazebo::common::Color::Black});
   }
@@ -157,11 +164,14 @@ void Qual1Plugin::OnStart(const std_msgs::EmptyConstPtr & /*_msg*/)
 }
 
 /////////////////////////////////////////////////
-void Qual1Plugin::OnLight(const geometry_msgs::Vector3ConstPtr &_msg)
+void Qual1Plugin::OnLight(const srcsim::ConsoleConstPtr &_msg)
 {
   // Log the answer
   std::ostringstream stream;
-  stream << "answer " << _msg->x << " " << _msg->y << " " << _msg->z;
+  stream << "answer " << _msg->x << " " << _msg->y << " " << _msg->z
+    << " " << _msg->r << " " << _msg->g << " " << _msg->b;
+  std::lock_guard<std::mutex> lock(this->iterMutex);
+  (*this->lightPatternIter).delay.sec = 0;
   this->Log(stream.str(), true);
 }
 
@@ -182,25 +192,28 @@ void Qual1Plugin::Log(const std::string &_string, const bool _stamp)
 void Qual1Plugin::OnUpdate()
 {
   // Stop when the light pattern reaches the end
-  if (lightPatternIter == this->lightPattern.end())
+  if (this->lightPatternIter == this->lightPattern.end())
     return;
+
+  std::lock_guard<std::mutex> lock(this->iterMutex);
 
   // Compute the time difference.
   gazebo::common::Time dt = this->world->GetSimTime() - this->prevLightTime;
 
   // Update the lights.
-  if (dt >= (*lightPatternIter).delay)
+  if (dt >= (*this->lightPatternIter).delay)
   {
     // Log light change data
     std::ostringstream stream;
-    stream << "switch " << (*lightPatternIter).light << " "
-              << (*lightPatternIter).color;
+    stream << "switch " << (*this->lightPatternIter).light << " "
+           << (*this->lightPatternIter).color;
     this->Log(stream.str(), true);
 
     // Switch the light
-    this->Switch((*lightPatternIter).light, (*lightPatternIter).color);
+    this->Switch((*this->lightPatternIter).light,
+        (*this->lightPatternIter).color);
 
-    lightPatternIter++;
+    this->lightPatternIter++;
     this->prevLightTime = this->world->GetSimTime();
   }
 }
