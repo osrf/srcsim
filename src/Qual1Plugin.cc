@@ -56,7 +56,7 @@ void Qual1Plugin::Load(physics::WorldPtr _world, sdf::ElementPtr _sdf)
   // Output header information
   this->Log("# switch <light_index> <r> <g> <b> <a> <sim_sec> <sim_nsec>",
       false);
-  this->Log("# answer <x> <y> <z> <sim_sec> <sim_nsec>", false);
+  this->Log("# answer <x> <y> <z> <r> <g> <b> <sim_sec> <sim_nsec>", false);
 
   this->world = _world;
 
@@ -108,7 +108,14 @@ void Qual1Plugin::Load(physics::WorldPtr _world, sdf::ElementPtr _sdf)
     offDelay.sec = _sdf->Get<int>("off_delay");
 
   this->lightPattern.push_back({1, 44, {5, 0}, gazebo::common::Color::Yellow});
-  this->lightPattern.push_back({1, 44, {5, 0}, gazebo::common::Color::Blue});
+  this->lightPattern.push_back({1, 44, {5, 0}, gazebo::common::Color::White});
+
+  std::vector<gazebo::common::Color> colors =
+  {
+    gazebo::common::Color::Red,
+    gazebo::common::Color::Blue,
+    gazebo::common::Color::Green,
+  };
 
   // Generate random lights
   for (int i = 0; i < numLightSwitches; ++i)
@@ -116,8 +123,11 @@ void Qual1Plugin::Load(physics::WorldPtr _world, sdf::ElementPtr _sdf)
     int light = ignition::math::Rand::IntUniform(1, maxLight);
     int console = 1;
 
+    int colorIdx = ignition::math::Rand::IntUniform(0, colors.size());
+
+    std::cout << "ColorIdx[" << colorIdx << "]\n";
     this->lightPattern.push_back({console, light, onDelay,
-        gazebo::common::Color::Red});
+        colors[colorIdx]});
     this->lightPattern.push_back({console, light, offDelay,
         gazebo::common::Color::Black});
   }
@@ -157,11 +167,12 @@ void Qual1Plugin::OnStart(const std_msgs::EmptyConstPtr & /*_msg*/)
 }
 
 /////////////////////////////////////////////////
-void Qual1Plugin::OnLight(const geometry_msgs::Vector3ConstPtr &_msg)
+void Qual1Plugin::OnLight(const srcsim::Console &_msg)
 {
   // Log the answer
   std::ostringstream stream;
-  stream << "answer " << _msg->x << " " << _msg->y << " " << _msg->z;
+  stream << "answer " << _msg->x << " " << _msg->y << " " << _msg->z
+    << " " << _msg->r << " " << _msg->g << " " << _msg->b;
   this->Log(stream.str(), true);
 }
 
@@ -194,7 +205,7 @@ void Qual1Plugin::OnUpdate()
     // Log light change data
     std::ostringstream stream;
     stream << "switch " << (*lightPatternIter).light << " "
-              << (*lightPatternIter).color;
+           << (*lightPatternIter).color;
     this->Log(stream.str(), true);
 
     // Switch the light

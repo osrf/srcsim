@@ -9,16 +9,24 @@ find_package(catkin REQUIRED COMPONENTS
   gazebo_plugins
   gazebo_ros
   roscpp
+  std_msgs
+  message_generation
 )
 
 find_package(gazebo REQUIRED)
 
-catkin_package()
+catkin_package(CATKIN_DEPENDS message_runtime)
 
 ########################
 ## Message generation ##
 ########################
 
+add_message_files(
+  FILES
+  Console.msg
+)
+
+generate_messages()
 
 ###########
 ## Build ##

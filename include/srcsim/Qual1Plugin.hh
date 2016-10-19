@@ -54,7 +54,7 @@ namespace gazebo
 
     /// \brief Callback when a light answer is received from a competitor
     /// \param[in] _msg The position of the light in Val's camera frame.
-    private: void OnLight(const geometry_msgs::Vector3ConstPtr &_msg);
+    private: void OnLight(const srcsim::Console &_msg);
 
     /// \brief Callback for World Update events.
     private: virtual void OnUpdate();
