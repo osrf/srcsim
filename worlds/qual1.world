@@ -27,7 +27,6 @@
     <plugin name="qual1" filename="libQual1Plugin.so">
       <switch_count>20</switch_count>
       <on_delay>1</on_delay>
-      <off_delay>5</off_delay>
     </plugin>
 
     <gui>

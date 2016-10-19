@@ -23,6 +23,7 @@
 #include <ros/ros.h>
 #include <std_msgs/Empty.h>
 #include <geometry_msgs/Vector3.h>
+#include "srcsim/Console.h"
 
 #include "gazebo/common/Plugin.hh"
 #include "gazebo/physics/PhysicsTypes.hh"
@@ -54,7 +55,7 @@ namespace gazebo
 
     /// \brief Callback when a light answer is received from a competitor
     /// \param[in] _msg The position of the light in Val's camera frame.
-    private: void OnLight(const srcsim::Console &_msg);
+    private: void OnLight(const srcsim::ConsoleConstPtr &_msg);
 
     /// \brief Callback for World Update events.
     private: virtual void OnUpdate();
@@ -116,6 +117,8 @@ namespace gazebo
 
     /// \brief Ros start subscriber
     private: ros::Subscriber startSub;
+
+    private: std::mutex iterMutex;
   };
 }
 
