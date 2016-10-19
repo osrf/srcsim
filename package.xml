@@ -14,7 +14,6 @@ schematypens="http://www.w3.org/2001/XMLSchema"?>
   <depend>gazebo_plugins</depend>
   <depend>gazebo_ros</depend>
   <depend>roscpp</depend>
-  <depend>ignition-transport2</depend>
 
   <build_depend>protobuf-dev</build_depend>
   <exec_depend>xacro</exec_depend>

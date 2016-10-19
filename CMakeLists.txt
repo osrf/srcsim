@@ -12,7 +12,6 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 find_package(gazebo REQUIRED)
-find_package(ignition-transport2 REQUIRED)
 
 catkin_package()
 
@@ -73,15 +72,6 @@ install(TARGETS ${qual1_plugin_name}
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin)
-
-# Create the qual1 executable.
-set(qual1_binary_name qual1)
-add_executable(${qual1_binary_name} src/qual1.cc)
-target_link_libraries(${qual1_binary_name}
-  ${GAZEBO_LIBRARIES}
-  ${roscpp_LIBRARIES}
-  ${IGNITION-TRANSPORT_LIBRARIES}
-)
 
 ##########################
 ## Qualification task 2 ##
