@@ -104,7 +104,6 @@ void Qual1Plugin::Load(physics::WorldPtr _world, sdf::ElementPtr _sdf)
   if (_sdf->HasElement("on_delay"))
     onDelay.sec = _sdf->Get<int>("on_delay");
 
-  this->lightPattern.push_back({1, 44, {5, 0}, gazebo::common::Color::Yellow});
   this->lightPattern.push_back({1, 44, {5, 0}, gazebo::common::Color::White});
 
   std::vector<gazebo::common::Color> colors =
@@ -128,7 +127,6 @@ void Qual1Plugin::Load(physics::WorldPtr _world, sdf::ElementPtr _sdf)
     this->lightPattern.push_back({console, light, offDelay,
         gazebo::common::Color::Black});
   }
-  this->lightPattern.push_back({1, 44, {1, 0}, gazebo::common::Color::Yellow});
   this->lightPattern.push_back({1, 44, {5, 0}, gazebo::common::Color::Black});
 
   this->lightPatternIter = this->lightPattern.begin();
