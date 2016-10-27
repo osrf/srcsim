@@ -74,9 +74,9 @@ target_link_libraries(${qual1_plugin_name}
   ${roscpp_LIBRARIES}
   ${IGNITION-TRANSPORT_LIBRARIES}
 )
-#add_dependencies(${qual1_plugin_name}
-#  ${${PROJECT_NAME}_EXPORTED_TARGETS}
-#)
+
+add_dependencies(${qual1_plugin_name} srcsim_generate_messages_cpp)
+
 install(TARGETS ${qual1_plugin_name}
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
