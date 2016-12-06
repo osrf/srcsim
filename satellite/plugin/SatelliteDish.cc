@@ -20,6 +20,8 @@
 #include <gazebo/physics/Joint.hh>
 #include <gazebo/physics/JointController.hh>
 #include <gazebo/physics/Model.hh>
+#include <gazebo/physics/PhysicsEngine.hh>
+#include <gazebo/physics/World.hh>
 
 namespace gazebo
 {
@@ -108,6 +110,12 @@ namespace gazebo
                 << std::endl;
           return;
         }
+
+        // Create joint to the world
+        physics::JointPtr joint;
+        joint = _model->GetWorld()->GetPhysicsEngine()->CreateJoint("fixed", _model);
+        joint->Load(nullptr, _model->GetLink("base"), ignition::math::Pose3d());
+        joint->Attach(nullptr, _model->GetLink("base"));
 
         this->connections.push_back(event::Events::ConnectWorldUpdateBegin(
             std::bind(&SatelliteDishPlugin::OnUpdate, this,
