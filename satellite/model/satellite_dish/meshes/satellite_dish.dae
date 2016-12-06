@@ -380,7 +380,10 @@
             </extra>
           </node>
           <node id="node-Dish_Bone" name="Dish_Bone">
+            <rotate>-1 0 0 -25</rotate>
             <node id="node-Dish" name="Dish">
+              <translate>0 -673.0959 -1443.459</translate>
+              <rotate>1 0 0 -25</rotate>
               <instance_geometry url="#geom-Dish">
                 <bind_material>
                   <technique_common>
