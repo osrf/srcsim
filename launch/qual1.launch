@@ -15,6 +15,9 @@
   <arg name="walk_test" default="false"/>
   <arg name="world_name" default="$(find srcsim)/worlds/qual1.world" />
 
+  <!-- Set ROS_IP env variable -->
+  <env name="ROS_IP" value="127.0.0.1"/>
+
   <include file="$(find val_gazebo)/launch/val_sim_gazebo_sync.launch" pass_all_args="false">
     <arg name="debug" value="$(arg debug)" />
     <arg name="extra_gazebo_args" default="$(arg extra_gazebo_args)"/>
