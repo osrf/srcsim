@@ -104,8 +104,8 @@ void Qual2Plugin::OnUpdate()
     return;
 
   int percentagePressed =
-    (1 - ((this->buttonJoint->GetAngle(0).Radian() - this->lowerLimit) /
-      this->range)) * 100;
+    ((this->buttonJoint->GetAngle(0).Radian() - this->lowerLimit) /
+      this->range) * 100;
 
   this->pressed = percentagePressed >= this->kPercentageButtonPressed;
 
