@@ -1,7 +1,9 @@
 # the first column is the number of seconds to reach this point,
 # relative to the beginning of the trajectory
-# the second column is which arm is being commanded
-# spaces separate the following sub-vectors of joint angles:
+# the last column is a space-separated string of joint angles
+# for the arm and neck trajectories, and roll-pitch-yaw for the head
+# for the arms, the second column is a string "left" or "right"
+# indicating which arm is being commanded
 head0:
   - [1.0, "0 0 0"]
 headRoll:
