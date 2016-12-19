@@ -14,32 +14,35 @@ from geometry_msgs.msg import Vector3
 from ihmc_msgs.msg import HeadTrajectoryRosMessage
 from ihmc_msgs.msg import SO3TrajectoryPointRosMessage
 
-def sendTrajectory(joint_waypoints):
+def sendTrajectory(head_waypoints):
     msg = HeadTrajectoryRosMessage()
     msg.unique_id = -1
     # for each set of joint states
-    for y in joint_waypoints:
+    for y in head_waypoints:
         # first value is time duration
         time = float(y[0])
         # subsequent values are desired joint commands
-        #commandPosition = array([ float(x) for x in y[2].split() ])
-        msg = appendTrajectoryPoint(msg, time)
+        commands = array([ float(x) for x in y[1].split() ])
+        msg = appendTrajectoryPoint(msg, time, commands)
     rospy.loginfo('publishing %s trajectory' % "head")
     headTrajectoryPublisher.publish(msg)
 
-def appendTrajectoryPoint(head_trajectory, time):
-    # for i, pos in enumerate(commands):
+def appendTrajectoryPoint(head_trajectory, time, rollPitchYaw):
+    roll = rollPitchYaw[0]
+    pitch = rollPitchYaw[1]
+    yaw = rollPitchYaw[2]
+    quat = tf.transformations.quaternion_from_euler(roll, pitch, yaw)
     point = copy.deepcopy(SO3TrajectoryPointRosMessage())
     point.time = time
     point.orientation = copy.deepcopy(Quaternion())
-    point.orientation.w = 0.5
-    point.orientation.x = 0.5
-    point.orientation.y = 0.5
-    point.orientation.z = 0.5
+    point.orientation.x = quat[0]
+    point.orientation.y = quat[1]
+    point.orientation.z = quat[2]
+    point.orientation.w = quat[3]
     point.angular_velocity = copy.deepcopy(Vector3())
-    point.angular_velocity.x = 0.5
-    point.angular_velocity.y = 0.5
-    point.angular_velocity.z = 0.5
+    point.angular_velocity.x = 0
+    point.angular_velocity.y = 0
+    point.angular_velocity.z = 0
     head_trajectory.taskspace_trajectory_points.append(point)
     return head_trajectory
 

@@ -2,6 +2,25 @@
 # relative to the beginning of the trajectory
 # the second column is which arm is being commanded
 # spaces separate the following sub-vectors of joint angles:
+head0:
+  - [1.0, "0 0 0"]
+headRoll:
+  - [2.0, " 0.5 0 0"]
+  - [4.0, "-0.5 0 0"]
+  - [6.0, " 0   0 0"]
+headPitch:
+  - [2.0, "0  0.5 0"]
+  - [4.0, "0 -0.5 0"]
+  - [6.0, "0  0   0"]
+headYaw:
+  - [2.0, "0 0  1.0"]
+  - [4.0, "0 0 -1.0"]
+  - [6.0, "0 0  0"]
+headStuck:
+  - [2.0, " 0   -0.5  1.0"]
+  - [4.0, " 0.1 -0.5  1.0"]
+  - [6.0, "-0.1 -0.5  1.0"]
+  - [8.0, "0 0  0"]
 neck0:
   - [1.0, "0 0 0"]
 neck1:
