@@ -240,9 +240,12 @@ currentTime = Time.new
 currentColor = Color.new
 latestLightMat = Matrix.identity(4)
 lightIndex = -1
-error = 0
-colorWeight = 1
-posWeight = 1
+
+colorTolerance = 0.25
+posTolerance = 0.05
+numCorrect = 0
+colorTotalError = 0
+posTotalError = 0
 
 File.open(qualLog).each do |line|
 
@@ -319,7 +322,9 @@ File.open(qualLog).each do |line|
 
     # Compute difference to previous light color
     colorError = answerColor.difference(currentColor)
-    error += colorWeight * colorError
+    colorTotalError += colorError
+
+    colorFail = colorError > colorTolerance
 
     # Answer pose in head frame
     answerLocalMat = matFromPose(parts[1].to_f, parts[2].to_f, parts[3].to_f, 0, 0, 0)
@@ -332,7 +337,9 @@ File.open(qualLog).each do |line|
 
     # Compute distance between the light pose and the answer
     posError = matDistance(latestLightMat, answerMat)
-    error += posWeight * posError
+    posTotalError += posError
+
+    posFail = posError > posTolerance
 
     # printf("Answer: Time[%4.2f] Color[%2.1f %2.1f %2.1f] Answer local pos[%6.4f %6.4f %6.4f] Head Pos [%6.4f %6.4f %6.4f] Answer world pos[%6.4f %6.4f %6.4f] Position error [%6.4f] Color error [%6.4f]\n",
     #        answerTime.sec + answerTime.nsec * 1e-9,
@@ -341,9 +348,77 @@ File.open(qualLog).each do |line|
     #        headMat[0, 3], headMat[1, 3], headMat[2, 3],
     #        answerMat[0, 3], answerMat[1, 3], answerMat[2, 3],
     #        posError, colorError)
+
+    # If color or position are wrong, reset
+    if (colorFail || posFail)
+      printf("[FAIL]    ")
+    else
+      printf("[SUCCESS] ")
+    end
+
+    # Print answer summary
+    printf("Color:    real   [%2.4f %2.4f %2.4f]\n",
+           currentColor.r, currentColor.g, currentColor.b)
+
+    printf("                    answer [%2.4f %2.4f %2.4f]\n",
+           answerColor.r, answerColor.g, answerColor.b)
+
+    printf("                    error  [%2.6f]\n", colorError)
+
+    printf("          Position: real   [%2.4f %2.4f %2.4f]\n",
+           latestLightMat[0, 3], latestLightMat[1, 3], latestLightMat[2, 3])
+
+    printf("                    answer [%2.4f %2.4f %2.4f]\n",
+           answerMat[0, 3], answerMat[1, 3], answerMat[2, 3])
+
+    printf("                    error  [%2.6f]\n", posError)
+
+    if (colorFail || posFail)
+      colorTotalError = 0
+      posTotalError = 0
+      numCorrect = 0
+      next
+    end
+
+    numCorrect += 1
+
+    # Get the first 10 correct in a row
+    if (numCorrect == 10)
+      break
+    end
   end
 end
 
+# Calculate duration
 duration = Time.new
 duration = currentTime - start
-printf("Duration: %d.%d Error: %f\n", duration.sec, duration.nsec, error)
+
+# 10 lights correct in a row?
+success = numCorrect == 10 ? "Yes" : "No"
+
+# Calculate score
+colorMax = Math::sqrt(colorTolerance)
+posMax = Math::sqrt(posTolerance)
+
+colorScore = colorMax
+posScore = posMax
+if (numCorrect > 0)
+  colorAvgError = colorTotalError / numCorrect
+  colorScore = colorAvgError / colorMax
+
+  posAvgError = posTotalError / numCorrect
+  posScore = posAvgError / posMax
+end
+
+colorWeight = 0.5
+posWeight = 0.5
+score = colorScore * colorWeight + posScore * posWeight
+
+printf("--------------------------------\n")
+printf("Duration: %d.%d\n", duration.sec, duration.nsec)
+printf("Success: " + success + "\n")
+printf("Color score: %1.6f\n", colorScore)
+printf("Position score: %1.6f\n", posScore)
+printf("Total score: %1.6f\n", score)
+printf("--------------------------------\n")
+
