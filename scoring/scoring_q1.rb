@@ -1,8 +1,9 @@
 #!/usr/bin/env ruby
 
 require 'nokogiri'
+require 'matrix'
 
-class Vector
+class Vec
   def initialize
     @x = 0
     @y = 0
@@ -112,13 +113,40 @@ end
 
 class Pose
   def initialize
-    @p = Vector.new
+    @p = Vec.new
     @q = Quaternion.new
   end
 
   def set(x, y, z, roll, pitch, yaw)
     @p.set(x, y, z)
     @q.set(roll, pitch, yaw)
+  end
+
+  def mat
+
+    @q.normalize()
+
+    m00 = 1 - 2 * @q.y * @q.y - 2 * @q.z * @q.z
+    m01 = 2 * @q.x * @q.y - 2 * @q.z * @q.w
+    m02 = 2 * @q.x * @q.z + 2 * @q.y * @q.w
+    m03 = @p.x
+
+    m10 = 2 * @q.x * @q.y + 2 * @q.z * @q.w
+    m11 = 1 - 2 * @q.x * @q.x - 2 * @q.z * @q.z
+    m12 = 2 * @q.y * @q.z - 2 * @q.x * @q.w
+    m13 = @p.y
+
+    m20 = 2 * @q.x * @q.z - 2 * @q.y * @q.w
+    m21 = 2 * @q.y * @q.z + 2 * @q.x * @q.w
+    m22 = 1 - 2 * @q.x * @q.x - 2 * @q.y * @q.y
+    m23 = @p.z
+
+    return Matrix[
+             [m00, m01, m02, m03],
+             [m10, m11, m12, m13],
+             [m20, m21, m22, m23],
+             [0.0, 0.0, 0.0, 1.0]
+           ]
   end
 
   def +(other)
@@ -228,12 +256,30 @@ class State
 
     chunk = Nokogiri::XML(chunks[0].text)
 
+    # Get console pose in world frame
+    @consolePose = Pose.new
+    pose = chunk.xpath("//sdf/world/model[@name='console1']/pose")
+    if pose.size == 1
+      parts = pose.text().split
+      @consolePose.set(parts[0].to_f,
+                       parts[1].to_f,
+                       parts[2].to_f,
+                       parts[3].to_f,
+                       parts[4].to_f,
+                       parts[5].to_f)
+    end
+    printf("Console world pose [%f %f %f %f %f %f %f]\n",
+           @consolePose.p.x, @consolePose.p.y, @consolePose.p.z,
+           @consolePose.q.x, @consolePose.q.y, @consolePose.q.z, @consolePose.q.w)
+
     # Read all the light positions
     for i in 1..44
-      light = chunk.xpath("//sdf/world/model/link/visual[@name='light#{i}']")
-      lightPoseParts = light.xpath(".//pose").text().split
 
       @lights[i] = Pose.new
+
+      # Light in console frame
+      light = chunk.xpath("//sdf/world/model/link/visual[@name='light#{i}']")
+      lightPoseParts = light.xpath(".//pose").text().split
 
       @lights[i].set(lightPoseParts[0].to_f,
                      lightPoseParts[1].to_f,
@@ -242,8 +288,11 @@ class State
                      lightPoseParts[4].to_f,
                      lightPoseParts[5].to_f)
 
-      # printf("Light[%f %f %f]\n", @lights[i].p.x, @lights[i].p.y,
-      #        @lights[i].p.z)
+      # Light in world frame
+      mat = @consolePose.mat * @lights[i].mat
+
+      printf("Light [%i] world position [%f %f %f]\n", i,
+             *mat[0, 3], *mat[1, 3], *mat[2, 3])
     end
 
     # Starting model pose
@@ -352,7 +401,7 @@ state = State.new(stateLog)
 start = Time.new
 currentTime = Time.new
 currentColor = Color.new
-currentPos = Vector.new
+currentPos = Vec.new
 lightIndex = -1
 error = 0
 colorWeight = 1
@@ -419,6 +468,11 @@ File.open(qualLog).each do |line|
       exit 0
     end
 
+    answerTime = Time.new
+    answerTime.sec = parts[7].to_i
+    answerTime.nsec = parts[8].to_i
+    currentTime = answerTime
+
     answerPose = Pose.new
     answerPose.set(parts[1].to_f, parts[2].to_f, parts[3].to_f, 0, 0, 0)
 
@@ -426,11 +480,6 @@ File.open(qualLog).each do |line|
     answerColor.r = parts[4].to_f
     answerColor.g = parts[5].to_f
     answerColor.b = parts[6].to_f
-
-    answerTime = Time.new
-    answerTime.sec = parts[7].to_i
-    answerTime.nsec = parts[8].to_i
-    currentTime = answerTime
 
     # Compute difference to previous light color
     colorError = answerColor.difference(currentColor)
