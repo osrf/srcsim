@@ -402,14 +402,20 @@ posMax = Math::sqrt(posTolerance)
 
 colorScore = colorMax
 posScore = posMax
-if (numCorrect > 0)
-  colorAvgError = colorTotalError / numCorrect
-  colorScore = colorAvgError / colorMax
-
-  posAvgError = posTotalError / numCorrect
-  posScore = posAvgError / posMax
+if (numCorrect == 10)
+  colorScore = colorTotalError / numCorrect
+  posScore = posTotalError / numCorrect
 end
 
+# Normalize
+colorScore = colorScore / colorMax
+posScore = posScore / posMax
+
+# Higher is better
+colorScore = 1 - colorScore
+posScore = 1 - posScore
+
+# Total score
 colorWeight = 0.5
 posWeight = 0.5
 score = colorScore * colorWeight + posScore * posWeight
@@ -417,8 +423,8 @@ score = colorScore * colorWeight + posScore * posWeight
 printf("--------------------------------\n")
 printf("Duration: %d.%d\n", duration.sec, duration.nsec)
 printf("Success: " + success + "\n")
-printf("Color score: %1.6f\n", colorScore)
-printf("Position score: %1.6f\n", posScore)
-printf("Total score: %1.6f\n", score)
+printf("Color score: %1.6f / 1.0\n", colorScore)
+printf("Position score: %1.6f / 1.0\n", posScore)
+printf("Total score: %1.6f / 1.0\n", score)
 printf("--------------------------------\n")
 
