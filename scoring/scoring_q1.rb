@@ -16,9 +16,9 @@ class Vector
   end
 
   def distance(pt)
-    return Math.sqrt(Math.pow(@x-pt.x, 2) +
-                     Math.pow(@y-pt.y, 2) +
-                     Math.pow(@z-pt.z, 2))
+    return Math.sqrt((@x-pt.x) * (@x-pt.x) +
+                     (@y-pt.y) * (@x-pt.y) +
+                     (@z-pt.z) * (@x-pt.z))
   end
 
   attr_accessor :x
@@ -81,7 +81,7 @@ class Quaternion
       q.x = -q.x / s
       q.y = -q.y / s
       q.z = -q.z / s
-    end 
+    end
 
     return q
   end
@@ -169,7 +169,7 @@ class Time
 
   def correct
     if (@sec > 0 && @nsec < 0)
-      n = Math.abs(@nsec / 1000000000).to_i + 1
+      n = (@nsec / 1000000000).abs.to_i + 1
       @sec -= n
       @nsec += n * 1000000000
     end
@@ -198,7 +198,7 @@ class Color
   def ==(other)
     return @r == other.r && @g == other.g && @b == other.b && @a == other.a
   end
-  
+
   attr_accessor :r
   attr_accessor :g
   attr_accessor :b
@@ -391,10 +391,13 @@ File.open(qualLog).each do |line|
     # If not black, then set the light index
     if lightColor != black
       lightIndex = parts[1].to_i
-      # printf("Switch: Light[%d] Color[%2.1f %2.1f %2.1f] Time[%4.2f] Pos[%6.4f %6.4f %6.4f]\n",
-      #        lightIndex, lightColor.r, lightColor.g, lightColor.b,
-      #        lightTime.sec + lightTime.nsec * 1e-9,
-      #       lightPose.p.x, lightPose.p.y, lightPose.p.z)
+      lightPose = state.lightPose(lightIndex)
+
+       printf("Switch: Time[%4.2f] Color[%2.1f %2.1f %2.1f] Pos[%6.4f %6.4f %6.4f] Index[%d]\n",
+              lightTime.sec + lightTime.nsec * 1e-9,
+              lightColor.r, lightColor.g, lightColor.b,
+              lightPose.p.x, lightPose.p.y, lightPose.p.z,
+              lightIndex)
     end
   end
 
@@ -406,7 +409,7 @@ File.open(qualLog).each do |line|
     end
 
     answerPose = Pose.new
-    answerPose.p.Set(parts[1].to_f, parts[2].to_f, parts[3].to_f)
+    answerPose.set(parts[1].to_f, parts[2].to_f, parts[3].to_f, 0, 0, 0)
 
     answerColor = Color.new
     answerColor.r = parts[4].to_f
@@ -422,7 +425,12 @@ File.open(qualLog).each do |line|
     lightPose = state.lightPose(lightIndex)
 
     # Convert the light pose to the head frame
-    
+
+    printf("Answer: Time[%4.2f] Color[%2.1f %2.1f %2.1f] Pos[%6.4f %6.4f %6.4f]\n",
+          answerTime.sec + answerTime.nsec * 1e-9,
+          answerColor.r, answerColor.g, answerColor.b,
+          answerPose.p.x, answerPose.p.y, answerPose.p.z)
+
     # Compute distance between the light pose and the answer
     error += lightPose.distance(answerPose)
   end
