@@ -3,28 +3,16 @@
 require 'nokogiri'
 require 'matrix'
 
-class Vec
-  def initialize
-    @x = 0
-    @y = 0
-    @z = 0
-  end
+def matDistance(matA, matB)
+  a = Vector[matA[0, 3],
+             matA[1, 3],
+             matA[2, 3]]
 
-  def set(x, y, z)
-    @x = x
-    @y = y
-    @z = z
-  end
+  b = Vector[matB[0, 3],
+             matB[1, 3],
+             matB[2, 3]]
 
-  def distance(pt)
-    return Math.sqrt((@x-pt.x) * (@x-pt.x) +
-                     (@y-pt.y) * (@x-pt.y) +
-                     (@z-pt.z) * (@x-pt.z))
-  end
-
-  attr_accessor :x
-  attr_accessor :y
-  attr_accessor :z
+  return (a - b).magnitude()
 end
 
 class Quaternion
@@ -113,12 +101,12 @@ end
 
 class Pose
   def initialize
-    @p = Vec.new
+    @p = Vector[]
     @q = Quaternion.new
   end
 
   def set(x, y, z, roll, pitch, yaw)
-    @p.set(x, y, z)
+    @p = Vector[x, y, z]
     @q.set(roll, pitch, yaw)
   end
 
@@ -129,17 +117,17 @@ class Pose
     m00 = 1 - 2 * @q.y * @q.y - 2 * @q.z * @q.z
     m01 = 2 * @q.x * @q.y - 2 * @q.z * @q.w
     m02 = 2 * @q.x * @q.z + 2 * @q.y * @q.w
-    m03 = @p.x
+    m03 = @p[0]
 
     m10 = 2 * @q.x * @q.y + 2 * @q.z * @q.w
     m11 = 1 - 2 * @q.x * @q.x - 2 * @q.z * @q.z
     m12 = 2 * @q.y * @q.z - 2 * @q.x * @q.w
-    m13 = @p.y
+    m13 = @p[1]
 
     m20 = 2 * @q.x * @q.z - 2 * @q.y * @q.w
     m21 = 2 * @q.y * @q.z + 2 * @q.x * @q.w
     m22 = 1 - 2 * @q.x * @q.x - 2 * @q.y * @q.y
-    m23 = @p.z
+    m23 = @p[2]
 
     return Matrix[
              [m00, m01, m02, m03],
@@ -154,12 +142,12 @@ class Pose
 
     tmp = Quaternion.new
     tmp.w = 0.0
-    tmp.x = other.p.x
-    tmp.y = other.p.y
-    tmp.z = other.p.z
+    tmp.x = other.p[0]
+    tmp.y = other.p[1]
+    tmp.z = other.p[2]
     tmp = @q * (tmp * @q.inverse)
 
-    result.p.set(@p.x + tmp.x, @p.y + tmp.y, @p.z + tmp.z)
+    result.p = Vector[@p[0] + tmp.x, @p[1] + tmp.y, @p[2] + tmp.z]
     result.q = other.q * @q
 
     return result
@@ -193,6 +181,10 @@ class Time
     result.nsec = @nsec - other.nsec
     result.correct
     return result
+  end
+
+  def >=(other)
+    return @sec.to_i >= other.sec && @nsec.to_i >= other.nsec
   end
 
   def correct
@@ -268,70 +260,34 @@ class State
                        parts[4].to_f,
                        parts[5].to_f)
     end
-    printf("Console world pose [%f %f %f %f %f %f %f]\n",
-           @consolePose.p.x, @consolePose.p.y, @consolePose.p.z,
-           @consolePose.q.x, @consolePose.q.y, @consolePose.q.z, @consolePose.q.w)
+    # printf("Console world pose [%f %f %f %f %f %f %f]\n",
+    #        @consolePose.p.x, @consolePose.p.y, @consolePose.p.z,
+    #        @consolePose.q.x, @consolePose.q.y, @consolePose.q.z, @consolePose.q.w)
 
     # Read all the light positions
     for i in 1..44
 
-      @lights[i] = Pose.new
-
-      # Light in console frame
+      # Light in console frame (local frame because this is not from states)
       light = chunk.xpath("//sdf/world/model/link/visual[@name='light#{i}']")
       lightPoseParts = light.xpath(".//pose").text().split
 
-      @lights[i].set(lightPoseParts[0].to_f,
-                     lightPoseParts[1].to_f,
-                     lightPoseParts[2].to_f,
-                     lightPoseParts[3].to_f,
-                     lightPoseParts[4].to_f,
-                     lightPoseParts[5].to_f)
+      lightLocalPose = Pose.new
+      lightLocalPose.set(lightPoseParts[0].to_f,
+                         lightPoseParts[1].to_f,
+                         lightPoseParts[2].to_f,
+                         lightPoseParts[3].to_f,
+                         lightPoseParts[4].to_f,
+                         lightPoseParts[5].to_f)
 
       # Light in world frame
-      mat = @consolePose.mat * @lights[i].mat
+      @lights[i] = @consolePose.mat * lightLocalPose.mat
 
-      printf("Light [%i] world position [%f %f %f]\n", i,
-             *mat[0, 3], *mat[1, 3], *mat[2, 3])
+      # printf("Light [%i] world position [%f %f %f]\n", i,
+      #        *@lights[i][0, 3], *@lights[i][1, 3], *@lights[i][2, 3])
     end
 
-    # Starting model pose
-    # @modelPose = Pose.new
-    # pose = chunk.xpath("//sdf/world/model[@name='valkyrie']/pose")
-    # if pose.size == 1
-    #   parts = pose.text().split
-    #   @modelPose.set(parts[0].to_f,
-    #                  parts[1].to_f,
-    #                  parts[2].to_f,
-    #                  parts[3].to_f,
-    #                  parts[4].to_f,
-    #                  parts[5].to_f)
-    # end
-    # printf("Model[%f %f %f]\n",
-    #        @modelPose.p.x, @modelPose.p.y, @modelPose.p.z)
-
-
-    # Starting head pose
-    # @headLinkName = "upperNeckPitchLink"
-    # @headPose = Pose.new
-    # head = chunk.xpath(
-    #       "//sdf/world/model/link[@name='#{@headLinkName}']/pose")
-    # if head.size != 1
-    #   puts "Error: Unable to find head link[#{upperNeckPitchLink}]!"
-    #   return
-    # else
-    #   parts = head.text().split
-    #   @headPose.set(parts[0].to_f,
-    #                 parts[1].to_f,
-    #                 parts[2].to_f,
-    #                 parts[3].to_f,
-    #                 parts[4].to_f,
-    #                 parts[5].to_f)
-    # end
-    # printf("Head[%f %f %f]\n", @headPose.p.x, @headPose.p.y, @headPose.p.z)
-
     # Create hash of the head pose over time
-    @poses = Hash.new
+    @headMats = Hash.new
     for i in 1..chunks.size-1
       chunk = Nokogiri::XML(chunks[i].text)
 
@@ -341,16 +297,7 @@ class State
       time.sec = parts[0]
       time.nsec = parts[1]
 
-      # Read model pose
-      modelPose = Pose.new
-      pose = chunk.xpath("//sdf/state/model[@name='valkyrie']/pose")
-      if pose.size == 1
-        parts = pose.text().split
-        modelPose.set(parts[0].to_f, parts[1].to_f, parts[2].to_f,
-                      parts[3].to_f, parts[4].to_f, parts[5].to_f)
-      end
-
-      # Read the head pose
+      # Read the head pose in world frame (world frame because they're from states)
       headPose = Pose.new
       head = chunk.xpath(
         "//sdf/state/model/link[@name='upperNeckPitchLink']/pose")
@@ -360,18 +307,32 @@ class State
                      parts[3].to_f, parts[4].to_f, parts[5].to_f)
       end
 
-      @poses[time] = modelPose + headPose
+      @headMats[time] = headPose.mat
       # printf("Time[%d.%d] Pose[%f %f %f]\n", time.sec, time.nsec,
-      #        @poses[time].p.x, @poses[time].p.y, @poses[time].p.z)
+      #         @headMats[time][0, 3], @headMats[time][1, 3], @headMats[time][2, 3])
     end
   end
 
-  def lightPose(index)
-    pose = Pose.new
+  # Return the matrix of a light in the world frame, according to the index
+  def lightMat(index)
+    mat = Matrix.identity(4)
     if @lights.has_key?(index)
-      pose = @lights[index]
+      mat = @lights[index]
     end
-    return pose
+    return mat
+  end
+
+  # Return the last matrix of the head in the world frame before the given time
+  def headMat(time)
+
+    @headMats.each do |key, mat|
+      if key >= time
+        # printf("Time wanted[%d.%d] Time found[%d.%d]\n", time.sec, time.nsec, key.sec, key.nsec)
+        return mat
+      end
+    end
+
+    return Matrix.identity(4)
   end
 end
 
@@ -401,7 +362,7 @@ state = State.new(stateLog)
 start = Time.new
 currentTime = Time.new
 currentColor = Color.new
-currentPos = Vec.new
+latestLightMat = Matrix.identity(4)
 lightIndex = -1
 error = 0
 colorWeight = 1
@@ -450,12 +411,12 @@ File.open(qualLog).each do |line|
     # If not black, then set the light index
     if currentColor != black
       lightIndex = parts[1].to_i
-      currentPos = state.lightPose(lightIndex)
+      latestLightMat = state.lightMat(lightIndex)
 
-      printf("Switch: Time[%4.2f] Color[%2.1f %2.1f %2.1f] Pos[%6.4f %6.4f %6.4f] Index[%d]\n",
+      printf("Switch: Time[%4.2f] Color[%2.1f %2.1f %2.1f] Light world pos[%6.4f %6.4f %6.4f] Index[%d]\n",
              lightTime.sec + lightTime.nsec * 1e-9,
              currentColor.r, currentColor.g, currentColor.b,
-             currentPos.p.x, currentPos.p.y, currentPos.p.z,
+             latestLightMat[0, 3], latestLightMat[1, 3], latestLightMat[2, 3],
              lightIndex)
     end
   end
@@ -468,14 +429,13 @@ File.open(qualLog).each do |line|
       exit 0
     end
 
+    # Answer time
     answerTime = Time.new
     answerTime.sec = parts[7].to_i
     answerTime.nsec = parts[8].to_i
     currentTime = answerTime
 
-    answerPose = Pose.new
-    answerPose.set(parts[1].to_f, parts[2].to_f, parts[3].to_f, 0, 0, 0)
-
+    # Answer color
     answerColor = Color.new
     answerColor.r = parts[4].to_f
     answerColor.g = parts[5].to_f
@@ -485,16 +445,26 @@ File.open(qualLog).each do |line|
     colorError = answerColor.difference(currentColor)
     error += colorWeight * colorError
 
-    # Convert the light pose to the head frame
+    # Answer pose in head frame
+    answerLocalPose = Pose.new
+    answerLocalPose.set(parts[1].to_f, parts[2].to_f, parts[3].to_f, 0, 0, 0)
+
+    # Head matrix in world frame at this time
+    headMat = state.headMat(answerTime)
+
+    # Amswer pose in world frame
+    answerMat = headMat * answerLocalPose.mat
 
     # Compute distance between the light pose and the answer
-    posError = currentPos.distance(answerPose)
+    posError = matDistance(latestLightMat, answerMat)
     error += posWeight * posError
 
-    printf("Answer: Time[%4.2f] Color[%2.1f %2.1f %2.1f] Pos[%6.4f %6.4f %6.4f] Position error [%6.4f] Color error [%6.4f]\n",
+    printf("Answer: Time[%4.2f] Color[%2.1f %2.1f %2.1f] Answer local pos[%6.4f %6.4f %6.4f] Head Pos [%6.4f %6.4f %6.4f] Answer world pos[%6.4f %6.4f %6.4f] Position error [%6.4f] Color error [%6.4f]\n",
            answerTime.sec + answerTime.nsec * 1e-9,
            answerColor.r, answerColor.g, answerColor.b,
-           answerPose.p.x, answerPose.p.y, answerPose.p.z,
+           answerLocalPose.p[0], answerLocalPose.p[1], answerLocalPose.p[2],
+           headMat[0, 3], headMat[1, 3], headMat[2, 3],
+           answerMat[0, 3], answerMat[1, 3], answerMat[2, 3],
            posError, colorError)
   end
 end
