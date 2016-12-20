@@ -199,6 +199,13 @@ class Color
     return @r == other.r && @g == other.g && @b == other.b && @a == other.a
   end
 
+  def difference(other)
+    return Math.sqrt((@r-other.r) * (@r-other.r) +
+                     (@g-other.g) * (@g-other.g) +
+                     (@b-other.b) * (@b-other.b) +
+                     (@a-other.a) * (@a-other.a))
+  end
+
   attr_accessor :r
   attr_accessor :g
   attr_accessor :b
@@ -344,8 +351,12 @@ state = State.new(stateLog)
 
 start = Time.new
 currentTime = Time.new
+currentColor = Color.new
+currentPos = Vector.new
 lightIndex = -1
 error = 0
+colorWeight = 1
+posWeight = 1
 
 File.open(qualLog).each do |line|
 
@@ -377,11 +388,10 @@ File.open(qualLog).each do |line|
       exit 0
     end
 
-    lightColor = Color.new
-    lightColor.r = parts[2].to_f
-    lightColor.g = parts[3].to_f
-    lightColor.b = parts[4].to_f
-    lightColor.a = parts[5].to_f
+    currentColor.r = parts[2].to_f
+    currentColor.g = parts[3].to_f
+    currentColor.b = parts[4].to_f
+    currentColor.a = parts[5].to_f
 
     lightTime = Time.new
     lightTime.sec = parts[6].to_i
@@ -389,18 +399,19 @@ File.open(qualLog).each do |line|
     currentTime = lightTime
 
     # If not black, then set the light index
-    if lightColor != black
+    if currentColor != black
       lightIndex = parts[1].to_i
-      lightPose = state.lightPose(lightIndex)
+      currentPos = state.lightPose(lightIndex)
 
-       printf("Switch: Time[%4.2f] Color[%2.1f %2.1f %2.1f] Pos[%6.4f %6.4f %6.4f] Index[%d]\n",
-              lightTime.sec + lightTime.nsec * 1e-9,
-              lightColor.r, lightColor.g, lightColor.b,
-              lightPose.p.x, lightPose.p.y, lightPose.p.z,
-              lightIndex)
+      printf("Switch: Time[%4.2f] Color[%2.1f %2.1f %2.1f] Pos[%6.4f %6.4f %6.4f] Index[%d]\n",
+             lightTime.sec + lightTime.nsec * 1e-9,
+             currentColor.r, currentColor.g, currentColor.b,
+             currentPos.p.x, currentPos.p.y, currentPos.p.z,
+             lightIndex)
     end
   end
 
+  # Process the "answer" line
   if line =~ /^answer/
     if parts.size != 9
       puts "Invalid 'answer' line, exiting: "
@@ -421,18 +432,21 @@ File.open(qualLog).each do |line|
     answerTime.nsec = parts[8].to_i
     currentTime = answerTime
 
-    # Get the light pose
-    lightPose = state.lightPose(lightIndex)
+    # Compute difference to previous light color
+    colorError = answerColor.difference(currentColor)
+    error += colorWeight * colorError
 
     # Convert the light pose to the head frame
 
-    printf("Answer: Time[%4.2f] Color[%2.1f %2.1f %2.1f] Pos[%6.4f %6.4f %6.4f]\n",
-          answerTime.sec + answerTime.nsec * 1e-9,
-          answerColor.r, answerColor.g, answerColor.b,
-          answerPose.p.x, answerPose.p.y, answerPose.p.z)
-
     # Compute distance between the light pose and the answer
-    error += lightPose.distance(answerPose)
+    posError = currentPos.distance(answerPose)
+    error += posWeight * posError
+
+    printf("Answer: Time[%4.2f] Color[%2.1f %2.1f %2.1f] Pos[%6.4f %6.4f %6.4f] Position error [%6.4f] Color error [%6.4f]\n",
+           answerTime.sec + answerTime.nsec * 1e-9,
+           answerColor.r, answerColor.g, answerColor.b,
+           answerPose.p.x, answerPose.p.y, answerPose.p.z,
+           posError, colorError)
   end
 end
 
