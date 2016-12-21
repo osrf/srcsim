@@ -121,9 +121,18 @@ install(DIRECTORY launch/
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch)
 
 # Install Misc. Scripts
-install(PROGRAMS scripts/init_robot.sh scripts/walk_test.py
+install(PROGRAMS scripts/init_robot.sh scripts/walk_test.py scripts/rossleep.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
   )
+
+# Install all the model files
+install(DIRECTORY models/
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/models)
+
+# Configure the setup script
+catkin_add_env_hooks(99_srcsim_setup
+  DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/cmake
+  SHELLS sh)
 
 # Packaging configuration
 set (CPACK_PACKAGE_VERSION "${DRC_SIM_VERSION_FULL}")
