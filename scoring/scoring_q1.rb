@@ -357,21 +357,21 @@ File.open(qualLog).each do |line|
     end
 
     # Print answer summary
-    printf("Color:    real   [%2.4f %2.4f %2.4f]\n",
+    printf("Color:    real             [%2.4f %2.4f %2.4f]\n",
            currentColor.r, currentColor.g, currentColor.b)
 
-    printf("                    answer [%2.4f %2.4f %2.4f]\n",
+    printf("                    answer           [%2.4f %2.4f %2.4f]\n",
            answerColor.r, answerColor.g, answerColor.b)
 
-    printf("                    error  [%2.6f]\n", colorError)
+    printf("                    euclidean error  [%2.6f]\n", colorError)
 
-    printf("          Position: real   [%2.4f %2.4f %2.4f]\n",
+    printf("          Position: real             [%2.4f %2.4f %2.4f]\n",
            latestLightMat[0, 3], latestLightMat[1, 3], latestLightMat[2, 3])
 
-    printf("                    answer [%2.4f %2.4f %2.4f]\n",
+    printf("                    answer           [%2.4f %2.4f %2.4f]\n",
            answerMat[0, 3], answerMat[1, 3], answerMat[2, 3])
 
-    printf("                    error  [%2.6f]\n", posError)
+    printf("                    euclidean error  [%2.6f]\n", posError)
 
     if (colorFail || posFail)
       colorTotalError = 0
@@ -397,19 +397,16 @@ duration = currentTime - start
 success = numCorrect == 10 ? "Yes" : "No"
 
 # Calculate score
-colorMax = Math::sqrt(colorTolerance)
-posMax = Math::sqrt(posTolerance)
-
-colorScore = colorMax
-posScore = posMax
+colorScore = colorTolerance
+posScore = posTolerance
 if (numCorrect == 10)
   colorScore = colorTotalError / numCorrect
   posScore = posTotalError / numCorrect
 end
 
 # Normalize
-colorScore = colorScore / colorMax
-posScore = posScore / posMax
+colorScore = colorScore / colorTolerance
+posScore = posScore / posTolerance
 
 # Higher is better
 colorScore = 1 - colorScore
