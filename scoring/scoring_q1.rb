@@ -195,6 +195,7 @@ class State
     if @lightMats.has_key?(index)
       mat = @lightMats[index]
     end
+    printf("Light [%i] not found. Returning identity matrix.\n", index)
     return mat
   end
 
@@ -208,6 +209,7 @@ class State
       end
     end
 
+    printf("Head pose for time [%d.%d] not found. Returning identity matrix.\n", time.sec, time.nsec)
     return Matrix.identity(4)
   end
 end
