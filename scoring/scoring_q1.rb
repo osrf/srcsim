@@ -2,6 +2,7 @@
 
 require 'nokogiri'
 require 'matrix'
+require './common'
 
 # Calculate position distance between two matrices
 def matDistance(matA, matB)
@@ -65,86 +66,6 @@ def getMatrix(chunk, path)
                      parts[5].to_f)
 end
 
-class Time
-  def initialize
-    @sec = 0
-    @nsec = 0
-  end
-
-  def eql?(other)
-    return @sec == other.sec && @nsec == other.nsec
-  end
-
-  def hash
-    return @sec.to_f + @nsec.to_f * 1e-9
-  end
-
-  def -(other)
-    result = Time.new
-    result.sec = @sec - other.sec
-    result.nsec = @nsec - other.nsec
-    result.correct
-    return result
-  end
-
-  def >=(other)
-
-    if (@sec.to_i < other.sec.to_i)
-      return false
-    end
-
-    if (@sec.to_i > other.sec.to_i)
-      return true
-    end
-
-    return @nsec.to_i >= other.nsec.to_i
-  end
-
-  def correct
-    if (@sec > 0 && @nsec < 0)
-      n = (@nsec / 1000000000).abs.to_i + 1
-      @sec -= n
-      @nsec += n * 1000000000
-    end
-    if (@sec < 0 && @nsec > 0)
-      n = Math.abs(@nsec / 1000000000).to_i + 1
-      @sec += n
-      @nsec -= n * 1000000000
-    end
-
-    @sec += (@nsec / 1000000000).to_i
-    @nsec = (@nsec % 1000000000).to_i
-  end
-
-  attr_accessor :sec
-  attr_accessor :nsec
-end
-
-class Color
-  def initialize
-    @r = 0.0
-    @g = 0.0
-    @b = 0.0
-    @a = 1.0
-  end
-
-  def ==(other)
-    return @r == other.r && @g == other.g && @b == other.b && @a == other.a
-  end
-
-  def difference(other)
-    return Math.sqrt((@r-other.r) * (@r-other.r) +
-                     (@g-other.g) * (@g-other.g) +
-                     (@b-other.b) * (@b-other.b) +
-                     (@a-other.a) * (@a-other.a))
-  end
-
-  attr_accessor :r
-  attr_accessor :g
-  attr_accessor :b
-  attr_accessor :a
-end
-
 class State
   def initialize(file)
     # Open and read the log file
@@ -186,7 +107,7 @@ class State
 
       # Read the sim time
       parts = chunk.xpath("//sdf/state/sim_time").text.split
-      time = Time.new
+      time = Common::Time.new
       time.sec = parts[0]
       time.nsec = parts[1]
 
@@ -251,14 +172,14 @@ if !File.file?(stateLog)
   exit 0
 end
 
-black = Color.new
+black = Common::Color.new
 
 # Read all the state information
 state = State.new(stateLog)
 
-start = Time.new
-currentTime = Time.new
-currentColor = Color.new
+start = Common::Time.new
+currentTime = Common::Time.new
+currentColor = Common::Color.new
 latestLightMat = Matrix.identity(4)
 lightIndex = -1
 
@@ -303,7 +224,7 @@ File.open(qualLog).each do |line|
     currentColor.b = parts[4].to_f
     currentColor.a = parts[5].to_f
 
-    lightTime = Time.new
+    lightTime = Common::Time.new
     lightTime.sec = parts[6].to_i
     lightTime.nsec = parts[7].to_i
     currentTime = lightTime
@@ -330,13 +251,13 @@ File.open(qualLog).each do |line|
     end
 
     # Answer time
-    answerTime = Time.new
+    answerTime = Common::Time.new
     answerTime.sec = parts[7].to_i
     answerTime.nsec = parts[8].to_i
     currentTime = answerTime
 
     # Answer color
-    answerColor = Color.new
+    answerColor = Common::Color.new
     answerColor.r = parts[4].to_f
     answerColor.g = parts[5].to_f
     answerColor.b = parts[6].to_f
@@ -411,7 +332,7 @@ File.open(qualLog).each do |line|
 end
 
 # Calculate duration
-duration = Time.new
+duration = Common::Time.new
 duration = currentTime - start
 
 # 10 lights correct in a row?

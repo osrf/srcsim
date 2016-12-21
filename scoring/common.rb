@@ -166,6 +166,18 @@ module Common
       return result
     end
 
+    def >=(other)
+      if (@sec.to_i < other.sec.to_i)
+        return false
+      end
+
+      if (@sec.to_i > other.sec.to_i)
+        return true
+      end
+
+      return @nsec.to_i >= other.nsec.to_i
+    end
+
     def correct
       if @sec > 0 && @nsec < 0
         n = (@nsec / 1_000_000_000).abs.to_i + 1
@@ -184,5 +196,30 @@ module Common
 
     attr_accessor :sec
     attr_accessor :nsec
+  end
+
+  class Color
+    def initialize
+      @r = 0.0
+      @g = 0.0
+      @b = 0.0
+      @a = 1.0
+    end
+
+    def ==(other)
+      return @r == other.r && @g == other.g && @b == other.b && @a == other.a
+    end
+
+    def difference(other)
+      return Math.sqrt((@r-other.r) * (@r-other.r) +
+                       (@g-other.g) * (@g-other.g) +
+                       (@b-other.b) * (@b-other.b) +
+                       (@a-other.a) * (@a-other.a))
+    end
+
+    attr_accessor :r
+    attr_accessor :g
+    attr_accessor :b
+    attr_accessor :a
   end
 end
