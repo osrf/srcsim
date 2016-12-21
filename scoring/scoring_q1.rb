@@ -88,7 +88,16 @@ class Time
   end
 
   def >=(other)
-    return @sec.to_i >= other.sec && @nsec.to_i >= other.nsec
+
+    if (@sec.to_i < other.sec.to_i)
+      return false
+    end
+
+    if (@sec.to_i > other.sec.to_i)
+      return true
+    end
+
+    return @nsec.to_i >= other.nsec.to_i
   end
 
   def correct
@@ -191,22 +200,32 @@ class State
 
   # Return the matrix of a light in the world frame, according to the index
   def lightMat(index)
-    mat = Matrix.identity(4)
-    if @lightMats.has_key?(index)
-      mat = @lightMats[index]
+
+    @lightMats.each do |key, mat|
+      if key == index
+        return mat
+      end
     end
+
     printf("Light [%i] not found. Returning identity matrix.\n", index)
-    return mat
+    return Matrix.identity(4)
   end
 
   # Return the last matrix of the head in the world frame before the given time
   def headMat(time)
 
-    @headMats.each do |key, mat|
+    @headMats.each_with_index do |(key, mat), index|
+
       if key >= time
-        # printf("Time wanted[%d.%d] Time found[%d.%d]\n", time.sec, time.nsec, key.sec, key.nsec)
-        return mat
+        prevKey = @headMats.keys[index-1]
+        # printf("Time wanted[%d.%d] Time found[%d.%d]\n", time.sec, time.nsec, prevKey.sec, prevKey.nsec)
+        return @headMats[prevKey]
       end
+    end
+
+    # Last element
+    if (time >= @headMats.keys.last)
+      return @headMats[@headMats.keys.last]
     end
 
     printf("Head pose for time [%d.%d] not found. Returning identity matrix.\n", time.sec, time.nsec)
