@@ -5,7 +5,7 @@ require 'matrix'
 require './common'
 
 # Calculate position distance between two matrices
-def matDistance(matA, matB)
+def transformPositionDistance(matA, matB)
   a = Vector[matA[0, 3],
              matA[1, 3],
              matA[2, 3]]
@@ -18,7 +18,7 @@ def matDistance(matA, matB)
 end
 
 # Get a matrix from pose elements
-def matFromPose(x, y, z, roll, pitch, yaw)
+def transformFromPose(x, y, z, roll, pitch, yaw)
 
   m00 = Math.cos(yaw) * Math.cos(pitch)
   m01 = Math.cos(yaw) * Math.sin(pitch) * Math.sin(roll) - Math.sin(yaw) * Math.cos(roll)
@@ -44,7 +44,7 @@ def matFromPose(x, y, z, roll, pitch, yaw)
 end
 
 # Get a matrix from a chunk and a path
-def getMatrix(chunk, path)
+def getTransform(chunk, path)
   pose = chunk.xpath(path)
 
   if pose.size != 1
@@ -58,7 +58,7 @@ def getMatrix(chunk, path)
     return
   end
 
-  return matFromPose(parts[0].to_f,
+  return transformFromPose(parts[0].to_f,
                      parts[1].to_f,
                      parts[2].to_f,
                      parts[3].to_f,
@@ -81,7 +81,7 @@ class State
     chunk = Nokogiri::XML(chunks[0].text)
 
     # Get console pose in world frame
-    tConsoleWorld = getMatrix(chunk, "//sdf/world/model[@name='console1']/pose")
+    tConsoleWorld = getTransform(chunk, "//sdf/world/model[@name='console1']/pose")
 
     # printf("Console world pos [%f %f %f]\n",
     #        tConsoleWorld[0, 3], tConsoleWorld[1, 3], tConsoleWorld[2, 3])
@@ -91,7 +91,7 @@ class State
     for i in 1..44
 
       # Light in console frame (local frame because this is not from states)
-      tLightConsole = getMatrix(chunk, "//sdf/world/model/link/visual[@name='light#{i}']/pose")
+      tLightConsole = getTransform(chunk, "//sdf/world/model/link/visual[@name='light#{i}']/pose")
 
       # Light in world frame
       @tLightWorld[i] = tConsoleWorld * tLightConsole
@@ -112,7 +112,7 @@ class State
       time.nsec = parts[1]
 
       # Read the neck pose in world frame (world frame because they're from states)
-      @tNeckWorld[time] = getMatrix(chunk, "//sdf/state/model/link[@name='upperNeckPitchLink']/pose")
+      @tNeckWorld[time] = getTransform(chunk, "//sdf/state/model/link[@name='upperNeckPitchLink']/pose")
 
       # printf("Time[%d.%d] Pose[%f %f %f]\n", time.sec, time.nsec,
       #         @tNeckWorld[time][0, 3], @tNeckWorld[time][1, 3], @tNeckWorld[time][2, 3])
@@ -195,11 +195,14 @@ answerCount = 1
 # Sum of euclidean error for all colors
 colorTotalError = 0
 
-# Sum of euclidean error for all positions
-posTotalError = 0
+# Sum of euclidean error for all positions (neck)
+neckTotalError = 0
+
+# Sum of euclidean error for all positions (head)
+headTotalError = 0
 
 # Transform from neck (upperNeckPitchLink) to head
-tHeadNeck = matFromPose(0.183585961, 0.0, 0.075353826, -3.14159, 0.130899694, 0.0)
+tHeadNeck = transformFromPose(0.183585961, 0.0, 0.075353826, -3.14159, 0.130899694, 0.0)
 
 File.open(qualLog).each do |line|
 
@@ -268,6 +271,8 @@ File.open(qualLog).each do |line|
     answerTime.nsec = parts[8].to_i
     latestTime = answerTime
 
+    ##### COLOR #####
+
     # Answer color
     answerColor = Common::Color.new
     answerColor.r = parts[4].to_f
@@ -278,8 +283,12 @@ File.open(qualLog).each do |line|
     colorError = answerColor.difference(latestColor)
     colorTotalError += colorError
 
+    ##### POSITION #####
+
     # Answer pose (could be in neck or head frame)
-    tLightAnswer = matFromPose(parts[1].to_f, parts[2].to_f, parts[3].to_f, 0, 0, 0)
+    tLightAnswer = transformFromPose(parts[1].to_f, parts[2].to_f, parts[3].to_f, 0, 0, 0)
+
+    ##### NECK POSITION #####
 
     # Neck matrix in world frame at this time
     tNeckWorld = state.neckMat(answerTime)
@@ -290,25 +299,44 @@ File.open(qualLog).each do |line|
     tLightNeck = tWorldNeck * tLightWorldLatest
 
     # Compute distance between the light pose and the answer
-    posError = matDistance(tLightNeck, tLightAnswer)
-    posTotalError += posError
+    neckError = transformPositionDistance(tLightNeck, tLightAnswer)
+    neckTotalError += neckError
+
+    ##### HEAD POSITION #####
+
+    # Head matrix in world frame at this time
+    tHeadWorld = tNeckWorld * tHeadNeck
+    tWorldHead = tHeadWorld.inverse()
+
+    # Light pose in head frame - ground truth
+    # light -> world -> neck -> head
+    tLightHead = tWorldHead * tLightWorldLatest
+
+    # Compute distance between the light pose and the answer
+    headError = transformPositionDistance(tLightHead, tLightAnswer)
+    headTotalError += headError
 
     # Print answer summary
-    printf("Answer %i: Color:     answer                 [%2.4f %2.4f %2.4f]\n",
+    printf("Answer %i: Color:    answer                 [%2.4f %2.4f %2.4f]\n",
            answerCount, answerColor.r, answerColor.g, answerColor.b)
 
-    printf("                     ground truth           [%2.4f %2.4f %2.4f]\n",
+    printf("                    ground truth           [%2.4f %2.4f %2.4f]\n",
            latestColor.r, latestColor.g, latestColor.b)
 
-    printf("                     euclidean error        [%2.6f]\n", colorError)
+    printf("                    euclidean error        [%2.6f]\n", colorError)
 
-    printf("           Position: answer                 [%2.4f %2.4f %2.4f]\n",
+    printf("          Position: answer                 [%2.4f %2.4f %2.4f]\n",
            tLightAnswer[0, 3], tLightAnswer[1, 3], tLightAnswer[2, 3])
 
-    printf("                     ground truth (neck)    [%2.4f %2.4f %2.4f]\n",
+    printf("                    ground truth (neck)    [%2.4f %2.4f %2.4f]\n",
            tLightNeck[0, 3], tLightNeck[1, 3], tLightNeck[2, 3])
 
-    printf("                     euclidean error (neck) [%2.6f]\n", posError)
+    printf("                    ground truth (head)    [%2.4f %2.4f %2.4f]\n",
+           tLightHead[0, 3], tLightHead[1, 3], tLightHead[2, 3])
+
+    printf("                    euclidean error (neck) [%2.6f]\n", neckError)
+
+    printf("                    euclidean error (head) [%2.6f]\n", headError)
 
     answerCount += 1
   end
@@ -321,6 +349,7 @@ duration = latestTime - start
 printf("--------------------------------\n")
 printf("Duration: %d.%d\n", duration.sec, duration.nsec)
 printf("Total color euclidean error: %1.6f\n", colorTotalError)
-printf("Total position euclidean error: %1.6f\n", posTotalError)
+printf("Total position euclidean error (neck): %1.6f\n", neckTotalError)
+printf("Total position euclidean error (head): %1.6f\n", headTotalError)
 printf("--------------------------------\n")
 
