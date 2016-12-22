@@ -201,6 +201,9 @@ neckTotalError = 0
 # Sum of euclidean error for all positions (head)
 headTotalError = 0
 
+# Sum of euclidean error for all positions (flipped head frame)
+headFlippedTotalError = 0
+
 # Transform from neck (upperNeckPitchLink) to head
 tHeadNeck = transformFromPose(0.183585961, 0.0, 0.075353826, -3.14159, 0.130899694, 0.0)
 
@@ -316,27 +319,41 @@ File.open(qualLog).each do |line|
     headError = transformPositionDistance(tLightHead, tLightAnswer)
     headTotalError += headError
 
+    ##### HEAD POSITION FLIPPED #####
+
+    # Rotate image by pi about head's X axis (flip image upside-down)
+    rollPi = transformFromPose(0, 0, 0, Math::PI, 0, 0)
+    tLightHeadFlipped = rollPi * tLightHead
+
+    headFlippedError = transformPositionDistance(tLightHeadFlipped, tLightAnswer)
+    headFlippedTotalError += headFlippedError
+
     # Print answer summary
-    printf("Answer %i: Color:    answer                 [%2.4f %2.4f %2.4f]\n",
+    printf("Answer %i: Color:    answer                        [%2.4f %2.4f %2.4f]\n",
            answerCount, answerColor.r, answerColor.g, answerColor.b)
 
-    printf("                    ground truth           [%2.4f %2.4f %2.4f]\n",
+    printf("                    ground truth                   [%2.4f %2.4f %2.4f]\n",
            latestColor.r, latestColor.g, latestColor.b)
 
-    printf("                    euclidean error        [%2.6f]\n", colorError)
+    printf("                    euclidean error                [%2.6f]\n", colorError)
 
-    printf("          Position: answer                 [%2.4f %2.4f %2.4f]\n",
+    printf("          Position: answer                         [%2.4f %2.4f %2.4f]\n",
            tLightAnswer[0, 3], tLightAnswer[1, 3], tLightAnswer[2, 3])
 
-    printf("                    ground truth (neck)    [%2.4f %2.4f %2.4f]\n",
+    printf("                    ground truth (neck)            [%2.4f %2.4f %2.4f]\n",
            tLightNeck[0, 3], tLightNeck[1, 3], tLightNeck[2, 3])
 
-    printf("                    ground truth (head)    [%2.4f %2.4f %2.4f]\n",
+    printf("                    ground truth (head)            [%2.4f %2.4f %2.4f]\n",
            tLightHead[0, 3], tLightHead[1, 3], tLightHead[2, 3])
 
-    printf("                    euclidean error (neck) [%2.6f]\n", neckError)
+    printf("                    ground truth (head flipped)    [%2.4f %2.4f %2.4f]\n",
+           tLightHeadFlipped[0, 3], tLightHeadFlipped[1, 3], tLightHeadFlipped[2, 3])
 
-    printf("                    euclidean error (head) [%2.6f]\n", headError)
+    printf("                    euclidean error (neck)         [%2.6f]\n", neckError)
+
+    printf("                    euclidean error (head)         [%2.6f]\n", headError)
+
+    printf("                    euclidean error (head flipped) [%2.6f]\n", headFlippedError)
 
     answerCount += 1
   end
@@ -348,8 +365,9 @@ duration = latestTime - start
 
 printf("--------------------------------\n")
 printf("Duration: %d.%d\n", duration.sec, duration.nsec)
-printf("Total color euclidean error: %1.6f\n", colorTotalError)
-printf("Total position euclidean error (neck): %1.6f\n", neckTotalError)
-printf("Total position euclidean error (head): %1.6f\n", headTotalError)
+printf("Total color euclidean error:                   %1.6f\n", colorTotalError)
+printf("Total position euclidean error (neck):         %1.6f\n", neckTotalError)
+printf("Total position euclidean error (head):         %1.6f\n", headTotalError)
+printf("Total position euclidean error (head flipped): %1.6f\n", headTotalError)
 printf("--------------------------------\n")
 
