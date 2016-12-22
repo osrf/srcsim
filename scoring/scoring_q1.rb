@@ -368,6 +368,6 @@ printf("Duration: %d.%d\n", duration.sec, duration.nsec)
 printf("Total color euclidean error:                   %1.6f\n", colorTotalError)
 printf("Total position euclidean error (neck):         %1.6f\n", neckTotalError)
 printf("Total position euclidean error (head):         %1.6f\n", headTotalError)
-printf("Total position euclidean error (head flipped): %1.6f\n", headTotalError)
+printf("Total position euclidean error (head flipped): %1.6f\n", headFlippedTotalError)
 printf("--------------------------------\n")
 
