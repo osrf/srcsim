@@ -198,6 +198,9 @@ colorTotalError = 0
 # Sum of euclidean error for all positions
 posTotalError = 0
 
+# Transform from neck (upperNeckPitchLink) to head
+tHeadNeck = matFromPose(0.183585961, 0.0, 0.075353826, -3.14159, 0.130899694, 0.0)
+
 File.open(qualLog).each do |line|
 
   # Skip lines that begin with "#"
@@ -275,37 +278,37 @@ File.open(qualLog).each do |line|
     colorError = answerColor.difference(latestColor)
     colorTotalError += colorError
 
-    # Answer pose in neck frame
-    tLightNeckAnswer = matFromPose(parts[1].to_f, parts[2].to_f, parts[3].to_f, 0, 0, 0)
+    # Answer pose (could be in neck or head frame)
+    tLightAnswer = matFromPose(parts[1].to_f, parts[2].to_f, parts[3].to_f, 0, 0, 0)
 
     # Neck matrix in world frame at this time
     tNeckWorld = state.neckMat(answerTime)
+    tWorldNeck = tNeckWorld.inverse()
 
-    # Amswer pose in world frame
-    tLightWorldAnswer = tNeckWorld * tLightNeckAnswer
+    # Light pose in neck frame - ground truth
+    # light -> world -> neck
+    tLightNeck = tWorldNeck * tLightWorldLatest
 
     # Compute distance between the light pose and the answer
-    posError = matDistance(tLightWorldLatest, tLightWorldAnswer)
+    posError = matDistance(tLightNeck, tLightAnswer)
     posTotalError += posError
 
     # Print answer summary
-    printf("Answer %i: ", answerCount)
+    printf("Answer %i: Color:     answer                 [%2.4f %2.4f %2.4f]\n",
+           answerCount, answerColor.r, answerColor.g, answerColor.b)
 
-    printf("Color:    real             [%2.4f %2.4f %2.4f]\n",
+    printf("                     ground truth           [%2.4f %2.4f %2.4f]\n",
            latestColor.r, latestColor.g, latestColor.b)
 
-    printf("                    answer           [%2.4f %2.4f %2.4f]\n",
-           answerColor.r, answerColor.g, answerColor.b)
+    printf("                     euclidean error        [%2.6f]\n", colorError)
 
-    printf("                    euclidean error  [%2.6f]\n", colorError)
+    printf("           Position: answer                 [%2.4f %2.4f %2.4f]\n",
+           tLightAnswer[0, 3], tLightAnswer[1, 3], tLightAnswer[2, 3])
 
-    printf("          Position: real             [%2.4f %2.4f %2.4f]\n",
-           tLightWorldLatest[0, 3], tLightWorldLatest[1, 3], tLightWorldLatest[2, 3])
+    printf("                     ground truth (neck)    [%2.4f %2.4f %2.4f]\n",
+           tLightNeck[0, 3], tLightNeck[1, 3], tLightNeck[2, 3])
 
-    printf("                    answer           [%2.4f %2.4f %2.4f]\n",
-           tLightWorldAnswer[0, 3], tLightWorldAnswer[1, 3], tLightWorldAnswer[2, 3])
-
-    printf("                    euclidean error  [%2.6f]\n", posError)
+    printf("                     euclidean error (neck) [%2.6f]\n", posError)
 
     answerCount += 1
   end
