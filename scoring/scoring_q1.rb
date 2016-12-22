@@ -329,7 +329,7 @@ File.open(qualLog).each do |line|
     headFlippedTotalError += headFlippedError
 
     # Print answer summary
-    printf("Answer %i: Color:     answer                        [%2.4f %2.4f %2.4f]\n",
+    printf("Answer %i: Color:    answer                         [%2.4f %2.4f %2.4f]\n",
            answerCount, answerColor.r, answerColor.g, answerColor.b)
 
     printf("                    ground truth                   [%2.4f %2.4f %2.4f]\n",
