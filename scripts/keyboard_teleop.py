@@ -1,27 +1,45 @@
 #!/usr/bin/env python
 
 from collections import OrderedDict
+from math import cos, radians, sin, sqrt
 import select
 import sys
 import termios
 import tty
 
-from geometry_msgs.msg import Quaternion
-from geometry_msgs.msg import Vector3
+from geometry_msgs.msg import Quaternion, Transform, Vector3
 
 from ihmc_msgs.msg import ArmTrajectoryRosMessage
+from ihmc_msgs.msg import FootstepDataListRosMessage
+from ihmc_msgs.msg import FootstepDataRosMessage
+from ihmc_msgs.msg import FootstepStatusRosMessage
 from ihmc_msgs.msg import HeadTrajectoryRosMessage
 from ihmc_msgs.msg import NeckTrajectoryRosMessage
 from ihmc_msgs.msg import OneDoFJointTrajectoryRosMessage
 from ihmc_msgs.msg import SO3TrajectoryPointRosMessage
 from ihmc_msgs.msg import TrajectoryPoint1DRosMessage
 
+import numpy
+
 import rospy
 
-from tf.transformations import quaternion_from_euler
+from tf.transformations import euler_from_quaternion, quaternion_from_euler, quaternion_matrix
+import tf2_ros
 
 
 class KeyboardTeleop(object):
+
+    # constants used for walking
+    LEFT_FOOT_FRAME_NAME = None
+    RIGHT_FOOT_FRAME_NAME = None
+    LEFT_FOOT = 0
+    RIGHT_FOOT = 1
+    TRANS_STEP = 0.2  # each step will be 20cm
+    ROT_STEP = radians(45)  # each rotation will be 45degrees
+
+    def receivedFootStepStatus_cb(self, msg):
+        if msg.status == FootstepStatusRosMessage.COMPLETED:
+            self.footstep_count += 1
 
     ARM_BINDINGS = OrderedDict([
         ('q', {'joint_index': 0, 'side': 'left', 'min': -1.0, 'max': 1.0}),
@@ -61,6 +79,11 @@ class KeyboardTeleop(object):
         ('h', {'joint_index': 'reset'}),
     ])
 
+    WALKING_BINDINGS = OrderedDict([
+        ('f', {'action': 'translate'}),
+        ('z', {'action': 'rotate'}),
+    ])
+
     def __init__(self):
         self.joint_values = {
             'left arm': [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
@@ -78,6 +101,8 @@ class KeyboardTeleop(object):
         try:
             self.init()
             self.print_usage()
+            # this space the feet to shoulder span, allow rotation on the spot
+            self.set_init_pose()
             while not rospy.is_shutdown():
                 ch = self.get_key()
                 self.process_key(ch)
@@ -88,6 +113,9 @@ class KeyboardTeleop(object):
         # save terminal settings
         self.settings = termios.tcgetattr(sys.stdin)
 
+        self.tfBuffer = tf2_ros.Buffer()
+        self.tfListener = tf2_ros.TransformListener(self.tfBuffer)  # noqa
+        self.footstep_count = 0
         # create publisher for arm trajectories
         robot_name = rospy.get_param('/ihmc_ros/robot_name')
         self.arm_publisher = rospy.Publisher(
@@ -99,15 +127,28 @@ class KeyboardTeleop(object):
         self.head_publisher = rospy.Publisher(
             '/ihmc_ros/{0}/control/head_trajectory'.format(robot_name),
             HeadTrajectoryRosMessage, queue_size=1)
+        self.footstep_publisher = rospy.Publisher(
+            '/ihmc_ros/{0}/control/footstep_list'.format(robot_name),
+            FootstepDataListRosMessage, queue_size=1)
+        self.footstep_status_subscriber = rospy.Subscriber(
+            '/ihmc_ros/{0}/output/footstep_status'.format(robot_name),
+            FootstepStatusRosMessage, self.receivedFootStepStatus_cb)
 
+        right_foot_frame_parameter_name = "/ihmc_ros/{0}/right_foot_frame_name".format(robot_name)
+        left_foot_frame_parameter_name = "/ihmc_ros/{0}/left_foot_frame_name".format(robot_name)
+        if rospy.has_param(right_foot_frame_parameter_name) and \
+                rospy.has_param(left_foot_frame_parameter_name):
+            self.RIGHT_FOOT_FRAME_NAME = rospy.get_param(right_foot_frame_parameter_name)
+            self.LEFT_FOOT_FRAME_NAME = rospy.get_param(left_foot_frame_parameter_name)
         # make sure the simulation is running otherwise wait
-        rate = rospy.Rate(10)  # 10hz
+        self.rate = rospy.Rate(10)  # 10hz
         publishers = [
-            self.arm_publisher, self.neck_publisher, self.head_publisher]
+            self.arm_publisher, self.neck_publisher, self.head_publisher,
+            self.footstep_publisher]
         if any([p.get_num_connections() == 0 for p in publishers]):
             rospy.loginfo('waiting for subscriber...')
             while any([p.get_num_connections() == 0 for p in publishers]):
-                rate.sleep()
+                self.rate.sleep()
 
     def fini(self):
         self.arm_publisher = None
@@ -161,6 +202,11 @@ class KeyboardTeleop(object):
         msg_args.append(' or '.join([
             self.NECK_BINDINGS.keys()[3], self.NECK_BINDINGS.keys()[3].upper()]))
 
+        # walking
+        [msg_args.append('{}, '.format(x)) for x in self.WALKING_BINDINGS.keys()]
+
+        print(msg_args)
+
         msg = """
             Keyboard Teleop for Space Robotics Challenge 0.1.0
             Copyright (C) 2017 Open Source Robotics Foundation
@@ -186,6 +232,9 @@ class KeyboardTeleop(object):
             The shown characters turn the joints in positive direction.
             The opposite case turns the joints in negative direction.
 
+            Walking controls:
+                Walk: {} lowercase meaning forward and uppercase backwards
+                Rotating on the spot: {} lowercase is counterclockwise, uppercase is clockwise
             ?: Print this menu
             <TAB>: Print all current joint values
             <ESC>: Quit
@@ -229,6 +278,10 @@ class KeyboardTeleop(object):
             self.process_neck_command(self.NECK_BINDINGS[ch.lower()], ch)
             return
 
+        if ch.lower() in self.WALKING_BINDINGS:
+            self.process_walking_command(self.WALKING_BINDINGS[ch.lower()], ch)
+            return
+
     def process_arm_command(self, binding, ch):
         msg = ArmTrajectoryRosMessage()
         msg.unique_id = -1
@@ -262,6 +315,170 @@ class KeyboardTeleop(object):
         self._append_trajectory_point_1d(
             msg, 1.0, self.joint_values['neck'])
         self.neck_publisher.publish(msg)
+
+    def process_walking_command(self, binding, ch):
+        is_lower_case = ch == ch.lower()
+        # ROT_STEP = 90*3.14159/180.
+        direction = 1.0 if is_lower_case else -1.0
+        self.footstep_count = 0
+        if binding['action'] == 'translate':
+            self.loginfo('Walking ' + ('forward' if is_lower_case else 'backward'))
+            self.translate([self.TRANS_STEP * direction, 0.0, 0.0])
+        elif binding['action'] == 'rotate':
+            self.loginfo('Rotating ' + ('counter-clockwise' if is_lower_case else 'clockwise'))
+            self.rotate(self.ROT_STEP * direction)
+
+    def createRotationFootStepList(self, yaw):
+        left_footstep = FootstepDataRosMessage()
+        left_footstep.robot_side = self.LEFT_FOOT
+        right_footstep = FootstepDataRosMessage()
+        right_footstep.robot_side = self.RIGHT_FOOT
+
+        left_foot_world = self.tfBuffer.lookup_transform(
+            'world', self.LEFT_FOOT_FRAME_NAME, rospy.Time())
+        right_foot_world = self.tfBuffer.lookup_transform(
+            'world', self.RIGHT_FOOT_FRAME_NAME, rospy.Time())
+        intermediate_transform = Transform()
+        # create a virtual fram between the feet, this will be the center of the rotation
+        intermediate_transform.translation.x = (
+            left_foot_world.transform.translation.x + right_foot_world.transform.translation.x)/2.
+        intermediate_transform.translation.y = (
+            left_foot_world.transform.translation.y + right_foot_world.transform.translation.y)/2.
+        intermediate_transform.translation.z = (
+            left_foot_world.transform.translation.z + right_foot_world.transform.translation.z)/2.
+        # here we assume that feet have the same orientation so we can pick arbitrary left or right
+        intermediate_transform.rotation = left_foot_world.transform.rotation
+
+        left_footstep.location = left_foot_world.transform.translation
+        right_footstep.location = right_foot_world.transform.translation
+
+        # define the turning radius
+        radius = sqrt(
+            (
+                right_foot_world.transform.translation.x -
+                left_foot_world.transform.translation.x
+            )**2 + (
+                right_foot_world.transform.translation.y -
+                left_foot_world.transform.translation.y
+            )**2) / 2.
+
+        left_offset = [-radius*sin(yaw), radius*(1-cos(yaw)), 0]
+        right_offset = [radius*sin(yaw), -radius*(1-cos(yaw)), 0]
+        intermediate_euler = euler_from_quaternion([
+            intermediate_transform.rotation.x,
+            intermediate_transform.rotation.y,
+            intermediate_transform.rotation.z,
+            intermediate_transform.rotation.w])
+        resulting_quat = quaternion_from_euler(
+            intermediate_euler[0], intermediate_euler[1],
+            intermediate_euler[2] + yaw)
+
+        rot = quaternion_matrix([
+            resulting_quat[0], resulting_quat[1], resulting_quat[2], resulting_quat[3]])
+        left_transformedOffset = numpy.dot(rot[0:3, 0:3], left_offset)
+        right_transformedOffset = numpy.dot(rot[0:3, 0:3], right_offset)
+        quat_final = Quaternion(
+            resulting_quat[0], resulting_quat[1], resulting_quat[2], resulting_quat[3])
+
+        left_footstep.location.x += left_transformedOffset[0]
+        left_footstep.location.y += left_transformedOffset[1]
+        left_footstep.location.z += left_transformedOffset[2]
+        left_footstep.orientation = quat_final
+
+        right_footstep.location.x += right_transformedOffset[0]
+        right_footstep.location.y += right_transformedOffset[1]
+        right_footstep.location.z += right_transformedOffset[2]
+        right_footstep.orientation = quat_final
+
+        if yaw > 0:
+            return [left_footstep, right_footstep]
+        else:
+            return [right_footstep, left_footstep]
+
+    # Creates footstep with the current position and orientation of the foot.
+    def createFootStepInPlace(self, step_side):
+        footstep = FootstepDataRosMessage()
+        footstep.robot_side = step_side
+
+        if step_side == self.LEFT_FOOT:
+            foot_frame = self.LEFT_FOOT_FRAME_NAME
+        else:
+            foot_frame = self.RIGHT_FOOT_FRAME_NAME
+
+        footWorld = self.tfBuffer.lookup_transform('world', foot_frame, rospy.Time())
+        footstep.orientation = footWorld.transform.rotation
+        footstep.location = footWorld.transform.translation
+
+        return footstep
+
+    # Creates footstep offset from the current foot position. The offset is in foot frame.
+    def createTranslationFootStepOffset(self, step_side, offset):
+        footstep = self.createFootStepInPlace(step_side)
+
+        # transform the offset to world frame
+        quat = footstep.orientation
+        rot = quaternion_matrix([quat.x, quat.y, quat.z, quat.w])
+        transformedOffset = numpy.dot(rot[0:3, 0:3], offset)
+
+        footstep.location.x += transformedOffset[0]
+        footstep.location.y += transformedOffset[1]
+        footstep.location.z += transformedOffset[2]
+
+        return footstep
+
+    def getEmptyFootsetListMsg(self):
+        msg = FootstepDataListRosMessage()
+        msg.transfer_time = 1.5
+        msg.swing_time = 1.5
+        msg.execution_mode = 0
+        msg.unique_id = -1
+        return msg
+
+    def getTranslationFootstepMsg(self, offset):
+        msg = self.getEmptyFootsetListMsg()
+        msg.footstep_data_list.append(self.createTranslationFootStepOffset(
+            self.LEFT, offset))
+        msg.footstep_data_list.append(self.createTranslationFootStepOffset(
+            self.RIGHT, offset))
+        return msg
+
+    def getRotationFooststepMsg(self, yaw):
+        msg = self.getEmptyFootsetListMsg()
+        footsteps = self.createRotationFootStepList(yaw)
+        for footstep in footsteps:
+            msg.footstep_data_list.append(footstep)
+
+        return msg
+
+    def execute_footsteps(self, msg):
+        self.footstep_count = 0
+        self.footstep_publisher.publish(msg)
+        number_of_footsteps = len(msg.footstep_data_list)
+        max_iterations = 50
+        count = 0
+        while count < max_iterations and self.footstep_count != number_of_footsteps:
+            self.rate.sleep()
+            count += 1
+
+    def translate(self, offset):
+        msg = self.getTranslationFootstepMsg(offset)
+        self.execute_footsteps(msg)
+        self.loginfo('done walking')
+
+    def rotate(self, yaw):
+        msg = self.getRotationFooststepMsg(yaw)
+        self.execute_footsteps(msg)
+        self.loginfo('done rotating')
+
+    def set_init_pose(self):
+        self.loginfo('moving feet further apart\n')
+        msg = self.getEmptyFootsetListMsg()
+        msg.footstep_data_list.append(self.createTranslationFootStepOffset(
+            self.LEFT_FOOT, [0.0, 0.05, 0.0]))
+        msg.footstep_data_list.append(self.createTranslationFootStepOffset(
+            self.RIGHT_FOOT, [0.0, -0.05, 0.0]))
+        self.execute_footsteps(msg)
+        self.loginfo('done moving feet further apart\n')
 
     def _update_joint_values(self, label, binding, ch):
         joint_index = binding['joint_index']
