@@ -24,26 +24,26 @@ from tf.transformations import quaternion_from_euler
 class KeyboardTeleop(object):
 
     ARM_BINDINGS = OrderedDict([
-        ('q', {'joint_index': 0, 'side': 'left', 'min': -1.0, 'max': 1.0}),
-        ('w', {'joint_index': 1, 'side': 'left', 'min': -1.0, 'max': 1.0,
-               'invert': True}),
-        ('e', {'joint_index': 2, 'side': 'left', 'min': -1.0, 'max': 1.0}),
-        ('r', {'joint_index': 3, 'side': 'left', 'min': -1.0, 'max': 0.1,
-               'invert': True}),
-        ('a', {'joint_index': 4, 'side': 'left', 'min': -1.0, 'max': 1.0}),
-        ('s', {'joint_index': 5, 'side': 'left', 'min': -0.6, 'max': 0.6,
-               'invert': True}),
-        ('d', {'joint_index': 6, 'side': 'left', 'min': -0.3, 'max': 0.4,
-               'invert': True}),
+        ('q', {'joint_index': 0, 'side': 'left', 'min': -2.85, 'max': 2.0}),  # leftShoulderPitch
+        ('w', {'joint_index': 1, 'side': 'left', 'min': -1.519, 'max': 1.266,
+               'invert': True}),  # leftShoulderRoll
+        ('e', {'joint_index': 2, 'side': 'left', 'min': -3.1, 'max': 2.18}),  # leftShoulderYaw
+        ('r', {'joint_index': 3, 'side': 'left', 'min': -2.174, 'max': 0.12,
+               'invert': True}),  # leftElbowPitch
+        ('a', {'joint_index': 4, 'side': 'left', 'min': -2.019, 'max': 3.14}),  # leftForearmYaw
+        ('s', {'joint_index': 5, 'side': 'left', 'min': -0.62, 'max': 0.625,
+               'invert': True}),  # leftWristRoll
+        ('d', {'joint_index': 6, 'side': 'left', 'min': -0.36, 'max': 0.49,
+               'invert': True}),  # leftWristPitch
         ('t', {'joint_index': 'reset', 'side': 'left'}),
 
-        ('u', {'joint_index': 0, 'side': 'right', 'min': -1.0, 'max': 1.0}),
-        ('i', {'joint_index': 1, 'side': 'right', 'min': -1.0, 'max': 1.0}),
-        ('o', {'joint_index': 2, 'side': 'right', 'min': -1.0, 'max': 1.0}),
-        ('p', {'joint_index': 3, 'side': 'right', 'min': -0.1, 'max': 1.0}),
-        ('j', {'joint_index': 4, 'side': 'right', 'min': -1.0, 'max': 1.0}),
-        ('k', {'joint_index': 5, 'side': 'right', 'min': -0.6, 'max': 0.6}),
-        ('l', {'joint_index': 6, 'side': 'right', 'min': -0.4, 'max': 0.3}),
+        ('u', {'joint_index': 0, 'side': 'right', 'min': -2.85, 'max': 2.0}),  # rightShoulderPitch
+        ('i', {'joint_index': 1, 'side': 'right', 'min': -1.266, 'max': 1.519}),  # rightShoulderRoll
+        ('o', {'joint_index': 2, 'side': 'right', 'min': -3.1, 'max': 2.18}),  # rightShoulderYaw
+        ('p', {'joint_index': 3, 'side': 'right', 'min': -0.12, 'max': 2.174}),  # rightElbowPitch
+        ('j', {'joint_index': 4, 'side': 'right', 'min': -2.019, 'max': 3.14}),  # rightForearmYaw
+        ('k', {'joint_index': 5, 'side': 'right', 'min': -0.625, 'max': 0.62}),  # rightWristRoll
+        ('l', {'joint_index': 6, 'side': 'right', 'min': -0.49, 'max': 0.36}),  # rightWristPitch
         ('y', {'joint_index': 'reset', 'side': 'right'}),
     ])
 
@@ -55,9 +55,9 @@ class KeyboardTeleop(object):
     ])
 
     NECK_BINDINGS = OrderedDict([
-        ('b', {'joint_index': 0, 'min': 0.0, 'max': 0.5}),
-        ('n', {'joint_index': 1, 'min': -1.0, 'max': 1.0}),
-        ('m', {'joint_index': 2, 'min': -0.5, 'max': 0.0}),
+        ('b', {'joint_index': 0, 'min': 0.0, 'max': 0.5}),  # lowerNeckPitch? 'min': 0, 'max': 1.162
+        ('n', {'joint_index': 1, 'min': -1.0, 'max': 1.0}),  # neckYaw? 'min': -1.047, 'max': 1.047
+        ('m', {'joint_index': 2, 'min': -0.5, 'max': 0.0}),  # upperNeckPitch? 'min': -0.872, 'max': 0
         ('h', {'joint_index': 'reset'}),
     ])
 
