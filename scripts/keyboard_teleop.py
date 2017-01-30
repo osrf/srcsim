@@ -284,7 +284,7 @@ class KeyboardTeleop(object):
 
             self.loginfo(
                 'Move %s joint #%d %s to %.1f: [%s]' %
-                (label, joint_index, '++' if is_lower_case else '--',
+                (label, joint_index, '++' if (is_lower_case != binding.get('invert', False)) else '--',
                  self.joint_values[label][joint_index],
                  ', '.join(
                      ['%.1f' % v for v in self.joint_values[label]])))
