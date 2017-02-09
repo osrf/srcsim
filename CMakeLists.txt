@@ -28,6 +28,13 @@ find_package(gazebo REQUIRED)
 add_message_files(
   FILES
   Console.msg
+  Satellite.msg
+  Task.msg
+)
+
+add_service_files(
+  FILES
+  StartTask.srv
 )
 
 generate_messages()
@@ -103,6 +110,30 @@ target_link_libraries(${qual2_plugin_name}
 #  ${${PROJECT_NAME}_EXPORTED_TARGETS}
 #)
 install(TARGETS ${qual2_plugin_name}
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin)
+
+##########################
+##         Finals       ##
+##########################
+
+# Create the libFinalsPlugin.so library.
+set(finals_plugin_name FinalsPlugin)
+add_library(${finals_plugin_name} SHARED
+  src/FinalsPlugin.cc
+  src/Task.cc
+  src/Task1.cc
+  src/Task2.cc
+  src/Task3.cc
+  src/Checkpoint.cc
+)
+target_link_libraries(${finals_plugin_name}
+  ${GAZEBO_LIBRARIES}
+  ${roscpp_LIBRARIES}
+  ${IGNITION-TRANSPORT_LIBRARIES}
+)
+install(TARGETS ${finals_plugin_name}
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin)

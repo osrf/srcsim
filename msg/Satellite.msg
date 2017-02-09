@@ -1,0 +1,8 @@
+float64 target_pitch
+float64 target_yaw
+float64 current_pitch
+float64 current_yaw
+bool pitch_correct_now
+bool yaw_correct_now
+bool pitch_completed
+bool yaw_completed
