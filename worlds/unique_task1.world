@@ -1,0 +1,257 @@
+<?xml version="1.0" ?>
+
+<sdf version="1.6">
+  <world name="SRC_finals">
+
+    <physics type="ode">
+      <real_time_update_rate>1000.0</real_time_update_rate>
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <ode>
+        <solver>
+          <type>quick</type>
+          <iters>150</iters>
+          <precon_iters>0</precon_iters>
+          <sor>1.400000</sor>
+          <use_dynamic_moi_rescaling>1</use_dynamic_moi_rescaling>
+        </solver>
+        <constraints>
+          <cfm>0.000000</cfm>
+          <erp>0.800000</erp>
+          <contact_max_correcting_vel>2000.000000</contact_max_correcting_vel>
+          <contact_surface_layer>0.01000</contact_surface_layer>
+        </constraints>
+      </ode>
+    </physics>
+
+    <!-- GUI -->
+    <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose>-4.1 -0.2 3.3 0 0.37 0</pose>
+      </camera>
+    </gui>
+
+    <!-- Scene -->
+    <scene>
+      <background>0.968627451 0.690196078 0.384313725 1.0</background>
+      <grid>0</grid>
+      <origin_visual>0</origin_visual>
+    </scene>
+
+    <!-- A global light source -->
+    <light type="directional" name="sun">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 1000 0.19233569598757283 -1.0588853729779535 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+
+    <!-- Background -->
+<!--
+    <include>
+      <uri>model://heightmap_mars</uri>
+    </include>
+-->
+
+    <!-- START WALKWAY -->
+
+    <!-- Walkway -->
+    <include>
+      <name>walkway_1</name>
+      <pose>
+      -0.3
+      0
+      -0.052151
+      0
+      0
+      -1.5707963267948968
+      </pose>
+      <uri>model://walkway_metal_straight</uri>
+    </include>
+
+
+    <!-- Bling -->
+    <include>
+      <name>mars_crate_long_1</name>
+      <pose>
+      0.46200000000000035
+      1.5619999999999998
+      0
+      0
+      0
+      0.785398163397448
+      </pose>
+      <uri>model://mars_crate_long</uri>
+    </include>
+
+
+    <!-- Bling -->
+    <include>
+      <name>mars_crate_long_2</name>
+      <pose>
+      0.4619999999999998
+      -1.5620000000000003
+      0
+      0
+      0
+      -2.3561944901923453
+      </pose>
+      <uri>model://mars_crate_long</uri>
+    </include>
+
+
+    
+
+    <!-- TASK 1 -->
+
+    <!-- Walkway -->
+    <include>
+      <name>walkway_2</name>
+      <pose>
+      2.524734
+      0.5394700919999994
+      -0.052151
+      0
+      0
+      2.356194490192345
+      </pose>
+      <uri>model://walkway_metal_45</uri>
+    </include>
+
+
+    <!-- Satellite -->
+    
+    <include>
+      <pose>
+        3.938947562373095
+        -1.952374204901394
+        0
+        0
+        0
+        -2.356194490192345
+      </pose>
+      <uri>model://satellite_dish</uri>
+    </include>
+
+    <!-- Bling -->
+    <include>
+      <name>mars_rock_1_3</name>
+      <pose>
+      1.9966949400811336
+      -1.2506735555415056
+      0
+      0
+      0
+      3.141592653589793
+      </pose>
+      <uri>model://mars_rock_1</uri>
+    </include>
+
+
+    <!-- Walkway -->
+    <include>
+      <name>walkway_3</name>
+      <pose>
+      2.524734
+      0.5394700919999994
+      -0.052151
+      0
+      0
+      -0.7853981633974485
+      </pose>
+      <uri>model://walkway_metal_straight</uri>
+    </include>
+
+
+    <!-- Bling -->
+    <include>
+      <name>mars_rock_2_4</name>
+      <pose>
+      2.171180609406727
+      1.970654217121572
+      0
+      0
+      0
+      0.7853981633974481
+      </pose>
+      <uri>model://mars_rock_2</uri>
+    </include>
+
+
+    <!-- Bling -->
+    <include>
+      <name>mars_rock_3_5</name>
+      <pose>
+      4.380182193833501
+      -0.23834736730520334
+      0
+      0
+      0
+      -2.3561944901923453
+      </pose>
+      <uri>model://mars_rock_3</uri>
+    </include>
+
+
+    <!-- Final box 1 -->
+    <include>
+      <name>walkway_4</name>
+      <pose>
+      4.679995469056598
+      2.694731561056596
+      -0.052151
+      0
+      0
+      -2.3561944901923453
+      </pose>
+      <uri>model://walkway_finish_adjacent</uri>
+    </include>
+
+
+    <!-- Bling -->
+    <include>
+      <name>mars_rock_2_6</name>
+      <pose>
+      3.248811343935026
+      4.1259156861781685
+      0
+      0
+      0
+      0.785398163397448
+      </pose>
+      <uri>model://mars_rock_2</uri>
+    </include>
+
+
+    <!-- Bling -->
+    <include>
+      <name>mars_crate_7</name>
+      <pose>
+      6.040468916059516
+      4.055205008059513
+      0
+      0
+      0
+      -0.7853981633974485
+      </pose>
+      <uri>model://mars_crate</uri>
+    </include>
+
+
+    <!-- /TASK 1 -->
+    
+
+    
+
+    
+
+  </world>
+</sdf>
+
