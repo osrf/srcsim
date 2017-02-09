@@ -19,10 +19,6 @@ set (SRCSIM_PATCH_VERSION 0)
 set (SRCSIM_VERSION_FULL ${SRCSIM_MAJOR_VERSION}.${SRCSIM_MINOR_VERSION}.${SRCSIM_PATCH_VERSION})
 
 find_package(gazebo REQUIRED)
-find_package(ignition-msgs0 REQUIRED)
-find_package(ignition-transport3 REQUIRED)
-
-
 
 ########################
 ## Message generation ##
@@ -124,6 +120,10 @@ target_link_libraries(${box_plugin_name}
   ${roscpp_LIBRARIES}
   ${IGNITION-TRANSPORT_LIBRARIES}
 )
+install(TARGETS ${box_plugin_name}
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin)
 
 #############
 ## Install ##

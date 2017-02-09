@@ -16,14 +16,14 @@
 */
 
 #include <ignition/math/OrientedBox.hh>
-#include <ignition/transport/Node.hh>
-#include <ignition/msgs.hh>
 #include <gazebo/common/Events.hh>
 #include <gazebo/common/Plugin.hh>
+#include <gazebo/msgs/msgs.hh>
+#include <gazebo/transport/Node.hh>
 
 namespace gazebo
 {
-  /// \brief Plugin which emits ignition transport messages according to whether
+  /// \brief Plugin which emits gazebo transport messages according to whether
   /// an entity is inside or outside an oriented box.
   ///
   /// Example usage:
@@ -40,7 +40,7 @@ namespace gazebo
   ///    <!-- Scoped name of entity to check -->
   ///    <entity>robot</entity>
   ///
-  ///    <!-- Namespace for ignition transport topic and service:
+  ///    <!-- Namespace for gazebo transport topic and service:
   ///           /<namespace>/box/contains : topic where true / false messages
   ///                                       are published.
   ///           /<namespace>/box/toggle : service to toggle plugin on and off.
@@ -67,10 +67,9 @@ namespace gazebo
     /// \param[in] _info Update info.
     private: void OnUpdate(const common::UpdateInfo &_info);
 
-    /// \brief Callback for toggle service.
-    /// \param[in] _rep Response, either "Started" or "Stoped".
-    /// \param[in] _result Whether the service succeeded.
-    public: void Toggle(ignition::msgs::StringMsg &_rep, bool &_result);
+    /// \brief Callback for toggle "service".
+    /// \param[in] _msg Unused message
+    public: void Toggle(ConstIntPtr &/*_msg*/);
 
     /// \brief Connection to world update.
     private: event::ConnectionPtr updateConnection;
@@ -87,11 +86,14 @@ namespace gazebo
     /// \brief Box representing the volume to check.
     private: ignition::math::OrientedBoxd box;
 
-    /// \brief Ignition transport node for communication.
-    private: ignition::transport::Node ignNode;
+    /// \brief Gazebo transport node for communication.
+    private: transport::NodePtr gzNode;
 
     /// \brief Publisher which publishes contain / doesn't contain messages.
-    private: ignition::transport::Node::Publisher containsPub;
+    private: transport::PublisherPtr containsPub;
+
+    /// \brief Subscriber to toggle messages.
+    private: transport::SubscriberPtr toggleSub;
 
     /// \brief Namespace for the topics:
     /// /<ns>/box/contains

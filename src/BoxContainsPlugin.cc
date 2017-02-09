@@ -74,24 +74,23 @@ void BoxContainsPlugin::Load(physics::WorldPtr _world, sdf::ElementPtr _sdf)
 
   this->world = _world;
 
-  // Start/stop service
-  this->ignNode.Advertise("/" + this->ns + "/box/toggle",
+  // Start/stop "service"
+  this->gzNode = transport::NodePtr(new transport::Node());
+  this->gzNode->Init();
+  this->toggleSub = this->gzNode->Subscribe("/" + this->ns + "/box/toggle",
       &BoxContainsPlugin::Toggle, this);
 
   auto start = _sdf->HasElement("start") && _sdf->Get<bool>("start");
   if (start)
   {
-    ignition::msgs::StringMsg req;
-    bool result;
-    this->Toggle(req, result);
+    ConstIntPtr msg;
+    this->Toggle(msg);
   }
 }
 
 //////////////////////////////////////////////////
-void BoxContainsPlugin::Toggle(ignition::msgs::StringMsg &_rep, bool &_result)
+void BoxContainsPlugin::Toggle(ConstIntPtr &/*_msg*/)
 {
-  _result = true;
-
   // Start
   if (!this->updateConnection)
   {
@@ -100,23 +99,22 @@ void BoxContainsPlugin::Toggle(ignition::msgs::StringMsg &_rep, bool &_result)
     {
       gzerr << "Can't find entity[" << entity <<
           "] in world. Failed to start Box Plugin." << std::endl;
-      _result = false;
+      return;
     }
 
     // Start update
     this->updateConnection = event::Events::ConnectWorldUpdateBegin(
         std::bind(&BoxContainsPlugin::OnUpdate, this, std::placeholders::_1));
 
-    this->containsPub = this->ignNode.Advertise<ignition::msgs::Boolean>(
+    this->containsPub = this->gzNode->Advertise<msgs::Int>(
         "/" + this->ns + "/box/contains");
-
-    _rep.set_data("Started");
+    gzmsg << "Started box contains plugin [" << this->ns << "]" << std::endl;
   }
   // Stop
   else
   {
     this->updateConnection.reset();
-    _rep.set_data("Stopped");
+    gzmsg << "Stopped box contains plugin [" << this->ns << "]" << std::endl;
   }
 }
 
@@ -145,10 +143,10 @@ void BoxContainsPlugin::OnUpdate(const common::UpdateInfo &_info)
   auto pos = this->entity->GetWorldPose().Ign().Pos();
   auto contains = this->box.Contains(pos);
 
-  ignition::msgs::Boolean msg;
-  msg.set_data(contains);
+  msgs::Int msg;
+  msg.set_data(contains ? 1 : 0);
 
-  this->containsPub.Publish(msg);
+  this->containsPub->Publish(msg);
 }
 
 
