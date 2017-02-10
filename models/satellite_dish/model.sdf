@@ -268,5 +268,10 @@
       </axis>
     </joint>
 
+    <joint name="satellite_world" type="fixed">
+      <parent>world</parent>
+      <child>base</child>
+    </joint>
+
   </model>
 </sdf>
