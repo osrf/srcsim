@@ -10,9 +10,9 @@ import tty
 from geometry_msgs.msg import Quaternion, Transform, Vector3
 
 from ihmc_msgs.msg import ArmTrajectoryRosMessage
-from ihmc_msgs.msg import FootstepStatusRosMessage
 from ihmc_msgs.msg import FootstepDataListRosMessage
 from ihmc_msgs.msg import FootstepDataRosMessage
+from ihmc_msgs.msg import FootstepStatusRosMessage
 from ihmc_msgs.msg import HeadTrajectoryRosMessage
 from ihmc_msgs.msg import NeckTrajectoryRosMessage
 from ihmc_msgs.msg import OneDoFJointTrajectoryRosMessage
