@@ -10,9 +10,9 @@ import tty
 from geometry_msgs.msg import Quaternion, Transform, Vector3
 
 from ihmc_msgs.msg import ArmTrajectoryRosMessage
+from ihmc_msgs.msg import FootstepStatusRosMessage
 from ihmc_msgs.msg import FootstepDataListRosMessage
 from ihmc_msgs.msg import FootstepDataRosMessage
-from ihmc_msgs.msg import FootstepStatusRosMessage
 from ihmc_msgs.msg import HeadTrajectoryRosMessage
 from ihmc_msgs.msg import NeckTrajectoryRosMessage
 from ihmc_msgs.msg import OneDoFJointTrajectoryRosMessage
@@ -42,26 +42,26 @@ class KeyboardTeleop(object):
             self.footstep_count += 1
 
     ARM_BINDINGS = OrderedDict([
-        ('q', {'joint_index': 0, 'side': 'left', 'min': -1.0, 'max': 1.0}),
-        ('w', {'joint_index': 1, 'side': 'left', 'min': -1.0, 'max': 1.0,
-               'invert': True}),
-        ('e', {'joint_index': 2, 'side': 'left', 'min': -1.0, 'max': 1.0}),
-        ('r', {'joint_index': 3, 'side': 'left', 'min': -1.0, 'max': 0.1,
-               'invert': True}),
-        ('a', {'joint_index': 4, 'side': 'left', 'min': -1.0, 'max': 1.0}),
-        ('s', {'joint_index': 5, 'side': 'left', 'min': -0.6, 'max': 0.6,
-               'invert': True}),
-        ('d', {'joint_index': 6, 'side': 'left', 'min': -0.3, 'max': 0.4,
-               'invert': True}),
+        ('q', {'joint_index': 0, 'side': 'left', 'min': -2.85, 'max': 2.0}),  # leftShoulderPitch
+        ('w', {'joint_index': 1, 'side': 'left', 'min': -1.519, 'max': 1.266,
+               'invert': True}),  # leftShoulderRoll
+        ('e', {'joint_index': 2, 'side': 'left', 'min': -3.1, 'max': 2.18}),  # leftShoulderYaw
+        ('r', {'joint_index': 3, 'side': 'left', 'min': -2.174, 'max': 0.12,
+               'invert': True}),  # leftElbowPitch
+        ('a', {'joint_index': 4, 'side': 'left', 'min': -2.019, 'max': 3.14}),  # leftForearmYaw
+        ('s', {'joint_index': 5, 'side': 'left', 'min': -0.62, 'max': 0.625,
+               'invert': True}),  # leftWristRoll
+        ('d', {'joint_index': 6, 'side': 'left', 'min': -0.36, 'max': 0.49,
+               'invert': True}),  # leftWristPitch
         ('t', {'joint_index': 'reset', 'side': 'left'}),
 
-        ('u', {'joint_index': 0, 'side': 'right', 'min': -1.0, 'max': 1.0}),
-        ('i', {'joint_index': 1, 'side': 'right', 'min': -1.0, 'max': 1.0}),
-        ('o', {'joint_index': 2, 'side': 'right', 'min': -1.0, 'max': 1.0}),
-        ('p', {'joint_index': 3, 'side': 'right', 'min': -0.1, 'max': 1.0}),
-        ('j', {'joint_index': 4, 'side': 'right', 'min': -1.0, 'max': 1.0}),
-        ('k', {'joint_index': 5, 'side': 'right', 'min': -0.6, 'max': 0.6}),
-        ('l', {'joint_index': 6, 'side': 'right', 'min': -0.4, 'max': 0.3}),
+        ('u', {'joint_index': 0, 'side': 'right', 'min': -2.85, 'max': 2.0}),  # rightShoulderPitch
+        ('i', {'joint_index': 1, 'side': 'right', 'min': -1.266, 'max': 1.519}),  # rightShoulderRoll
+        ('o', {'joint_index': 2, 'side': 'right', 'min': -3.1, 'max': 2.18}),  # rightShoulderYaw
+        ('p', {'joint_index': 3, 'side': 'right', 'min': -0.12, 'max': 2.174}),  # rightElbowPitch
+        ('j', {'joint_index': 4, 'side': 'right', 'min': -2.019, 'max': 3.14}),  # rightForearmYaw
+        ('k', {'joint_index': 5, 'side': 'right', 'min': -0.625, 'max': 0.62}),  # rightWristRoll
+        ('l', {'joint_index': 6, 'side': 'right', 'min': -0.49, 'max': 0.36}),  # rightWristPitch
         ('y', {'joint_index': 'reset', 'side': 'right'}),
     ])
 
@@ -73,9 +73,9 @@ class KeyboardTeleop(object):
     ])
 
     NECK_BINDINGS = OrderedDict([
-        ('b', {'joint_index': 0, 'min': 0.0, 'max': 0.5}),
-        ('n', {'joint_index': 1, 'min': -1.0, 'max': 1.0}),
-        ('m', {'joint_index': 2, 'min': -0.5, 'max': 0.0}),
+        ('b', {'joint_index': 0, 'min': 0.0, 'max': 0.5}),  # lowerNeckPitch? 'min': 0, 'max': 1.162
+        ('n', {'joint_index': 1, 'min': -1.0, 'max': 1.0}),  # neckYaw? 'min': -1.047, 'max': 1.047
+        ('m', {'joint_index': 2, 'min': -0.5, 'max': 0.0}),  # upperNeckPitch? 'min': -0.872, 'max': 0
         ('h', {'joint_index': 'reset'}),
     ])
 
@@ -203,7 +203,7 @@ class KeyboardTeleop(object):
             self.NECK_BINDINGS.keys()[3], self.NECK_BINDINGS.keys()[3].upper()]))
 
         # walking
-        [msg_args.append('{}, '.format(x)) for x in self.WALKING_BINDINGS.keys()]
+        [msg_args.append('{}'.format(x)) for x in self.WALKING_BINDINGS.keys()]
 
         print(msg_args)
 
@@ -437,9 +437,9 @@ class KeyboardTeleop(object):
     def getTranslationFootstepMsg(self, offset):
         msg = self.getEmptyFootsetListMsg()
         msg.footstep_data_list.append(self.createTranslationFootStepOffset(
-            self.LEFT, offset))
+            self.LEFT_FOOT, offset))
         msg.footstep_data_list.append(self.createTranslationFootStepOffset(
-            self.RIGHT, offset))
+            self.RIGHT_FOOT, offset))
         return msg
 
     def getRotationFooststepMsg(self, yaw):
@@ -471,14 +471,28 @@ class KeyboardTeleop(object):
         self.loginfo('done rotating')
 
     def set_init_pose(self):
-        self.loginfo('moving feet further apart\n')
-        msg = self.getEmptyFootsetListMsg()
-        msg.footstep_data_list.append(self.createTranslationFootStepOffset(
-            self.LEFT_FOOT, [0.0, 0.05, 0.0]))
-        msg.footstep_data_list.append(self.createTranslationFootStepOffset(
-            self.RIGHT_FOOT, [0.0, -0.05, 0.0]))
-        self.execute_footsteps(msg)
-        self.loginfo('done moving feet further apart\n')
+        left_foot_world = self.tfBuffer.lookup_transform(
+            'world', self.LEFT_FOOT_FRAME_NAME, rospy.Time())
+        right_foot_world = self.tfBuffer.lookup_transform(
+            'world', self.RIGHT_FOOT_FRAME_NAME, rospy.Time())
+        intermediate_transform = Transform()
+        distance_between_feet = sqrt(
+            (
+                right_foot_world.transform.translation.x -
+                left_foot_world.transform.translation.x
+            )**2 + (
+                right_foot_world.transform.translation.y -
+                left_foot_world.transform.translation.y
+            )**2)
+        if distance_between_feet <= 0.2:
+            self.loginfo('moving feet further apart\n')
+            msg = self.getEmptyFootsetListMsg()
+            msg.footstep_data_list.append(self.createTranslationFootStepOffset(
+                self.LEFT_FOOT, [0.0, 0.05, 0.0]))
+            msg.footstep_data_list.append(self.createTranslationFootStepOffset(
+                self.RIGHT_FOOT, [0.0, -0.05, 0.0]))
+            self.execute_footsteps(msg)
+            self.loginfo('done moving feet further apart\n')
 
     def _update_joint_values(self, label, binding, ch):
         joint_index = binding['joint_index']
@@ -501,7 +515,7 @@ class KeyboardTeleop(object):
 
             self.loginfo(
                 'Move %s joint #%d %s to %.1f: [%s]' %
-                (label, joint_index, '++' if is_lower_case else '--',
+                (label, joint_index, '++' if (is_lower_case != binding.get('invert', False)) else '--',
                  self.joint_values[label][joint_index],
                  ', '.join(
                      ['%.1f' % v for v in self.joint_values[label]])))
