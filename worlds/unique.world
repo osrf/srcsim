@@ -1,4 +1,5 @@
 <?xml version="1.0" ?>
+
 <sdf version="1.6">
   <world name="SRC_finals">
 
@@ -40,7 +41,7 @@
     <!-- A global light source -->
     <light type="directional" name="sun">
       <cast_shadows>true</cast_shadows>
-      <pose>0 0 1000 0.8976840340411865 -0.8808340660723502 0</pose>
+      <pose>0 0 1000 -0.3805097541626281 -1.08156007758464 0</pose>
       <diffuse>0.8 0.8 0.8 1</diffuse>
       <specular>0.2 0.2 0.2 1</specular>
       <attenuation>
@@ -127,18 +128,34 @@
     <include>
       <name>walkway_2</name>
       <pose>
-        3.9945735623730956
-        2.0238135623730944
-        0
-        0
-        0
-        -0.7853981633974485
+    3.9945735623730956
+    2.0238135623730944
+    0
+    0
+    0
+    -0.7853981633974485
       </pose>
       <uri>model://satellite_dish</uri>
     </include>
 
 
     <!-- Checkpoint 1 - Box plugin -->
+
+
+    <plugin name="boxT1CP1" filename="libBoxContainsPlugin.so">
+      <frequency>100</frequency>
+      <entity>valkyrie</entity>
+      <namespace>task1/checkpoint1</namespace>
+      <pose>
+        2.4389386437626905
+        0.46817864376269
+        2.5
+        0
+        0
+        -0.7853981633974485
+      </pose>
+      <size>1 1 5</size>
+    </plugin>
 
     <!-- Bling -->
     <include>
@@ -216,6 +233,20 @@
 
 
     <!-- Checkpoint 3 - Box plugin -->
+    <plugin name="boxT1CP3" filename="libBoxContainsPlugin.so">
+      <frequency>100</frequency>
+      <entity>valkyrie</entity>
+      <namespace>task1/checkpoint3</namespace>
+      <pose>
+        5.349954792220434
+        -1.077764963619373
+        2.5
+        0
+        0
+        3.141592653589793
+      </pose>
+      <size>3.048 3.048 5</size>
+    </plugin>
 
     <!-- Bling -->
     <include>
@@ -389,6 +420,22 @@
     </include>
 
 
+    <!-- Checkpoint 6 - Box plugin -->
+    <plugin name="boxT2CP6" filename="libBoxContainsPlugin.so">
+      <frequency>100</frequency>
+      <entity>valkyrie</entity>
+      <namespace>task2/checkpoint6</namespace>
+      <pose>
+        14.493954792220435
+        -1.077764963619374
+        2.5
+        0
+        0
+        3.141592653589793
+      </pose>
+      <size>3.048 3.048 5</size>
+    </plugin>
+
     <!-- Bling -->
     <include>
       <name>mars_crate_12</name>
@@ -487,6 +534,28 @@
 
 
 
+    <!-- TODO: Put the box inside the habitat -->
+
+    <!-- Checkpoint 8 - Box plugin -->
+
+    <plugin name="boxT3CP8" filename="libBoxContainsPlugin.so">
+      <frequency>100</frequency>
+      <entity>valkyrie</entity>
+      <namespace>task3/checkpoint8</namespace>
+      <pose>
+        17.318688792220435
+        -0.5382948716193742
+        2.5
+        0
+        0
+        -0.7853981633974485
+      </pose>
+      <size>3.048 3.048 5</size>
+    </plugin>
+
+    <!-- /TASK 3 -->
+
+
     <!-- Finals plugin -->
     <plugin name="run" filename="libFinalsPlugin.so">
 
@@ -496,19 +565,19 @@
         <task_1_checkpoint_2_pose>
           2.4389386437626905
           0.46817864376269
-          1.10
+          0.152151
           0
           0
-          0.7853981633974485
+          -0.7853981633974485
         </task_1_checkpoint_2_pose>
 
         <task_1_checkpoint_3_pose>
           2.4389386437626905
           0.46817864376269
-          1.10
+          0.152151
           0
           0
-          0.7853981633974485
+          -0.7853981633974485
         </task_1_checkpoint_3_pose>
 
 
@@ -518,7 +587,7 @@
         <task_2_checkpoint_1_pose>
           5.349954792220434
           -1.077764963619373
-          1.10
+          0.152151
           0
           0
           3.141592653589793
@@ -527,7 +596,7 @@
         <task_2_checkpoint_2_pose>
           6.873954792220434
           -1.077764963619373
-          1.10
+          0.152151
           0
           0
           -1.5707963267948968
@@ -536,7 +605,7 @@
         <task_2_checkpoint_3_pose>
           6.873954792220434
           -1.077764963619373
-          1.10
+          0.152151
           0
           0
           -1.5707963267948968
@@ -545,7 +614,7 @@
         <task_2_checkpoint_4_pose>
           6.873954792220434
           -1.077764963619373
-          1.10
+          0.152151
           0
           0
           -1.5707963267948968
@@ -554,7 +623,7 @@
         <task_2_checkpoint_5_pose>
           6.873954792220434
           -1.077764963619373
-          1.10
+          0.152151
           0
           0
           -1.5707963267948968
@@ -563,7 +632,7 @@
         <task_2_checkpoint_6_pose>
           10.683954792220433
           -2.5397649636193735
-          1.10
+          0.152151
           0
           0
           -1.8369701987210297e-16
@@ -576,7 +645,7 @@
         <task_3_checkpoint_1_pose>
           14.493954792220435
           -1.077764963619374
-          1.10
+          0.152151
           0
           0
           3.141592653589793
@@ -585,7 +654,7 @@
         <task_3_checkpoint_2_pose>
           14.493954792220435
           -1.077764963619374
-          1.10
+          0.152151
           0
           0
           3.141592653589793
@@ -594,7 +663,7 @@
         <task_3_checkpoint_3_pose>
           14.493954792220435
           -1.077764963619374
-          1.10
+          0.152151
           0
           0
           3.141592653589793
@@ -603,7 +672,7 @@
         <task_3_checkpoint_4_pose>
           14.493954792220435
           -1.077764963619374
-          1.10
+          0.152151
           0
           0
           3.141592653589793
@@ -612,7 +681,7 @@
         <task_3_checkpoint_5_pose>
           14.493954792220435
           -1.077764963619374
-          1.10
+          0.152151
           0
           0
           3.141592653589793
@@ -621,7 +690,7 @@
         <task_3_checkpoint_6_pose>
           14.493954792220435
           -1.077764963619374
-          1.10
+          0.152151
           0
           0
           3.141592653589793
@@ -630,7 +699,7 @@
         <task_3_checkpoint_7_pose>
           14.493954792220435
           -1.077764963619374
-          1.10
+          0.152151
           0
           0
           3.141592653589793
@@ -639,7 +708,7 @@
         <task_3_checkpoint_8_pose>
           14.493954792220435
           -1.077764963619374
-          1.10
+          0.152151
           0
           0
           3.141592653589793
