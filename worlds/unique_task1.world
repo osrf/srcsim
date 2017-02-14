@@ -439,7 +439,6 @@
     
 
     <plugin name="boxT1CP1" filename="libBoxContainsPlugin.so">
-      <frequency>100</frequency>
       <entity>valkyrie</entity>
       <namespace>task1/checkpoint1</namespace>
       <pose>
@@ -530,7 +529,6 @@
 
     <!-- Checkpoint 3 - Box plugin -->
     <plugin name="boxT1CP3" filename="libBoxContainsPlugin.so">
-      <frequency>100</frequency>
       <entity>valkyrie</entity>
       <namespace>task1/checkpoint3</namespace>
       <pose>
