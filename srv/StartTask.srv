@@ -1,0 +1,4 @@
+uint8 task_id
+uint8 checkpoint_id
+---
+bool success
