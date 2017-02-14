@@ -35,6 +35,17 @@
 
   ###############################################
   #                                             #
+  #             IMPORT OTHER FILES              #
+  #                                             #
+  ###############################################
+
+  # Helper function to import another erb file
+  def fromFile filename
+    return ERB.new(File.read(filename), nil, nil, '_sub01').result(binding)
+  end
+
+  ###############################################
+  #                                             #
   #            TRANSFORMATION MATRIX            #
   #                                             #
   ###############################################
@@ -391,17 +402,7 @@
                         tSatSlotOrigin
     %>
 
-      <include>
-        <pose>
-          <%= $satellite_frame[0, 2] %>
-          <%= $satellite_frame[1, 2] %>
-          0
-          0
-          0
-          <%= Math::atan2($satellite_frame[1, 0], $satellite_frame[0, 0]) %>
-        </pose>
-        <uri>model://satellite_dish</uri>
-      </include>
+    <%= fromFile("satellite.erb") %>
 
     <!-- Checkpoint 1 - Box plugin -->
     <%
