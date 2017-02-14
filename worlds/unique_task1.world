@@ -212,6 +212,20 @@
       <uri>model://walkway_finish_adjacent</uri>
     </include>
 
+    <!-- Checkpoint 3 - Box plugin -->
+    <plugin name="boxT1CP3" filename="libBoxContainsPlugin.so">
+      <entity>valkyrie</entity>
+      <namespace>task1/checkpoint3</namespace>
+      <pose>
+      4.679995469056598
+      2.694731561056596
+      -0.052151
+      0
+      0
+      -2.3561944901923453
+      </pose>
+      <size>3.048 3.048 5</size>
+    </plugin>
 
     <!-- Bling -->
     <include>
