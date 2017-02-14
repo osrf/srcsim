@@ -419,7 +419,7 @@
 
     <pitch_ratio>0.1</pitch_ratio>
     <pitch_pid>1000 100 10</pitch_pid>
-    <pitch_target>-0.0630511660142608</pitch_target>
+    <pitch_target>0.9</pitch_target>
 
     <!-- Tolerance in degrees -->
     <tolerance>5</tolerance>
