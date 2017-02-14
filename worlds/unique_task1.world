@@ -585,7 +585,7 @@
     <plugin name="finals" filename="libFinalsPlugin.so">
 
       
-        <task_1_timeout>180</task_1_timeout>
+        <task_1_timeout>1800</task_1_timeout>
 
         <task_1_checkpoint_2_pose>
           1.9859999999999998
