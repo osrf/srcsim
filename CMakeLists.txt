@@ -26,8 +26,8 @@ find_package(gazebo REQUIRED)
 
 add_message_files(
   FILES
-  Satellite.msg
   Console.msg
+  Satellite.msg
 )
 
 generate_messages()
