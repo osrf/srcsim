@@ -1,143 +1,20 @@
-<?xml version="1.0" ?>
+<%
+  # Template for satellite model for SRC finals world
 
-<sdf version="1.6">
-  <world name="SRC_finals">
+  # Requires the following global variables:
+  # $satellite_frame
 
-    <physics type="ode">
-      <real_time_update_rate>1000.0</real_time_update_rate>
-      <max_step_size>0.001</max_step_size>
-      <real_time_factor>1</real_time_factor>
-      <ode>
-        <solver>
-          <type>quick</type>
-          <iters>150</iters>
-          <precon_iters>0</precon_iters>
-          <sor>1.400000</sor>
-          <use_dynamic_moi_rescaling>1</use_dynamic_moi_rescaling>
-        </solver>
-        <constraints>
-          <cfm>0.000000</cfm>
-          <erp>0.800000</erp>
-          <contact_max_correcting_vel>2000.000000</contact_max_correcting_vel>
-          <contact_surface_layer>0.01000</contact_surface_layer>
-        </constraints>
-      </ode>
-    </physics>
-
-    <!-- GUI -->
-    <gui fullscreen='0'>
-      <camera name='user_camera'>
-        <pose>-4.1 -0.2 3.3 0 0.37 0</pose>
-      </camera>
-    </gui>
-
-    <!-- Scene -->
-    <scene>
-      <background>0.968627451 0.690196078 0.384313725 1.0</background>
-      <grid>0</grid>
-      <origin_visual>0</origin_visual>
-    </scene>
-
-    <!-- A global light source -->
-    <light type="directional" name="sun">
-      <cast_shadows>true</cast_shadows>
-      <pose>0 0 1000 -0.6738703905215202 -1.2460269213575421 0</pose>
-      <diffuse>0.8 0.8 0.8 1</diffuse>
-      <specular>0.2 0.2 0.2 1</specular>
-      <attenuation>
-        <range>1000</range>
-        <constant>0.9</constant>
-        <linear>0.01</linear>
-        <quadratic>0.001</quadratic>
-      </attenuation>
-      <direction>-0.5 0.1 -0.9</direction>
-    </light>
-
-    <!-- Background -->
-    <include>
-      <uri>model://heightmap_mars</uri>
-    </include>
-
-    <!-- START WALKWAY -->
-
-    <!-- Walkway -->
-    <include>
-      <name>walkway_1</name>
-      <pose>
-      -0.3
-      0
-      -0.052151
-      0
-      0
-      -1.5707963267948968
-      </pose>
-      <uri>model://walkway_metal_straight</uri>
-    </include>
-
-
-    <!-- Bling -->
-    <include>
-      <name>mars_rock_3_1</name>
-      <pose>
-      0.4619999999999998
-      -1.862
-      0
-      0
-      0
-      3.141592653589793
-      </pose>
-      <uri>model://mars_rock_3</uri>
-    </include>
-
-
-    <!-- Bling -->
-    <include>
-      <name>mars_rock_2_2</name>
-      <pose>
-      0.46200000000000024
-      1.262
-      0
-      0
-      0
-      -2.4492935982947064e-16
-      </pose>
-      <uri>model://mars_rock_2</uri>
-    </include>
-
-
-    
-
-    <!-- TASK 1 -->
-
-    <!-- Walkway -->
-    <include>
-      <name>walkway_2</name>
-      <pose>
-      2.524734
-      0.5394700919999994
-      -0.052151
-      0
-      0
-      2.356194490192345
-      </pose>
-      <uri>model://walkway_metal_45</uri>
-    </include>
-
-
-    <!-- Satellite -->
-    
-
-    
+%>
 
 <model name="satellite_dish">
 
   <pose>
-    1.9966949400811331
-    -2.8506735555415057
+    <%= $satellite_frame[0, 2] %>
+    <%= $satellite_frame[1, 2] %>
     0
     0
     0
-    3.141592653589793
+    <%= Math::atan2($satellite_frame[1, 0], $satellite_frame[0, 0]) %>
   </pose>
 
   <link name="base">
@@ -390,7 +267,7 @@
     <axis>
       <xyz>0 0 1</xyz>
       <dynamics>
-        <friction>2.8316148708925315</friction>
+        <friction><%= rand(2.0...3.0) %></friction>
       </dynamics>
     </axis>
   </joint>
@@ -401,7 +278,7 @@
     <axis>
       <xyz>0 0 1</xyz>
       <dynamics>
-        <friction>2.262622483644182</friction>
+        <friction><%= rand(2.0...3.0) %></friction>
       </dynamics>
     </axis>
   </joint>
@@ -415,11 +292,11 @@
 
     <yaw_ratio>0.1</yaw_ratio>
     <yaw_pid>1000 0 10</yaw_pid>
-    <yaw_target>1.1956362020524156</yaw_target>
+    <yaw_target><%= rand(-1.65...2.20) %></yaw_target>
 
     <pitch_ratio>0.1</pitch_ratio>
     <pitch_pid>1000 100 10</pitch_pid>
-    <pitch_target>1.088343938251467</pitch_target>
+    <pitch_target><%= rand(-0.2...1.25) %></pitch_target>
 
     <!-- Tolerance in degrees -->
     <tolerance>5</tolerance>
@@ -433,184 +310,3 @@
   </plugin>
 
 </model>
-
-
-    <!-- Checkpoint 1 - Box plugin -->
-    
-
-    <plugin name="boxT1CP1" filename="libBoxContainsPlugin.so">
-      <frequency>100</frequency>
-      <entity>valkyrie</entity>
-      <namespace>task1/checkpoint1</namespace>
-      <pose>
-        1.9966949400811336
-        -0.6506735555415055
-        2.5
-        0
-        0
-        -1.570796326794897
-      </pose>
-      <size>1 1 5</size>
-    </plugin>
-
-    <!-- Bling -->
-    <include>
-      <name>mars_rock_3_3</name>
-      <pose>
-      3.302551459305202
-      -1.3159781018335013
-      0
-      0
-      0
-      -2.356194490192345
-      </pose>
-      <uri>model://mars_rock_3</uri>
-    </include>
-
-
-    <!-- Walkway -->
-    <include>
-      <name>walkway_3</name>
-      <pose>
-      2.524734
-      0.5394700919999994
-      -0.052151
-      0
-      0
-      -0.7853981633974485
-      </pose>
-      <uri>model://walkway_metal_straight</uri>
-    </include>
-
-
-    <!-- Bling -->
-    <include>
-      <name>mars_rock_3_4</name>
-      <pose>
-      4.380182193833501
-      -0.23834736730520334
-      0
-      0
-      0
-      -2.3561944901923453
-      </pose>
-      <uri>model://mars_rock_3</uri>
-    </include>
-
-
-    <!-- Bling -->
-    <include>
-      <name>mars_rock_3_5</name>
-      <pose>
-      1.7469165406947984
-      2.3949182858335005
-      0
-      0
-      0
-      0.7853981633974481
-      </pose>
-      <uri>model://mars_rock_3</uri>
-    </include>
-
-
-    <!-- Final box 1 -->
-    <include>
-      <name>walkway_4</name>
-      <pose>
-      4.679995469056598
-      2.694731561056596
-      -0.052151
-      0
-      0
-      -2.3561944901923453
-      </pose>
-      <uri>model://walkway_finish_opposite</uri>
-    </include>
-
-
-    <!-- Checkpoint 3 - Box plugin -->
-    <plugin name="boxT1CP3" filename="libBoxContainsPlugin.so">
-      <frequency>100</frequency>
-      <entity>valkyrie</entity>
-      <namespace>task1/checkpoint3</namespace>
-      <pose>
-        4.679995469056598
-        2.694731561056596
-        2.5
-        0
-        0
-        -2.3561944901923453
-      </pose>
-      <size>3.048 3.048 5</size>
-    </plugin>
-
-    <!-- Bling -->
-    <include>
-      <name>mars_rock_3_6</name>
-      <pose>
-      2.8245472752230976
-      4.550179754890097
-      0
-      0
-      0
-      0.785398163397448
-      </pose>
-      <uri>model://mars_rock_3</uri>
-    </include>
-
-
-    <!-- Bling -->
-    <include>
-      <name>mars_crate_long_7</name>
-      <pose>
-      6.323311628534134
-      1.0514154015790589
-      0
-      0
-      0
-      -1.570796326794897
-      </pose>
-      <uri>model://mars_crate_long</uri>
-    </include>
-
-
-    <!-- /TASK 1 -->
-    
-
-    
-
-    
-
-    <!-- Finals plugin -->
-    <plugin name="finals" filename="libFinalsPlugin.so">
-
-      
-        <task_1_timeout>180</task_1_timeout>
-
-        <task_1_checkpoint_2_pose>
-          1.9966949400811336
-          -0.6506735555415055
-          1.1
-          0
-          0
-          -1.570796326794897
-        </task_1_checkpoint_2_pose>
-
-        <task_1_checkpoint_3_pose>
-          1.9966949400811336
-          -0.6506735555415055
-          1.1
-          0
-          0
-          -1.570796326794897
-        </task_1_checkpoint_3_pose>
-      
-
-      
-
-      
-
-    </plugin>
-
-  </world>
-</sdf>
