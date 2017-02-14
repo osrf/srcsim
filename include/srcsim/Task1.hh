@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Open Source Robotics Foundation
+ * Copyright (C) 2017 Open Source Robotics Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,6 +57,7 @@ namespace gazebo
 
     /// \brief Check whether the last message received from the satellite had
     /// the checkpoint complete.
+    /// \return True if the checkpoint is compelete.
     public: bool Check();
 
     /// \brief Callback when a satellite message is received.
@@ -82,6 +83,7 @@ namespace gazebo
     using BoxCheckpoint::BoxCheckpoint;
 
     /// \brief Check whether the robot is in the final box region.
+    /// \return True if the checkpoint is compelete.
     public: bool Check();
   };
 }
