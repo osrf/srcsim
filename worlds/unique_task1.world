@@ -126,25 +126,17 @@
 
     <!-- Satellite -->
 
-
-    <model name="satellite_frame">
-      <include>
-        <pose>
-          3.938947562373095
-          -1.952374204901394
-          0
-          0
-          0
-          -2.356194490192345
-        </pose>
-        <uri>model://satellite_dish</uri>
-      </include>
-
-      <joint name="satellite_world" type="fixed">
-        <parent>world</parent>
-        <child>satellite_dish::base</child>
-      </joint>
-    </model>
+    <include>
+      <pose>
+        3.938947562373095
+        -1.952374204901394
+        0
+        0
+        0
+        -2.356194490192345
+      </pose>
+      <uri>model://satellite_dish</uri>
+    </include>
 
     <!-- Bling -->
     <include>
@@ -274,3 +266,4 @@
 
   </world>
 </sdf>
+
