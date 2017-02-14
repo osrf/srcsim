@@ -20,7 +20,6 @@ set (SRCSIM_VERSION_FULL ${SRCSIM_MAJOR_VERSION}.${SRCSIM_MINOR_VERSION}.${SRCSI
 
 find_package(gazebo REQUIRED)
 
-
 ########################
 ## Message generation ##
 ########################
@@ -104,6 +103,25 @@ target_link_libraries(${qual2_plugin_name}
 #  ${${PROJECT_NAME}_EXPORTED_TARGETS}
 #)
 install(TARGETS ${qual2_plugin_name}
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin)
+
+##########################
+## Box plugin ##
+##########################
+
+# Create the libBoxContainsPlugin.so library.
+set(box_plugin_name BoxContainsPlugin)
+add_library(${box_plugin_name} SHARED
+  src/BoxContainsPlugin.cc
+)
+target_link_libraries(${box_plugin_name}
+  ${GAZEBO_LIBRARIES}
+  ${roscpp_LIBRARIES}
+  ${IGNITION-TRANSPORT_LIBRARIES}
+)
+install(TARGETS ${box_plugin_name}
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin)
