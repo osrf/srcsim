@@ -415,11 +415,11 @@
 
     <yaw_ratio>0.1</yaw_ratio>
     <yaw_pid>1000 0 10</yaw_pid>
-    <yaw_target>-0.04117564110176675</yaw_target>
+    <yaw_target>-0.5</yaw_target>
 
     <pitch_ratio>0.1</pitch_ratio>
     <pitch_pid>1000 100 10</pitch_pid>
-    <pitch_target>0.01455536973145996</pitch_target>
+    <pitch_target>1.0</pitch_target>
 
     <!-- Tolerance in degrees -->
     <tolerance>5</tolerance>
@@ -581,8 +581,8 @@
 
     
 
-    <!-- Run plugin -->
-    <plugin name="run" filename="libRunPlugin.so">
+    <!-- Finals plugin -->
+    <plugin name="finals" filename="libFinalsPlugin.so">
 
       
         <task_1_timeout>180</task_1_timeout>
