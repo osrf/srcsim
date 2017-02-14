@@ -30,12 +30,9 @@ namespace gazebo
   ///
   ///  <plugin name="boxContainsRobot" filename="libBoxContainsPlugin.so">
   ///
-  ///    <!-- True to start checking automatically, false so it only starts
+  ///    <!-- True to enable automatically, false so it must be enabled
   ///         when toggled -->
-  ///    <start>true</start>
-  ///
-  ///    <!-- Frequency in Hertz on which to send updates -->
-  ///    <frequency>100</frequency>
+  ///    <enabled>true</enabled>
   ///
   ///    <!-- Scoped name of entity to check -->
   ///    <entity>robot</entity>
@@ -100,8 +97,8 @@ namespace gazebo
     /// /<ns>/box/toggle
     private: std::string ns;
 
-    /// \brief Update period in seconds.
-    public: int period;
+    /// \brief Whether contains or not
+    public: int contains = -1;
 
     /// \brief Previous update time.
     public: common::Time prevTime;
