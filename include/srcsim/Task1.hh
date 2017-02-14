@@ -57,6 +57,7 @@ namespace gazebo
 
     /// \brief Check whether the last message received from the satellite had
     /// the checkpoint complete.
+    /// \return True if the checkpoint is compelete.
     public: bool Check();
 
     /// \brief Callback when a satellite message is received.
@@ -82,6 +83,7 @@ namespace gazebo
     using BoxCheckpoint::BoxCheckpoint;
 
     /// \brief Check whether the robot is in the final box region.
+    /// \return True if the checkpoint is compelete.
     public: bool Check();
   };
 }
