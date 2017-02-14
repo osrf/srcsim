@@ -273,5 +273,26 @@
       <child>base</child>
     </joint>
 
+    <plugin name="satellite_plugin" filename="libSatellitePlugin.so">
+
+      <yaw_ratio>0.1</yaw_ratio>
+      <yaw_pid>1000 0 10</yaw_pid>
+      <yaw_target>1</yaw_target>
+
+      <pitch_ratio>0.1</pitch_ratio>
+      <pitch_pid>1000 100 10</pitch_pid>
+      <pitch_target>-0.2</pitch_target>
+
+      <!-- Tolerance in degrees -->
+      <tolerance>5</tolerance>
+
+      <!-- Target time to hold position in seconds -->
+      <time>5</time>
+
+      <topic>/task1/checkpoint2/satellite</topic>
+      <frequency>100</frequency>
+
+    </plugin>
+
   </model>
 </sdf>

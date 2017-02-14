@@ -58,20 +58,6 @@
       <uri>model://heightmap_mars</uri>
     </include>
 
-    <!-- Placeholder robot -->
-    <include>
-      <name>valkyrie</name>
-      <pose>
-        0
-        0
-        0.152151
-        0
-        0
-        1.5707963267948966
-      </pose>
-      <uri>model://person_standing</uri>
-    </include>
-
     <!-- START WALKWAY -->
 
     <!-- Walkway -->

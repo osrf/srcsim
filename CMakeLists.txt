@@ -156,6 +156,28 @@ install(TARGETS ${box_plugin_name}
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin)
 
+##########################
+## Satellite plugin ##
+##########################
+
+# Create the libSatellitePlugin.so library.
+set(satellite_plugin_name SatellitePlugin)
+add_library(${satellite_plugin_name} SHARED
+  src/SatellitePlugin.cc
+)
+target_link_libraries(${satellite_plugin_name}
+  ${GAZEBO_LIBRARIES}
+  ${roscpp_LIBRARIES}
+  ${IGNITION-TRANSPORT_LIBRARIES}
+)
+
+add_dependencies(${satellite_plugin_name} srcsim_generate_messages_cpp)
+
+install(TARGETS ${satellite_plugin_name}
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin)
+
 #############
 ## Install ##
 #############
