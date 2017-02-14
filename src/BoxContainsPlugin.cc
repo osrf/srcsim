@@ -59,12 +59,6 @@ void BoxContainsPlugin::Load(physics::WorldPtr _world, sdf::ElementPtr _sdf)
     return;
   }
 
-  // Update period
-  if (_sdf->HasElement("frequency"))
-    this->period = 1.0/_sdf->Get<double>("frequency");
-  else
-    this->period = 1.0/30.0;
-
   auto size = _sdf->Get<ignition::math::Vector3d>("size");
   auto pose = _sdf->Get<ignition::math::Pose3d>("pose");
   this->entityName = _sdf->Get<std::string>("entity");
@@ -80,8 +74,8 @@ void BoxContainsPlugin::Load(physics::WorldPtr _world, sdf::ElementPtr _sdf)
   this->toggleSub = this->gzNode->Subscribe("/" + this->ns + "/box/toggle",
       &BoxContainsPlugin::Toggle, this);
 
-  auto start = _sdf->HasElement("start") && _sdf->Get<bool>("start");
-  if (start)
+  auto enabled = _sdf->HasElement("enabled") && _sdf->Get<bool>("enabled");
+  if (enabled)
   {
     ConstIntPtr msg;
     this->Toggle(msg);
@@ -98,7 +92,7 @@ void BoxContainsPlugin::Toggle(ConstIntPtr &/*_msg*/)
     if (!this->entity)
     {
       gzerr << "Can't find entity[" << entity <<
-          "] in world. Failed to start Box Plugin." << std::endl;
+          "] in world. Failed to enable Box Plugin." << std::endl;
       return;
     }
 
@@ -119,20 +113,8 @@ void BoxContainsPlugin::Toggle(ConstIntPtr &/*_msg*/)
 }
 
 /////////////////////////////////////////////////
-void BoxContainsPlugin::OnUpdate(const common::UpdateInfo &_info)
+void BoxContainsPlugin::OnUpdate(const common::UpdateInfo &/*_info*/)
 {
-  auto currentTime = _info.simTime;
-
-  // Check for world reset
-  if (currentTime < this->prevTime)
-    this->prevTime = currentTime;
-
-  // Throttle update
-  if ((currentTime - this->prevTime).Double() < this->period)
-    return;
-
-  this->prevTime = currentTime;
-
   // For safety
   if (!this->entity)
   {
@@ -141,12 +123,16 @@ void BoxContainsPlugin::OnUpdate(const common::UpdateInfo &_info)
   }
 
   auto pos = this->entity->GetWorldPose().Ign().Pos();
-  auto contains = this->box.Contains(pos);
+  auto containsNow = this->box.Contains(pos) ? 1 : 0;
 
-  msgs::Int msg;
-  msg.set_data(contains ? 1 : 0);
+  if (containsNow != this->contains)
+  {
+    this->contains = containsNow;
 
-  this->containsPub->Publish(msg);
+    msgs::Int msg;
+    msg.set_data(this->contains);
+
+    this->containsPub->Publish(msg);
+  }
 }
-
 
