@@ -38,6 +38,24 @@
 
   # button
   button_mass = total_mass * 0.02
+
+  # CoM offsets
+  large_panel_com_x = 0
+  large_panel_com_y = 0.05
+  large_panel_com_z = 0.24
+
+  small_panel_com_x = 0.1
+  small_panel_com_y = 0.015
+  small_panel_com_z = 0.005
+
+  # Inertia box dimensions
+  large_panel_inertia_x = 0.406
+  large_panel_inertia_y = 0.030
+  large_panel_inertia_z = 0.336
+
+  small_panel_inertia_x = 0.2
+  small_panel_inertia_y = 0.025
+  small_panel_inertia_z = 0.24
 %>
 
 <model name="solar_panel">
@@ -81,7 +99,16 @@
 
   <link name="panel_01">
 
-    <%= printInertialBox(0, 0.05, 0.24, large_panel_mass, 0.406, 0.057, 0.336) %>
+    <%=
+      printInertialBox(
+          large_panel_com_x,
+          large_panel_com_y,
+          large_panel_com_z,
+          large_panel_mass,
+          large_panel_inertia_x,
+          large_panel_inertia_y,
+          large_panel_inertia_z)
+    %>
 
     <collision name="panel_collision">
       <geometry>
@@ -132,7 +159,15 @@
 
   <link name="panel_02">
 
-    <%= printInertialBox(0, -0.05, 0.24, large_panel_mass, 0.406, 0.057, 0.336) %>
+    <%= printInertialBox(
+          large_panel_com_x,
+          -large_panel_com_y,
+          large_panel_com_z,
+          large_panel_mass,
+          large_panel_inertia_x,
+          large_panel_inertia_y,
+          large_panel_inertia_z)
+    %>
 
     <collision name="collision">
       <geometry>
@@ -162,7 +197,15 @@
 
     <pose>0.2 0.03 0.2 0 0 0</pose>
 
-    <%= printInertialBox(-0.1, -0.015, 0.005, small_panel_mass, 0.2, 0.025, 0.24) %>
+    <%= printInertialBox(
+          -small_panel_com_x,
+          -small_panel_com_y,
+          small_panel_com_z,
+          small_panel_mass,
+          small_panel_inertia_x,
+          small_panel_inertia_y,
+          small_panel_inertia_z)
+    %>
 
     <collision name="collision">
       <pose>-0.2 -0.03 -0.2 0 0 0</pose>
@@ -194,7 +237,15 @@
 
     <pose>0.2 -0.03 0.2 0 0 0</pose>
 
-    <%= printInertialBox(-0.1, 0.015, 0.005, small_panel_mass, 0.2, 0.025, 0.24) %>
+    <%= printInertialBox(
+          -small_panel_com_x,
+          small_panel_com_y,
+          small_panel_com_z,
+          small_panel_mass,
+          small_panel_inertia_x,
+          small_panel_inertia_y,
+          small_panel_inertia_z)
+    %>
 
     <collision name="collision">
       <pose>-0.2 0.03 -0.2 0 0 0</pose>
@@ -226,7 +277,15 @@
 
     <pose>-0.2 0.03 0.2 0 0 0</pose>
 
-    <%= printInertialBox(0.1, -0.015, 0.005, small_panel_mass, 0.2, 0.025, 0.24) %>
+    <%= printInertialBox(
+          small_panel_com_x,
+          -small_panel_com_y,
+          small_panel_com_z,
+          small_panel_mass,
+          small_panel_inertia_x,
+          small_panel_inertia_y,
+          small_panel_inertia_z)
+    %>
 
     <collision name="collision">
       <pose>0.2 -0.03 -0.2 0 0 0</pose>
@@ -258,7 +317,15 @@
 
     <pose>-0.2 -0.03 0.2 0 0 0</pose>
 
-    <%= printInertialBox(0.1, 0.015, 0.005, small_panel_mass, 0.2, 0.025, 0.24) %>
+    <%= printInertialBox(
+          small_panel_com_x,
+          small_panel_com_y,
+          small_panel_com_z,
+          small_panel_mass,
+          small_panel_inertia_x,
+          small_panel_inertia_y,
+          small_panel_inertia_z)
+    %>
 
     <collision name="collision">
       <pose>0.2 0.03 -0.2 0 0 0</pose>
@@ -317,6 +384,13 @@
         </mesh>
       </geometry>
     </visual>
+
+    <sensor name="button_contact" type="contact">
+      <contact>
+        <collision>collision</collision>
+      </contact>
+    </sensor>
+
   </link>
 
   <%
@@ -434,6 +508,21 @@
         <spring_reference>0</spring_reference>
       </dynamics>
     </axis>
+  </joint>
+
+  <joint name="lock_1" type="fixed">
+    <parent>panel_01</parent>
+    <child>panel_02</child>
+  </joint>
+
+  <joint name="lock_2" type="fixed">
+    <parent>panel_small_01</parent>
+    <child>panel_small_03</child>
+  </joint>
+
+  <joint name="lock_3" type="fixed">
+    <parent>panel_small_02</parent>
+    <child>panel_small_04</child>
   </joint>
 
   <plugin name="solar_panel_plugin" filename="libSolarPanelPlugin.so">

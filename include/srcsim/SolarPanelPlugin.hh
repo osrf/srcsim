@@ -21,6 +21,7 @@
 #include <gazebo/common/Plugin.hh>
 #include <gazebo/physics/Joint.hh>
 #include <gazebo/physics/Model.hh>
+#include <gazebo/sensors/ContactSensor.hh>
 #include <gazebo/transport/Node.hh>
 #include <sdf/sdf.hh>
 
@@ -41,11 +42,17 @@ namespace gazebo
     /// \brief Update plugin's function.
     private: void OnUpdate(const common::UpdateInfo &/*_info*/);
 
+    /// \brief Pointer to the solar panel model.
+    private: physics::ModelPtr model;
+
     /// \brief Pointer to the button joint.
     private: physics::JointPtr buttonJoint;
 
+    /// \brief Pointer to the joints locking the panel closed.
+    private: std::vector<physics::JointPtr> lockJoints;
+
     /// \brief Joints which will be actuated to open the panel.
-    private: std::vector<physics::JointPtr> joints;
+    private: std::vector<physics::JointPtr> panelJoints;
 
     /// \brief Whether the button is pressed.
     private: bool pressed = false;
@@ -62,6 +69,9 @@ namespace gazebo
     /// \brief Between 0% of the range and this value the button is considered
     /// not pressed. From this value to 100% the button is considered pressed.
     private: static const int kPercentageButtonPressed = 75;
+
+    /// \brief Contact sensor attached to button
+    private: sensors::ContactSensorPtr contactSensor;
 
     /// \brief Gazebo transport node for communication.
     private: transport::NodePtr gzNode;

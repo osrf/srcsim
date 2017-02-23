@@ -20,6 +20,7 @@
 #include <gazebo/common/Assert.hh>
 #include <gazebo/physics/Joint.hh>
 #include <gazebo/physics/Model.hh>
+#include <gazebo/sensors/SensorManager.hh>
 #include <sdf/sdf.hh>
 
 #include "srcsim/SolarPanelPlugin.hh"
@@ -39,26 +40,53 @@ void SolarPanelPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
   GZ_ASSERT(_model, "Model pointer is null");
   GZ_ASSERT(_sdf, "SDF pointer is null");
 
-  this->joints.push_back(_model->GetJoint("base_panel_01"));
-  this->joints.push_back(_model->GetJoint("base_panel_02"));
-  this->joints.push_back(_model->GetJoint("panel_01_panel_small_01"));
-  this->joints.push_back(_model->GetJoint("panel_01_panel_small_03"));
-  this->joints.push_back(_model->GetJoint("panel_02_panel_small_02"));
-  this->joints.push_back(_model->GetJoint("panel_02_panel_small_04"));
+  this->model = _model;
 
-  for (const auto &it : this->joints)
-  {
-    if (!it)
-    {
-      gzerr << "Some joint was not found" << std::endl;
-      return;
-    }
-  }
-
+  // Button joint
   this->buttonJoint = _model->GetJoint("button");
   if (!this->buttonJoint)
   {
     gzerr << "Joint [button] not found" << std::endl;
+    return;
+  }
+
+  // Lock joints
+  this->lockJoints.push_back(_model->GetJoint("lock_1"));
+  this->lockJoints.push_back(_model->GetJoint("lock_2"));
+  this->lockJoints.push_back(_model->GetJoint("lock_3"));
+
+  for (const auto &it : this->lockJoints)
+  {
+    if (!it)
+    {
+      gzerr << "Some lock joint was not found" << std::endl;
+      return;
+    }
+  }
+
+  // Panel joints
+  this->panelJoints.push_back(_model->GetJoint("base_panel_01"));
+  this->panelJoints.push_back(_model->GetJoint("base_panel_02"));
+  this->panelJoints.push_back(_model->GetJoint("panel_01_panel_small_01"));
+  this->panelJoints.push_back(_model->GetJoint("panel_01_panel_small_03"));
+  this->panelJoints.push_back(_model->GetJoint("panel_02_panel_small_02"));
+  this->panelJoints.push_back(_model->GetJoint("panel_02_panel_small_04"));
+
+  for (const auto &it : this->panelJoints)
+  {
+    if (!it)
+    {
+      gzerr << "Some panel joint was not found" << std::endl;
+      return;
+    }
+  }
+
+  // Contact sensor
+  this->contactSensor = std::dynamic_pointer_cast<sensors::ContactSensor>(
+      sensors::SensorManager::Instance()->GetSensor("button_contact"));
+  if (!this->contactSensor)
+  {
+    gzerr << "Contact sensor not found" << std::endl;
     return;
   }
 
@@ -93,12 +121,16 @@ void SolarPanelPlugin::Toggle(ConstIntPtr &/*_msg*/)
 
     this->openedPub = this->gzNode->Advertise<msgs::Int>(
         "/task2/checkpoint3/opened");
+
+    this->contactSensor->SetActive(true);
+
     gzmsg << "Started solar panel plugin" << std::endl;
   }
   // Stop
   else
   {
     this->updateConnection.reset();
+    this->contactSensor->SetActive(false);
     gzmsg << "Stopped solar panel plugin" << std::endl;
   }
 }
@@ -107,11 +139,12 @@ void SolarPanelPlugin::Toggle(ConstIntPtr &/*_msg*/)
 void SolarPanelPlugin::OnUpdate(const common::UpdateInfo &/*_info*/)
 {
   // Something went wrong, nothing to do.
-  if (!this->buttonJoint || !(this->joints.size() == 6u))
+  if (!this->buttonJoint || !(this->panelJoints.size() == 6u))
     return;
 
   // It's enough to press the button once
-  if (!this->pressed)
+  // Only accept pressed if the button is in contact with something
+  if (!this->pressed && this->contactSensor->Contacts().contact().size())
   {
     int percentagePressed = 100 -
       ((this->buttonJoint->GetAngle(0).Radian() - this->lowerLimit) /
@@ -124,50 +157,59 @@ void SolarPanelPlugin::OnUpdate(const common::UpdateInfo &/*_info*/)
   if (!this->pressed)
     return;
 
+  // Remove joints locking panel closed
+  if (this->lockJoints.size() > 0)
+  {
+    this->lockJoints.clear();
+    this->model->RemoveJoint("lock_1");
+    this->model->RemoveJoint("lock_2");
+    this->model->RemoveJoint("lock_3");
+  }
+
   auto largeForce = 1.0;
   auto smallForce = 0.5;
 
-  bool p1open = this->joints[0]->GetAngle(0).Radian() <= -IGN_PI * 0.4;
-  bool p2open = this->joints[1]->GetAngle(0).Radian() >=  IGN_PI * 0.4;
-  bool ps1open = this->joints[2]->GetAngle(0).Radian() >=  IGN_PI * 0.8;
-  bool ps2open = this->joints[3]->GetAngle(0).Radian() <= -IGN_PI * 0.8;
-  bool ps3open = this->joints[4]->GetAngle(0).Radian() <= -IGN_PI * 0.8;
-  bool ps4open = this->joints[5]->GetAngle(0).Radian() >=  IGN_PI * 0.8;
+  bool p1open = this->panelJoints[0]->GetAngle(0).Radian() <= -IGN_PI * 0.4;
+  bool p2open = this->panelJoints[1]->GetAngle(0).Radian() >=  IGN_PI * 0.4;
+  bool ps1open = this->panelJoints[2]->GetAngle(0).Radian() >=  IGN_PI * 0.8;
+  bool ps2open = this->panelJoints[3]->GetAngle(0).Radian() <= -IGN_PI * 0.8;
+  bool ps3open = this->panelJoints[4]->GetAngle(0).Radian() <= -IGN_PI * 0.8;
+  bool ps4open = this->panelJoints[5]->GetAngle(0).Radian() >=  IGN_PI * 0.8;
 
   // Large panel 1
   if (!p1open)
   {
-    this->joints[0]->SetForce(0, -largeForce);
+    this->panelJoints[0]->SetForce(0, -largeForce);
   }
 
   // Large panel 2
   if (!p2open)
   {
-    this->joints[1]->SetForce(0, largeForce);
+    this->panelJoints[1]->SetForce(0, largeForce);
   }
 
   // Small panel 1
   if (p1open && p2open && !ps1open)
   {
-    this->joints[2]->SetForce(0, smallForce);
+    this->panelJoints[2]->SetForce(0, smallForce);
   }
 
   // Small panel 2
   if (p1open && p2open && !ps2open)
   {
-    this->joints[3]->SetForce(0, -smallForce);
+    this->panelJoints[3]->SetForce(0, -smallForce);
   }
 
   // Small panel 3
   if (p1open && p2open && !ps3open)
   {
-    this->joints[4]->SetForce(0, -smallForce);
+    this->panelJoints[4]->SetForce(0, -smallForce);
   }
 
   // Small panel 4
   if (p1open && p2open && !ps4open)
   {
-    this->joints[5]->SetForce(0, smallForce);
+    this->panelJoints[5]->SetForce(0, smallForce);
   }
 
   // This is a single-use plugin. After all panels are open, publish a message
