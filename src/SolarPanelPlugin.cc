@@ -113,7 +113,7 @@ void SolarPanelPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
 void SolarPanelPlugin::Toggle(ConstIntPtr &/*_msg*/)
 {
   // Start
-  if (!this->updateConnection)
+  if (!this->openedPub)
   {
     // Start update
     this->updateConnection = event::Events::ConnectWorldUpdateBegin(
@@ -216,13 +216,13 @@ void SolarPanelPlugin::OnUpdate(const common::UpdateInfo &/*_info*/)
   // and stop updating
   if (p1open && p2open && ps1open && ps2open && ps3open && ps4open)
   {
+    gzmsg << "Solar panel is open" << std::endl;
+
     gazebo::msgs::Int msg;
     msg.set_data(1);
 
     this->openedPub->Publish(msg);
 
     this->updateConnection.reset();
-
-    gzmsg << "Solar panel is open" << std::endl;
   }
 }
