@@ -1,0 +1,186 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <model name="mars_explorer">
+    <static>1</static>
+    <link name="link">
+
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://mars_explorer/meshes/mars_explorer.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+
+      <collision name="trailer_left">
+        <pose>0.2871 1.70435 0.51765 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.030 0.945 0.186</size>
+          </box>
+        </geometry>
+      </collision>
+
+      <collision name="trailer_left_top">
+        <pose>0.304516 1.70435 0.5925 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.060321 0.945 0.03635</size>
+          </box>
+        </geometry>
+      </collision>
+
+      <collision name="trailer_left_handle">
+        <pose>0.362376 1.70005 0.5925 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.060321 0.190475 0.036350</size>
+          </box>
+        </geometry>
+      </collision>
+
+      <collision name="trailer_left_handle_edge_1">
+        <pose>0.338519 1.579486 0.5925 0 0 -0.681263</pose>
+        <geometry>
+          <box>
+            <size>0.051576 0.108054 0.03635</size>
+          </box>
+        </geometry>
+      </collision>
+
+      <collision name="trailer_left_handle_edge_2">
+        <pose>0.338519 1.820614 0.5925 0 0 0.681263</pose>
+        <geometry>
+          <box>
+            <size>0.051576 0.108054 0.03635</size>
+          </box>
+        </geometry>
+      </collision>
+
+      <collision name="trailer_right">
+        <pose>-0.2871 1.70435 0.51765 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.030 0.945 0.186</size>
+          </box>
+        </geometry>
+      </collision>
+
+      <collision name="trailer_right_top">
+        <pose>-0.304516 1.70435 0.5925 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.060321 0.945 0.03635</size>
+          </box>
+        </geometry>
+      </collision>
+
+      <collision name="trailer_right_handle">
+        <pose>-0.362376 1.70005 0.5925 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.060321 0.190475 0.036350</size>
+          </box>
+        </geometry>
+      </collision>
+
+      <collision name="trailer_right_handle_edge_1">
+        <pose>-0.338519 1.579486 0.5925 0 0 0.681263</pose>
+        <geometry>
+          <box>
+            <size>0.051576 0.108054 0.03635</size>
+          </box>
+        </geometry>
+      </collision>
+
+      <collision name="trailer_right_handle_edge_2">
+        <pose>-0.338519 1.820614 0.5925 0 0 -0.681263</pose>
+        <geometry>
+          <box>
+            <size>0.051576 0.108054 0.03635</size>
+          </box>
+        </geometry>
+      </collision>
+
+      <collision name="trailer_bottom">
+        <pose>0 1.7 0.4396 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.5718 0.9534 0.035</size>
+          </box>
+        </geometry>
+      </collision>
+
+      <collision name="trailer_back">
+        <pose>0 1.24188 0.51765 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.5718 0.036 0.186</size>
+          </box>
+        </geometry>
+      </collision>
+
+      <collision name="wheel_right_back">
+        <pose>-0.6286 1.6991 0.2542 0 -1.5707 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.263245</radius>
+            <length>0.241910</length>
+          </cylinder>
+        </geometry>
+      </collision>
+
+      <collision name="wheel_left_back">
+        <pose>0.6286 1.6991 0.2542 0 -1.5707 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.263245</radius>
+            <length>0.241910</length>
+          </cylinder>
+        </geometry>
+      </collision>
+
+      <collision name="wheel_right_center">
+        <pose>-0.6286 0.688 0.2542 0 -1.5707 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.263245</radius>
+            <length>0.241910</length>
+          </cylinder>
+        </geometry>
+      </collision>
+
+      <collision name="wheel_left_center">
+        <pose>0.6286 0.688 0.2542 0 -1.5707 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.263245</radius>
+            <length>0.241910</length>
+          </cylinder>
+        </geometry>
+      </collision>
+
+      <collision name="wheel_right_front">
+        <pose>-0.6286 -0.655 0.2542 0 -1.5707 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.263245</radius>
+            <length>0.241910</length>
+          </cylinder>
+        </geometry>
+      </collision>
+
+      <collision name="wheel_left_front">
+        <pose>0.6286 -0.655 0.2542 0 -1.5707 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.263245</radius>
+            <length>0.241910</length>
+          </cylinder>
+        </geometry>
+      </collision>
+
+    </link>
+  </model>
+</sdf>

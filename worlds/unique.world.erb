@@ -522,15 +522,32 @@
     <!-- Rover -->
     <%
       randomSlot()
-      # TODO: Rover goes here
+
+      tRoverSlotOrigin = TMatrix(0, 1.95, Math::PI);
+      rover_frame = $current_frame *
+                    $current_walkway[$slot] *
+                    tRoverSlotOrigin
     %>
+
+    <include>
+      <pose>
+        <%= rover_frame[0, 2] %>
+        <%= rover_frame[1, 2] %>
+        0
+        0
+        0
+        <%= Math::atan2(rover_frame[1, 0], rover_frame[0, 0]) %>
+      </pose>
+      <uri>model://mars_explorer</uri>
+    </include>
 
     <!-- Solar panel -->
     <%
-      tPanelSlotOrigin = TMatrix(0, 1.0, 0);
+      tPanelSlotOrigin = TMatrix(0, 0.05, rand(-Math::PI...Math::PI));
       $solar_panel_frame = $current_frame *
                            $current_walkway[$slot] *
                            tPanelSlotOrigin
+      $solar_panel_pos_z = 0.46
     %>
 
     <%= fromFile("solar_panel.erb") %>
