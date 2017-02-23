@@ -24,6 +24,20 @@
     "    </inertial>\n"\
   end
 
+  # Masses in kg
+  total_mass = 5
+
+  # Most of the mass is in the base, so the model is stable when open
+  base_mass = total_mass * 0.8
+
+  # 2 large panels
+  large_panel_mass = total_mass * 0.1 * 0.5
+
+  # 4 small panels
+  small_panel_mass = total_mass * 0.08 * 0.25
+
+  # button
+  button_mass = total_mass * 0.02
 %>
 
 <model name="solar_panel">
@@ -39,7 +53,7 @@
 
   <link name="base">
 
-    <%= printInertialBox(0, 0, 0.04, 1.0, 0.406, 0.1, 0.05) %>
+    <%= printInertialBox(0, 0, 0.04, base_mass, 0.406, 0.1, 0.05) %>
 
     <collision name="collision">
       <geometry>
@@ -67,7 +81,7 @@
 
   <link name="panel_01">
 
-    <%= printInertialBox(0, 0.05, 0.24, 1.5, 0.406, 0.057, 0.336) %>
+    <%= printInertialBox(0, 0.05, 0.24, large_panel_mass, 0.406, 0.057, 0.336) %>
 
     <collision name="panel_collision">
       <geometry>
@@ -118,7 +132,7 @@
 
   <link name="panel_02">
 
-    <%= printInertialBox(0, -0.05, 0.24, 1.5, 0.406, 0.057, 0.336) %>
+    <%= printInertialBox(0, -0.05, 0.24, large_panel_mass, 0.406, 0.057, 0.336) %>
 
     <collision name="collision">
       <geometry>
@@ -148,7 +162,7 @@
 
     <pose>0.2 0.03 0.2 0 0 0</pose>
 
-    <%= printInertialBox(-0.1, -0.015, 0.005, 0.2, 0.2, 0.025, 0.24) %>
+    <%= printInertialBox(-0.1, -0.015, 0.005, small_panel_mass, 0.2, 0.025, 0.24) %>
 
     <collision name="collision">
       <pose>-0.2 -0.03 -0.2 0 0 0</pose>
@@ -180,7 +194,7 @@
 
     <pose>0.2 -0.03 0.2 0 0 0</pose>
 
-    <%= printInertialBox(-0.1, 0.015, 0.005, 0.2, 0.2, 0.025, 0.24) %>
+    <%= printInertialBox(-0.1, 0.015, 0.005, small_panel_mass, 0.2, 0.025, 0.24) %>
 
     <collision name="collision">
       <pose>-0.2 0.03 -0.2 0 0 0</pose>
@@ -212,7 +226,7 @@
 
     <pose>-0.2 0.03 0.2 0 0 0</pose>
 
-    <%= printInertialBox(0.1, -0.015, 0.005, 0.2, 0.2, 0.025, 0.24) %>
+    <%= printInertialBox(0.1, -0.015, 0.005, small_panel_mass, 0.2, 0.025, 0.24) %>
 
     <collision name="collision">
       <pose>0.2 -0.03 -0.2 0 0 0</pose>
@@ -244,7 +258,7 @@
 
     <pose>-0.2 -0.03 0.2 0 0 0</pose>
 
-    <%= printInertialBox(0.1, 0.015, 0.005, 0.2, 0.2, 0.025, 0.24) %>
+    <%= printInertialBox(0.1, 0.015, 0.005, small_panel_mass, 0.2, 0.025, 0.24) %>
 
     <collision name="collision">
       <pose>0.2 0.03 -0.2 0 0 0</pose>
@@ -277,7 +291,7 @@
 
     <pose>-0.155 0 0.4 0 0 0</pose>
 
-    <%= printInertialBox(0, 0, 0.017, 0.1, 0.07, 0.07, 0.03) %>
+    <%= printInertialBox(0, 0, 0.017, button_mass, 0.07, 0.07, 0.03) %>
 
     <collision name="collision">
       <pose>0.155 0 -0.4 0 0 0</pose>
@@ -305,6 +319,10 @@
     </visual>
   </link>
 
+  <%
+    panel_joint_damping = 0.1
+  %>
+
   <joint name="base_panel_01" type="revolute">
     <pose>0 0.0455 0.095 0 0 0</pose>
     <parent>base</parent>
@@ -315,6 +333,9 @@
        <lower><%= -Math::PI * 0.5 %></lower>
        <upper>0</upper>
       </limit>
+      <dynamics>
+        <damping><%= panel_joint_damping %></damping>
+      </dynamics>
     </axis>
   </joint>
 
@@ -328,6 +349,9 @@
        <lower>0</lower>
        <upper><%= Math::PI * 0.5 %></upper>
       </limit>
+      <dynamics>
+        <damping><%= panel_joint_damping %></damping>
+      </dynamics>
     </axis>
   </joint>
 
@@ -340,6 +364,9 @@
        <lower>0</lower>
        <upper><%= Math::PI %></upper>
       </limit>
+      <dynamics>
+        <damping><%= panel_joint_damping %></damping>
+      </dynamics>
     </axis>
   </joint>
 
@@ -352,6 +379,9 @@
        <lower><%= -Math::PI %></lower>
        <upper>0</upper>
       </limit>
+      <dynamics>
+        <damping><%= panel_joint_damping %></damping>
+      </dynamics>
     </axis>
   </joint>
 
@@ -364,6 +394,9 @@
        <lower><%= -Math::PI %></lower>
        <upper>0</upper>
       </limit>
+      <dynamics>
+        <damping><%= panel_joint_damping %></damping>
+      </dynamics>
     </axis>
   </joint>
 
@@ -376,20 +409,34 @@
        <lower>0</lower>
        <upper><%= Math::PI %></upper>
       </limit>
+      <dynamics>
+        <damping><%= panel_joint_damping %></damping>
+      </dynamics>
     </axis>
   </joint>
 
+  <%
+    button_z_pos = 0.005
+  %>
   <joint name="button" type="prismatic">
-    <pose>0 0 0 0 0 0</pose>
+    <pose>0 0 <%= button_z_pos %> 0 0 0</pose>
     <parent>panel_01</parent>
     <child>button</child>
     <axis>
       <xyz>0 0 1</xyz>
       <limit>
-       <lower>0</lower>
-       <upper>0.01</upper>
+       <lower><%= -button_z_pos %></lower>
+       <upper>0</upper>
       </limit>
+      <dynamics>
+        <damping>10</damping>
+        <spring_stiffness>1000</spring_stiffness>
+        <spring_reference>0</spring_reference>
+      </dynamics>
     </axis>
   </joint>
+
+  <plugin name="solar_panel_plugin" filename="libSolarPanelPlugin.so">
+  </plugin>
 
 </model>
