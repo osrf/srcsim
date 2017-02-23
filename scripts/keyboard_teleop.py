@@ -32,8 +32,6 @@ class KeyboardTeleop(object):
     # constants used for walking
     LEFT_FOOT_FRAME_NAME = None
     RIGHT_FOOT_FRAME_NAME = None
-    LEFT_FOOT = 0
-    RIGHT_FOOT = 1
     TRANS_STEP = 0.2  # each step will be 20cm
     ROT_STEP = radians(45)  # each rotation will be 45degrees
 
@@ -330,9 +328,9 @@ class KeyboardTeleop(object):
 
     def createRotationFootStepList(self, yaw):
         left_footstep = FootstepDataRosMessage()
-        left_footstep.robot_side = self.LEFT_FOOT
+        left_footstep.robot_side = FootstepDataRosMessage.LEFT
         right_footstep = FootstepDataRosMessage()
-        right_footstep.robot_side = self.RIGHT_FOOT
+        right_footstep.robot_side = FootstepDataRosMessage.RIGHT
 
         left_foot_world = self.tfBuffer.lookup_transform(
             'world', self.LEFT_FOOT_FRAME_NAME, rospy.Time())
@@ -400,7 +398,7 @@ class KeyboardTeleop(object):
         footstep = FootstepDataRosMessage()
         footstep.robot_side = step_side
 
-        if step_side == self.LEFT_FOOT:
+        if step_side == FootstepDataRosMessage.LEFT:
             foot_frame = self.LEFT_FOOT_FRAME_NAME
         else:
             foot_frame = self.RIGHT_FOOT_FRAME_NAME
@@ -428,8 +426,8 @@ class KeyboardTeleop(object):
 
     def getEmptyFootsetListMsg(self):
         msg = FootstepDataListRosMessage()
-        msg.transfer_time = 1.5
-        msg.swing_time = 1.5
+        msg.default_transfer_time = 1.5
+        msg.default_swing_time = 1.5
         msg.execution_mode = 0
         msg.unique_id = -1
         return msg
@@ -437,9 +435,9 @@ class KeyboardTeleop(object):
     def getTranslationFootstepMsg(self, offset):
         msg = self.getEmptyFootsetListMsg()
         msg.footstep_data_list.append(self.createTranslationFootStepOffset(
-            self.LEFT_FOOT, offset))
+            FootstepDataRosMessage.LEFT, offset))
         msg.footstep_data_list.append(self.createTranslationFootStepOffset(
-            self.RIGHT_FOOT, offset))
+            FootstepDataRosMessage.RIGHT, offset))
         return msg
 
     def getRotationFooststepMsg(self, yaw):
@@ -488,9 +486,9 @@ class KeyboardTeleop(object):
             self.loginfo('moving feet further apart\n')
             msg = self.getEmptyFootsetListMsg()
             msg.footstep_data_list.append(self.createTranslationFootStepOffset(
-                self.LEFT_FOOT, [0.0, 0.05, 0.0]))
+                FootstepDataRosMessage.LEFT, [0.0, 0.05, 0.0]))
             msg.footstep_data_list.append(self.createTranslationFootStepOffset(
-                self.RIGHT_FOOT, [0.0, -0.05, 0.0]))
+                FootstepDataRosMessage.RIGHT, [0.0, -0.05, 0.0]))
             self.execute_footsteps(msg)
             self.loginfo('done moving feet further apart\n')
 
