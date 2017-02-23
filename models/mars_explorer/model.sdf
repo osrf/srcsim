@@ -181,6 +181,15 @@
         </geometry>
       </collision>
 
+      <collision name="chassis">
+        <pose>0 -0.223874 0.850992 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.995498 2.665479 0.883886</size>
+          </box>
+        </geometry>
+      </collision>
+
     </link>
   </model>
 </sdf>
