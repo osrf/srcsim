@@ -459,7 +459,7 @@ class KeyboardTeleop(object):
         while count < max_iterations:
             self.rate.sleep()
             count += 1
-            if self.footstep_count != number_of_footsteps:
+            if self.footstep_count == number_of_footsteps:
                 return True
                 break
         msg = AbortWalkingRosMessage()
