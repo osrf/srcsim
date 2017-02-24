@@ -179,6 +179,26 @@ install(TARGETS ${satellite_plugin_name}
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin)
 
+#############################
+## Solar Panel Lift plugin ##
+#############################
+
+# Create the libSolarPanelLiftPlugin.so library.
+set(solar_panel_lift_plugin_name SolarPanelLiftPlugin)
+add_library(${solar_panel_lift_plugin_name} SHARED
+  src/SolarPanelLiftPlugin.cc
+)
+target_link_libraries(${solar_panel_lift_plugin_name}
+  ${catkin_LIBRARIES}
+  ${GAZEBO_LIBRARIES}
+  ${roscpp_LIBRARIES}
+)
+
+install(TARGETS ${solar_panel_lift_plugin_name}
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin)
+
 ##########################
 ##  Solar Panel plugin  ##
 ##########################
