@@ -456,7 +456,7 @@ class KeyboardTeleop(object):
         number_of_footsteps = len(msg.footstep_data_list)
         max_iterations = 50
         count = 0
-        while count < max_iterations: # and self.footstep_count != number_of_footsteps:
+        while count < max_iterations:
             self.rate.sleep()
             count += 1
             if self.footstep_count != number_of_footsteps:
