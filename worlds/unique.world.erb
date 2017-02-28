@@ -410,7 +410,7 @@
       t1cp2_frame = $satellite_frame * TMatrix(0, -2.2, Math::PI * 0.5)
       t1cp3_frame = t1cp2_frame
     %>
-
+<!--
     <plugin name="boxT1CP1" filename="libBoxContainsPlugin.so">
       <entity>valkyrie</entity>
       <namespace>task1/checkpoint1</namespace>
@@ -424,7 +424,7 @@
       </pose>
       <size>1 1 5</size>
     </plugin>
-
+-->
     <!-- Bling -->
     <%=
       remainingSlot()
@@ -454,6 +454,7 @@
     %>
 
     <!-- Checkpoint 3 - Box plugin -->
+<!--
     <plugin name="boxT1CP3" filename="libBoxContainsPlugin.so">
       <entity>valkyrie</entity>
       <namespace>task1/checkpoint3</namespace>
@@ -467,7 +468,7 @@
       </pose>
       <size><%= finish_walkway_length %> <%= finish_walkway_length %> 5</size>
     </plugin>
-
+-->
     <!-- Bling -->
     <%=
       randomSlot()
@@ -559,6 +560,7 @@
     %>
 
     <!-- Checkpoint 6 - Box plugin -->
+<!--
     <plugin name="boxT2CP6" filename="libBoxContainsPlugin.so">
       <entity>valkyrie</entity>
       <namespace>task2/checkpoint6</namespace>
@@ -572,7 +574,7 @@
       </pose>
       <size><%= finish_walkway_length %> <%= finish_walkway_length %> 5</size>
     </plugin>
-
+-->
     <!-- Bling -->
     <%=
       randomSlot()
@@ -628,13 +630,18 @@
 
     <!-- Habitat -->
     <%
-      # TODO: Habitat goes here
+      tHabitatSlotOrigin = TMatrix(6.7, 5.25, 0);
+      $current_frame = $current_frame * $current_walkway["tOriginExit"]
+      $habitat_frame = $current_frame *
+                       tHabitatSlotOrigin
     %>
+
+    <%= fromFile("habitat.erb") %>
 
     <!-- TODO: Put the box inside the habitat -->
 
     <!-- Checkpoint 8 - Box plugin -->
-
+<!--
     <plugin name="boxT3CP8" filename="libBoxContainsPlugin.so">
       <entity>valkyrie</entity>
       <namespace>task3/checkpoint8</namespace>
@@ -648,6 +655,7 @@
       </pose>
       <size><%= finish_walkway_length %> <%= finish_walkway_length %> 5</size>
     </plugin>
+-->
 
     <!-- /TASK 3 -->
     <%
@@ -655,6 +663,7 @@
     %>
 
     <!-- Finals plugin -->
+<!--
     <plugin name="finals" filename="libFinalsPlugin.so">
 
       <%
@@ -826,6 +835,7 @@
       %>
 
     </plugin>
+-->
 
   </world>
 </sdf>
