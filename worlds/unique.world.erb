@@ -523,7 +523,7 @@
     <%
       randomSlot()
 
-      tRoverSlotOrigin = TMatrix(0, 1.95, Math::PI);
+      tRoverSlotOrigin = TMatrix(0, 4.5, Math::PI);
       rover_frame = $current_frame *
                     $current_walkway[$slot] *
                     tRoverSlotOrigin
@@ -543,7 +543,7 @@
 
     <!-- Solar panel -->
     <%
-      tPanelSlotOrigin = TMatrix(0, 0.05, rand(-Math::PI...Math::PI));
+      tPanelSlotOrigin = TMatrix(0, -0.2, rand(-Math::PI...Math::PI));
       $solar_panel_frame = $current_frame *
                            $current_walkway[$slot] *
                            tPanelSlotOrigin
@@ -554,8 +554,11 @@
 
     <!-- Bling -->
     <%=
-      remainingSlot()
-      nextBling()
+      # No room for bling if it's a 45 turn
+      if $current_walkway['angle'].abs() != Math::PI/4
+        remainingSlot()
+        nextBling()
+      end
     %>
 
     <!-- Walkway -->
