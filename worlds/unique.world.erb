@@ -422,7 +422,7 @@
         0
         <%= Math::atan2(t1cp2_frame[1, 0], t1cp2_frame[0, 0]) %>
       </pose>
-      <size>1 1 5</size>
+      <size>1 1 <%= box_height %></size>
     </plugin>
 
     <!-- Bling -->
@@ -465,7 +465,7 @@
         0
         <%= Math::atan2($current_frame[1, 0], $current_frame[0, 0]) %>
       </pose>
-      <size><%= finish_walkway_length %> <%= finish_walkway_length %> 5</size>
+      <size><%= finish_walkway_length %> <%= finish_walkway_length %> <%= box_height %></size>
     </plugin>
 
     <!-- Bling -->
@@ -575,6 +575,25 @@
       # TODO: Array goes here
     %>
 
+    <!-- Checkpoint 2 - Box plugin -->
+    <%
+      t2cp3_frame = $current_frame * TMatrix(0, -2.2, Math::PI * 0.5)
+    %>
+
+    <plugin name="boxT2CP2" filename="libBoxContainsPlugin.so">
+      <entity>solar_panel</entity>
+      <namespace>task2/checkpoint2</namespace>
+      <pose>
+        <%= t2cp3_frame[0, 2] %>
+        <%= t2cp3_frame[1, 2] %>
+        <%= box_height * 0.5 %>
+        0
+        0
+        <%= Math::atan2(t2cp3_frame[1, 0], t2cp3_frame[0, 0]) %>
+      </pose>
+      <size>1 1 <%= box_height %></size>
+    </plugin>
+
     <!-- Bling -->
     <%=
       remainingSlot()
@@ -603,7 +622,7 @@
         0
         <%= Math::atan2($current_frame[1, 0], $current_frame[0, 0]) %>
       </pose>
-      <size><%= finish_walkway_length %> <%= finish_walkway_length %> 5</size>
+      <size><%= finish_walkway_length %> <%= finish_walkway_length %> <%= box_height %></size>
     </plugin>
 
     <!-- Bling -->
@@ -679,7 +698,7 @@
         0
         <%= Math::atan2($current_frame[1, 0], $current_frame[0, 0]) %>
       </pose>
-      <size><%= finish_walkway_length %> <%= finish_walkway_length %> 5</size>
+      <size><%= finish_walkway_length %> <%= finish_walkway_length %> <%= box_height %></size>
     </plugin>
 
     <!-- /TASK 3 -->
