@@ -46,43 +46,9 @@ size_t Task2::Number() const
 }
 
 /////////////////////////////////////////////////
-void Task2CP1::OnTouchGzMsg(ConstIntPtr &/*_msg*/)
-{
-  this->done = true;
-}
-
-/////////////////////////////////////////////////
 bool Task2CP1::Check()
 {
-  // First time
-  if (!this->touchGzSub && !this->done)
-  {
-    this->gzNode = transport::NodePtr(new transport::Node());
-    this->gzNode->Init();
-
-    // Enable touch plugin
-    this->enableGzPub = this->gzNode->Advertise<msgs::Int>(
-        "/task2/checkpoint1/enable");
-
-    msgs::Int msg;
-    msg.set_data(1);
-    this->enableGzPub->Publish(msg);
-
-    // Subscribe to touch msgs
-    this->touchGzSub = this->gzNode->Subscribe("/task2/checkpoint1/touched",
-        &Task2CP1::OnTouchGzMsg, this);
-  }
-
-  if (this->done)
-  {
-    msgs::Int msg;
-    msg.set_data(0);
-    this->enableGzPub->Publish(msg);
-
-    this->touchGzSub.reset();
-  }
-
-  return this->done;
+  return this->CheckTouch("/task2/checkpoint1");
 }
 
 /////////////////////////////////////////////////
