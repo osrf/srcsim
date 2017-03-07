@@ -84,6 +84,14 @@
           <scale>0.001 0.001 0.001</scale>
         </mesh>
       </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <max_vel>0.00</max_vel>
+            <min_depth>0.01</min_depth>
+          </ode>
+        </contact>
+      </surface>
     </collision>
     <visual name="visual">
       <geometry>
@@ -96,6 +104,13 @@
         </mesh>
       </geometry>
     </visual>
+
+    <sensor name="base_sensor" type="contact">
+      <contact>
+        <collision>collision</collision>
+      </contact>
+    </sensor>
+
   </link>
 
   <link name="panel_01">
@@ -121,6 +136,14 @@
           <scale>0.001 0.001 0.001</scale>
         </mesh>
       </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <max_vel>0.00</max_vel>
+            <min_depth>0.01</min_depth>
+          </ode>
+        </contact>
+      </surface>
     </collision>
     <visual name="panel_visual">
       <geometry>
@@ -155,6 +178,13 @@
         </mesh>
       </geometry>
     </visual>
+
+    <sensor name="panel1_sensor" type="contact">
+      <contact>
+        <collision>panel_collision</collision>
+      </contact>
+    </sensor>
+
   </link>
 
 
@@ -180,6 +210,14 @@
           <scale>0.001 0.001 0.001</scale>
         </mesh>
       </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <max_vel>0.00</max_vel>
+            <min_depth>0.01</min_depth>
+          </ode>
+        </contact>
+      </surface>
     </collision>
     <visual name="visual">
       <geometry>
@@ -192,6 +230,13 @@
         </mesh>
       </geometry>
     </visual>
+
+    <sensor name="panel2_sensor" type="contact">
+      <contact>
+        <collision>collision</collision>
+      </contact>
+    </sensor>
+
   </link>
 
   <link name="panel_small_01">
@@ -527,6 +572,15 @@
   </joint>
 
   <plugin name="solar_panel_plugin" filename="libSolarPanelPlugin.so">
+  </plugin>
+
+  <plugin name="touch_valkyrie_panel" filename="libTouchPlugin.so">
+    <sensor>base_sensor</sensor>
+    <sensor>panel1_sensor</sensor>
+    <sensor>panel2_sensor</sensor>
+    <target>valkyrie</target>
+    <time>5</time>
+    <namespace>task2/checkpoint1</namespace>
   </plugin>
 
 </model>

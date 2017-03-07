@@ -516,7 +516,9 @@
       t2cp4_frame = $current_frame
       t2cp5_frame = $current_frame
       t2cp6_frame = $current_frame
-      nextWalkway($walkways, false)
+
+      # Can't have 90 degrees near the rover
+      nextWalkway($walkways, true)
     %>
 
     <!-- Rover -->
@@ -563,7 +565,8 @@
 
     <!-- Walkway -->
     <%=
-      nextWalkway($walkways, false)
+      # Can't have 90 degrees near the rover
+      nextWalkway($walkways, true)
     %>
 
     <!-- Solar Array -->

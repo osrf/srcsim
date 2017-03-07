@@ -39,6 +39,34 @@ namespace gazebo
     public: size_t Number() const;
   };
 
+  /// \brief Task 2, Checkpoint 1: Lift panel
+  class Task2CP1 : public Checkpoint
+  {
+    using Checkpoint::Checkpoint;
+
+    /// \brief Check whether the robot has been the only thing touching the
+    /// panel for a specific time.
+    /// \return True if the checkpoint is complete.
+    public: bool Check();
+
+    /// \brief Callback when a touch message is received.
+    /// This means the robot is holding the panel.
+    /// \param[in] _msg Unused message.
+    private: void OnTouchGzMsg(ConstIntPtr &/*_msg*/);
+
+    /// \brief Whether the checkpoint is complete or not.
+    private: bool done = false;
+
+    /// \brief Gazebo transport node for communication.
+    private: transport::NodePtr gzNode;
+
+    /// \brief Subscribes to touch messages.
+    private: transport::SubscriberPtr touchGzSub;
+
+    /// \brief Publishes enable messages.
+    private: transport::PublisherPtr enableGzPub;
+  };
+
   /// \brief Task 2, Checkpoint 3: Deploy solar panel
   class Task2CP3 : public Checkpoint
   {
