@@ -261,8 +261,8 @@
       # Total angle from the beginning of the walkway
       new_total = $total_angle + $current_walkway["angle"]
 
-      break if new_total < Math::PI/2 &&
-               new_total > -Math::PI/2 &&
+      break if new_total <= Math::PI/2 &&
+               new_total >= -Math::PI/2 &&
                !(new_angle < 0 && prev_angle < 0) &&
                !(new_angle > 0 && prev_angle > 0) &&
                !(_no90 && (new_angle.abs() == Math::PI/2))
@@ -391,7 +391,7 @@
 
     <!-- Walkway -->
     <%=
-      nextWalkway($walkways, true)
+      nextWalkway($walkways, false)
     %>
 
     <!-- Satellite -->
