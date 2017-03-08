@@ -29,7 +29,7 @@ Task2::Task2(const common::Time &_timeout,
   this->checkpoints.push_back(std::move(cp1));
 
   // Checkpoint 2: Place solar panel near cable
-  std::unique_ptr<Task2CP2> cp2(new Task2CP2(_poses[0]));
+  std::unique_ptr<Task2CP2> cp2(new Task2CP2(_poses[1]));
   this->checkpoints.push_back(std::move(cp2));
 
   // Checkpoint 3: Deploy solar panel
