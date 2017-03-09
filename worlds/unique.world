@@ -861,7 +861,7 @@
   <pose>
     12.07629034067597
     3.7099523532770275
-    0.82
+    0.79448
     1.5707963267948966
     0
     -3.4450928483976665e-16
@@ -872,16 +872,16 @@
     <inertial>
       <pose>
       0
-      -0.0008
-      0.03399
+      -0.00063
+      0.026760000000000003
       0
       0
       0
       </pose>
       <inertia>
-        <ixx>0.005172208333333333</ixx>
-        <iyy>0.0009736016666666666</iyy>
-        <izz>0.005377408333333333</izz>
+        <ixx>0.003206729933333333</ixx>
+        <iyy>0.0006035883333333333</iyy>
+        <izz>0.003333989666666666</izz>
       </inertia>
       <mass>1.0</mass>
     </inertial>
@@ -890,7 +890,7 @@
     <collision name="collision">
       <geometry>
         <mesh>
-          <scale>0.0254 0.0254 0.0254</scale>
+          <scale>0.02 0.02 0.02</scale>
           <uri>model://air_leak_detector/meshes/air_leak_detector.obj</uri>
         </mesh>
       </geometry>
@@ -909,7 +909,7 @@
     <visual name="visual">
       <geometry>
         <mesh>
-          <scale>0.0254 0.0254 0.0254</scale>
+          <scale>0.02 0.02 0.02</scale>
           <uri>model://air_leak_detector/meshes/air_leak_detector.obj</uri>
         </mesh>
       </geometry>

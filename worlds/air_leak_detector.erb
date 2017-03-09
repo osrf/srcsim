@@ -25,22 +25,22 @@
   end
 
   # Scale
-  scale = 0.0254
+  scale = 0.02
 
   # Masse in kg
   mass = 1.0
 
   # CoM offset
   com_x = 0
-  com_y = -0.0008
-  com_z = 0.03399
+  com_y = -0.0315 * scale
+  com_z = 1.338 * scale
 
   # Inertia box dimensions
-  inertia_x = 0.0841
-  inertia_y = 0.2397
-  inertia_z = 0.0679
+  inertia_x = 3.311 * scale
+  inertia_y = 9.437 * scale
+  inertia_z = 2.673 * scale
 
-  offset_z = 0.12
+  offset_z = 4.724 * scale
 %>
 
 <model name="air_leak_detector">
