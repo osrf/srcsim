@@ -631,6 +631,35 @@
       # TODO: Habitat goes here
     %>
 
+    <!-- TODO: Put the table inside the habitat -->
+
+    <!-- Table -->
+    <%
+      $current_frame = $current_frame *
+                       $current_walkway["tOriginExit"]
+
+      $table_frame = $current_frame * TMatrix(0, 2, 0)
+    %>
+    <include>
+      <pose>
+        <%= $table_frame[0, 2] %>
+        <%= $table_frame[1, 2] %>
+        0
+        0
+        0
+        <%= Math::atan2($table_frame[1, 0], $table_frame[0, 0]) %>
+      </pose>
+      <uri>model://space_table</uri>
+    </include>
+
+    <!-- Air leak detector -->
+    <%
+      $air_leak_detector_frame = $table_frame
+      $table_top_z = 0.7
+    %>
+
+    <%= fromFile("air_leak_detector.erb") %>
+
     <!-- TODO: Put the box inside the habitat -->
 
     <!-- Checkpoint 8 - Box plugin -->
