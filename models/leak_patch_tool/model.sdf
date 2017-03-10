@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <model name="leak_patch_tool">
+    <link name="link">
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <scale>0.04 0.04 0.04</scale>
+            <uri>model://leak_patch_tool/meshes/leak_patch_tool.obj</uri>
+          </mesh>
+        </geometry>
+      </collision>
+
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <scale>0.04 0.04 0.04</scale>
+            <uri>model://leak_patch_tool/meshes/leak_patch_tool.obj</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+  </model>
+</sdf>
