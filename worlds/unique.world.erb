@@ -595,7 +595,8 @@
 
     <!-- Walkway -->
     <%=
-      nextWalkway($walkways, false)
+      # Can't have 90 degrees near the array
+      nextWalkway($walkways, true)
     %>
 
     <!-- Solar Array -->
@@ -660,7 +661,20 @@
 
     <!-- Walkway -->
     <%=
+      # Can't have 90 degrees near the array or the final box
       nextWalkway($walkways, true)
+    %>
+
+    <!-- Bling -->
+    <%=
+      randomSlot()
+      nextBling()
+    %>
+
+    <!-- Bling -->
+    <%=
+      remainingSlot()
+      nextBling()
     %>
 
     <!-- Final Box 2 -->
@@ -716,6 +730,8 @@
       t3cp6_frame = $current_frame
       t3cp7_frame = $current_frame
       t3cp8_frame = $current_frame
+
+      # Can't have 90 degrees near the final box
       nextWalkway($walkways, true)
     %>
 
