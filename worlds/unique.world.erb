@@ -587,8 +587,6 @@
       nextBling()
     %>
 
-    <%= fromFile("solar_panel.erb") %>
-
     <!-- Bling -->
     <%=
       remainingSlot()
@@ -605,16 +603,26 @@
       randomSlot()
 
       tArraySlotOrigin = TMatrix(0, 0.55, 0);
-      $array_frame = $current_frame *
-                     $current_walkway[$slot] *
-                     tArraySlotOrigin
+      array_frame = $current_frame *
+                    $current_walkway[$slot] *
+                    tArraySlotOrigin
     %>
 
-    <%= fromFile("solar_array.erb") %>
+    <include>
+      <pose>
+        <%= array_frame[0, 2] %>
+        <%= array_frame[1, 2] %>
+        0
+        0
+        0
+        <%= Math::atan2(array_frame[1, 0], array_frame[0, 0]) %>
+      </pose>
+      <uri>model://solar_array</uri>
+    </include>
 
     <!-- Cable -->
     <%
-      tCableSlotOrigin = TMatrix(0.4, 1.1, -Math::PI / 2);
+      tCableSlotOrigin = TMatrix(0.4, 1.15, -Math::PI / 2);
       $cable_frame = $current_frame *
                      $current_walkway[$slot] *
                      tCableSlotOrigin
@@ -643,8 +651,11 @@
 
     <!-- Bling -->
     <%=
-      remainingSlot()
-      nextBling()
+      # No room for bling if it's a 45 turn
+      if $current_walkway['angle'].abs() != Math::PI/4
+        remainingSlot()
+        nextBling()
+      end
     %>
 
     <!-- Walkway -->
