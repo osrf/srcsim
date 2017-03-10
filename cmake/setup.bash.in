@@ -3,12 +3,12 @@
 ROS_DISTRO="indigo"
 LINUX_GROUP_NEEDED="ros"
 JAVA_HOME_DIR="/usr/lib/jvm/java-8-openjdk-amd64"
-LIMITD_FILE="/etc/security/limits.d/ros-rtprio.conf'"
+LIMITD_FILE="/etc/security/limits.d/ros-rtprio.conf"
 NASA_SETUP_FILE="/opt/nasa/${ROS_DISTRO}/setup.bash"
 # modify the URI to point to default?
 IHMC_NETWORK_FILE_URI="https://raw.githubusercontent.com/ihmcrobotics/ihmc_ros_core/0.8.0/ihmc_ros_common/configurations/IHMCNetworkParametersTemplate.ini"
 IHMC_NETWORK_FILE="${HOME}/.ihmc/IHMCNetworkParameters.ini"
-IHMC_JAVA_ADAPTER_DIR="/opt/ros/${ROS_DISTRO}share/ihmc_ros_java_adapter"
+IHMC_JAVA_ADAPTER_DIR="/opt/ros/${ROS_DISTRO}/share/ihmc_ros_java_adapter"
 
 get_current_update_alternatives_link()
 {
@@ -95,7 +95,7 @@ fi
 if [[ ! -f ${LIMITD_FILE} ]]; then
   echo "The ${LIMITD_FILE} is not present in the system"
   echo "To add it with the right configuration:"
-  echo " - sudo bash -c 'echo "@${LINUX_GROUP_NEEDED} - rtprio 99" > /etc/security/limits.d/ros-rtprio.conf'"
+  echo " - sudo bash -c 'echo \"@${LINUX_GROUP_NEEDED} - rtprio 99\" > /etc/security/limits.d/ros-rtprio.conf'"
   return 1
 fi
 
@@ -115,4 +115,4 @@ if [[ ! -d "${HOME}/valkyrie" ]]; then
   echo " - mkdir -p ${HOME}/.gazebo/models"
   echo " - wget -qO- http://gazebosim.org/distributions/srcsim/valkyrie_controller.tar.gz | tar xvz -C ${HOME}"
   return 1
-if
+fi
