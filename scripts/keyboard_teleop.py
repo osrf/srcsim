@@ -68,15 +68,19 @@ class KeyboardTeleop(object):
     ])
 
     HAND_BINDINGS = OrderedDict([
-        ('1', {'joint_index': 0, 'side': 'left', 'min': -0.55, 'max': 0.0, 'uppercase': '!'}),
-        ('2', {'joint_index': 1, 'side': 'left', 'min': -1.1, 'max': 0.0, 'uppercase': '@'}),
-        ('3', {'joint_index': 2, 'side': 'left', 'min': -0.9, 'max': 0.0, 'uppercase': '#'}),
-        ('4', {'joint_index': 3, 'side': 'left', 'min': -1.0, 'max': 0.0, 'uppercase': '$'}),
+        ('4', {'joint_index': 0, 'side': 'left', 'min': -0.55, 'max': 0.0, 'uppercase': '$',
+               'invert': True}),
+        ('3', {'joint_index': 1, 'side': 'left', 'min': -1.1, 'max': 0.0, 'uppercase': '#',
+               'invert': True}),
+        ('2', {'joint_index': 2, 'side': 'left', 'min': -0.9, 'max': 0.0, 'uppercase': '@',
+               'invert': True}),
+        ('1', {'joint_index': 3, 'side': 'left', 'min': -1.0, 'max': 0.0, 'uppercase': '!',
+               'invert': True}),  # left thumb
         ('5', {'joint_index': 'reset', 'side': 'left', 'uppercase': '%'}),
-        ('0', {'joint_index': 0, 'side': 'right', 'min': 0.0, 'max': 0.55, 'uppercase': ')'}),
-        ('9', {'joint_index': 1, 'side': 'right', 'min': 0.0, 'max': 1.1, 'uppercase': '('}),
-        ('8', {'joint_index': 2, 'side': 'right', 'min': 0.0, 'max': 0.9, 'uppercase': '*'}),
-        ('7', {'joint_index': 3, 'side': 'right', 'min': 0.0, 'max': 1.0, 'uppercase': '&'}),
+        ('7', {'joint_index': 0, 'side': 'right', 'min': 0.0, 'max': 0.55, 'uppercase': '&'}),  # right thumb
+        ('8', {'joint_index': 1, 'side': 'right', 'min': 0.0, 'max': 1.1, 'uppercase': '*'}),
+        ('9', {'joint_index': 2, 'side': 'right', 'min': 0.0, 'max': 0.9, 'uppercase': '('}),
+        ('0', {'joint_index': 3, 'side': 'right', 'min': 0.0, 'max': 1.0, 'uppercase': ')'}),
         ('6', {'joint_index': 'reset', 'side': 'right', 'uppercase': '^'}),
     ])
 
@@ -167,8 +171,8 @@ class KeyboardTeleop(object):
         # make sure the simulation is running otherwise wait
         self.rate = rospy.Rate(10)  # 10hz
         publishers = [
-            self.arm_publisher, self.neck_publisher, self.head_publisher,
-            self.footstep_publisher]
+            self.arm_publisher, self.left_hand_publisher, self.right_hand_publisher,
+            self.neck_publisher, self.head_publisher, self.footstep_publisher]
         if any([p.get_num_connections() == 0 for p in publishers]):
             rospy.loginfo('waiting for subscriber...')
             while any([p.get_num_connections() == 0 for p in publishers]):
@@ -373,7 +377,7 @@ class KeyboardTeleop(object):
         msg.layout.dim = [dim]
         msg.layout.data_offset = 0
         msg.data = [1.4]
-        for joint_value in self.joint_values['%s arm' % side]:
+        for joint_value in self.joint_values['%s hand' % side]:
             msg.data.append(joint_value)
 
         pub.publish(msg)
