@@ -24,6 +24,9 @@ import numpy
 
 import rospy
 
+from std_msgs.msg import Float64MultiArray
+from std_msgs.msg import MultiArrayDimension
+
 from tf.transformations import euler_from_quaternion, quaternion_from_euler, quaternion_matrix
 import tf2_ros
 
@@ -64,6 +67,19 @@ class KeyboardTeleop(object):
         ('y', {'joint_index': 'reset', 'side': 'right'}),
     ])
 
+    HAND_BINDINGS = OrderedDict([
+        ('1', {'joint_index': 0, 'side': 'left', 'min': -0.55, 'max': 0.0, 'uppercase': '!'}),
+        ('2', {'joint_index': 1, 'side': 'left', 'min': -1.1, 'max': 0.0, 'uppercase': '@'}),
+        ('3', {'joint_index': 2, 'side': 'left', 'min': -0.9, 'max': 0.0, 'uppercase': '#'}),
+        ('4', {'joint_index': 3, 'side': 'left', 'min': -1.0, 'max': 0.0, 'uppercase': '$'}),
+        ('5', {'joint_index': 'reset', 'side': 'left', 'uppercase': '%'}),
+        ('0', {'joint_index': 0, 'side': 'right', 'min': 0.0, 'max': 0.55, 'uppercase': ')'}),
+        ('9', {'joint_index': 1, 'side': 'right', 'min': 0.0, 'max': 1.1, 'uppercase': '('}),
+        ('8', {'joint_index': 2, 'side': 'right', 'min': 0.0, 'max': 0.9, 'uppercase': '*'}),
+        ('7', {'joint_index': 3, 'side': 'right', 'min': 0.0, 'max': 1.0, 'uppercase': '&'}),
+        ('6', {'joint_index': 'reset', 'side': 'right', 'uppercase': '^'}),
+    ])
+
     HEAD_BINDINGS = OrderedDict([
         ('x', {'joint_index': 0, 'min': -0.5, 'max': 0.5}),
         ('c', {'joint_index': 1, 'min': -0.5, 'max': 0.5}),
@@ -87,6 +103,8 @@ class KeyboardTeleop(object):
         self.joint_values = {
             'left arm': [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
             'right arm': [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+            'left hand': [0.0, 0.0, 0.0, 0.0],
+            'right hand': [0.0, 0.0, 0.0, 0.0],
             'head': [0.0, 0.0, 0.0],
             'neck': [0.0, 0.0, 0.0],
         }
@@ -118,6 +136,12 @@ class KeyboardTeleop(object):
         self.arm_publisher = rospy.Publisher(
             '/ihmc_ros/{0}/control/arm_trajectory'.format(robot_name),
             ArmTrajectoryRosMessage, queue_size=1)
+        self.left_hand_publisher = rospy.Publisher(
+            '/left_hand_position_controller/command',
+            Float64MultiArray, queue_size=1)
+        self.right_hand_publisher = rospy.Publisher(
+            '/right_hand_position_controller/command',
+            Float64MultiArray, queue_size=1)
         self.neck_publisher = rospy.Publisher(
             '/ihmc_ros/{0}/control/neck_trajectory'.format(robot_name),
             NeckTrajectoryRosMessage, queue_size=1)
@@ -158,7 +182,8 @@ class KeyboardTeleop(object):
 
     def print_usage(self):
         def get_bound_char(bindings, x):
-            return x.upper() if bindings[x].get('invert', False) else x
+            upper = bindings[x].get('uppercase', x.upper())
+            return upper if bindings[x].get('invert', False) else x
 
         msg_args = []
 
@@ -185,6 +210,22 @@ class KeyboardTeleop(object):
         # right arm - reset
         msg_args.append(' or '.join([
             self.ARM_BINDINGS.keys()[15], self.ARM_BINDINGS.keys()[15].upper()]))
+
+        # left hand
+        msg_args.append(', '.join([
+            get_bound_char(self.HAND_BINDINGS, x)
+            for x in self.HAND_BINDINGS.keys()[0:4]]))
+        # left hand - reset
+        msg_args.append(' or '.join([
+            self.HAND_BINDINGS.keys()[4], self.HAND_BINDINGS.values()[4].get('uppercase')]))
+
+        # right hand
+        msg_args.append(', '.join([
+            get_bound_char(self.HAND_BINDINGS, x)
+            for x in self.HAND_BINDINGS.keys()[5:9]]))
+        # right hand - reset
+        msg_args.append(' or '.join([
+            self.HAND_BINDINGS.keys()[9], self.HAND_BINDINGS.values()[9].get('uppercase')]))
 
         # head - roll, pitch, yaw
         msg_args += [
@@ -220,6 +261,12 @@ class KeyboardTeleop(object):
                               {}
                 Reset: {}
 
+            Left hand joints: {}
+                Reset: {}
+
+            Right hand joints: {}
+                Reset: {}
+
             Head angles:
                 Roll: {}
                 Pitch: {}
@@ -231,6 +278,7 @@ class KeyboardTeleop(object):
 
             The shown characters turn the joints in positive direction.
             The opposite case turns the joints in negative direction.
+            For numbers the uppercase character is based on an English layout.
 
             Walking controls:
                 Walk: {} lowercase meaning forward and uppercase backwards
@@ -261,7 +309,7 @@ class KeyboardTeleop(object):
                     (label, self.joint_values[label]))
             return
 
-        if ord(ch) == 27:  # ESCAPE key
+        if ord(ch) in (3, 27):  # Ctrl+C or ESCAPE key
             self.loginfo('Quitting')
             rospy.signal_shutdown('Shutdown')
             return
@@ -269,6 +317,14 @@ class KeyboardTeleop(object):
         if ch.lower() in self.ARM_BINDINGS:
             self.process_arm_command(self.ARM_BINDINGS[ch.lower()], ch)
             return
+
+        if ch.lower() in self.HAND_BINDINGS:
+            self.process_hand_command(self.HAND_BINDINGS[ch.lower()], ch)
+            return
+        for k, v in self.HAND_BINDINGS.items():
+            if ch in v.get('uppercase'):
+                self.process_hand_command(self.HAND_BINDINGS[k], ch)
+                return
 
         if ch.lower() in self.HEAD_BINDINGS:
             self.process_head_command(self.HEAD_BINDINGS[ch.lower()], ch)
@@ -299,6 +355,28 @@ class KeyboardTeleop(object):
             msg, 1.0, self.joint_values['%s arm' % side])
 
         self.arm_publisher.publish(msg)
+
+    def process_hand_command(self, binding, ch):
+        msg = Float64MultiArray()
+
+        side = binding['side']
+        if side not in ('left', 'right'):
+            assert False, "Unknown arm side '%s'" % side
+        pub = getattr(self, '%s_hand_publisher' % side)
+
+        self._update_joint_values('%s hand' % side, binding, ch)
+
+        dim = MultiArrayDimension()
+        dim.label = 'fingers'
+        dim.size = 5
+        dim.stride = 5
+        msg.layout.dim = [dim]
+        msg.layout.data_offset = 0
+        msg.data = [1.4]
+        for joint_value in self.joint_values['%s arm' % side]:
+            msg.data.append(joint_value)
+
+        pub.publish(msg)
 
     def process_head_command(self, binding, ch):
         msg = HeadTrajectoryRosMessage()
@@ -519,7 +597,8 @@ class KeyboardTeleop(object):
         else:
             # update value within boundaries
             value = self.joint_values[label][joint_index]
-            is_lower_case = ch == ch.lower()
+            upper = binding.get('uppercase', ch.upper())
+            is_lower_case = ch != upper
             factor = 1.0 if is_lower_case else -1.0
             if binding.get('invert', False):
                 factor *= -1.0
