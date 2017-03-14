@@ -83,7 +83,7 @@
         <izz><%= [link_mass * radius * radius * 0.5, min_inertia].max %></izz>
       </inertia>
     </inertial>
-    <collision name="collision">
+    <collision name="cylinder">
       <pose>0 0 <%= length / 2 %> 0 0 0</pose>
       <geometry>
         <cylinder>
@@ -94,7 +94,10 @@
       <surface>
         <contact>
           <ode>
-            <min_depth>0.005</min_depth>
+            <kp>1e5</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
           </ode>
         </contact>
         <friction>
@@ -105,7 +108,30 @@
         </friction>
       </surface>
     </collision>
-    <visual name="visual">
+    <collision name="sphere">
+      <geometry>
+        <sphere>
+          <radius><%= radius %></radius>
+        </sphere>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e5</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+        <friction>
+          <ode>
+            <mu>1.0</mu>
+            <mu2>1.0</mu2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+    <visual name="cylinder">
       <pose>0 0 <%= length / 2 %> 0 0 0</pose>
       <geometry>
         <cylinder>
@@ -116,7 +142,7 @@
       <material>
         <ambient>0 0 0 1</ambient>
         <emissive>0 0 0 1</emissive>
-        <diffuse>0 0 0 1</diffuse>
+        <diffuse>0.1 0.1 0.1 1</diffuse>
         <specular>1 1 1 1</specular>
       </material>
     </visual>
@@ -129,7 +155,7 @@
       <material>
         <ambient>0 0 0 1</ambient>
         <emissive>0 0 0 1</emissive>
-        <diffuse>0 0 0 1</diffuse>
+        <diffuse>0.1 0.1 0.1 1</diffuse>
         <specular>1 1 1 1</specular>
       </material>
     </visual>
@@ -144,6 +170,22 @@
           <radius><%= radius * 1.1 %></radius>
         </cylinder>
       </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e5</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+        <friction>
+          <ode>
+            <mu>1.0</mu>
+            <mu2>1.0</mu2>
+          </ode>
+        </friction>
+      </surface>
     </collision>
 
     <visual name="plug_visual">
@@ -155,9 +197,9 @@
         </cylinder>
       </geometry>
       <material>
-        <ambient>0 0 0.8 1</ambient>
-        <emissive>0 0 0.8 1</emissive>
-        <diffuse>0 0 0.8 1</diffuse>
+        <ambient>0 0 0.3 1</ambient>
+        <emissive>0 0 0.2 1</emissive>
+        <diffuse>0 0 0.1 1</diffuse>
         <specular>1 1 1 1</specular>
       </material>
     </visual>
