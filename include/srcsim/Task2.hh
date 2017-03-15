@@ -19,6 +19,7 @@
 #define SRC_TASK2_HH_
 
 #include <vector>
+#include <sdf/sdf.hh>
 #include <ignition/math/Pose3.hh>
 #include <gazebo/sensors/ContactSensor.hh>
 #include <gazebo/transport/transport.hh>
@@ -34,7 +35,8 @@ namespace gazebo
     /// \param[in] _timeout Timeout for this task
     /// \param[in] _poses Vector of starting poses for checkpoints.
     public: Task2(const common::Time &_timeout,
-        const std::vector<ignition::math::Pose3d> _poses);
+        const std::vector<ignition::math::Pose3d> _poses,
+        sdf::ElementPtr _sdf);
 
     // Documentation inherited
     public: size_t Number() const;
@@ -59,6 +61,9 @@ namespace gazebo
     /// \brief Check whether the panel is within reach of the cable.
     /// \return True if the checkpoint is complete.
     public: bool Check();
+
+    /// \brief Skip this checkpoint. This places the solar panel on the array.
+    public: void Skip();
   };
 
   /// \brief Task 2, Checkpoint 3: Deploy solar panel
@@ -66,9 +71,12 @@ namespace gazebo
   {
     using Checkpoint::Checkpoint;
 
-    /// \brief Check whether the robot is in the final box region.
+    /// \brief Check whether the solar panel has been deployed.
     /// \return True if the checkpoint is complete.
     public: bool Check();
+
+    /// \brief Skip this checkpoint. This deploys the solar panel.
+    public: void Skip();
 
     /// \brief Callback when a message about the solar panel is received.
     /// This means the panel has been opened.
@@ -84,8 +92,8 @@ namespace gazebo
     /// \brief Subscribes to solar panel messages.
     private: transport::SubscriberPtr panelGzSub;
 
-    /// \brief Publishes toggle messages.
-    private: transport::PublisherPtr toggleGzPub;
+    /// \brief Publishes enable messages.
+    private: transport::PublisherPtr enableGzPub;
   };
 
   /// \brief Task 2, Checkpoint 5: Plug cable

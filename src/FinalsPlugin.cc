@@ -113,6 +113,10 @@ void FinalsPlugin::Load(physics::WorldPtr _world, sdf::ElementPtr _sdf)
   if (_sdf->HasElement("task_3_checkpoint_8_pose"))
     t3cp8Pose = _sdf->Get<ignition::math::Pose3d>("task_3_checkpoint_8_pose");
 
+  sdf::ElementPtr task2Elem;
+  if (_sdf->HasElement("task_2"))
+    task2Elem = _sdf->GetElement("task_2");
+
   std::vector<ignition::math::Pose3d> t1Poses = {t1cp2Pose, t1cp3Pose};
   std::vector<ignition::math::Pose3d> t2Poses = {t2cp1Pose, t2cp2Pose,
       t2cp3Pose, t2cp4Pose, t2cp5Pose, t2cp6Pose};
@@ -126,7 +130,8 @@ void FinalsPlugin::Load(physics::WorldPtr _world, sdf::ElementPtr _sdf)
   this->tasks.push_back(std::move(task1));
 
   // Task 2: Solar panel
-  std::unique_ptr<Task2> task2(new Task2(common::Time(task2Timeout), t2Poses));
+  std::unique_ptr<Task2> task2(new Task2(common::Time(task2Timeout), t2Poses,
+      task2Elem));
   this->tasks.push_back(std::move(task2));
 
   // Task 3: Habitat

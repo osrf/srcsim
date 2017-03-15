@@ -492,6 +492,7 @@
     <!-- TASK 2 -->
     <%
       t2cp1_frame = $current_frame *
+                    $current_walkway["tOriginExit"] *
                     TMatrix(0, -finish_walkway_length * 0.5, Math::PI * 0.5)
     %>
 
@@ -606,6 +607,10 @@
       array_frame = $current_frame *
                     $current_walkway[$slot] *
                     tArraySlotOrigin
+
+      t2cp2_panel_skip_frame = array_frame *
+          TMatrix(rand(-0.4...-0.05), rand(-0.2...0.065), rand(-Math::PI...Math::PI));
+      t2cp2_panel_skip_z_pos = 0.7
 
       t2cp3_frame = array_frame * TMatrix(0, -1.2, Math::PI * 0.5);
       t2cp4_frame = t2cp3_frame
@@ -835,6 +840,19 @@
           0
           <%= Math::atan2(t2cp2_frame[1, 0], t2cp2_frame[0, 0]) %>
         </task_2_checkpoint_2_pose>
+
+        <task_2>
+          <checkpoint_2>
+            <panel_skip>
+              <%= t2cp2_panel_skip_frame[0, 2] %>
+              <%= t2cp2_panel_skip_frame[1, 2] %>
+              <%= t2cp2_panel_skip_z_pos %>
+              0
+              0
+              <%= Math::atan2(t2cp2_panel_skip_frame[1, 0], t2cp2_panel_skip_frame[0, 0]) %>
+            </panel_skip>
+          </checkpoint_2>
+        </task_2>
 
         <task_2_checkpoint_3_pose>
           <%= t2cp3_frame[0, 2] %>

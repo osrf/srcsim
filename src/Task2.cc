@@ -22,11 +22,33 @@
 
 using namespace gazebo;
 
+// Checkpoint 2: pose of solar panel if checkpoint is skipped
+ignition::math::Pose3d g_cp2PanelSkipPose;
+
 /////////////////////////////////////////////////
 Task2::Task2(const common::Time &_timeout,
-    const std::vector<ignition::math::Pose3d> _poses)
+    const std::vector<ignition::math::Pose3d> _poses,
+    sdf::ElementPtr _sdf)
     : Task(_timeout)
 {
+  // Get variables for checkpoint 2
+  if (_sdf->HasElement("checkpoint_2"))
+  {
+    auto cp2Elem = _sdf->GetElement("checkpoint_2");
+
+    if (cp2Elem->HasElement("panel_skip"))
+    {
+      g_cp2PanelSkipPose =
+          cp2Elem->Get<ignition::math::Pose3d>("panel_skip");
+    }
+  }
+
+  if (g_cp2PanelSkipPose == ignition::math::Pose3d::Zero)
+  {
+    gzerr << "Missing <task_2> <checkpoint_2> <panel_skip> pose" << std::endl;
+    return;
+  }
+
   // Checkpoint 1: Lift solar panel
   std::unique_ptr<Task2CP1> cp1(new Task2CP1(_poses[0]));
   this->checkpoints.push_back(std::move(cp1));
@@ -69,6 +91,26 @@ bool Task2CP2::Check()
 }
 
 /////////////////////////////////////////////////
+void Task2CP2::Skip()
+{
+  auto world = physics::get_world();
+  if (!world)
+  {
+    gzerr << "Failed to get world" << std::endl;
+    return;
+  }
+
+  auto panel = world->GetModel("solar_panel");
+  if (!panel)
+  {
+    gzerr << "Failed to get world" << std::endl;
+    return;
+  }
+
+  panel->SetWorldPose(g_cp2PanelSkipPose);
+}
+
+/////////////////////////////////////////////////
 void Task2CP3::OnSolarPanelGzMsg(ConstIntPtr &/*_msg*/)
 {
   this->panelDone = true;
@@ -84,12 +126,12 @@ bool Task2CP3::Check()
     this->gzNode->Init();
 
     // Enable solar panel plugin
-    this->toggleGzPub = this->gzNode->Advertise<msgs::Int>(
-        "/task2/checkpoint3/toggle");
+    this->enableGzPub = this->gzNode->Advertise<msgs::Int>(
+        "/task2/checkpoint3/enable");
 
     msgs::Int msg;
     msg.set_data(1);
-    this->toggleGzPub->Publish(msg);
+    this->enableGzPub->Publish(msg);
 
     // Subscribe to solar panel msgs
     this->panelGzSub = this->gzNode->Subscribe("/task2/checkpoint3/opened",
@@ -100,12 +142,39 @@ bool Task2CP3::Check()
   {
     msgs::Int msg;
     msg.set_data(0);
-    this->toggleGzPub->Publish(msg);
+    this->enableGzPub->Publish(msg);
 
     this->panelGzSub.reset();
   }
 
   return this->panelDone;
+}
+
+/////////////////////////////////////////////////
+void Task2CP3::Skip()
+{
+  if (this->panelDone)
+  {
+    gzwarn << "Trying to skip Task 2 Checkpoint 3, "
+           << "but this checkpoint is already done!" << std::endl;
+    return;
+  }
+
+  if (!this->enableGzPub)
+  {
+    this->gzNode = transport::NodePtr(new transport::Node());
+    this->gzNode->Init();
+
+    // Enable solar panel plugin
+    this->enableGzPub = this->gzNode->Advertise<msgs::Int>(
+        "/task2/checkpoint3/enable");
+  }
+
+  msgs::Int msg;
+  msg.set_data(2);
+  this->enableGzPub->Publish(msg);
+
+  this->enableGzPub.reset();
 }
 
 /////////////////////////////////////////////////

@@ -97,23 +97,23 @@ void SolarPanelPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
   // Start/stop "service"
   this->gzNode = transport::NodePtr(new transport::Node());
   this->gzNode->Init();
-  this->toggleSub = this->gzNode->Subscribe("/task2/checkpoint3/toggle",
-      &SolarPanelPlugin::Toggle, this);
+  this->enableSub = this->gzNode->Subscribe("/task2/checkpoint3/enable",
+      &SolarPanelPlugin::Enable, this);
 
   // Start enabled or not
   auto enabled = _sdf->HasElement("enabled") && _sdf->Get<bool>("enabled");
   if (enabled)
   {
     ConstIntPtr msg;
-    this->Toggle(msg);
+    this->Enable(msg);
   }
 }
 
 //////////////////////////////////////////////////
-void SolarPanelPlugin::Toggle(ConstIntPtr &/*_msg*/)
+void SolarPanelPlugin::Enable(ConstIntPtr &_msg)
 {
   // Start
-  if (!this->openedPub)
+  if (_msg->data() == 1u)
   {
     // Start update
     this->updateConnection = event::Events::ConnectWorldUpdateBegin(
@@ -127,11 +127,16 @@ void SolarPanelPlugin::Toggle(ConstIntPtr &/*_msg*/)
     gzmsg << "Started solar panel plugin" << std::endl;
   }
   // Stop
-  else
+  else if (_msg->data() == 0u)
   {
     this->updateConnection.reset();
     this->contactSensor->SetActive(false);
     gzmsg << "Stopped solar panel plugin" << std::endl;
+  }
+  // Cheat to open panel
+  else if (_msg->data() == 2u)
+  {
+    this->pressed = true;
   }
 }
 
