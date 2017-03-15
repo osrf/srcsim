@@ -136,6 +136,12 @@ void SolarPanelPlugin::Enable(ConstIntPtr &_msg)
   // Cheat to open panel
   else if (_msg->data() == 2u)
   {
+    if (!this->updateConnection)
+    {
+      this->updateConnection = event::Events::ConnectWorldUpdateBegin(
+          std::bind(&SolarPanelPlugin::OnUpdate, this, std::placeholders::_1));
+    }
+
     this->pressed = true;
   }
 }
