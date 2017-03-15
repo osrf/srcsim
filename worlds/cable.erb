@@ -78,8 +78,8 @@
       <pose>0 0 <%= length / 2 %> 0 0 0</pose>
       <mass><%= link_mass %></mass>
       <inertia>
-        <ixx><%= [link_mass * ( 3 * radius * radius * radius + length * length) /12, min_inertia].max %></ixx>
-        <iyy><%= [link_mass * ( 3 * radius * radius * radius + length * length) /12, min_inertia].max %></iyy>
+        <ixx><%= [link_mass * ( 3 * radius * radius + length * length) /12, min_inertia].max %></ixx>
+        <iyy><%= [link_mass * ( 3 * radius * radius + length * length) /12, min_inertia].max %></iyy>
         <izz><%= [link_mass * radius * radius * 0.5, min_inertia].max %></izz>
       </inertia>
     </inertial>

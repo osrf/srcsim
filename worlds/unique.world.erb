@@ -675,6 +675,16 @@
       nextBling()
     %>
 
+    <!-- Cable -->
+    <%
+      tCableSlotOrigin = TMatrix(0.4, 1.15, -Math::PI / 2);
+      $cable_frame = $current_frame *
+                     $current_walkway[$slot] *
+                     tCableSlotOrigin
+    %>
+
+    <%= fromFile("cable.erb") %>
+
     <!-- Bling -->
     <%=
       remainingSlot()
