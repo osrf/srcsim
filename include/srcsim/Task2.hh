@@ -20,6 +20,7 @@
 
 #include <vector>
 #include <ignition/math/Pose3.hh>
+#include <gazebo/sensors/ContactSensor.hh>
 #include <gazebo/transport/transport.hh>
 
 #include "Checkpoint.hh"
@@ -85,6 +86,36 @@ namespace gazebo
 
     /// \brief Publishes toggle messages.
     private: transport::PublisherPtr toggleGzPub;
+  };
+
+  /// \brief Task 2, Checkpoint 5: Plug cable
+  class Task2CP5 : public Checkpoint
+  {
+    using Checkpoint::Checkpoint;
+
+    /// \brief Check whether the robot is in the final box region.
+    /// \return True if the checkpoint is complete.
+    public: bool Check();
+
+    /// \brief Whether the checkpoint is complete or not.
+    private: bool done = false;
+
+    /// \brief
+    private: sensors::ContactSensorPtr sensor;
+    private: physics::WorldPtr world;
+
+    /// \brief
+    private: std::string sensorName = "panel2_sensor";
+    private: std::string cable = "solar_panel_cable";
+    private: std::string plug = "solar_panel_cable::link_16";
+    private: std::string outletParent = "solar_panel::panel_02";
+    private: std::string outlet = "solar_panel::panel_02::outlet";
+
+    /// \brief Time when started touching.
+    private: common::Time touchStart;
+
+    /// \brief Target time to continuously touch.
+    private: common::Time targetTime = 1;
   };
 
   /// \brief Task 2, Checkpoint 6: Final box

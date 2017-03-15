@@ -490,14 +490,14 @@
     %>
 
     <!-- TASK 2 -->
+    <%
+      t2cp1_frame = $current_frame *
+                    TMatrix(0, -finish_walkway_length * 0.5, Math::PI * 0.5)
+    %>
 
     <!-- Walkway -->
     <%=
       nextWalkway($walkways, true)
-    %>
-    <%
-      t2cp1_frame = $current_frame *
-                    TMatrix(0, -finish_walkway_length * 0.5, Math::PI * 0.5)
     %>
 
     <!-- Bling -->
@@ -674,16 +674,6 @@
       randomSlot()
       nextBling()
     %>
-
-    <!-- Cable -->
-    <%
-      tCableSlotOrigin = TMatrix(0.4, 1.15, -Math::PI / 2);
-      $cable_frame = $current_frame *
-                     $current_walkway[$slot] *
-                     tCableSlotOrigin
-    %>
-
-    <%= fromFile("cable.erb") %>
 
     <!-- Bling -->
     <%=
