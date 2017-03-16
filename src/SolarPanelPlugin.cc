@@ -142,7 +142,7 @@ void SolarPanelPlugin::Enable(ConstIntPtr &_msg)
           std::bind(&SolarPanelPlugin::OnUpdate, this, std::placeholders::_1));
     }
 
-    this->pressed = true;
+    this->cheated = true;
   }
 }
 
@@ -165,7 +165,7 @@ void SolarPanelPlugin::OnUpdate(const common::UpdateInfo &/*_info*/)
   }
 
   // Nothing to do yet
-  if (!this->pressed)
+  if (!this->pressed && !this->cheated)
     return;
 
   // Remove joints locking panel closed
@@ -227,12 +227,15 @@ void SolarPanelPlugin::OnUpdate(const common::UpdateInfo &/*_info*/)
   // and stop updating
   if (p1open && p2open && ps1open && ps2open && ps3open && ps4open)
   {
-    gzmsg << "Solar panel is open" << std::endl;
+    if (!this->cheated)
+    {
+      gzmsg << "Solar panel is open" << std::endl;
 
-    gazebo::msgs::Int msg;
-    msg.set_data(1);
+      gazebo::msgs::Int msg;
+      msg.set_data(1);
 
-    this->openedPub->Publish(msg);
+      this->openedPub->Publish(msg);
+    }
 
     this->updateConnection.reset();
   }

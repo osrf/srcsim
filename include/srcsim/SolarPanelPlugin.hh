@@ -57,6 +57,9 @@ namespace gazebo
     /// \brief Whether the button is pressed.
     private: bool pressed = false;
 
+    /// \brief Whether a cheat was used to open the panel.
+    private: bool cheated = false;
+
     /// \brief Lower limit of the button's joint.
     private: double lowerLimit;
 

@@ -113,7 +113,7 @@ namespace gazebo
     private: physics::WorldPtr world;
 
     /// \brief
-    private: std::string sensorName = "panel2_sensor";
+    private: std::string sensorName = "outlet_sensor";
     private: std::string cable = "solar_panel_cable";
     private: std::string plug = "solar_panel_cable::link_16";
     private: std::string outletParent = "solar_panel::panel_02";
@@ -123,7 +123,7 @@ namespace gazebo
     private: common::Time touchStart;
 
     /// \brief Target time to continuously touch.
-    private: common::Time targetTime = 1;
+    private: common::Time targetTime = 0.1;
   };
 
   /// \brief Task 2, Checkpoint 6: Final box
