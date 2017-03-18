@@ -235,7 +235,7 @@
   # Parameters:
   # _list: either $walkways or $finish_walkways
   # _no90: do not pick a walkway with a +-90 degree turn. This is used before
-  # and after finish boxes.
+  # and after large objects.
   def nextWalkway(_list, _no90)
 
     # angle of previous walkway
@@ -501,18 +501,6 @@
       nextWalkway($walkways, true)
     %>
 
-    <!-- Bling -->
-    <%=
-      randomSlot()
-      nextBling()
-    %>
-
-    <!-- Bling -->
-    <%=
-      remainingSlot()
-      nextBling()
-    %>
-
     <!-- Walkway -->
     <%=
       # Can't have 90 degrees near the rover
@@ -569,16 +557,10 @@
       nextWalkway($walkways, true)
     %>
 
-    <!-- Bling -->
-    <%=
-      # Place it on the 2nd slot
-      $slot = "tOriginSlot2"
-      nextBling()
-    %>
-
     <!-- Walkway -->
     <%=
-      nextWalkway($walkways, false)
+      # Can't have 90 degrees between the rover and the array
+      nextWalkway($walkways, true)
     %>
 
     <!-- Bling -->
@@ -686,7 +668,7 @@
       nextBling()
     %>
 
-    <!-- Final box 2 -->
+    <!-- Final Box 2 -->
     <%=
       nextWalkway($finish_walkways, false)
     %>
@@ -765,6 +747,35 @@
     <%
       # TODO: Habitat goes here
     %>
+
+    <!-- TODO: Put the table inside the habitat -->
+
+    <!-- Table -->
+    <%
+      $current_frame = $current_frame *
+                       $current_walkway["tOriginExit"]
+
+      $table_frame = $current_frame * TMatrix(0, 2, 0)
+    %>
+    <include>
+      <pose>
+        <%= $table_frame[0, 2] %>
+        <%= $table_frame[1, 2] %>
+        0
+        0
+        0
+        <%= Math::atan2($table_frame[1, 0], $table_frame[0, 0]) %>
+      </pose>
+      <uri>model://space_table</uri>
+    </include>
+
+    <!-- Air leak detector -->
+    <%
+      $air_leak_detector_frame = $table_frame
+      $table_top_z = 0.7
+    %>
+
+    <%= fromFile("air_leak_detector.erb") %>
 
     <!-- TODO: Put the box inside the habitat -->
 
