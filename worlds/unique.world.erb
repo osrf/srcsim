@@ -525,6 +525,16 @@
       # TODO: Rover goes here
     %>
 
+    <!-- Solar panel -->
+    <%
+      tPanelSlotOrigin = TMatrix(0, 1.0, 0);
+      $solar_panel_frame = $current_frame *
+                           $current_walkway[$slot] *
+                           tPanelSlotOrigin
+    %>
+
+    <%= fromFile("solar_panel.erb") %>
+
     <!-- Bling -->
     <%=
       remainingSlot()
