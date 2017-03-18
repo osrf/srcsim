@@ -235,7 +235,7 @@
   # Parameters:
   # _list: either $walkways or $finish_walkways
   # _no90: do not pick a walkway with a +-90 degree turn. This is used before
-  # and after finish boxes.
+  # and after large objects.
   def nextWalkway(_list, _no90)
 
     # angle of previous walkway
@@ -525,6 +525,16 @@
       # TODO: Rover goes here
     %>
 
+    <!-- Solar panel -->
+    <%
+      tPanelSlotOrigin = TMatrix(0, 1.0, 0);
+      $solar_panel_frame = $current_frame *
+                           $current_walkway[$slot] *
+                           tPanelSlotOrigin
+    %>
+
+    <%= fromFile("solar_panel.erb") %>
+
     <!-- Bling -->
     <%=
       remainingSlot()
@@ -533,14 +543,31 @@
 
     <!-- Walkway -->
     <%=
-      nextWalkway($walkways, false)
+      # Can't have 90 degrees near the array
+      nextWalkway($walkways, true)
     %>
 
     <!-- Solar Array -->
     <%
       randomSlot()
-      # TODO: Array goes here
+
+      tArraySlotOrigin = TMatrix(0, 0.55, 0);
+      array_frame = $current_frame *
+                    $current_walkway[$slot] *
+                    tArraySlotOrigin
     %>
+
+    <include>
+      <pose>
+        <%= array_frame[0, 2] %>
+        <%= array_frame[1, 2] %>
+        0
+        0
+        0
+        <%= Math::atan2(array_frame[1, 0], array_frame[0, 0]) %>
+      </pose>
+      <uri>model://solar_array</uri>
+    </include>
 
     <!-- Cable -->
     <%
@@ -552,15 +579,36 @@
 
     <%= fromFile("cable.erb") %>
 
+    <!-- Checkpoint 2 - Box plugin -->
+    <%
+      panel_goal_frame = $cable_frame * TMatrix(0, -2.2, Math::PI * 0.5)
+    %>
+
     <!-- Bling -->
     <%=
-      remainingSlot()
-      nextBling()
+      # No room for bling if it's a 45 turn
+      if $current_walkway['angle'].abs() != Math::PI/4
+        remainingSlot()
+        nextBling()
+      end
     %>
 
     <!-- Walkway -->
     <%=
+      # Can't have 90 degrees near the array or the final box
       nextWalkway($walkways, true)
+    %>
+
+    <!-- Bling -->
+    <%=
+      randomSlot()
+      nextBling()
+    %>
+
+    <!-- Bling -->
+    <%=
+      remainingSlot()
+      nextBling()
     %>
 
     <!-- Final Box 2 -->
@@ -640,6 +688,35 @@
     <%
       # TODO: Habitat goes here
     %>
+
+    <!-- TODO: Put the table inside the habitat -->
+
+    <!-- Table -->
+    <%
+      $current_frame = $current_frame *
+                       $current_walkway["tOriginExit"]
+
+      $table_frame = $current_frame * TMatrix(0, 2, 0)
+    %>
+    <include>
+      <pose>
+        <%= $table_frame[0, 2] %>
+        <%= $table_frame[1, 2] %>
+        0
+        0
+        0
+        <%= Math::atan2($table_frame[1, 0], $table_frame[0, 0]) %>
+      </pose>
+      <uri>model://space_table</uri>
+    </include>
+
+    <!-- Air leak detector -->
+    <%
+      $air_leak_detector_frame = $table_frame
+      $table_top_z = 0.7
+    %>
+
+    <%= fromFile("air_leak_detector.erb") %>
 
     <!-- TODO: Put the box inside the habitat -->
 
