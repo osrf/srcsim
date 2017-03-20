@@ -24,12 +24,16 @@ Task2::Task2(const common::Time &_timeout,
     const std::vector<ignition::math::Pose3d> _poses)
     : Task(_timeout)
 {
+  // Checkpoint 1: Lift solar panel
+  std::unique_ptr<Task2CP1> cp1(new Task2CP1(_poses[0]));
+  this->checkpoints.push_back(std::move(cp1));
+
   // Checkpoint 3: Deploy solar panel
-  std::unique_ptr<Task2CP3> cp3(new Task2CP3(_poses[0]));
+  std::unique_ptr<Task2CP3> cp3(new Task2CP3(_poses[2]));
   this->checkpoints.push_back(std::move(cp3));
 
   // Checkpoint 6: Walk to final box
-  std::unique_ptr<Task2CP6> cp6(new Task2CP6(_poses[1]));
+  std::unique_ptr<Task2CP6> cp6(new Task2CP6(_poses[5]));
   this->checkpoints.push_back(std::move(cp6));
 
   gzmsg << "Task [2] created" << std::endl;
@@ -39,6 +43,12 @@ Task2::Task2(const common::Time &_timeout,
 size_t Task2::Number() const
 {
   return 2u;
+}
+
+/////////////////////////////////////////////////
+bool Task2CP1::Check()
+{
+  return this->CheckTouch("/task2/checkpoint1");
 }
 
 /////////////////////////////////////////////////
