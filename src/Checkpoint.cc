@@ -118,5 +118,3 @@ void TouchCheckpoint::OnTouchGzMsg(ConstIntPtr &/*_msg*/)
 {
   this->touchDone = true;
 }
-
-
