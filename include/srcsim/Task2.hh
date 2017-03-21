@@ -77,6 +77,17 @@ namespace gazebo
     private: transport::PublisherPtr toggleGzPub;
   };
 
+  /// \brief Task 2, Checkpoint 4: Lift cable
+  class Task2CP4 : public TouchCheckpoint
+  {
+    using TouchCheckpoint::TouchCheckpoint;
+
+    /// \brief Check whether the cable's tip has been touching the robot and
+    /// nothing else for long enough.
+    /// \return True if the checkpoint is complete.
+    public: bool Check();
+  };
+
   /// \brief Task 2, Checkpoint 6: Final box
   class Task2CP6 : public BoxCheckpoint
   {
