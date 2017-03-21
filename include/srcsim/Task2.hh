@@ -127,6 +127,17 @@ namespace gazebo
     private: common::Time targetTime = 0.1;
   };
 
+  /// \brief Task 2, Checkpoint 4: Lift cable
+  class Task2CP4 : public TouchCheckpoint
+  {
+    using TouchCheckpoint::TouchCheckpoint;
+
+    /// \brief Check whether the cable's tip has been touching the robot and
+    /// nothing else for long enough.
+    /// \return True if the checkpoint is complete.
+    public: bool Check();
+  };
+
   /// \brief Task 2, Checkpoint 6: Final box
   class Task2CP6 : public BoxCheckpoint
   {

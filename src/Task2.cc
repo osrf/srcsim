@@ -64,6 +64,10 @@ Task2::Task2(sdf::ElementPtr _sdf) : Task(_sdf)
   std::unique_ptr<Task2CP3> cp3(new Task2CP3(cp3Elem));
   this->checkpoints.push_back(std::move(cp3));
 
+  // Checkpoint 4: Lift cable
+  std::unique_ptr<Task2CP4> cp4(new Task2CP4(cp4Elem));
+  this->checkpoints.push_back(std::move(cp4));
+
   // Checkpoint 5: Plug cable
   std::unique_ptr<Task2CP5> cp5(new Task2CP5(cp5Elem));
   this->checkpoints.push_back(std::move(cp5));
@@ -187,6 +191,12 @@ void Task2CP3::Skip()
   this->enableGzPub->Publish(msg);
 
   this->enableGzPub.reset();
+}
+
+/////////////////////////////////////////////////
+bool Task2CP4::Check()
+{
+  return this->CheckTouch("/task2/checkpoint4");
 }
 
 /////////////////////////////////////////////////
