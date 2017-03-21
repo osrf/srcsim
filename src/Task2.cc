@@ -25,11 +25,11 @@ Task2::Task2(const common::Time &_timeout,
     : Task(_timeout)
 {
   // Checkpoint 3: Deploy solar panel
-  std::unique_ptr<Task2CP3> cp3(new Task2CP3(_poses[0]));
+  std::unique_ptr<Task2CP3> cp3(new Task2CP3(_poses[2]));
   this->checkpoints.push_back(std::move(cp3));
 
   // Checkpoint 6: Walk to final box
-  std::unique_ptr<Task2CP6> cp6(new Task2CP6(_poses[1]));
+  std::unique_ptr<Task2CP6> cp6(new Task2CP6(_poses[5]));
   this->checkpoints.push_back(std::move(cp6));
 
   gzmsg << "Task [2] created" << std::endl;
@@ -57,12 +57,12 @@ bool Task2CP3::Check()
     this->gzNode->Init();
 
     // Enable solar panel plugin
-    this->toggleGzPub = this->gzNode->Advertise<msgs::Int>(
-        "/task2/checkpoint3/toggle");
+    this->enableGzPub = this->gzNode->Advertise<msgs::Int>(
+        "/task2/checkpoint3/enable");
 
     msgs::Int msg;
     msg.set_data(1);
-    this->toggleGzPub->Publish(msg);
+    this->enableGzPub->Publish(msg);
 
     // Subscribe to solar panel msgs
     this->panelGzSub = this->gzNode->Subscribe("/task2/checkpoint3/opened",
@@ -73,12 +73,39 @@ bool Task2CP3::Check()
   {
     msgs::Int msg;
     msg.set_data(0);
-    this->toggleGzPub->Publish(msg);
+    this->enableGzPub->Publish(msg);
 
     this->panelGzSub.reset();
   }
 
   return this->panelDone;
+}
+
+/////////////////////////////////////////////////
+void Task2CP3::Skip()
+{
+  if (this->panelDone)
+  {
+    gzwarn << "Trying to skip Task 2 Checkpoint 3, "
+           << "but this checkpoint is already done!" << std::endl;
+    return;
+  }
+
+  if (!this->enableGzPub)
+  {
+    this->gzNode = transport::NodePtr(new transport::Node());
+    this->gzNode->Init();
+
+    // Enable solar panel plugin
+    this->enableGzPub = this->gzNode->Advertise<msgs::Int>(
+        "/task2/checkpoint3/enable");
+  }
+
+  msgs::Int msg;
+  msg.set_data(2);
+  this->enableGzPub->Publish(msg);
+
+  this->enableGzPub.reset();
 }
 
 /////////////////////////////////////////////////

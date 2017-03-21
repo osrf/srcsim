@@ -28,6 +28,11 @@ Checkpoint::Checkpoint(const ignition::math::Pose3d &_startPose)
 }
 
 /////////////////////////////////////////////////
+void Checkpoint::Skip()
+{
+}
+
+/////////////////////////////////////////////////
 bool BoxCheckpoint::CheckBox(const std::string &_namespace)
 {
   // First time checking
