@@ -512,11 +512,8 @@
     <!-- Walkway -->
     <%=
       t2cp2_frame = $current_frame
-      t2cp3_frame = $current_frame
-      t2cp4_frame = $current_frame
-      t2cp5_frame = $current_frame
-      t2cp6_frame = $current_frame
-      nextWalkway($walkways, false)
+      # Can't have 90 degrees near the rover
+      nextWalkway($walkways, true)
     %>
 
     <!-- Rover -->
@@ -555,6 +552,11 @@
       array_frame = $current_frame *
                     $current_walkway[$slot] *
                     tArraySlotOrigin
+
+      t2cp3_frame = array_frame * TMatrix(0, -1.2, Math::PI * 0.5);
+      t2cp4_frame = t2cp3_frame
+      t2cp5_frame = t2cp3_frame
+      t2cp6_frame = t2cp3_frame
     %>
 
     <include>
