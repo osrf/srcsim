@@ -511,7 +511,6 @@
 
     <!-- Walkway -->
     <%=
-      t2cp2_frame = $current_frame
       t2cp3_frame = $current_frame
       t2cp4_frame = $current_frame
       t2cp5_frame = $current_frame
@@ -581,8 +580,22 @@
 
     <!-- Checkpoint 2 - Box plugin -->
     <%
-      panel_goal_frame = $cable_frame * TMatrix(0, -2.2, Math::PI * 0.5)
+      panel_goal_frame = array_frame
     %>
+
+    <plugin name="boxT2CP2" filename="libBoxContainsPlugin.so">
+      <entity>solar_panel</entity>
+      <namespace>task2/checkpoint2</namespace>
+      <pose>
+        <%= panel_goal_frame[0, 2] %>
+        <%= panel_goal_frame[1, 2] %>
+        0.9
+        0
+        0
+        <%= Math::atan2(panel_goal_frame[1, 0], panel_goal_frame[0, 0]) %>
+      </pose>
+      <size>1.47 0.95 0.45</size>
+    </plugin>
 
     <!-- Bling -->
     <%=
@@ -783,15 +796,6 @@
           0
           <%= Math::atan2(t2cp1_frame[1, 0], t2cp1_frame[0, 0]) %>
         </task_2_checkpoint_1_pose>
-
-        <task_2_checkpoint_2_pose>
-          <%= t2cp2_frame[0, 2] %>
-          <%= t2cp2_frame[1, 2] %>
-          <%= robot_z_pos %>
-          0
-          0
-          <%= Math::atan2(t2cp2_frame[1, 0], t2cp2_frame[0, 0]) %>
-        </task_2_checkpoint_2_pose>
 
         <task_2_checkpoint_3_pose>
           <%= t2cp3_frame[0, 2] %>
