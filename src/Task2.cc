@@ -122,6 +122,8 @@ void Task2CP2::Skip()
   }
 
   panel->SetWorldPose(this->panelSkipPose);
+
+  Checkpoint::Skip();
 }
 
 /////////////////////////////////////////////////
@@ -189,6 +191,8 @@ void Task2CP3::Skip()
   this->enableGzPub->Publish(msg);
 
   this->enableGzPub.reset();
+
+  Checkpoint::Skip();
 }
 
 /////////////////////////////////////////////////

@@ -37,6 +37,9 @@ Checkpoint::Checkpoint(sdf::ElementPtr _sdf)
 /////////////////////////////////////////////////
 void Checkpoint::Skip()
 {
+  if (this->robotSkipPose == ignition::math::Pose3d::Zero)
+    return;
+
   // Teleport robot
   // TODO: Reset joints
   auto world = physics::get_world();

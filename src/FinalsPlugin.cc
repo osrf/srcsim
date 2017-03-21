@@ -142,6 +142,26 @@ bool FinalsPlugin::OnStartTaskRosRequest(srcsim::StartTask::Request &_req,
     return true;
   }
 
+  // We won't allow skipping directly to a few checkpoints. Shortcut this here.
+  if ((_req.task_id == 2 && _req.checkpoint_id == 2) ||
+      (_req.task_id == 2 && _req.checkpoint_id == 4) ||
+      (_req.task_id == 3 && _req.checkpoint_id == 4) ||
+      (_req.task_id == 3 && _req.checkpoint_id == 6))
+  {
+    auto tid = unsigned(_req.task_id);
+    auto cpid = unsigned(_req.checkpoint_id);
+    auto prevCp = unsigned(cpid - 1);
+    auto nextCp = unsigned(cpid + 1);
+    gzerr << "It's not possible to skip to task [" << tid << "] checkpoint ["
+          << cpid << "] (" << tid << "/" << cpid
+          << "). You can either complete " << tid << "/" << prevCp
+          << " and then skip to " << tid << "/" << nextCp
+          << ", or skip straight to " << tid << "/" << nextCp << ". "
+          << std::endl;
+    _res.success = false;
+    return true;
+  }
+
   auto time = this->world->GetSimTime();
 
   // Tasks being skipped

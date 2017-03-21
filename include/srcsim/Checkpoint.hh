@@ -42,7 +42,7 @@ namespace gazebo
     /// This function is optional.
     public: virtual void Skip();
 
-    /// \brief Start pose.
+    /// \brief Robot pose after skipping this checkpoint,
     public: ignition::math::Pose3d robotSkipPose;
   };
 

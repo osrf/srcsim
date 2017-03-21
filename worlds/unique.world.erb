@@ -621,7 +621,7 @@
 
     <!-- Checkpoint 2 - Box plugin -->
     <%
-      panel_goal_frame = $cable_frame * TMatrix(0, -2.2, Math::PI * 0.5)
+      panel_goal_frame = array_frame
     %>
 
     <plugin name="boxT2CP2" filename="libBoxContainsPlugin.so">
@@ -630,12 +630,12 @@
       <pose>
         <%= panel_goal_frame[0, 2] %>
         <%= panel_goal_frame[1, 2] %>
-        <%= box_height * 0.5 %>
+        0.9
         0
         0
         <%= Math::atan2(panel_goal_frame[1, 0], panel_goal_frame[0, 0]) %>
       </pose>
-      <size>1 1 <%= box_height %></size>
+      <size>1.47 0.95 0.45</size>
     </plugin>
 
     <!-- Bling -->
