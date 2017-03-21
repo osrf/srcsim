@@ -15,9 +15,6 @@
  *
 */
 
-#include <gazebo/physics/Model.hh>
-#include <gazebo/physics/PhysicsIface.hh>
-#include <gazebo/physics/World.hh>
 #include <srcsim/Task.h>
 #include <std_msgs/Time.h>
 
@@ -47,8 +44,7 @@ Task::Task(sdf::ElementPtr _sdf)
 }
 
 /////////////////////////////////////////////////
-void Task::Start(const common::Time &_time, const size_t _checkpoint,
-    bool _skipped)
+void Task::Start(const common::Time &_time, const size_t _checkpoint)
 {
   // Double-check that we're not going back to a previous checkpoint
   if (_checkpoint <= this->current)
@@ -74,8 +70,6 @@ void Task::Start(const common::Time &_time, const size_t _checkpoint,
       gzmsg << "Task [" << this->Number() << "] - Checkpoint ["
             << this->current << "] - Skipped (" << _time << ")" << std::endl;
       this->checkpointsCompletion.push_back(common::Time::Zero);
-
-      _skipped = true;
     }
 
     this->current++;
@@ -83,27 +77,6 @@ void Task::Start(const common::Time &_time, const size_t _checkpoint,
 
   // Checkpoint
   this->current = _checkpoint;
-
-  // Teleport robot if tasks / checkpoints are being skipped
-  // TODO: Reset joints
-  if (_skipped)
-  {
-    auto world = physics::get_world();
-    if (!world)
-    {
-      gzerr << "Failed to get world pointer, robot won't be teleported."
-          << std::endl;
-      return;
-    }
-    auto robot = world->GetModel("valkyrie");
-    if (!robot)
-    {
-      gzerr << "Failed to get model pointer, robot won't be teleported."
-          << std::endl;
-      return;
-    }
-    robot->SetWorldPose(this->checkpoints[this->current - 1]->startPose);
-  }
 
   gzmsg << "Task [" << this->Number() << "] - Checkpoint [" << this->current
         << "] - Started (" << _time << ")" << std::endl;
@@ -167,6 +140,13 @@ void Task::Update(const common::Time &_time)
   }
 
   this->taskRosPub.publish(msg);
+}
+
+/////////////////////////////////////////////////
+void Task::Skip()
+{
+  // Trigger skip on last checkpoint
+  this->checkpoints.back()->Skip();
 }
 
 /////////////////////////////////////////////////

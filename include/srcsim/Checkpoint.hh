@@ -43,7 +43,7 @@ namespace gazebo
     public: virtual void Skip();
 
     /// \brief Start pose.
-    public: ignition::math::Pose3d startPose;
+    public: ignition::math::Pose3d robotSkipPose;
   };
 
   /// \brief A checkpoint tied to a BoxContainsPlugin.

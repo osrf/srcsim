@@ -25,17 +25,18 @@ Task1::Task1(sdf::ElementPtr _sdf) : Task(_sdf)
   gzmsg << "Creating Task [1] ... ";
 
   // Get SDF for each checkpoint
-  sdf::ElementPtr cp1Elem;
-  if (_sdf->HasElement("checkpoint1"))
-    cp1Elem = _sdf->GetElement("checkpoint1");
+  sdf::ElementPtr cp1Elem, cp2Elem, cp3Elem;
+  if (_sdf)
+  {
+    if (_sdf->HasElement("checkpoint1"))
+      cp1Elem = _sdf->GetElement("checkpoint1");
 
-  sdf::ElementPtr cp2Elem;
-  if (_sdf->HasElement("checkpoint2"))
-    cp2Elem = _sdf->GetElement("checkpoint2");
+    if (_sdf->HasElement("checkpoint2"))
+      cp2Elem = _sdf->GetElement("checkpoint2");
 
-  sdf::ElementPtr cp3Elem;
-  if (_sdf->HasElement("checkpoint3"))
-    cp3Elem = _sdf->GetElement("checkpoint3");
+    if (_sdf->HasElement("checkpoint3"))
+      cp3Elem = _sdf->GetElement("checkpoint3");
+  }
 
   // Checkpoint 1: Walk to satellite dish
   std::unique_ptr<Task1CP1> cp1(new Task1CP1(cp1Elem));

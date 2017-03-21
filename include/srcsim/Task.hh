@@ -40,13 +40,14 @@ namespace gazebo
     /// \brief Start this task at a specific checkpoint
     /// \param[in] _time Start time
     /// \param[in] _checkpoint Checkpoint Id
-    /// \param[in] _skipped True if another task was skipped before this one.
-    public: void Start(const common::Time &_time, const size_t _checkpoint,
-        bool _skipped = false);
+    public: void Start(const common::Time &_time, const size_t _checkpoint);
 
     /// \brief Update this task
     /// \param[in] _time Current time
     public: void Update(const common::Time &_time);
+
+    /// \brief Skip this task
+    public: void Skip();
 
     /// \brief Return the number of checkpoints in this task.
     /// \return Number of checkpoints.

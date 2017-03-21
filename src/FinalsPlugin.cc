@@ -144,15 +144,15 @@ bool FinalsPlugin::OnStartTaskRosRequest(srcsim::StartTask::Request &_req,
 
   auto time = this->world->GetSimTime();
 
-  // Check if there are tasks being skipped
-  bool skipped = false;
+  // Tasks being skipped
   while (this->current < _req.task_id)
   {
     if (this->current > 0)
     {
+      this->tasks[this->current - 1]->Skip();
+
       gzmsg << "Task [" << unsigned(this->current)  << "] - Skipped (" << time
             << ")" << std::endl;
-      skipped = true;
     }
 
     this->current++;
@@ -168,7 +168,7 @@ bool FinalsPlugin::OnStartTaskRosRequest(srcsim::StartTask::Request &_req,
   this->current = _req.task_id;
 
   // Start task
-  this->tasks[this->current - 1]->Start(time, _req.checkpoint_id, skipped);
+  this->tasks[this->current - 1]->Start(time, _req.checkpoint_id);
 
   _res.success = true;
   return true;

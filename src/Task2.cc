@@ -28,29 +28,27 @@ Task2::Task2(sdf::ElementPtr _sdf) : Task(_sdf)
   gzmsg << "Creating Task [2] ... ";
 
   // Get SDF for each checkpoint
-  sdf::ElementPtr cp1Elem;
-  if (_sdf->HasElement("checkpoint1"))
-    cp1Elem = _sdf->GetElement("checkpoint1");
+  sdf::ElementPtr cp1Elem, cp2Elem, cp3Elem, cp4Elem, cp5Elem, cp6Elem;
+  if (_sdf)
+  {
+    if (_sdf->HasElement("checkpoint1"))
+      cp1Elem = _sdf->GetElement("checkpoint1");
 
-  sdf::ElementPtr cp2Elem;
-  if (_sdf->HasElement("checkpoint2"))
-    cp2Elem = _sdf->GetElement("checkpoint2");
+    if (_sdf->HasElement("checkpoint2"))
+      cp2Elem = _sdf->GetElement("checkpoint2");
 
-  sdf::ElementPtr cp3Elem;
-  if (_sdf->HasElement("checkpoint3"))
-    cp3Elem = _sdf->GetElement("checkpoint3");
+    if (_sdf->HasElement("checkpoint3"))
+      cp3Elem = _sdf->GetElement("checkpoint3");
 
-  sdf::ElementPtr cp4Elem;
-  if (_sdf->HasElement("checkpoint4"))
-    cp4Elem = _sdf->GetElement("checkpoint4");
+    if (_sdf->HasElement("checkpoint4"))
+      cp4Elem = _sdf->GetElement("checkpoint4");
 
-  sdf::ElementPtr cp5Elem;
-  if (_sdf->HasElement("checkpoint5"))
-    cp5Elem = _sdf->GetElement("checkpoint5");
+    if (_sdf->HasElement("checkpoint5"))
+      cp5Elem = _sdf->GetElement("checkpoint5");
 
-  sdf::ElementPtr cp6Elem;
-  if (_sdf->HasElement("checkpoint6"))
-    cp6Elem = _sdf->GetElement("checkpoint6");
+    if (_sdf->HasElement("checkpoint6"))
+      cp6Elem = _sdf->GetElement("checkpoint6");
+  }
 
   // Checkpoint 1: Lift solar panel
   std::unique_ptr<Task2CP1> cp1(new Task2CP1(cp1Elem));
