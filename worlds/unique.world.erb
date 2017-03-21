@@ -806,25 +806,30 @@
       <%
         if (task == '0' || task == '1')
       %>
-        <task_1_timeout>1800</task_1_timeout>
+        <task1>
+          <timeout>1800</timeout>
+          <checkpoint2>
+            <robot_pose>
+              <%= t1cp2_frame[0, 2] %>
+              <%= t1cp2_frame[1, 2] %>
+              <%= robot_z_pos %>
+              0
+              0
+              <%= Math::atan2(t1cp2_frame[1, 0], t1cp2_frame[0, 0]) %>
+            </robot_pose>
+          </checkpoint2>
 
-        <task_1_checkpoint_2_pose>
-          <%= t1cp2_frame[0, 2] %>
-          <%= t1cp2_frame[1, 2] %>
-          <%= robot_z_pos %>
-          0
-          0
-          <%= Math::atan2(t1cp2_frame[1, 0], t1cp2_frame[0, 0]) %>
-        </task_1_checkpoint_2_pose>
-
-        <task_1_checkpoint_3_pose>
-          <%= t1cp3_frame[0, 2] %>
-          <%= t1cp3_frame[1, 2] %>
-          <%= robot_z_pos %>
-          0
-          0
-          <%= Math::atan2(t1cp3_frame[1, 0], t1cp3_frame[0, 0]) %>
-        </task_1_checkpoint_3_pose>
+          <checkpoint3>
+            <robot_pose>
+              <%= t1cp3_frame[0, 2] %>
+              <%= t1cp3_frame[1, 2] %>
+              <%= robot_z_pos %>
+              0
+              0
+              <%= Math::atan2(t1cp3_frame[1, 0], t1cp3_frame[0, 0]) %>
+            </robot_pose>
+          </checkpoint3>
+        </task1>
       <%
         end
       %>
@@ -832,74 +837,84 @@
       <%
         if (task == '0' || task == '2')
       %>
-        <task_2_timeout>3600</task_2_timeout>
+        <task2>
+          <timeout>3600</timeout>
+          <checkpoint1>
+            <robot_pose>
+              <%= t2cp1_frame[0, 2] %>
+              <%= t2cp1_frame[1, 2] %>
+              <%= robot_z_pos %>
+              0
+              0
+              <%= Math::atan2(t2cp1_frame[1, 0], t2cp1_frame[0, 0]) %>
+            </robot_pose>
+          </checkpoint1>
 
-        <task_2_checkpoint_1_pose>
-          <%= t2cp1_frame[0, 2] %>
-          <%= t2cp1_frame[1, 2] %>
-          <%= robot_z_pos %>
-          0
-          0
-          <%= Math::atan2(t2cp1_frame[1, 0], t2cp1_frame[0, 0]) %>
-        </task_2_checkpoint_1_pose>
-
-        <task_2_checkpoint_2_pose>
-          <%= t2cp2_frame[0, 2] %>
-          <%= t2cp2_frame[1, 2] %>
-          <%= robot_z_pos %>
-          0
-          0
-          <%= Math::atan2(t2cp2_frame[1, 0], t2cp2_frame[0, 0]) %>
-        </task_2_checkpoint_2_pose>
-
-        <task_2>
-          <checkpoint_2>
-            <panel_skip>
+          <checkpoint2>
+            <robot_pose>
+              <%= t2cp2_frame[0, 2] %>
+              <%= t2cp2_frame[1, 2] %>
+              <%= robot_z_pos %>
+              0
+              0
+              <%= Math::atan2(t2cp2_frame[1, 0], t2cp2_frame[0, 0]) %>
+            </robot_pose>
+            <panel_pose>
               <%= t2cp2_panel_skip_frame[0, 2] %>
               <%= t2cp2_panel_skip_frame[1, 2] %>
               <%= t2cp2_panel_skip_z_pos %>
               0
               0
               <%= Math::atan2(t2cp2_panel_skip_frame[1, 0], t2cp2_panel_skip_frame[0, 0]) %>
-            </panel_skip>
-          </checkpoint_2>
-        </task_2>
+            </panel_pose>
+          </checkpoint2>
 
-        <task_2_checkpoint_3_pose>
-          <%= t2cp3_frame[0, 2] %>
-          <%= t2cp3_frame[1, 2] %>
-          <%= robot_z_pos %>
-          0
-          0
-          <%= Math::atan2(t2cp3_frame[1, 0], t2cp3_frame[0, 0]) %>
-        </task_2_checkpoint_3_pose>
+          <checkpoint3>
+            <robot_pose>
+              <%= t2cp3_frame[0, 2] %>
+              <%= t2cp3_frame[1, 2] %>
+              <%= robot_z_pos %>
+              0
+              0
+              <%= Math::atan2(t2cp3_frame[1, 0], t2cp3_frame[0, 0]) %>
+            </robot_pose>
+          </checkpoint3>
 
-        <task_2_checkpoint_4_pose>
-          <%= t2cp4_frame[0, 2] %>
-          <%= t2cp4_frame[1, 2] %>
-          <%= robot_z_pos %>
-          0
-          0
-          <%= Math::atan2(t2cp4_frame[1, 0], t2cp4_frame[0, 0]) %>
-        </task_2_checkpoint_4_pose>
+          <checkpoint4>
+            <robot_pose>
+              <%= t2cp4_frame[0, 2] %>
+              <%= t2cp4_frame[1, 2] %>
+              <%= robot_z_pos %>
+              0
+              0
+              <%= Math::atan2(t2cp4_frame[1, 0], t2cp4_frame[0, 0]) %>
+            </robot_pose>
+          </checkpoint4>
 
-        <task_2_checkpoint_5_pose>
-          <%= t2cp5_frame[0, 2] %>
-          <%= t2cp5_frame[1, 2] %>
-          <%= robot_z_pos %>
-          0
-          0
-          <%= Math::atan2(t2cp5_frame[1, 0], t2cp5_frame[0, 0]) %>
-        </task_2_checkpoint_5_pose>
+          <checkpoint5>
+            <robot_pose>
+              <%= t2cp5_frame[0, 2] %>
+              <%= t2cp5_frame[1, 2] %>
+              <%= robot_z_pos %>
+              0
+              0
+              <%= Math::atan2(t2cp5_frame[1, 0], t2cp5_frame[0, 0]) %>
+            </robot_pose>
+          </checkpoint5>
 
-        <task_2_checkpoint_6_pose>
-          <%= t2cp6_frame[0, 2] %>
-          <%= t2cp6_frame[1, 2] %>
-          <%= robot_z_pos %>
-          0
-          0
-          <%= Math::atan2(t2cp6_frame[1, 0], t2cp6_frame[0, 0]) %>
-        </task_2_checkpoint_6_pose>
+          <checkpoint6>
+            <robot_pose>
+              <%= t2cp6_frame[0, 2] %>
+              <%= t2cp6_frame[1, 2] %>
+              <%= robot_z_pos %>
+              0
+              0
+              <%= Math::atan2(t2cp6_frame[1, 0], t2cp6_frame[0, 0]) %>
+            </robot_pose>
+          </checkpoint6>
+
+        </task2>
+
       <%
         end
       %>
@@ -907,79 +922,98 @@
       <%
         if (task == '0' || task == '3')
       %>
-        <task_3_timeout>7200</task_3_timeout>
+        <task3>
+          <timeout>7200</timeout>
 
-        <task_3_checkpoint_1_pose>
-          <%= t3cp1_frame[0, 2] %>
-          <%= t3cp1_frame[1, 2] %>
-          <%= robot_z_pos %>
-          0
-          0
-          <%= Math::atan2(t3cp1_frame[1, 0], t3cp1_frame[0, 0]) %>
-        </task_3_checkpoint_1_pose>
+          <checkpoint1>
+            <robot_pose>
+              <%= t3cp1_frame[0, 2] %>
+              <%= t3cp1_frame[1, 2] %>
+              <%= robot_z_pos %>
+              0
+              0
+              <%= Math::atan2(t3cp1_frame[1, 0], t3cp1_frame[0, 0]) %>
+            </robot_pose>
+          </checkpoint1>
 
-        <task_3_checkpoint_2_pose>
-          <%= t3cp2_frame[0, 2] %>
-          <%= t3cp2_frame[1, 2] %>
-          <%= robot_z_pos %>
-          0
-          0
-          <%= Math::atan2(t3cp2_frame[1, 0], t3cp2_frame[0, 0]) %>
-        </task_3_checkpoint_2_pose>
+          <checkpoint2>
+            <robot_pose>
+              <%= t3cp2_frame[0, 2] %>
+              <%= t3cp2_frame[1, 2] %>
+              <%= robot_z_pos %>
+              0
+              0
+              <%= Math::atan2(t3cp2_frame[1, 0], t3cp2_frame[0, 0]) %>
+            </robot_pose>
+          </checkpoint2>
 
-        <task_3_checkpoint_3_pose>
-          <%= t3cp3_frame[0, 2] %>
-          <%= t3cp3_frame[1, 2] %>
-          <%= robot_z_pos %>
-          0
-          0
-          <%= Math::atan2(t3cp3_frame[1, 0], t3cp3_frame[0, 0]) %>
-        </task_3_checkpoint_3_pose>
+          <checkpoint3>
+            <robot_pose>
+              <%= t3cp3_frame[0, 2] %>
+              <%= t3cp3_frame[1, 2] %>
+              <%= robot_z_pos %>
+              0
+              0
+              <%= Math::atan2(t3cp3_frame[1, 0], t3cp3_frame[0, 0]) %>
+            </robot_pose>
+          </checkpoint3>
 
-        <task_3_checkpoint_4_pose>
-          <%= t3cp4_frame[0, 2] %>
-          <%= t3cp4_frame[1, 2] %>
-          <%= robot_z_pos %>
-          0
-          0
-          <%= Math::atan2(t3cp4_frame[1, 0], t3cp4_frame[0, 0]) %>
-        </task_3_checkpoint_4_pose>
+          <checkpoint4>
+            <robot_pose>
+              <%= t3cp4_frame[0, 2] %>
+              <%= t3cp4_frame[1, 2] %>
+              <%= robot_z_pos %>
+              0
+              0
+              <%= Math::atan2(t3cp4_frame[1, 0], t3cp4_frame[0, 0]) %>
+            </robot_pose>
+          </checkpoint4>
 
-        <task_3_checkpoint_5_pose>
-          <%= t3cp5_frame[0, 2] %>
-          <%= t3cp5_frame[1, 2] %>
-          <%= robot_z_pos %>
-          0
-          0
-          <%= Math::atan2(t3cp5_frame[1, 0], t3cp5_frame[0, 0]) %>
-        </task_3_checkpoint_5_pose>
+          <checkpoint5>
+            <robot_pose>
+              <%= t3cp5_frame[0, 2] %>
+              <%= t3cp5_frame[1, 2] %>
+              <%= robot_z_pos %>
+              0
+              0
+              <%= Math::atan2(t3cp5_frame[1, 0], t3cp5_frame[0, 0]) %>
+            </robot_pose>
+          </checkpoint5>
 
-        <task_3_checkpoint_6_pose>
-          <%= t3cp6_frame[0, 2] %>
-          <%= t3cp6_frame[1, 2] %>
-          <%= robot_z_pos %>
-          0
-          0
-          <%= Math::atan2(t3cp6_frame[1, 0], t3cp6_frame[0, 0]) %>
-        </task_3_checkpoint_6_pose>
+          <checkpoint6>
+            <robot_pose>
+              <%= t3cp6_frame[0, 2] %>
+              <%= t3cp6_frame[1, 2] %>
+              <%= robot_z_pos %>
+              0
+              0
+              <%= Math::atan2(t3cp6_frame[1, 0], t3cp6_frame[0, 0]) %>
+            </robot_pose>
+          </checkpoint6>
 
-        <task_3_checkpoint_7_pose>
-          <%= t3cp7_frame[0, 2] %>
-          <%= t3cp7_frame[1, 2] %>
-          <%= robot_z_pos %>
-          0
-          0
-          <%= Math::atan2(t3cp7_frame[1, 0], t3cp7_frame[0, 0]) %>
-        </task_3_checkpoint_7_pose>
+          <checkpoint7>
+            <robot_pose>
+              <%= t3cp7_frame[0, 2] %>
+              <%= t3cp7_frame[1, 2] %>
+              <%= robot_z_pos %>
+              0
+              0
+              <%= Math::atan2(t3cp7_frame[1, 0], t3cp7_frame[0, 0]) %>
+            </robot_pose>
+          </checkpoint7>
 
-        <task_3_checkpoint_8_pose>
-          <%= t3cp8_frame[0, 2] %>
-          <%= t3cp8_frame[1, 2] %>
-          <%= robot_z_pos %>
-          0
-          0
-          <%= Math::atan2(t3cp8_frame[1, 0], t3cp8_frame[0, 0]) %>
-        </task_3_checkpoint_8_pose>
+          <checkpoint8>
+            <robot_pose>
+              <%= t3cp8_frame[0, 2] %>
+              <%= t3cp8_frame[1, 2] %>
+              <%= robot_z_pos %>
+              0
+              0
+              <%= Math::atan2(t3cp8_frame[1, 0], t3cp8_frame[0, 0]) %>
+            </robot_pose>
+          </checkpoint8>
+
+        </task3>
       <%
         end
       %>

@@ -35,7 +35,7 @@ namespace gazebo
   {
     /// \brief Constructor
     /// \param[in] _timeout Timeout for this task
-    public: Task(const common::Time &_timeout);
+    public: Task(sdf::ElementPtr _sdf);
 
     /// \brief Start this task at a specific checkpoint
     /// \param[in] _time Start time
@@ -74,7 +74,7 @@ namespace gazebo
     private: common::Time startTime;
 
     /// \brief Total time allowed for the task.
-    private: common::Time timeout;
+    private: common::Time timeout = 300;
 
     /// \brief True if task has been completed before timeout.
     private: bool finished = false;

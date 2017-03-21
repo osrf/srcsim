@@ -22,9 +22,13 @@
 using namespace gazebo;
 
 /////////////////////////////////////////////////
-Checkpoint::Checkpoint(const ignition::math::Pose3d &_startPose)
-    : startPose(_startPose)
+Checkpoint::Checkpoint(sdf::ElementPtr _sdf)
 {
+  // Get robot pose
+  if (_sdf && _sdf->HasElement("robot_pose"))
+  {
+    this->startPose = _sdf->Get<ignition::math::Pose3d>("robot_pose");
+  }
 }
 
 /////////////////////////////////////////////////

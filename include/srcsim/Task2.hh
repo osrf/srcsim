@@ -32,11 +32,8 @@ namespace gazebo
   class Task2 : public Task
   {
     /// \brief Constructor
-    /// \param[in] _timeout Timeout for this task
-    /// \param[in] _poses Vector of starting poses for checkpoints.
-    public: Task2(const common::Time &_timeout,
-        const std::vector<ignition::math::Pose3d> _poses,
-        sdf::ElementPtr _sdf);
+    /// \param[in] _sdf Pointer to SDF element for this task.
+    public: Task2(sdf::ElementPtr _sdf);
 
     // Documentation inherited
     public: size_t Number() const;
@@ -56,7 +53,8 @@ namespace gazebo
   /// \brief Task 2, Checkpoint 2: Place panel near cable
   class Task2CP2 : public BoxCheckpoint
   {
-    using BoxCheckpoint::BoxCheckpoint;
+    /// \brief Constructor
+    public: Task2CP2(sdf::ElementPtr _sdf);
 
     /// \brief Check whether the panel is within reach of the cable.
     /// \return True if the checkpoint is complete.
@@ -64,6 +62,9 @@ namespace gazebo
 
     /// \brief Skip this checkpoint. This places the solar panel on the array.
     public: void Skip();
+
+    /// \brief
+    private: ignition::math::Pose3d panelSkipPose;
   };
 
   /// \brief Task 2, Checkpoint 3: Deploy solar panel

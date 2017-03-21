@@ -26,8 +26,19 @@
 using namespace gazebo;
 
 /////////////////////////////////////////////////
-Task::Task(const common::Time &_timeout) : timeout(_timeout)
+Task::Task(sdf::ElementPtr _sdf)
 {
+  // Get timeout
+  if (_sdf && _sdf->HasElement("timeout"))
+  {
+    this->timeout = _sdf->Get<double>("timeout");
+  }
+  else
+  {
+    gzwarn << "Timeout not specified, using default value ["
+           << this->timeout << "]" << std::endl;
+  }
+
   // ROS transport
   this->rosNode.reset(new ros::NodeHandle());
 

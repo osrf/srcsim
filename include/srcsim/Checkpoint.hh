@@ -27,8 +27,8 @@ namespace gazebo
   class Checkpoint
   {
     /// \brief Constructor
-    /// \param[in] _startPose Pose to start from if skipped to this checkpoint.
-    public: Checkpoint(const ignition::math::Pose3d &_startPose);
+    /// \param[in] _sdf SDF element for this checkpoint.
+    public: Checkpoint(sdf::ElementPtr _sdf);
 
     /// \brief Check whether checkpoint has been completed.
     /// Any publishers or subscribers are created the first time this is
