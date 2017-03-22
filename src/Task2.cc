@@ -213,12 +213,15 @@ bool Task2CP5::Check()
   {
     this->world = physics::get_world();
 
-    this->sensor = std::dynamic_pointer_cast<sensors::ContactSensor>(
-        sensors::SensorManager::Instance()->GetSensor(this->sensorName));
-    this->sensor->SetActive(true);
+    if (this->world)
+    {
+      this->sensor = std::dynamic_pointer_cast<sensors::ContactSensor>(
+          sensors::SensorManager::Instance()->GetSensor(this->sensorName));
+      this->sensor->SetActive(true);
+    }
   }
 
-  // If couldn't get world sensor
+  // If couldn't get sensor
   if (!this->sensor)
   {
     gzerr << "Couldn't get world or sensor pointer. "
