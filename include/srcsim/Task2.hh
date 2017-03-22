@@ -19,7 +19,6 @@
 #define SRC_TASK2_HH_
 
 #include <vector>
-#include <sdf/sdf.hh>
 #include <ignition/math/Pose3.hh>
 #include <gazebo/sensors/ContactSensor.hh>
 #include <gazebo/transport/transport.hh>
@@ -33,7 +32,7 @@ namespace gazebo
   {
     /// \brief Constructor
     /// \param[in] _sdf Pointer to SDF element for this task.
-    public: Task2(sdf::ElementPtr _sdf);
+    public: Task2(const sdf::ElementPtr &_sdf);
 
     // Documentation inherited
     public: size_t Number() const;
@@ -54,7 +53,8 @@ namespace gazebo
   class Task2CP2 : public BoxCheckpoint
   {
     /// \brief Constructor
-    public: Task2CP2(sdf::ElementPtr _sdf);
+    /// \param[in] _sdf Pointer to SDF element for this checkpoint.
+    public: Task2CP2(const sdf::ElementPtr &_sdf);
 
     /// \brief Check whether the panel is within reach of the cable.
     /// \return True if the checkpoint is complete.
@@ -109,22 +109,32 @@ namespace gazebo
     /// \brief Whether the checkpoint is complete or not.
     private: bool done = false;
 
-    /// \brief
+    /// \brief Pointer to contact sensor
     private: sensors::ContactSensorPtr sensor;
+
+    /// \brief Pointer to the world
     private: physics::WorldPtr world;
 
-    /// \brief
+    /// \brief Name of contact sensor
     private: std::string sensorName = "outlet_sensor";
+
+    /// \brief Name of cable model
     private: std::string cable = "solar_panel_cable";
+
+    /// \brief Name of link which has the cable plug
     private: std::string plug = "solar_panel_cable::link_16";
+
+    /// \brief Name of link which has the outlet
     private: std::string outletParent = "solar_panel::panel_02";
+
+    /// \brief Name of outlet collision
     private: std::string outlet = "solar_panel::panel_02::outlet";
 
     /// \brief Time when started touching.
     private: common::Time touchStart;
 
     /// \brief Target time to continuously touch.
-    private: common::Time targetTime = 0.1;
+    private: common::Time targetTime = 5;
   };
 
   /// \brief Task 2, Checkpoint 4: Lift cable

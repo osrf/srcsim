@@ -23,7 +23,7 @@
 using namespace gazebo;
 
 /////////////////////////////////////////////////
-Task2::Task2(sdf::ElementPtr _sdf) : Task(_sdf)
+Task2::Task2(const sdf::ElementPtr &_sdf) : Task(_sdf)
 {
   gzmsg << "Creating Task [2] ... ";
 
@@ -90,7 +90,7 @@ bool Task2CP1::Check()
 }
 
 /////////////////////////////////////////////////
-Task2CP2::Task2CP2(sdf::ElementPtr _sdf) : BoxCheckpoint(_sdf)
+Task2CP2::Task2CP2(const sdf::ElementPtr &_sdf) : BoxCheckpoint(_sdf)
 {
   if (_sdf && _sdf->HasElement("panel_pose"))
     this->panelSkipPose = _sdf->Get<ignition::math::Pose3d>("panel_pose");

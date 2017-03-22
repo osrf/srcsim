@@ -32,7 +32,7 @@ namespace gazebo
   {
     /// \brief Constructor
     /// \param[in] _sdf Pointer to SDF element for this task.
-    public: Task1(sdf::ElementPtr _sdf);
+    public: Task1(const sdf::ElementPtr &_sdf);
 
     // Documentation inherited
     public: size_t Number() const;

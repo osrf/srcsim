@@ -37,7 +37,7 @@ namespace gazebo
 
     /// \brief Callback for enable "service".
     /// \param[in] _msg 0 to stop, 1 to start, 2 to open the panel (cheat).
-    public: void Enable(ConstIntPtr &/*_msg*/);
+    public: void Enable(ConstIntPtr &_msg);
 
     /// \brief Update plugin's function.
     private: void OnUpdate(const common::UpdateInfo &/*_info*/);

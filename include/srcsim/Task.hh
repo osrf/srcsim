@@ -23,6 +23,8 @@
 
 #include <ros/ros.h>
 
+#include <sdf/sdf.hh>
+
 #include <gazebo/common/Console.hh>
 #include <gazebo/common/Time.hh>
 
@@ -34,8 +36,8 @@ namespace gazebo
   class Task
   {
     /// \brief Constructor
-    /// \param[in] _timeout Timeout for this task
-    public: Task(sdf::ElementPtr _sdf);
+    /// \param[in] _sdf SDF element for this task.
+    public: Task(const sdf::ElementPtr &_sdf);
 
     /// \brief Start this task at a specific checkpoint
     /// \param[in] _time Start time

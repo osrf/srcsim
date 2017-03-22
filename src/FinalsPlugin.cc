@@ -36,42 +36,56 @@ void FinalsPlugin::Load(physics::WorldPtr _world, sdf::ElementPtr _sdf)
 {
   gzmsg << "Initializing Finals plugin ... " << std::endl;
 
-  this->world = _world;
-
-  // Get SDF for each task
-  sdf::ElementPtr task1Elem, task2Elem, task3Elem;
-
-  if (_sdf)
+  if (!_sdf)
   {
-    if (_sdf->HasElement("task1"))
-      task1Elem = _sdf->GetElement("task1");
-    else
-      gzwarn << "Missing <task1> element, using default values" << std::endl;
-
-    if (_sdf->HasElement("task2"))
-      task2Elem = _sdf->GetElement("task2");
-    else
-      gzwarn << "Missing <task2> element, using default values" << std::endl;
-
-    if (_sdf->HasElement("task3"))
-      task3Elem = _sdf->GetElement("task3");
-    else
-      gzwarn << "Missing <task3> element, using default values" << std::endl;
+    gzerr << "Something went wrong, missing SDF pointer." << std::endl;
+    return;
   }
 
-  // Instantiate tasks
+  this->world = _world;
+  this->product = 1;
 
-  // Task 1: Satellite Dish
-  std::unique_ptr<Task1> task1(new Task1(task1Elem));
-  this->tasks.push_back(std::move(task1));
+  // Task 1
+  if (_sdf->HasElement("task1"))
+  {
+    std::unique_ptr<Task1> task1(new Task1(_sdf->GetElement("task1")));
+    this->tasks.push_back(std::move(task1));
+    product *= 2;
+  }
+  else
+  {
+    gzmsg << "Task [1] won't be generated." << std::endl;
+    // Just for counting purposes
+    this->tasks.push_back(nullptr);
+  }
 
-  // Task 2: Solar panel
-  std::unique_ptr<Task2> task2(new Task2(task2Elem));
-  this->tasks.push_back(std::move(task2));
+  // Task 2
+  if (_sdf->HasElement("task2"))
+  {
+    std::unique_ptr<Task2> task2(new Task2(_sdf->GetElement("task2")));
+    this->tasks.push_back(std::move(task2));
+    product *= 3;
+  }
+  else
+  {
+    gzmsg << "Task [2] won't be generated." << std::endl;
+    // Just for counting purposes
+    this->tasks.push_back(nullptr);
+  }
 
-  // Task 3: Habitat
-  std::unique_ptr<Task3> task3(new Task3(task3Elem));
-  this->tasks.push_back(std::move(task3));
+  // Task 3
+  if (_sdf->HasElement("task3"))
+  {
+    std::unique_ptr<Task3> task3(new Task3(_sdf->GetElement("task3")));
+    this->tasks.push_back(std::move(task3));
+    product *= 5;
+  }
+  else
+  {
+    gzmsg << "Task [3] won't be generated." << std::endl;
+    // Just for counting purposes
+    this->tasks.push_back(nullptr);
+  }
 
   // ROS transport
   if (!ros::isInitialized())
@@ -98,6 +112,8 @@ void FinalsPlugin::Load(physics::WorldPtr _world, sdf::ElementPtr _sdf)
 bool FinalsPlugin::OnStartTaskRosRequest(srcsim::StartTask::Request &_req,
     srcsim::StartTask::Response &_res)
 {
+  _res.success = true;
+
   // Check if task exists
   if (_req.task_id > 3 || _req.task_id < 1)
   {
@@ -105,6 +121,29 @@ bool FinalsPlugin::OnStartTaskRosRequest(srcsim::StartTask::Request &_req,
         "]. Task numbers go from 1 to 3." << std::endl;
     _res.success = false;
     return true;
+  }
+
+  // In case world doesn't have all tasks
+  if (this->product % 30 != 0)
+  {
+    // Task 1
+    if (_req.task_id == 1 && this->product % 2 != 0)
+      _res.success = false;
+
+    // Task 2
+    if (_req.task_id == 2 && this->product % 3 != 0)
+      _res.success = false;
+
+    // Task 3
+    if (_req.task_id == 3 && this->product % 5 != 0)
+      _res.success = false;
+
+    if (!_res.success)
+    {
+      gzerr << "Trying to start task [" << unsigned(_req.task_id) <<
+          "] but this task is not in the world." << std::endl;
+      return true;
+    }
   }
 
   // Check if checkpoint exists
@@ -169,7 +208,8 @@ bool FinalsPlugin::OnStartTaskRosRequest(srcsim::StartTask::Request &_req,
   {
     if (this->current > 0)
     {
-      this->tasks[this->current - 1]->Skip();
+      if (this->tasks[this->current - 1])
+        this->tasks[this->current - 1]->Skip();
 
       gzmsg << "Task [" << unsigned(this->current)  << "] - Skipped (" << time
             << ")" << std::endl;

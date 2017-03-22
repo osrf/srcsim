@@ -20,7 +20,7 @@
 using namespace gazebo;
 
 /////////////////////////////////////////////////
-Task3::Task3(sdf::ElementPtr _sdf) : Task(_sdf)
+Task3::Task3(const sdf::ElementPtr &_sdf) : Task(_sdf)
 {
   gzmsg << "Creating Task [3] ... ";
 

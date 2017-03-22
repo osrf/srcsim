@@ -480,6 +480,12 @@
       nextBling()
     %>
 
+    <%
+      t1cp3_frame = $current_frame *
+                    $current_walkway["tOriginExit"] *
+                    TMatrix(0, -finish_walkway_length * 0.5, Math::PI * 0.5)
+    %>
+
     <!-- /TASK 1 -->
     <%
       end
@@ -490,11 +496,6 @@
     %>
 
     <!-- TASK 2 -->
-    <%
-      t1cp3_frame = $current_frame *
-                    $current_walkway["tOriginExit"] *
-                    TMatrix(0, -finish_walkway_length * 0.5, Math::PI * 0.5)
-    %>
 
     <!-- Walkway -->
     <%=
@@ -697,6 +698,12 @@
       nextBling()
     %>
 
+    <%
+      t2cp6_frame = $current_frame *
+                    $current_walkway["tOriginExit"] *
+                    TMatrix(0, -finish_walkway_length * 0.5, Math::PI * 0.5)
+    %>
+
     <!-- /TASK 2 -->
     <%
       end
@@ -710,9 +717,6 @@
 
     <!-- Walkway -->
     <%=
-      t2cp6_frame = $current_frame *
-                    $current_walkway["tOriginExit"] *
-                    TMatrix(0, -finish_walkway_length * 0.5, Math::PI * 0.5)
       t3cp1_frame = t2cp6_frame
       t3cp2_frame = t2cp6_frame
       t3cp3_frame = t2cp6_frame
@@ -753,7 +757,7 @@
       $current_frame = $current_frame *
                        $current_walkway["tOriginExit"]
 
-      $table_frame = $current_frame * TMatrix(0, 2, 0)
+      $table_frame = $current_frame * TMatrix(0, 0.5, 0)
     %>
     <include>
       <pose>

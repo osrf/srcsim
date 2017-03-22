@@ -19,6 +19,7 @@
 #define SRC_CHECKPOINT_HH_
 
 #include <ignition/math/Pose3.hh>
+#include <sdf/sdf.hh>
 #include <ros/ros.h>
 #include <gazebo/transport/transport.hh>
 
@@ -28,7 +29,7 @@ namespace gazebo
   {
     /// \brief Constructor
     /// \param[in] _sdf SDF element for this checkpoint.
-    public: Checkpoint(sdf::ElementPtr _sdf);
+    public: Checkpoint(const sdf::ElementPtr &_sdf);
 
     /// \brief Check whether checkpoint has been completed.
     /// Any publishers or subscribers are created the first time this is
@@ -37,12 +38,13 @@ namespace gazebo
     public: virtual bool Check() = 0;
 
     /// \brief Skip this checkpoint.
-    /// This function should rearrange objects (not the robot) in the world
-    /// as if the checkpoint has been completed.
-    /// This function is optional.
+    /// This function rearranges the world as if the checkpoint had been
+    /// completed.
+    /// The base implementation teleports the robot, but checkpoints can
+    /// override the function to move other objects too.
     public: virtual void Skip();
 
-    /// \brief Robot pose after skipping this checkpoint,
+    /// \brief The pose the robot should be in when this checkpoint is skipped.
     public: ignition::math::Pose3d robotSkipPose;
   };
 

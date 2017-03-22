@@ -25,7 +25,7 @@
 using namespace gazebo;
 
 /////////////////////////////////////////////////
-Checkpoint::Checkpoint(sdf::ElementPtr _sdf)
+Checkpoint::Checkpoint(const sdf::ElementPtr &_sdf)
 {
   // Get robot pose
   if (_sdf && _sdf->HasElement("skip_robot_pose"))

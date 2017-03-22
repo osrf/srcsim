@@ -23,7 +23,7 @@
 using namespace gazebo;
 
 /////////////////////////////////////////////////
-Task::Task(sdf::ElementPtr _sdf)
+Task::Task(const sdf::ElementPtr &_sdf)
 {
   // Get timeout
   if (_sdf && _sdf->HasElement("timeout"))
