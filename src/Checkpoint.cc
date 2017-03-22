@@ -60,11 +60,6 @@ void Checkpoint::Skip()
 }
 
 /////////////////////////////////////////////////
-void Checkpoint::Skip()
-{
-}
-
-/////////////////////////////////////////////////
 bool BoxCheckpoint::CheckBox(const std::string &_namespace)
 {
   // First time checking
