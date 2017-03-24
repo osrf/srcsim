@@ -121,6 +121,10 @@ void Task::Update(const common::Time &_time)
         gzmsg << "Task [" << this->Number() << "] - Checkpoint ["
               << this->current << "] - Started (" << _time << ")" << std::endl;
       }
+      else
+      {
+        this->current = 0;
+      }
     }
   }
 

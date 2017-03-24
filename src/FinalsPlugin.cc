@@ -263,7 +263,7 @@ void FinalsPlugin::OnTaskRosMsg(const srcsim::Task::ConstPtr &_msg)
   if (!finishedTask)
     return;
 
-  if ( _msg->task < 3)
+  if ( _msg->task < 3 && this->tasks[this->current])
   {
     // Start next task
     this->current++;
