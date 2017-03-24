@@ -779,6 +779,23 @@
 
     <%= fromFile("air_leak_detector.erb") %>
 
+    <!-- Leak patch tool -->
+    <%
+      $leak_patch_tool_frame = $table_frame * TMatrix(0.3, 0, 0)
+    %>
+
+    <include>
+      <pose>
+        <%= $leak_patch_tool_frame[0, 2] %>
+        <%= $leak_patch_tool_frame[1, 2] %>
+        <%= $table_top_z + 0.1 %>
+        0
+        0
+        <%= Math::atan2($leak_patch_tool_frame[1, 0], $leak_patch_tool_frame[0, 0]) %>
+      </pose>
+      <uri>model://leak_patch_tool</uri>
+    </include>
+
     <!-- TODO: Put the box inside the habitat -->
 
     <!-- Checkpoint 8 - Box plugin -->
