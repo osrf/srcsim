@@ -24,8 +24,12 @@ Task2::Task2(const common::Time &_timeout,
     const std::vector<ignition::math::Pose3d> _poses)
     : Task(_timeout)
 {
+  // Checkpoint 3: Deploy solar panel
+  std::unique_ptr<Task2CP3> cp3(new Task2CP3(_poses[0]));
+  this->checkpoints.push_back(std::move(cp3));
+
   // Checkpoint 6: Walk to final box
-  std::unique_ptr<Task2CP6> cp6(new Task2CP6(_poses[0]));
+  std::unique_ptr<Task2CP6> cp6(new Task2CP6(_poses[1]));
   this->checkpoints.push_back(std::move(cp6));
 
   gzmsg << "Task [2] created" << std::endl;
@@ -35,6 +39,46 @@ Task2::Task2(const common::Time &_timeout,
 size_t Task2::Number() const
 {
   return 2u;
+}
+
+/////////////////////////////////////////////////
+void Task2CP3::OnSolarPanelGzMsg(ConstIntPtr &/*_msg*/)
+{
+  this->panelDone = true;
+}
+
+/////////////////////////////////////////////////
+bool Task2CP3::Check()
+{
+  // First time
+  if (!this->panelGzSub && !this->panelDone)
+  {
+    this->gzNode = transport::NodePtr(new transport::Node());
+    this->gzNode->Init();
+
+    // Enable solar panel plugin
+    this->toggleGzPub = this->gzNode->Advertise<msgs::Int>(
+        "/task2/checkpoint3/toggle");
+
+    msgs::Int msg;
+    msg.set_data(1);
+    this->toggleGzPub->Publish(msg);
+
+    // Subscribe to solar panel msgs
+    this->panelGzSub = this->gzNode->Subscribe("/task2/checkpoint3/opened",
+        &Task2CP3::OnSolarPanelGzMsg, this);
+  }
+
+  if (this->panelDone)
+  {
+    msgs::Int msg;
+    msg.set_data(0);
+    this->toggleGzPub->Publish(msg);
+
+    this->panelGzSub.reset();
+  }
+
+  return this->panelDone;
 }
 
 /////////////////////////////////////////////////

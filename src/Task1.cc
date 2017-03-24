@@ -76,7 +76,7 @@ bool Task1CP2::Check()
     this->gzNode->Init();
 
     auto togglePub = this->gzNode->Advertise<msgs::Int>(
-        "/task1/checkpoint2/toggle"); 
+        "/task1/checkpoint2/toggle");
 
     msgs::Int msg;
     msg.set_data(0);
@@ -85,7 +85,7 @@ bool Task1CP2::Check()
     this->rosNode.reset();
   }
 
-  return this->satelliteDone; 
+  return this->satelliteDone;
 }
 
 /////////////////////////////////////////////////
