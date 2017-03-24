@@ -747,23 +747,52 @@
 
     <!-- Habitat -->
     <%
-      # TODO: Habitat goes here
+      tHabitatSlotOrigin = TMatrix(6.7, 5.25, 0);
+      $current_frame = $current_frame * $current_walkway["tOriginExit"]
+      $habitat_frame = $current_frame *
+                       tHabitatSlotOrigin
     %>
 
-    <!-- TODO: Put the table inside the habitat -->
+    <%= fromFile("habitat.erb") %>
+
+
+    <!-- Lamp inside the habitat -->
+    <%
+      lamp_frame = $habitat_frame
+      lamp_pos_z = 4.5
+    %>
+
+    <light name='habitat_lamp' type='point'>
+      <pose>
+        <%= lamp_frame[0, 2] %>
+        <%= lamp_frame[1, 2] %>
+        <%= lamp_pos_z %>
+        0
+        0
+        <%= Math::atan2(lamp_frame[1, 0], lamp_frame[0, 0]) %>
+      </pose>
+      <diffuse>0.5 0.5 0.5 1</diffuse>
+      <specular>0.1 0.1 0.1 1</specular>
+      <attenuation>
+        <range>20</range>
+        <constant>0.5</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <cast_shadows>0</cast_shadows>
+      <direction>0 0 -1</direction>
+    </light>
 
     <!-- Table -->
     <%
-      $current_frame = $current_frame *
-                       $current_walkway["tOriginExit"]
-
-      $table_frame = $current_frame * TMatrix(0, 0.5, 0)
+      $table_frame = $habitat_frame * TMatrix(0, 0.5, 0)
+      table_pos_z = 1.8
     %>
     <include>
       <pose>
         <%= $table_frame[0, 2] %>
         <%= $table_frame[1, 2] %>
-        0
+        <%= table_pos_z %>
         0
         0
         <%= Math::atan2($table_frame[1, 0], $table_frame[0, 0]) %>
@@ -774,7 +803,7 @@
     <!-- Air leak detector -->
     <%
       $air_leak_detector_frame = $table_frame
-      $table_top_z = 0.7
+      $table_top_z = table_pos_z + 0.7
     %>
 
     <%= fromFile("air_leak_detector.erb") %>
