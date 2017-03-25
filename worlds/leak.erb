@@ -1,0 +1,66 @@
+<%
+  # Template for leak model for SRC finals world
+
+  # Requires the following global variables:
+  # $habitat_frame, $table_pos_z
+
+
+  # habitat circle
+  center_x = $habitat_frame[0, 2]
+  center_y = $habitat_frame[1, 2]
+  r = 5
+
+  # angle
+  habitat_rot = Math::atan2($habitat_frame[1, 0], $habitat_frame[0, 0])
+
+  door_margin = Math::PI / 9
+
+  min_rot = habitat_rot + door_margin
+  max_rot = habitat_rot + Math::PI * 0.5 - door_margin
+
+  rot = rand(min_rot...max_rot)
+
+  # height
+  height_margin = 0.8
+
+  min_height = $table_pos_z + height_margin
+  max_height = $table_pos_z + 2 - height_margin
+
+  x = center_x + r * Math::cos(rot)
+  y = center_y + r * Math::sin(rot)
+  z = rand(min_height...max_height)
+
+%>
+
+<model name="leak">
+  <static>true</static>
+
+  <pose><%= x %> <%= y %> <%= z %> 0 0 0</pose>
+
+  <link name="base">
+
+    <visual name="visual">
+
+      <geometry>
+        <sphere>
+          <radius>0.05</radius>
+        </sphere>
+      </geometry>
+
+      <material>
+        <ambient>1 0 0 1</ambient>
+        <emissive>1 0 0 1</emissive>
+        <diffuse>1 0 0 1</diffuse>
+        <specular>1 1 1 1</specular>
+      </material>
+
+      <meta>
+        <layer>1</layer>
+      </meta>
+
+    </visual>
+
+  </link>
+
+</model>
+

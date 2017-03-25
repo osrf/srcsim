@@ -786,13 +786,13 @@
     <!-- Table -->
     <%
       $table_frame = $habitat_frame
-      table_pos_z = 1.8
+      $table_pos_z = 1.8
     %>
     <include>
       <pose>
         <%= $table_frame[0, 2] %>
         <%= $table_frame[1, 2] %>
-        <%= table_pos_z %>
+        <%= $table_pos_z %>
         0
         0
         <%= Math::atan2($table_frame[1, 0], $table_frame[0, 0]) %>
@@ -803,7 +803,7 @@
     <!-- Air leak detector -->
     <%
       $air_leak_detector_frame = $table_frame
-      $table_top_z = table_pos_z + 0.7
+      $table_top_z = $table_pos_z + 0.7
     %>
 
     <%= fromFile("air_leak_detector.erb") %>
@@ -824,6 +824,9 @@
       </pose>
       <uri>model://leak_patch_tool</uri>
     </include>
+
+    <!-- Leak -->
+    <%= fromFile("leak.erb") %>
 
     <!-- TODO: Put the box inside the habitat -->
 
