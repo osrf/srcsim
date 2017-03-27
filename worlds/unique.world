@@ -105,7 +105,7 @@
     </include>
 
 
-    
+
 
     <!-- TASK 1 -->
 
@@ -125,9 +125,9 @@
 
 
     <!-- Satellite -->
-    
 
-    
+
+
 
 <model name="satellite_dish">
 
@@ -436,7 +436,7 @@
 
 
     <!-- Checkpoint 1 - Box plugin -->
-    
+
 
     <plugin name="boxT1CP1" filename="libBoxContainsPlugin.so">
       <entity>valkyrie</entity>
@@ -572,12 +572,12 @@
     </include>
 
 
-    
+
 
     <!-- /TASK 1 -->
-    
 
-    
+
+
 
     <!-- TASK 2 -->
 
@@ -612,7 +612,7 @@
 
 
     <!-- Rover -->
-    
+
 
     <include>
       <pose>
@@ -627,9 +627,9 @@
     </include>
 
     <!-- Solar panel -->
-    
 
-    
+
+
 
 <model name="solar_panel">
 
@@ -1182,7 +1182,7 @@
 
   </link>
 
-  
+
 
   <joint name="base_panel_01" type="revolute">
     <pose>0 0.0455 0.095 0 0 0</pose>
@@ -1276,7 +1276,7 @@
     </axis>
   </joint>
 
-  
+
   <joint name="button" type="prismatic">
     <pose>0 0 0.005 0 0 0</pose>
     <parent>panel_01</parent>
@@ -1318,7 +1318,7 @@
     <sensor>panel1_sensor</sensor>
     <sensor>panel2_sensor</sensor>
     <target>valkyrie</target>
-    <time>5</time>
+    <time>0.5</time>
     <namespace>task2/checkpoint1</namespace>
   </plugin>
 
@@ -1326,7 +1326,7 @@
 
 
     <!-- Bling -->
-    
+
 
     <!-- Walkway -->
     <include>
@@ -1404,7 +1404,7 @@
 
 
     <!-- Solar Array -->
-    
+
 
     <include>
       <pose>
@@ -1419,9 +1419,9 @@
     </include>
 
     <!-- Cable -->
-    
 
-    
+
+
 
 <model name="solar_panel_cable">
 
@@ -1460,7 +1460,7 @@
     </visual>
   </link>
 
-  
+
 
   <link name="link_1">
     <pose>0.0 0 0 0 1.5707963267948966 0.9424777960769379</pose>
@@ -1550,7 +1550,7 @@
       </material>
     </visual>
 
-    
+
 
   </link>
 
@@ -1578,7 +1578,7 @@
     </physics>
   </joint>
 
-  
+
 
   <link name="link_2">
     <pose>0.058778525229247314 0.08090169943749476 0 0 1.5707963267948966 -0.9424777960769379</pose>
@@ -1668,7 +1668,7 @@
       </material>
     </visual>
 
-    
+
 
   </link>
 
@@ -1696,7 +1696,7 @@
     </physics>
   </joint>
 
-  
+
 
   <link name="link_3">
     <pose>0.11755705045849463 0 0 0 1.5707963267948966 -0.9424777960769379</pose>
@@ -1786,7 +1786,7 @@
       </material>
     </visual>
 
-    
+
 
   </link>
 
@@ -1814,7 +1814,7 @@
     </physics>
   </joint>
 
-  
+
 
   <link name="link_4">
     <pose>0.17633557568774197 -0.08090169943749476 0 0 1.5707963267948966 0.9424777960769379</pose>
@@ -1904,7 +1904,7 @@
       </material>
     </visual>
 
-    
+
 
   </link>
 
@@ -1932,7 +1932,7 @@
     </physics>
   </joint>
 
-  
+
 
   <link name="link_5">
     <pose>0.23511410091698925 0 0 0 1.5707963267948966 0.9424777960769379</pose>
@@ -2022,7 +2022,7 @@
       </material>
     </visual>
 
-    
+
 
   </link>
 
@@ -2050,7 +2050,7 @@
     </physics>
   </joint>
 
-  
+
 
   <link name="link_6">
     <pose>0.29389262614623657 0.08090169943749476 0 0 1.5707963267948966 -0.9424777960769379</pose>
@@ -2140,7 +2140,7 @@
       </material>
     </visual>
 
-    
+
 
   </link>
 
@@ -2168,7 +2168,7 @@
     </physics>
   </joint>
 
-  
+
 
   <link name="link_7">
     <pose>0.35267115137548394 0 0 0 1.5707963267948966 -0.9424777960769379</pose>
@@ -2258,7 +2258,7 @@
       </material>
     </visual>
 
-    
+
 
   </link>
 
@@ -2286,7 +2286,7 @@
     </physics>
   </joint>
 
-  
+
 
   <link name="link_8">
     <pose>0.41144967660473125 -0.08090169943749476 0 0 1.5707963267948966 0.9424777960769379</pose>
@@ -2376,7 +2376,7 @@
       </material>
     </visual>
 
-    
+
 
   </link>
 
@@ -2404,7 +2404,7 @@
     </physics>
   </joint>
 
-  
+
 
   <link name="link_9">
     <pose>0.4702282018339785 0 0 0 1.5707963267948966 0.9424777960769379</pose>
@@ -2494,7 +2494,7 @@
       </material>
     </visual>
 
-    
+
 
   </link>
 
@@ -2522,7 +2522,7 @@
     </physics>
   </joint>
 
-  
+
 
   <link name="link_10">
     <pose>0.5290067270632258 0.08090169943749476 0 0 1.5707963267948966 -0.9424777960769379</pose>
@@ -2612,7 +2612,7 @@
       </material>
     </visual>
 
-    
+
 
   </link>
 
@@ -2640,7 +2640,7 @@
     </physics>
   </joint>
 
-  
+
 
   <link name="link_11">
     <pose>0.5877852522924731 0 0 0 1.5707963267948966 -0.9424777960769379</pose>
@@ -2730,7 +2730,7 @@
       </material>
     </visual>
 
-    
+
 
   </link>
 
@@ -2758,7 +2758,7 @@
     </physics>
   </joint>
 
-  
+
 
   <link name="link_12">
     <pose>0.6465637775217205 -0.08090169943749476 0 0 1.5707963267948966 0.9424777960769379</pose>
@@ -2848,7 +2848,7 @@
       </material>
     </visual>
 
-    
+
 
   </link>
 
@@ -2876,7 +2876,7 @@
     </physics>
   </joint>
 
-  
+
 
   <link name="link_13">
     <pose>0.7053423027509679 0 0 0 1.5707963267948966 0.9424777960769379</pose>
@@ -2966,7 +2966,7 @@
       </material>
     </visual>
 
-    
+
 
   </link>
 
@@ -2994,7 +2994,7 @@
     </physics>
   </joint>
 
-  
+
 
   <link name="link_14">
     <pose>0.7641208279802151 0.08090169943749476 0 0 1.5707963267948966 -0.9424777960769379</pose>
@@ -3084,7 +3084,7 @@
       </material>
     </visual>
 
-    
+
 
   </link>
 
@@ -3112,7 +3112,7 @@
     </physics>
   </joint>
 
-  
+
 
   <link name="link_15">
     <pose>0.8228993532094625 0 0 0 1.5707963267948966 -0.9424777960769379</pose>
@@ -3202,7 +3202,7 @@
       </material>
     </visual>
 
-    
+
 
   </link>
 
@@ -3230,7 +3230,7 @@
     </physics>
   </joint>
 
-  
+
 
   <link name="link_16">
     <pose>0.8816778784387097 -0.08090169943749476 0 0 1.5707963267948966 0.9424777960769379</pose>
@@ -3320,7 +3320,7 @@
       </material>
     </visual>
 
-    
+
 
     <collision name="plug_collision">
       <pose>0 0 0.1 0 0 0</pose>
@@ -3372,7 +3372,7 @@
       </contact>
     </sensor>
 
-    
+
 
   </link>
 
@@ -3400,7 +3400,7 @@
     </physics>
   </joint>
 
-  
+
 
   <joint name="world" type="fixed">
     <child>link_0</child>
@@ -3410,7 +3410,7 @@
   <plugin name="touch_valkyrie_cable" filename="libTouchPlugin.so">
     <sensor>tip_sensor</sensor>
     <target>valkyrie</target>
-    <time>5</time>
+    <time>0.5</time>
     <namespace>task2/checkpoint4</namespace>
   </plugin>
 
@@ -3418,7 +3418,7 @@
 
 
     <!-- Checkpoint 2 - Box plugin -->
-    
+
 
     <plugin name="boxT2CP2" filename="libBoxContainsPlugin.so">
       <entity>solar_panel</entity>
@@ -3435,7 +3435,7 @@
     </plugin>
 
     <!-- Bling -->
-    
+
 
     <!-- Walkway -->
     <include>
@@ -3542,12 +3542,12 @@
     </include>
 
 
-    
+
 
     <!-- /TASK 2 -->
-    
 
-    
+
+
 
     <!-- TASK 3 -->
 
@@ -3612,12 +3612,12 @@
 
 
     <!-- Habitat -->
-    
+
 
     <!-- TODO: Put the table inside the habitat -->
 
     <!-- Table -->
-    
+
     <include>
       <pose>
         13.284342694888613
@@ -3631,9 +3631,9 @@
     </include>
 
     <!-- Air leak detector -->
-    
 
-    
+
+
 
 <model name="air_leak_detector">
 
@@ -3719,12 +3719,12 @@
     </plugin>
 
     <!-- /TASK 3 -->
-    
+
 
     <!-- Finals plugin -->
     <plugin name="finals" filename="libFinalsPlugin.so">
 
-      
+
         <task1>
           <timeout>1800</timeout>
 
@@ -3761,9 +3761,9 @@
             </skip_robot_pose>
           </checkpoint3>
         </task1>
-      
 
-      
+
+
         <task2>
           <timeout>3600</timeout>
 
@@ -3827,9 +3827,9 @@
 
         </task2>
 
-      
 
-      
+
+
         <task3>
           <timeout>7200</timeout>
 
@@ -3906,7 +3906,7 @@
           </checkpoint8>
 
         </task3>
-      
+
 
     </plugin>
 

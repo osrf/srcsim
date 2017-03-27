@@ -85,6 +85,7 @@ namespace gazebo
     public: void OnTouchGzMsg(ConstIntPtr &_msg);
 
     /// \brief Check whether the touch checkpoint has been completed.
+    /// \param[in] _namespace Namespace for the Gazebo topics in this plugin.
     /// \return True if completed.
     protected: bool CheckTouch(const std::string &_namespace);
 
