@@ -50,6 +50,16 @@ namespace gazebo
     public: bool Check();
   };
 
+  /// \brief Task 2, Checkpoint 2: Place panel near cable
+  class Task2CP2 : public BoxCheckpoint
+  {
+    using BoxCheckpoint::BoxCheckpoint;
+
+    /// \brief Check whether the panel is within reach of the cable.
+    /// \return True if the checkpoint is complete.
+    public: bool Check();
+  };
+
   /// \brief Task 2, Checkpoint 3: Deploy solar panel
   class Task2CP3 : public Checkpoint
   {
