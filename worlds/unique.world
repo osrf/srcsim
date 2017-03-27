@@ -41,7 +41,7 @@
     <!-- A global light source -->
     <light type="directional" name="sun">
       <cast_shadows>true</cast_shadows>
-      <pose>0 0 1000 0.12094270991730305 -1.0127265962577043 0</pose>
+      <pose>0 0 1000 -0.4541532787146807 -0.8857606820899075 0</pose>
       <diffuse>0.8 0.8 0.8 1</diffuse>
       <specular>0.2 0.2 0.2 1</specular>
       <attenuation>
@@ -92,16 +92,16 @@
 
     <!-- Bling -->
     <include>
-      <name>mars_crate_long_2</name>
+      <name>mars_rock_3_2</name>
       <pose>
-      0.46200000000000035
-      1.5619999999999998
+      0.4620000000000004
+      1.862
       0
       0
       0
-      0.785398163397448
+      -2.4492935982947064e-16
       </pose>
-      <uri>model://mars_crate_long</uri>
+      <uri>model://mars_rock_3</uri>
     </include>
 
 
@@ -113,14 +113,14 @@
     <include>
       <name>walkway_2</name>
       <pose>
-      2.524734
-      0.5394700919999994
+      1.224
+      -2.7995425828508494e-16
       -0.052151
       0
       0
-      2.356194490192345
+      -1.5707963267948968
       </pose>
-      <uri>model://walkway_metal_45</uri>
+      <uri>model://walkway_metal_90</uri>
     </include>
 
 
@@ -132,12 +132,12 @@
 <model name="satellite_dish">
 
   <pose>
-    3.938947562373095
-    -1.952374204901394
+    1.9860000000000007
+    2.7619999999999996
     0
     0
     0
-    -2.356194490192345
+    -2.4492935982947064e-16
   </pose>
 
   <link name="base">
@@ -390,7 +390,7 @@
     <axis>
       <xyz>0 0 1</xyz>
       <dynamics>
-        <friction>2.762580347021746</friction>
+        <friction>2.0086182474816905</friction>
       </dynamics>
     </axis>
   </joint>
@@ -401,7 +401,7 @@
     <axis>
       <xyz>0 0 1</xyz>
       <dynamics>
-        <friction>2.230791776897223</friction>
+        <friction>2.771926685267867</friction>
       </dynamics>
     </axis>
   </joint>
@@ -415,11 +415,11 @@
 
     <yaw_ratio>0.1</yaw_ratio>
     <yaw_pid>1000 0 10</yaw_pid>
-    <yaw_target>1.9069385184565344</yaw_target>
+    <yaw_target>1.306601591682821</yaw_target>
 
     <pitch_ratio>0.1</pitch_ratio>
     <pitch_pid>1000 100 10</pitch_pid>
-    <pitch_target>0.8101315269115565</pitch_target>
+    <pitch_target>0.5518601671021888</pitch_target>
 
     <!-- Tolerance in degrees -->
     <tolerance>5</tolerance>
@@ -442,12 +442,12 @@
       <entity>valkyrie</entity>
       <namespace>task1/checkpoint1</namespace>
       <pose>
-        2.3833126437626904
-        -0.3967392862909891
+        1.9860000000000002
+        0.5619999999999994
         2.5
         0
         0
-        -0.7853981633974484
+        1.5707963267948963
       </pose>
       <size>1 1 5</size>
     </plugin>
@@ -456,12 +456,12 @@
     <include>
       <name>mars_rock_3_3</name>
       <pose>
-      1.9966949400811334
-      -1.9506735555415058
+      3.8480000000000003
+      -7.619752384294831e-16
       0
       0
       0
-      3.141592653589793
+      -1.5707963267948968
       </pose>
       <uri>model://mars_rock_3</uri>
     </include>
@@ -471,12 +471,12 @@
     <include>
       <name>walkway_3</name>
       <pose>
-      2.524734
-      0.5394700919999994
+      1.9859999999999998
+      -0.7620000000000005
       -0.052151
       0
       0
-      -0.7853981633974485
+      3.141592653589793
       </pose>
       <uri>model://walkway_metal_straight</uri>
     </include>
@@ -484,31 +484,31 @@
 
     <!-- Bling -->
     <include>
-      <name>mars_crate_long_4</name>
+      <name>mars_crate_4</name>
       <pose>
-      1.9590485750507627
-      2.1827862514775362
+      3.1479999999999997
+      -1.5240000000000005
       0
       0
       0
-      1.5707963267948963
+      -1.5707963267948968
       </pose>
-      <uri>model://mars_crate_long</uri>
+      <uri>model://mars_crate</uri>
     </include>
 
 
     <!-- Bling -->
     <include>
-      <name>mars_rock_3_5</name>
+      <name>mars_crate_long_5</name>
       <pose>
-      4.380182193833501
-      -0.23834736730520334
+      0.4239999999999997
+      -1.5240000000000005
       0
       0
       0
-      -2.3561944901923453
+      2.356194490192345
       </pose>
-      <uri>model://mars_rock_3</uri>
+      <uri>model://mars_crate_long</uri>
     </include>
 
 
@@ -516,12 +516,12 @@
     <include>
       <name>walkway_4</name>
       <pose>
-      4.679995469056598
-      2.694731561056596
+      1.9859999999999993
+      -3.8100000000000005
       -0.052151
       0
       0
-      -2.3561944901923453
+      1.5707963267948966
       </pose>
       <uri>model://walkway_finish_opposite</uri>
     </include>
@@ -532,12 +532,12 @@
       <entity>valkyrie</entity>
       <namespace>task1/checkpoint3</namespace>
       <pose>
-        4.679995469056598
-        2.694731561056596
+        1.9859999999999993
+        -3.8100000000000005
         2.5
         0
         0
-        -2.3561944901923453
+        1.5707963267948966
       </pose>
       <size>3.048 3.048 5</size>
     </plugin>
@@ -546,12 +546,12 @@
     <include>
       <name>mars_crate_6</name>
       <pose>
-      6.040468916059516
-      1.334258114053678
+      0.06199999999999928
+      -3.8100000000000005
       0
       0
       0
-      -2.3561944901923453
+      1.5707963267948966
       </pose>
       <uri>model://mars_crate</uri>
     </include>
@@ -559,16 +559,16 @@
 
     <!-- Bling -->
     <include>
-      <name>mars_rock_3_7</name>
+      <name>mars_crate_long_7</name>
       <pose>
-      2.8245472752230976
-      4.550179754890097
+      4.31
+      -3.8100000000000005
       0
       0
       0
-      0.785398163397448
+      -0.7853981633974485
       </pose>
-      <uri>model://mars_rock_3</uri>
+      <uri>model://mars_crate_long</uri>
     </include>
 
 
@@ -584,44 +584,14 @@
     <include>
       <name>walkway_5</name>
       <pose>
-      6.295921075204269
-      5.073583087805328
+      1.9859999999999993
+      -5.3340000000000005
       -0.052151
       0
       0
       3.141592653589793
       </pose>
-      <uri>model://walkway_metal_45</uri>
-    </include>
-
-
-    <!-- Bling -->
-    <include>
-      <name>mars_crate_long_8</name>
-      <pose>
-      7.471206500153507
-      3.151537662856089
-      0
-      0
-      0
-      -1.570796326794897
-      </pose>
-      <uri>model://mars_crate_long</uri>
-    </include>
-
-
-    <!-- Bling -->
-    <include>
-      <name>mars_crate_9</name>
-      <pose>
-      7.457921075204269
-      4.311583087805327
-      0
-      0
-      0
-      -1.570796326794897
-      </pose>
-      <uri>model://mars_crate</uri>
+      <uri>model://walkway_metal_straight</uri>
     </include>
 
 
@@ -629,19 +599,31 @@
     <include>
       <name>walkway_6</name>
       <pose>
-      6.295921075204269
-      5.073583087805328
+      2.525470091999999
+      -8.158734
       -0.052151
       0
       0
-      -3.4450928483976665e-16
+      0.7853981633974483
       </pose>
-      <uri>model://walkway_metal_straight</uri>
+      <uri>model://walkway_metal_45</uri>
     </include>
 
 
     <!-- Rover -->
     
+
+    <include>
+      <pose>
+        -3.364673555541506
+        -7.630694940081134
+        0
+        0
+        0
+        -1.570796326794897
+      </pose>
+      <uri>model://mars_explorer</uri>
+    </include>
 
     <!-- Solar panel -->
     
@@ -651,12 +633,12 @@
 <model name="solar_panel">
 
   <pose>
-    8.05792107520427
-    5.835583087805327
+    1.335326444458494
+    -7.630694940081135
+    0.46
     0
     0
-    0
-    -1.570796326794897
+    2.8084866331692036
   </pose>
 
   <link name="base">
@@ -1309,38 +1291,83 @@
     <sensor>panel1_sensor</sensor>
     <sensor>panel2_sensor</sensor>
     <target>valkyrie</target>
-    <time>5</time>
+    <time>0.5</time>
     <namespace>task2/checkpoint1</namespace>
   </plugin>
 
 </model>
 
 
-    <!-- Bling -->
+    <!-- Walkway -->
     <include>
-      <name>mars_rock_1_10</name>
+      <name>walkway_7</name>
       <pose>
-      5.133921075204269
-      5.835583087805328
+      2.525470091999999
+      -8.158734
+      -0.052151
       0
       0
-      0
-      1.5707963267948961
+      -2.3561944901923453
       </pose>
-      <uri>model://mars_rock_1</uri>
+      <uri>model://walkway_metal_straight</uri>
     </include>
 
 
     <!-- Walkway -->
     <include>
-      <name>walkway_7</name>
+      <name>walkway_8</name>
       <pose>
-      6.29592107520427
-      6.597583087805328
+      3.6031008265282973
+      -9.2363647345283
       -0.052151
       0
       0
-      -3.4450928483976665e-16
+      -2.3561944901923453
+      </pose>
+      <uri>model://walkway_metal_straight</uri>
+    </include>
+
+
+    <!-- Bling -->
+    <include>
+      <name>mars_crate_long_8</name>
+      <pose>
+      3.0374154015790586
+      -10.879680894005837
+      0
+      0
+      0
+      3.141592653589793
+      </pose>
+      <uri>model://mars_crate_long</uri>
+    </include>
+
+
+    <!-- Bling -->
+    <include>
+      <name>mars_crate_long_9</name>
+      <pose>
+      5.246416986005833
+      -8.67067930957906
+      0
+      0
+      0
+      -2.7755575615628914e-16
+      </pose>
+      <uri>model://mars_crate_long</uri>
+    </include>
+
+
+    <!-- Walkway -->
+    <include>
+      <name>walkway_9</name>
+      <pose>
+      4.680731561056596
+      -10.313995469056598
+      -0.052151
+      0
+      0
+      -2.3561944901923453
       </pose>
       <uri>model://walkway_metal_straight</uri>
     </include>
@@ -1351,12 +1378,12 @@
 
     <include>
       <pose>
-        4.983921075204271
-        7.359583087805328
+        6.147271025237496
+        -9.925086739403998
         0
         0
         0
-        1.5707963267948961
+        -0.7853981633974485
       </pose>
       <uri>model://solar_array</uri>
     </include>
@@ -1371,12 +1398,12 @@
   <self_collide>true</self_collide>
 
   <pose>
-    4.383921075204271
-    7.7595830878053285
+    6.8543778064240435
+    -9.783665383166689
     0.85
     0
     0
-    -3.4450928483976665e-16
+    -2.3561944901923453
   </pose>
 
   <link name="link_0">
@@ -3363,31 +3390,45 @@
     <!-- Checkpoint 2 - Box plugin -->
     
 
+    <plugin name="boxT2CP2" filename="libBoxContainsPlugin.so">
+      <entity>solar_panel</entity>
+      <namespace>task2/checkpoint2</namespace>
+      <pose>
+        6.147271025237496
+        -9.925086739403998
+        0.9
+        0
+        0
+        -0.7853981633974485
+      </pose>
+      <size>1.47 0.95 0.45</size>
+    </plugin>
+
     <!-- Bling -->
     <include>
-      <name>mars_rock_2_11</name>
+      <name>mars_rock_3_10</name>
       <pose>
-      7.557921075204271
-      7.359583087805327
+      3.902914101751393
+      -12.1694436628901
       0
       0
       0
-      -1.570796326794897
+      2.356194490192345
       </pose>
-      <uri>model://mars_rock_2</uri>
+      <uri>model://mars_rock_3</uri>
     </include>
 
 
     <!-- Walkway -->
     <include>
-      <name>walkway_8</name>
+      <name>walkway_10</name>
       <pose>
-      6.295921075204271
-      8.121583087805327
+      5.758362295584893
+      -11.391626203584897
       -0.052151
       0
       0
-      -3.4450928483976665e-16
+      -2.3561944901923453
       </pose>
       <uri>model://walkway_metal_45</uri>
     </include>
@@ -3395,46 +3436,46 @@
 
     <!-- Bling -->
     <include>
-      <name>mars_rock_3_12</name>
+      <name>mars_rock_1_11</name>
       <pose>
-      4.90850361589907
-      10.25576054711053
+      7.1188357425878115
+      -11.108783491110279
       0
       0
       0
-      0.785398163397448
+      -0.7853981633974485
       </pose>
-      <uri>model://mars_rock_3</uri>
+      <uri>model://mars_rock_1</uri>
     </include>
 
 
     <!-- Bling -->
     <include>
-      <name>mars_rock_2_13</name>
+      <name>mars_rock_1_12</name>
       <pose>
-      5.033921075204272
-      8.883583087805327
+      7.548505943126399
+      -11.919665263503763
       0
       0
       0
-      1.5707963267948961
+      -1.570796326794897
       </pose>
-      <uri>model://mars_rock_2</uri>
+      <uri>model://mars_rock_1</uri>
     </include>
 
 
     <!-- Final Box 2 -->
     <include>
-      <name>walkway_9</name>
+      <name>walkway_11</name>
       <pose>
-      7.91302190173257
-      10.499947822333626
+      6.296657167204265
+      -14.21684699580533
       -0.052151
       0
       0
-      -2.3561944901923453
+      -3.4450928483976665e-16
       </pose>
-      <uri>model://walkway_finish_opposite</uri>
+      <uri>model://walkway_finish_adjacent</uri>
     </include>
 
 
@@ -3443,43 +3484,43 @@
       <entity>valkyrie</entity>
       <namespace>task2/checkpoint6</namespace>
       <pose>
-        7.91302190173257
-        10.499947822333626
+        6.296657167204265
+        -14.21684699580533
         2.5
         0
         0
-        -2.3561944901923453
+        -3.4450928483976665e-16
       </pose>
       <size>3.048 3.048 5</size>
     </plugin>
 
     <!-- Bling -->
     <include>
-      <name>mars_rock_1_14</name>
+      <name>mars_rock_3_13</name>
       <pose>
-      9.273495348735487
-      9.139474375330709
+      3.672657167204265
+      -14.21684699580533
       0
       0
       0
-      -2.3561944901923453
+      1.5707963267948961
       </pose>
-      <uri>model://mars_rock_1</uri>
+      <uri>model://mars_rock_3</uri>
     </include>
 
 
     <!-- Bling -->
     <include>
-      <name>mars_rock_3_15</name>
+      <name>mars_crate_long_14</name>
       <pose>
-      6.057573707899069
-      12.355396016167127
+      6.296657167204264
+      -16.54084699580533
       0
       0
       0
-      0.785398163397448
+      -2.3561944901923453
       </pose>
-      <uri>model://mars_rock_3</uri>
+      <uri>model://mars_crate_long</uri>
     </include>
 
 
@@ -3492,14 +3533,14 @@
 
     <!-- Walkway -->
     <include>
-      <name>walkway_10</name>
+      <name>walkway_12</name>
       <pose>
-      9.528947507880241
-      12.878799349082358
+      7.820657167204265
+      -14.21684699580533
       -0.052151
       0
       0
-      3.141592653589793
+      -1.570796326794897
       </pose>
       <uri>model://walkway_metal_45</uri>
     </include>
@@ -3507,44 +3548,44 @@
 
     <!-- Walkway -->
     <include>
-      <name>walkway_11</name>
+      <name>walkway_13</name>
       <pose>
-      9.528947507880241
-      12.878799349082358
+      9.121391167204266
+      -14.75631708780533
       -0.052151
       0
       0
-      -3.4450928483976665e-16
+      -2.3561944901923453
       </pose>
-      <uri>model://walkway_metal_90</uri>
+      <uri>model://walkway_metal_straight</uri>
     </include>
 
 
     <!-- Bling -->
     <include>
-      <name>mars_rock_1_16</name>
+      <name>mars_rock_3_15</name>
       <pose>
-      9.528947507880241
-      14.802799349082358
+      10.976839361037767
+      -13.978499628500128
       0
       0
       0
-      -3.4450928483976665e-16
+      -0.7853981633974485
       </pose>
-      <uri>model://mars_rock_1</uri>
+      <uri>model://mars_rock_3</uri>
     </include>
 
 
     <!-- Bling -->
     <include>
-      <name>mars_crate_17</name>
+      <name>mars_crate_16</name>
       <pose>
-      8.36694750788024
-      13.640799349082359
+      8.838548454729647
+      -16.11679053480825
       0
       0
       0
-      1.5707963267948961
+      2.356194490192345
       </pose>
       <uri>model://mars_crate</uri>
     </include>
@@ -3559,12 +3600,12 @@
     
     <include>
       <pose>
-        12.290947507880242
-        13.640799349082359
+        11.613235464105658
+        -17.248161384706723
         0
         0
         0
-        -1.570796326794897
+        -2.3561944901923453
       </pose>
       <uri>model://space_table</uri>
     </include>
@@ -3577,12 +3618,12 @@
 <model name="air_leak_detector">
 
   <pose>
-    12.290947507880242
-    13.640799349082359
+    11.613235464105658
+    -17.248161384706723
     0.79448
     1.5707963267948966
     0
-    -1.570796326794897
+    -2.3561944901923453
   </pose>
 
   <link name="base">
@@ -3647,12 +3688,12 @@
       <entity>valkyrie</entity>
       <namespace>task3/checkpoint8</namespace>
       <pose>
-        10.290947507880242
-        13.640799349082359
+        10.199021901732564
+        -15.833947822333629
         2.5
         0
         0
-        -1.570796326794897
+        -2.3561944901923453
       </pose>
       <size>3.048 3.048 5</size>
     </plugin>
@@ -3667,21 +3708,21 @@
         <task_1_timeout>1800</task_1_timeout>
 
         <task_1_checkpoint_2_pose>
-          2.3833126437626904
-          -0.3967392862909891
+          1.9860000000000002
+          0.5619999999999994
           1.1
           0
           0
-          -0.7853981633974484
+          1.5707963267948963
         </task_1_checkpoint_2_pose>
 
         <task_1_checkpoint_3_pose>
-          2.3833126437626904
-          -0.3967392862909891
+          1.9860000000000002
+          0.5619999999999994
           1.1
           0
           0
-          -0.7853981633974484
+          1.5707963267948963
         </task_1_checkpoint_3_pose>
       
 
@@ -3689,57 +3730,48 @@
         <task_2_timeout>3600</task_2_timeout>
 
         <task_2_checkpoint_1_pose>
-          4.679995469056598
-          2.694731561056596
+          1.9859999999999995
+          -3.8100000000000005
+          1.1
+          0
+          0
+          -1.5707963267948968
+        </task_2_checkpoint_1_pose>
+
+        <task_2_checkpoint_3_pose>
+          5.2987428878136384
+          -10.773614876827855
           1.1
           0
           0
           0.7853981633974481
-        </task_2_checkpoint_1_pose>
-
-        <task_2_checkpoint_2_pose>
-          6.295921075204269
-          5.073583087805328
-          1.1
-          0
-          0
-          3.141592653589793
-        </task_2_checkpoint_2_pose>
-
-        <task_2_checkpoint_3_pose>
-          6.183921075204271
-          7.359583087805327
-          1.1
-          0
-          0
-          3.1415926535897927
         </task_2_checkpoint_3_pose>
 
         <task_2_checkpoint_4_pose>
-          6.183921075204271
-          7.359583087805327
+          5.2987428878136384
+          -10.773614876827855
           1.1
           0
           0
-          3.1415926535897927
+          0.7853981633974481
         </task_2_checkpoint_4_pose>
 
         <task_2_checkpoint_5_pose>
-          6.183921075204271
-          7.359583087805327
+          5.2987428878136384
+          -10.773614876827855
           1.1
           0
           0
-          3.1415926535897927
+          0.7853981633974481
         </task_2_checkpoint_5_pose>
 
         <task_2_checkpoint_6_pose>
-          6.183921075204271
-          7.359583087805327
+          5.2987428878136384
+          -10.773614876827855
           1.1
           0
           0
-          3.1415926535897927
+          0.7853981633974481
         </task_2_checkpoint_6_pose>
       
 
@@ -3747,75 +3779,75 @@
         <task_3_timeout>7200</task_3_timeout>
 
         <task_3_checkpoint_1_pose>
-          7.91302190173257
-          10.499947822333626
+          6.296657167204265
+          -14.21684699580533
           1.1
           0
           0
-          -2.3561944901923453
+          -3.4450928483976665e-16
         </task_3_checkpoint_1_pose>
 
         <task_3_checkpoint_2_pose>
-          7.91302190173257
-          10.499947822333626
+          6.296657167204265
+          -14.21684699580533
           1.1
           0
           0
-          -2.3561944901923453
+          -3.4450928483976665e-16
         </task_3_checkpoint_2_pose>
 
         <task_3_checkpoint_3_pose>
-          7.91302190173257
-          10.499947822333626
+          6.296657167204265
+          -14.21684699580533
           1.1
           0
           0
-          -2.3561944901923453
+          -3.4450928483976665e-16
         </task_3_checkpoint_3_pose>
 
         <task_3_checkpoint_4_pose>
-          7.91302190173257
-          10.499947822333626
+          6.296657167204265
+          -14.21684699580533
           1.1
           0
           0
-          -2.3561944901923453
+          -3.4450928483976665e-16
         </task_3_checkpoint_4_pose>
 
         <task_3_checkpoint_5_pose>
-          7.91302190173257
-          10.499947822333626
+          6.296657167204265
+          -14.21684699580533
           1.1
           0
           0
-          -2.3561944901923453
+          -3.4450928483976665e-16
         </task_3_checkpoint_5_pose>
 
         <task_3_checkpoint_6_pose>
-          7.91302190173257
-          10.499947822333626
+          6.296657167204265
+          -14.21684699580533
           1.1
           0
           0
-          -2.3561944901923453
+          -3.4450928483976665e-16
         </task_3_checkpoint_6_pose>
 
         <task_3_checkpoint_7_pose>
-          7.91302190173257
-          10.499947822333626
+          6.296657167204265
+          -14.21684699580533
           1.1
           0
           0
-          -2.3561944901923453
+          -3.4450928483976665e-16
         </task_3_checkpoint_7_pose>
 
         <task_3_checkpoint_8_pose>
-          7.91302190173257
-          10.499947822333626
+          6.296657167204265
+          -14.21684699580533
           1.1
           0
           0
-          -2.3561944901923453
+          -3.4450928483976665e-16
         </task_3_checkpoint_8_pose>
       
 

@@ -3,6 +3,7 @@
 
   # Requires the following global variables:
   # $solar_panel_frame
+  # $solar_panel_pos_z
 
   # Print inertial element based on a box
   def printInertialBox(_com_x, _com_y, _com_z, _mass, _len_x, _len_y, _len_z)
@@ -63,7 +64,7 @@
   <pose>
     <%= $solar_panel_frame[0, 2] %>
     <%= $solar_panel_frame[1, 2] %>
-    0
+    <%= $solar_panel_pos_z %>
     0
     0
     <%= Math::atan2($solar_panel_frame[1, 0], $solar_panel_frame[0, 0]) %>
@@ -644,7 +645,7 @@
     <sensor>panel1_sensor</sensor>
     <sensor>panel2_sensor</sensor>
     <target>valkyrie</target>
-    <time>5</time>
+    <time>0.5</time>
     <namespace>task2/checkpoint1</namespace>
   </plugin>
 
