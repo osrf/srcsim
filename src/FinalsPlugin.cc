@@ -61,9 +61,8 @@ void FinalsPlugin::Load(physics::WorldPtr _world, sdf::ElementPtr _sdf)
   if (_sdf->HasElement("task_2_checkpoint_1_pose"))
     t2cp1Pose = _sdf->Get<ignition::math::Pose3d>("task_2_checkpoint_1_pose");
 
+  // Not possible to skip to this checkpoint
   ignition::math::Pose3d t2cp2Pose;
-  if (_sdf->HasElement("task_2_checkpoint_2_pose"))
-    t2cp2Pose = _sdf->Get<ignition::math::Pose3d>("task_2_checkpoint_2_pose");
 
   ignition::math::Pose3d t2cp3Pose;
   if (_sdf->HasElement("task_2_checkpoint_3_pose"))
@@ -198,6 +197,16 @@ bool FinalsPlugin::OnStartTaskRosRequest(srcsim::StartTask::Request &_req,
         "], and current checkpoint is [" <<
         this->tasks[_req.task_id - 1]->CurrentCheckpointId() << "]. " <<
         "It's not possible to go back to a previous checkpoint." << std::endl;
+    _res.success = false;
+    return true;
+  }
+
+  // We won't allow skipping directly to a few checkpoints. Shortcut this here.
+  if (_req.task_id == 2 && _req.checkpoint_id == 2)
+  {
+    gzerr << "It's not possible to skip to task [2] checkpoint [2] (2/2). " <<
+        "You can either complete 2/1 and then skip to 2/3, or skip straight " <<
+        "to 2/3." << std::endl;
     _res.success = false;
     return true;
   }

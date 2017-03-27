@@ -39,6 +39,27 @@ namespace gazebo
     public: size_t Number() const;
   };
 
+  /// \brief Task 2, Checkpoint 1: Lift panel
+  class Task2CP1 : public TouchCheckpoint
+  {
+    using TouchCheckpoint::TouchCheckpoint;
+
+    /// \brief Check whether the panel has been touching the robot and
+    /// nothing else for long enough.
+    /// \return True if the checkpoint is complete.
+    public: bool Check();
+  };
+
+  /// \brief Task 2, Checkpoint 2: Place panel near cable
+  class Task2CP2 : public BoxCheckpoint
+  {
+    using BoxCheckpoint::BoxCheckpoint;
+
+    /// \brief Check whether the panel is within reach of the cable.
+    /// \return True if the checkpoint is complete.
+    public: bool Check();
+  };
+
   /// \brief Task 2, Checkpoint 3: Deploy solar panel
   class Task2CP3 : public Checkpoint
   {
