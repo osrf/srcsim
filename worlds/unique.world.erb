@@ -497,39 +497,64 @@
       nextWalkway($walkways, true)
     %>
 
-    <!-- Bling -->
-    <%=
-      randomSlot()
-      nextBling()
-    %>
-
-    <!-- Bling -->
-    <%=
-      remainingSlot()
-      nextBling()
-    %>
-
     <!-- Walkway -->
     <%=
       t2cp2_frame = $current_frame
-      nextWalkway($walkways, false)
+
+      # Can't have 90 degrees near the rover
+      nextWalkway($walkways, true)
     %>
 
     <!-- Rover -->
     <%
       randomSlot()
-      # TODO: Rover goes here
+
+      tRoverSlotOrigin = TMatrix(0, 4.5, Math::PI);
+      rover_frame = $current_frame *
+                    $current_walkway[$slot] *
+                    tRoverSlotOrigin
     %>
+
+    <include>
+      <pose>
+        <%= rover_frame[0, 2] %>
+        <%= rover_frame[1, 2] %>
+        0
+        0
+        0
+        <%= Math::atan2(rover_frame[1, 0], rover_frame[0, 0]) %>
+      </pose>
+      <uri>model://mars_explorer</uri>
+    </include>
 
     <!-- Solar panel -->
     <%
-      tPanelSlotOrigin = TMatrix(0, 1.0, 0);
+      tPanelSlotOrigin = TMatrix(0, -0.2, rand(-Math::PI...Math::PI));
       $solar_panel_frame = $current_frame *
                            $current_walkway[$slot] *
                            tPanelSlotOrigin
+      $solar_panel_pos_z = 0.46
     %>
 
     <%= fromFile("solar_panel.erb") %>
+
+    <!-- Walkway -->
+    <%=
+      # Can't have 90 degrees near the rover
+      nextWalkway($walkways, true)
+    %>
+
+    <!-- Walkway -->
+    <%=
+      # Can't have 90 degrees between the rover and the array
+      nextWalkway($walkways, true)
+    %>
+
+    <!-- Bling -->
+    <%=
+      randomSlot()
+      nextBling()
+    %>
 
     <!-- Bling -->
     <%=
