@@ -73,3 +73,43 @@ void BoxCheckpoint::OnBox(ConstIntPtr &_msg)
   this->boxDone = _msg->data() == 0 ? false : true;
 }
 
+/////////////////////////////////////////////////
+bool TouchCheckpoint::CheckTouch(const std::string &_namespace)
+{
+  // First time checking
+  if (!this->touchGzSub && !this->touchDone)
+  {
+    // Initialize node
+    this->gzNode = transport::NodePtr(new transport::Node());
+    this->gzNode->Init();
+
+    // Enable touch plugin
+    this->enableGzPub = this->gzNode->Advertise<msgs::Int>(
+        _namespace + "/enable");
+
+    msgs::Int msg;
+    msg.set_data(1);
+    this->enableGzPub->Publish(msg);
+
+    // Subscribe to touch msgs
+    this->touchGzSub = this->gzNode->Subscribe(_namespace + "/touched",
+        &TouchCheckpoint::OnTouchGzMsg, this);
+  }
+
+  if (this->touchDone && this->enableGzPub)
+  {
+    msgs::Int msg;
+    msg.set_data(0);
+    this->enableGzPub->Publish(msg);
+
+    this->touchGzSub.reset();
+  }
+
+  return this->touchDone;
+}
+
+//////////////////////////////////////////////////
+void TouchCheckpoint::OnTouchGzMsg(ConstIntPtr &/*_msg*/)
+{
+  this->touchDone = true;
+}

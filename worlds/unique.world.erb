@@ -490,10 +490,14 @@
     %>
 
     <!-- TASK 2 -->
+    <%
+      t2cp1_frame = $current_frame *
+                    $current_walkway["tOriginExit"] *
+                    TMatrix(0, -finish_walkway_length * 0.5, Math::PI * 0.5)
+    %>
 
     <!-- Walkway -->
     <%=
-      t2cp1_frame = $current_frame
       nextWalkway($walkways, true)
     %>
 
