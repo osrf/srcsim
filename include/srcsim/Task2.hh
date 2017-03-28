@@ -69,6 +69,9 @@ namespace gazebo
     /// \return True if the checkpoint is complete.
     public: bool Check();
 
+    /// \brief Skip this checkpoint. This deploys the solar panel.
+    public: void Skip();
+
     /// \brief Callback when a message about the solar panel is received.
     /// This means the panel has been opened.
     /// \param[in] _msg Unused message.
@@ -83,8 +86,8 @@ namespace gazebo
     /// \brief Subscribes to solar panel messages.
     private: transport::SubscriberPtr panelGzSub;
 
-    /// \brief Publishes toggle messages.
-    private: transport::PublisherPtr toggleGzPub;
+    /// \brief Publishes enable messages.
+    private: transport::PublisherPtr enableGzPub;
   };
 
   /// \brief Task 2, Checkpoint 6: Final box

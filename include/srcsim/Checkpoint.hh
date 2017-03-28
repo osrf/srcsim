@@ -36,6 +36,12 @@ namespace gazebo
     /// \return True if completed.
     public: virtual bool Check() = 0;
 
+    /// \brief Skip this checkpoint.
+    /// This function should rearrange objects (not the robot) in the world
+    /// as if the checkpoint has been completed.
+    /// This function is optional.
+    public: virtual void Skip();
+
     /// \brief Start pose.
     public: ignition::math::Pose3d startPose;
   };
