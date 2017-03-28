@@ -189,7 +189,8 @@ bool FinalsPlugin::OnStartTaskRosRequest(srcsim::StartTask::Request &_req,
     return true;
   }
 
-  if (_req.task_id == this->current && _req.checkpoint_id <= this->current)
+  if (_req.task_id == this->current && _req.checkpoint_id <=
+      this->tasks[_req.task_id - 1]->CurrentCheckpointId())
   {
     gzerr << "Trying to start task [" << unsigned(this->current) <<
         "] checkpoint [" << unsigned(_req.checkpoint_id) <<

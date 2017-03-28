@@ -58,6 +58,8 @@ void Task::Start(const common::Time &_time, const size_t _checkpoint,
   {
     if (this->current > 0)
     {
+      this->checkpoints[this->current - 1]->Skip();
+
       gzmsg << "Task [" << this->Number() << "] - Checkpoint ["
             << this->current << "] - Skipped (" << _time << ")" << std::endl;
       this->checkpointsCompletion.push_back(common::Time::Zero);
@@ -78,14 +80,14 @@ void Task::Start(const common::Time &_time, const size_t _checkpoint,
     auto world = physics::get_world();
     if (!world)
     {
-      gzerr << "Failed to get world pointer, robot won't be teleported." 
+      gzerr << "Failed to get world pointer, robot won't be teleported."
           << std::endl;
       return;
     }
     auto robot = world->GetModel("valkyrie");
     if (!robot)
     {
-      gzerr << "Failed to get model pointer, robot won't be teleported." 
+      gzerr << "Failed to get model pointer, robot won't be teleported."
           << std::endl;
       return;
     }
