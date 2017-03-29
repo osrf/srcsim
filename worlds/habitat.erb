@@ -41,18 +41,44 @@
   </pose>
 
   <link name="link_stairs">
-    <collision name="collision">
-      <pose>0 0 0 0 0 0</pose>
+
+    <%
+      step_count = 7
+      size_x = 2.46997
+      size_y = 0.317063
+      size_z = 0.210
+      pos_x = -6.686
+      for step in 0..step_count
+        pos_y = -5.597 + 0.2389 * step
+        pos_z = 0.1079 + 0.2031 * step
+    %>
+
+    <collision name="step_<%= step %>">
+      <pose><%= pos_x %> <%= pos_y %> <%= pos_z %> 0 0 0</pose>
       <geometry>
-        <mesh>
-          <uri>model://src_habitat/meshes/hdu.obj</uri>
-          <scale>0.0254 0.0254 0.0254</scale>
-          <submesh>
-            <name>Stairs</name>
-          </submesh>
-        </mesh>
+        <box>
+          <size><%= size_x %> <%= size_y %> <%= size_z %> </size>
+        </box>
       </geometry>
     </collision>
+
+    <% end %>
+
+    <%
+      size_y = 2.95
+      pos_y = pos_y + 1.555
+      pos_z = pos_z + 0.1804
+    %>
+
+    <collision name="walkway">
+      <pose><%= pos_x %> <%= pos_y %> <%= pos_z %> 0 0 0</pose>
+      <geometry>
+        <box>
+          <size><%= size_x %> <%= size_y %> <%= size_z %> </size>
+        </box>
+      </geometry>
+    </collision>
+
     <visual name="visual">
       <pose>0 0 0 0 0 0</pose>
       <geometry>
