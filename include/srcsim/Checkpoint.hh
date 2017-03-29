@@ -53,13 +53,13 @@ namespace gazebo
   {
     using Checkpoint::Checkpoint;
 
-    /// \brief Callback when messages are received from the BoxContainsPlugin.
-    /// \param[in] _msg 1 if robot is inside box, 0 otherwise.
-    public: void OnBox(ConstIntPtr &_msg);
-
     /// \brief Check whether the box checkpoint has been completed.
     /// \return True if completed.
     protected: bool CheckBox(const std::string &_namespace);
+
+    /// \brief Callback when messages are received from the BoxContainsPlugin.
+    /// \param[in] _msg 1 if robot is inside box, 0 otherwise.
+    private: void OnBox(ConstIntPtr &_msg);
 
     /// \brief Gazebo transport node for communication.
     protected: transport::NodePtr gzNode;

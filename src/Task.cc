@@ -15,6 +15,8 @@
  *
 */
 
+#include <gazebo/physics/PhysicsIface.hh>
+#include <gazebo/physics/World.hh>
 #include <srcsim/Task.h>
 #include <std_msgs/Time.h>
 
@@ -56,6 +58,38 @@ void Task::Start(const common::Time &_time, const size_t _checkpoint)
     return;
   }
 
+  // First checkpoint officially starts when entering start box
+  if (_checkpoint == 1 && !this->startBox)
+  {
+    // Already waiting
+    if (this->gzNode)
+      return;
+
+    // Initialize node
+    this->gzNode = transport::NodePtr(new transport::Node());
+    this->gzNode->Init();
+
+    // Setup contains subscriber
+    this->boxSub = this->gzNode->Subscribe(
+        "/task" + std::to_string(this->Number()) + "/start/box/contains",
+        &Task::OnStartBox, this);
+
+    // Setup toggle publisher
+    this->togglePub = this->gzNode->Advertise<msgs::Int>(
+        "/task" + std::to_string(this->Number()) + "/start/box/toggle");
+
+    // Toggle box plugin on
+    msgs::Int msg;
+    msg.set_data(1);
+    this->togglePub->Publish(msg);
+
+    gzmsg << "Task [" << this->Number()
+          << "] - Started: time will start counting as you leave the box."
+          << std::endl;
+
+    return;
+  }
+
   // Starting task
   if (this->current == 0)
     this->startTime = _time;
@@ -85,6 +119,18 @@ void Task::Start(const common::Time &_time, const size_t _checkpoint)
 /////////////////////////////////////////////////
 void Task::Update(const common::Time &_time)
 {
+  if (this->current == 0)
+    return;
+
+  // Terminate start transport
+  if (this->gzNode)
+  {
+    this->boxSub.reset();
+    this->togglePub.reset();
+    this->gzNode->Fini();
+    this->gzNode.reset();
+  }
+
   // Timeout
   auto elapsed = _time - this->startTime;
   this->timedOut = !this->finished && elapsed > this->timeout;
@@ -163,5 +209,22 @@ size_t Task::CheckpointCount() const
 size_t Task::CurrentCheckpointId() const
 {
   return this->current;
+}
+
+//////////////////////////////////////////////////
+void Task::OnStartBox(ConstIntPtr &_msg)
+{
+  this->startBox = _msg->data() == 0 ? false : true;
+
+  auto world = physics::get_world();
+  if (!world)
+  {
+    gzerr << "Failed to get world pointer, can't start task."
+        << std::endl;
+    return;
+  }
+
+  // Now the checkpoint starts
+  this->Start(world->GetSimTime(), 1);
 }
 
