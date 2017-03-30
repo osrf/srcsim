@@ -140,7 +140,7 @@ namespace gazebo
     private: common::Time touchStart;
 
     /// \brief Target time to continuously touch.
-    private: common::Time targetTime = 5;
+    private: common::Time targetTime = 0.5;
   };
 
   /// \brief Task 2, Checkpoint 6: Final box
