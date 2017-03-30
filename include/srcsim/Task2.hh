@@ -41,14 +41,38 @@ namespace gazebo
     public: size_t Number() const;
   };
 
+  /// \brief Task 2, Checkpoint 1: Lift panel
+  class Task2CP1 : public TouchCheckpoint
+  {
+    using TouchCheckpoint::TouchCheckpoint;
+
+    /// \brief Check whether the panel has been touching the robot and
+    /// nothing else for long enough.
+    /// \return True if the checkpoint is complete.
+    public: bool Check();
+  };
+
+  /// \brief Task 2, Checkpoint 2: Place panel near cable
+  class Task2CP2 : public BoxCheckpoint
+  {
+    using BoxCheckpoint::BoxCheckpoint;
+
+    /// \brief Check whether the panel is within reach of the cable.
+    /// \return True if the checkpoint is complete.
+    public: bool Check();
+  };
+
   /// \brief Task 2, Checkpoint 3: Deploy solar panel
   class Task2CP3 : public Checkpoint
   {
     using Checkpoint::Checkpoint;
 
-    /// \brief Check whether the robot is in the final box region.
+    /// \brief Check whether the solar panel has been deployed.
     /// \return True if the checkpoint is complete.
     public: bool Check();
+
+    /// \brief Skip this checkpoint. This deploys the solar panel.
+    public: void Skip();
 
     /// \brief Callback when a message about the solar panel is received.
     /// This means the panel has been opened.
@@ -64,8 +88,19 @@ namespace gazebo
     /// \brief Subscribes to solar panel messages.
     private: transport::SubscriberPtr panelGzSub;
 
-    /// \brief Publishes toggle messages.
-    private: transport::PublisherPtr toggleGzPub;
+    /// \brief Publishes enable messages.
+    private: transport::PublisherPtr enableGzPub;
+  };
+
+  /// \brief Task 2, Checkpoint 4: Lift cable
+  class Task2CP4 : public TouchCheckpoint
+  {
+    using TouchCheckpoint::TouchCheckpoint;
+
+    /// \brief Check whether the cable's tip has been touching the robot and
+    /// nothing else for long enough.
+    /// \return True if the checkpoint is complete.
+    public: bool Check();
   };
 
   /// \brief Task 2, Checkpoint 5: Plug cable

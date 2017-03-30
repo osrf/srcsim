@@ -490,28 +490,19 @@
     %>
 
     <!-- TASK 2 -->
+    <%
+      t2cp1_frame = $current_frame *
+                    $current_walkway["tOriginExit"] *
+                    TMatrix(0, -finish_walkway_length * 0.5, Math::PI * 0.5)
+    %>
 
     <!-- Walkway -->
     <%=
-      t2cp1_frame = $current_frame
       nextWalkway($walkways, true)
     %>
 
-    <!-- Bling -->
-    <%=
-      randomSlot()
-      nextBling()
-    %>
-
-    <!-- Bling -->
-    <%=
-      remainingSlot()
-      nextBling()
-    %>
-
     <!-- Walkway -->
     <%=
-      t2cp2_frame = $current_frame
       # Can't have 90 degrees near the rover
       nextWalkway($walkways, true)
     %>
@@ -519,18 +510,53 @@
     <!-- Rover -->
     <%
       randomSlot()
-      # TODO: Rover goes here
+
+      tRoverSlotOrigin = TMatrix(0, 4.5, Math::PI);
+      rover_frame = $current_frame *
+                    $current_walkway[$slot] *
+                    tRoverSlotOrigin
     %>
+
+    <include>
+      <pose>
+        <%= rover_frame[0, 2] %>
+        <%= rover_frame[1, 2] %>
+        0
+        0
+        0
+        <%= Math::atan2(rover_frame[1, 0], rover_frame[0, 0]) %>
+      </pose>
+      <uri>model://mars_explorer</uri>
+    </include>
 
     <!-- Solar panel -->
     <%
-      tPanelSlotOrigin = TMatrix(0, 1.0, 0);
+      tPanelSlotOrigin = TMatrix(0, -0.2, rand(-Math::PI...Math::PI));
       $solar_panel_frame = $current_frame *
                            $current_walkway[$slot] *
                            tPanelSlotOrigin
+      $solar_panel_pos_z = 0.46
     %>
 
     <%= fromFile("solar_panel.erb") %>
+
+    <!-- Walkway -->
+    <%=
+      # Can't have 90 degrees near the rover
+      nextWalkway($walkways, true)
+    %>
+
+    <!-- Walkway -->
+    <%=
+      # Can't have 90 degrees between the rover and the array
+      nextWalkway($walkways, true)
+    %>
+
+    <!-- Bling -->
+    <%=
+      randomSlot()
+      nextBling()
+    %>
 
     <!-- Bling -->
     <%=
@@ -583,8 +609,22 @@
 
     <!-- Checkpoint 2 - Box plugin -->
     <%
-      panel_goal_frame = $cable_frame * TMatrix(0, -2.2, Math::PI * 0.5)
+      panel_goal_frame = array_frame
     %>
+
+    <plugin name="boxT2CP2" filename="libBoxContainsPlugin.so">
+      <entity>solar_panel</entity>
+      <namespace>task2/checkpoint2</namespace>
+      <pose>
+        <%= panel_goal_frame[0, 2] %>
+        <%= panel_goal_frame[1, 2] %>
+        0.9
+        0
+        0
+        <%= Math::atan2(panel_goal_frame[1, 0], panel_goal_frame[0, 0]) %>
+      </pose>
+      <size>1.47 0.95 0.45</size>
+    </plugin>
 
     <!-- Bling -->
     <%=
@@ -666,6 +706,8 @@
       t3cp6_frame = $current_frame
       t3cp7_frame = $current_frame
       t3cp8_frame = $current_frame
+
+      # Can't have 90 degrees near the final box
       nextWalkway($walkways, true)
     %>
 
@@ -785,15 +827,6 @@
           0
           <%= Math::atan2(t2cp1_frame[1, 0], t2cp1_frame[0, 0]) %>
         </task_2_checkpoint_1_pose>
-
-        <task_2_checkpoint_2_pose>
-          <%= t2cp2_frame[0, 2] %>
-          <%= t2cp2_frame[1, 2] %>
-          <%= robot_z_pos %>
-          0
-          0
-          <%= Math::atan2(t2cp2_frame[1, 0], t2cp2_frame[0, 0]) %>
-        </task_2_checkpoint_2_pose>
 
         <task_2_checkpoint_3_pose>
           <%= t2cp3_frame[0, 2] %>

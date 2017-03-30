@@ -36,6 +36,12 @@ namespace gazebo
     /// \return True if completed.
     public: virtual bool Check() = 0;
 
+    /// \brief Skip this checkpoint.
+    /// This function should rearrange objects (not the robot) in the world
+    /// as if the checkpoint has been completed.
+    /// This function is optional.
+    public: virtual void Skip();
+
     /// \brief Start pose.
     public: ignition::math::Pose3d startPose;
   };
@@ -64,6 +70,34 @@ namespace gazebo
 
     /// \brief Flag to indicate whether the robot has reached the box.
     private: bool boxDone = false;
+  };
+
+  /// \brief A checkpoint tied to a TouchPlugin.
+  class TouchCheckpoint : public Checkpoint
+  {
+    using Checkpoint::Checkpoint;
+
+    /// \brief Callback when a touch message is received.
+    /// This means the touch is complete.
+    /// \param[in] _msg Unused message.
+    public: void OnTouchGzMsg(ConstIntPtr &_msg);
+
+    /// \brief Check whether the touch checkpoint has been completed.
+    /// \param[in] _namespace Namespace for the Gazebo topics in this plugin.
+    /// \return True if completed.
+    protected: bool CheckTouch(const std::string &_namespace);
+
+    /// \brief Gazebo transport node for communication.
+    protected: transport::NodePtr gzNode;
+
+    /// \brief Gazebo subscriber of touch messages.
+    private: transport::SubscriberPtr touchGzSub;
+
+    /// \brief Gazebo publisher of enable messages.
+    private: transport::PublisherPtr enableGzPub;
+
+    /// \brief Flag to indicate whether the touch is complete.
+    private: bool touchDone = false;
   };
 }
 #endif

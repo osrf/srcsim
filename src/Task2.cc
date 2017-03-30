@@ -27,9 +27,21 @@ Task2::Task2(const common::Time &_timeout,
     const std::vector<ignition::math::Pose3d> _poses)
     : Task(_timeout)
 {
+  // Checkpoint 1: Lift solar panel
+  std::unique_ptr<Task2CP1> cp1(new Task2CP1(_poses[0]));
+  this->checkpoints.push_back(std::move(cp1));
+
+  // Checkpoint 2: Place solar panel near cable
+  std::unique_ptr<Task2CP2> cp2(new Task2CP2(_poses[1]));
+  this->checkpoints.push_back(std::move(cp2));
+
   // Checkpoint 3: Deploy solar panel
   std::unique_ptr<Task2CP3> cp3(new Task2CP3(_poses[2]));
   this->checkpoints.push_back(std::move(cp3));
+
+  // Checkpoint 4: Lift cable
+  std::unique_ptr<Task2CP4> cp4(new Task2CP4(_poses[3]));
+  this->checkpoints.push_back(std::move(cp4));
 
   // Checkpoint 5: Plug cable
   std::unique_ptr<Task2CP5> cp5(new Task2CP5(_poses[4]));
@@ -49,6 +61,18 @@ size_t Task2::Number() const
 }
 
 /////////////////////////////////////////////////
+bool Task2CP1::Check()
+{
+  return this->CheckTouch("/task2/checkpoint1");
+}
+
+/////////////////////////////////////////////////
+bool Task2CP2::Check()
+{
+  return this->CheckBox("/task2/checkpoint2");
+}
+
+/////////////////////////////////////////////////
 void Task2CP3::OnSolarPanelGzMsg(ConstIntPtr &/*_msg*/)
 {
   this->panelDone = true;
@@ -64,12 +88,12 @@ bool Task2CP3::Check()
     this->gzNode->Init();
 
     // Enable solar panel plugin
-    this->toggleGzPub = this->gzNode->Advertise<msgs::Int>(
-        "/task2/checkpoint3/toggle");
+    this->enableGzPub = this->gzNode->Advertise<msgs::Int>(
+        "/task2/checkpoint3/enable");
 
     msgs::Int msg;
     msg.set_data(1);
-    this->toggleGzPub->Publish(msg);
+    this->enableGzPub->Publish(msg);
 
     // Subscribe to solar panel msgs
     this->panelGzSub = this->gzNode->Subscribe("/task2/checkpoint3/opened",
@@ -80,12 +104,45 @@ bool Task2CP3::Check()
   {
     msgs::Int msg;
     msg.set_data(0);
-    this->toggleGzPub->Publish(msg);
+    this->enableGzPub->Publish(msg);
 
     this->panelGzSub.reset();
   }
 
   return this->panelDone;
+}
+
+/////////////////////////////////////////////////
+void Task2CP3::Skip()
+{
+  if (this->panelDone)
+  {
+    gzwarn << "Trying to skip Task 2 Checkpoint 3, "
+           << "but this checkpoint is already done!" << std::endl;
+    return;
+  }
+
+  if (!this->enableGzPub)
+  {
+    this->gzNode = transport::NodePtr(new transport::Node());
+    this->gzNode->Init();
+
+    // Enable solar panel plugin
+    this->enableGzPub = this->gzNode->Advertise<msgs::Int>(
+        "/task2/checkpoint3/enable");
+  }
+
+  msgs::Int msg;
+  msg.set_data(2);
+  this->enableGzPub->Publish(msg);
+
+  this->enableGzPub.reset();
+}
+
+/////////////////////////////////////////////////
+bool Task2CP4::Check()
+{
+  return this->CheckTouch("/task2/checkpoint4");
 }
 
 /////////////////////////////////////////////////

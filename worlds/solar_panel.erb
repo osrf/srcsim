@@ -3,6 +3,7 @@
 
   # Requires the following global variables:
   # $solar_panel_frame
+  # $solar_panel_pos_z
 
   # Print inertial element based on a box
   def printInertialBox(_com_x, _com_y, _com_z, _mass, _len_x, _len_y, _len_z)
@@ -63,7 +64,7 @@
   <pose>
     <%= $solar_panel_frame[0, 2] %>
     <%= $solar_panel_frame[1, 2] %>
-    0
+    <%= $solar_panel_pos_z %>
     0
     0
     <%= Math::atan2($solar_panel_frame[1, 0], $solar_panel_frame[0, 0]) %>
@@ -105,6 +106,13 @@
         </mesh>
       </geometry>
     </visual>
+
+    <sensor name="base_sensor" type="contact">
+      <contact>
+        <collision>collision</collision>
+      </contact>
+    </sensor>
+
   </link>
 
   <link name="panel_01">
@@ -184,6 +192,13 @@
         </mesh>
       </geometry>
     </visual>
+
+    <sensor name="panel1_sensor" type="contact">
+      <contact>
+        <collision>panel_collision</collision>
+      </contact>
+    </sensor>
+
   </link>
 
 
@@ -251,6 +266,12 @@
         </contact>
       </surface>
     </collision>
+
+    <sensor name="panel2_sensor" type="contact">
+      <contact>
+        <collision>collision</collision>
+      </contact>
+    </sensor>
 
     <sensor name="outlet_sensor" type="contact">
       <contact>
@@ -643,6 +664,15 @@
   </joint>
 
   <plugin name="solar_panel_plugin" filename="libSolarPanelPlugin.so">
+  </plugin>
+
+  <plugin name="touch_valkyrie_panel" filename="libTouchPlugin.so">
+    <sensor>base_sensor</sensor>
+    <sensor>panel1_sensor</sensor>
+    <sensor>panel2_sensor</sensor>
+    <target>valkyrie</target>
+    <time>0.5</time>
+    <namespace>task2/checkpoint1</namespace>
   </plugin>
 
 </model>
