@@ -36,6 +36,10 @@ Task2::Task2(const common::Time &_timeout,
   std::unique_ptr<Task2CP3> cp3(new Task2CP3(_poses[2]));
   this->checkpoints.push_back(std::move(cp3));
 
+  // Checkpoint 4: Lift cable
+  std::unique_ptr<Task2CP4> cp4(new Task2CP4(_poses[3]));
+  this->checkpoints.push_back(std::move(cp4));
+
   // Checkpoint 6: Walk to final box
   std::unique_ptr<Task2CP6> cp6(new Task2CP6(_poses[5]));
   this->checkpoints.push_back(std::move(cp6));
@@ -126,6 +130,12 @@ void Task2CP3::Skip()
   this->enableGzPub->Publish(msg);
 
   this->enableGzPub.reset();
+}
+
+/////////////////////////////////////////////////
+bool Task2CP4::Check()
+{
+  return this->CheckTouch("/task2/checkpoint4");
 }
 
 /////////////////////////////////////////////////

@@ -206,6 +206,14 @@
       </material>
     </visual>
 
+    <sensor name="tip_sensor" type="contact">
+      <contact>
+        <collision>plug_collision</collision>
+        <collision>cylinder</collision>
+        <collision>sphere</collision>
+      </contact>
+    </sensor>
+
     <% end %>
 
   </link>
@@ -240,5 +248,12 @@
     <child>link_0</child>
     <parent>world</parent>
   </joint>
+
+  <plugin name="touch_valkyrie_cable" filename="libTouchPlugin.so">
+    <sensor>tip_sensor</sensor>
+    <target>valkyrie</target>
+    <time>0.5</time>
+    <namespace>task2/checkpoint4</namespace>
+  </plugin>
 
 </model>
