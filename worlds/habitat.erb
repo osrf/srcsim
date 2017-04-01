@@ -112,6 +112,37 @@
       </geometry>
     </collision>
 
+    <%
+      size_z = 0.037
+      pos_x = -7.920
+      pos_y = -4.678
+      pos_z = 1.368
+      pitch = -0.709
+      yaw = Math::PI / 2.0
+    %>
+
+    <collision name="rail_2_left">
+      <pose><%= pos_x %> <%= pos_y %> <%= pos_z %> 0 <%= pitch %> <%= yaw %></pose>
+      <geometry>
+        <box>
+          <size><%= size_x %> <%= size_y %> <%= size_z %> </size>
+        </box>
+      </geometry>
+    </collision>
+
+    <%
+      pos_x = -5.4505
+    %>
+
+    <collision name="rail_2_right">
+      <pose><%= pos_x %> <%= pos_y %> <%= pos_z %> 0 <%= pitch %> <%= yaw %></pose>
+      <geometry>
+        <box>
+          <size><%= size_x %> <%= size_y %> <%= size_z %> </size>
+        </box>
+      </geometry>
+    </collision>
+
     <visual name="visual">
       <pose>0 0 0 0 0 0</pose>
       <geometry>
