@@ -159,8 +159,20 @@ bool Task2CP5::Check()
 
     if (this->world)
     {
-      this->sensor = std::dynamic_pointer_cast<sensors::ContactSensor>(
-          sensors::SensorManager::Instance()->GetSensor(this->sensorName));
+      auto s = sensors::SensorManager::Instance()->GetSensor(this->sensorName);
+      if (!s)
+      {
+        gzerr << "Failed to get sensor [" << this->sensorName << "]" << std::endl;
+        return false;
+      }
+
+      this->sensor = std::dynamic_pointer_cast<sensors::ContactSensor>(s);
+      if (!this->sensor)
+      {
+        gzerr << "Failed to cast sensor [" << this->sensorName << "]" << std::endl;
+        return false;
+      }
+
       this->sensor->SetActive(true);
     }
   }
@@ -216,7 +228,7 @@ bool Task2CP5::Check()
   }
 
   // Just started touching
-  if (touching && this->touchStart == common::Time::Zero)
+  if (this->touchStart == common::Time::Zero)
   {
     this->touchStart = simTime;
     gzmsg << "Plug started touching outlet at " << this->touchStart
