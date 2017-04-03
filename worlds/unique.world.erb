@@ -733,21 +733,9 @@
       nextWalkway($walkways, false)
     %>
 
-    <!-- Bling -->
-    <%=
-      randomSlot()
-      nextBling()
-    %>
-
-    <!-- Bling -->
-    <%=
-      remainingSlot()
-      nextBling()
-    %>
-
     <!-- Habitat -->
     <%
-      tHabitatSlotOrigin = TMatrix(6.7, 5.25, 0);
+      tHabitatSlotOrigin = TMatrix(6.7, 5.7, 0);
       $current_frame = $current_frame * $current_walkway["tOriginExit"]
       $habitat_frame = $current_frame *
                        tHabitatSlotOrigin
