@@ -65,12 +65,14 @@
     <% end %>
 
     <%
-      size_y = 2.95
-      pos_y = pos_y + 1.555
+      size_x = 20.00
+      size_y = 8.00
+      pos_x = 2.00
+      pos_y = 0.155
       pos_z = pos_z + 0.1804
     %>
 
-    <collision name="walkway">
+    <collision name="floor">
       <pose><%= pos_x %> <%= pos_y %> <%= pos_z %> 0 0 0</pose>
       <geometry>
         <box>
@@ -1325,16 +1327,22 @@
   </link>
 
   <link name="module_small">
-    <collision name="collision">
-      <pose>0 0 0 0 0 0</pose>
+
+    <%
+      pos_x = -7.447
+      pos_y = -1.175
+      pos_z = 2.9
+      size_x = 0.16
+      size_y = 0.5
+      size_z = 2.2
+    %>
+
+    <collision name="door_left">
+      <pose><%= pos_x %> <%= pos_y %> <%= pos_z %> 0 0 0</pose>
       <geometry>
-        <mesh>
-          <uri>model://src_habitat/meshes/hdu.obj</uri>
-          <scale>0.0254 0.0254 0.0254</scale>
-          <submesh>
-            <name>Module_Small</name>
-          </submesh>
-        </mesh>
+        <box>
+          <size><%= size_x %> <%= size_y %> <%= size_z %> </size>
+        </box>
       </geometry>
       <surface>
         <contact>
@@ -1343,6 +1351,26 @@
         </contact>
       </surface>
     </collision>
+
+    <%
+      pos_x = -5.923
+    %>
+
+    <collision name="door_right">
+      <pose><%= pos_x %> <%= pos_y %> <%= pos_z %> 0 0 0</pose>
+      <geometry>
+        <box>
+          <size><%= size_x %> <%= size_y %> <%= size_z %> </size>
+        </box>
+      </geometry>
+      <surface>
+        <contact>
+          <!-- Don't collide with door -->
+          <collide_bitmask>0x01</collide_bitmask>
+        </contact>
+      </surface>
+    </collision>
+
     <visual name="visual">
       <pose>0 0 0 0 0 0</pose>
       <geometry>
