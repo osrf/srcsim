@@ -169,13 +169,14 @@ class KeyboardTeleop(object):
             self.RIGHT_FOOT_FRAME_NAME = rospy.get_param(right_foot_frame_parameter_name)
             self.LEFT_FOOT_FRAME_NAME = rospy.get_param(left_foot_frame_parameter_name)
         # make sure the simulation is running otherwise wait
-        self.rate = rospy.Rate(10)  # 10hz
+        self.rate = rospy.Rate(2)  # 2hz
         publishers = [
             self.arm_publisher, self.left_hand_publisher, self.right_hand_publisher,
             self.neck_publisher, self.head_publisher, self.footstep_publisher]
         if any([p.get_num_connections() == 0 for p in publishers]):
-            rospy.loginfo('waiting for subscriber...')
             while any([p.get_num_connections() == 0 for p in publishers]):
+                rospy.loginfo('waiting for subscribers: ' + ', '.join(sorted([
+                    p.name for p in publishers if p.get_num_connections() == 0])))
                 self.rate.sleep()
 
     def fini(self):
