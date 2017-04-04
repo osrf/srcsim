@@ -36,6 +36,24 @@ namespace gazebo
     public: size_t Number() const;
   };
 
+  /// \brief Task 3, Checkpoint 1: Climb the stairs
+  class Task3CP1 : public BoxCheckpoint
+  {
+    using BoxCheckpoint::BoxCheckpoint;
+
+    /// \brief Check whether the robot is on the top of the stairs.
+    public: bool Check();
+  };
+
+  /// \brief Task 3, Checkpoint 3: Pass through door
+  class Task3CP3 : public BoxCheckpoint
+  {
+    using BoxCheckpoint::BoxCheckpoint;
+
+    /// \brief Check whether the robot is on the other side of the door
+    public: bool Check();
+  };
+
   /// \brief Task 3, Checkpoint 8: Final box
   class Task3CP8 : public BoxCheckpoint
   {

@@ -54,6 +54,14 @@ Task3::Task3(const sdf::ElementPtr &_sdf) : Task(_sdf)
       cp8Elem = _sdf->GetElement("checkpoint8");
   }
 
+  // Checkpoint 1: Climb the stairs
+  std::unique_ptr<Task3CP1> cp1(new Task3CP1(cp1Elem));
+  this->checkpoints.push_back(std::move(cp1));
+
+  // Checkpoint 3: Pass through the door
+  std::unique_ptr<Task3CP3> cp3(new Task3CP3(cp3Elem));
+  this->checkpoints.push_back(std::move(cp3));
+
   // Checkpoint 8: Walk to final box
   std::unique_ptr<Task3CP8> cp8(new Task3CP8(cp8Elem));
   this->checkpoints.push_back(std::move(cp8));
@@ -65,6 +73,18 @@ Task3::Task3(const sdf::ElementPtr &_sdf) : Task(_sdf)
 size_t Task3::Number() const
 {
   return 3u;
+}
+
+/////////////////////////////////////////////////
+bool Task3CP1::Check()
+{
+  return this->CheckBox("/task3/checkpoint1");
+}
+
+/////////////////////////////////////////////////
+bool Task3CP3::Check()
+{
+  return this->CheckBox("/task3/checkpoint3");
 }
 
 /////////////////////////////////////////////////
