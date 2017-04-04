@@ -54,6 +54,28 @@ namespace gazebo
     public: bool Check();
   };
 
+  /// \brief Task 3, Checkpoint 4: Lift detector
+  class Task3CP4 : public TouchCheckpoint
+  {
+    using TouchCheckpoint::TouchCheckpoint;
+
+    /// \brief Check whether the detector has been touching the robot and
+    /// nothing else for long enough.
+    /// \return True if the checkpoint is complete.
+    public: bool Check();
+  };
+
+  /// \brief Task 3, Checkpoint 6: Lift patch tool
+  class Task3CP6 : public TouchCheckpoint
+  {
+    using TouchCheckpoint::TouchCheckpoint;
+
+    /// \brief Check whether the tool has been touching the robot and
+    /// nothing else for long enough.
+    /// \return True if the checkpoint is complete.
+    public: bool Check();
+  };
+
   /// \brief Task 3, Checkpoint 8: Final box
   class Task3CP8 : public BoxCheckpoint
   {

@@ -47,6 +47,13 @@
           </mesh>
         </geometry>
       </visual>
+
+      <sensor name="tool_contact_sensor" type="contact">
+        <contact>
+          <collision>collision</collision>
+        </contact>
+      </sensor>
+
     </link>
 
     <link name="button">
@@ -94,6 +101,13 @@
           </mesh>
         </geometry>
       </visual>
+
+      <sensor name="button_contact_sensor" type="contact">
+        <contact>
+          <collision>collision</collision>
+        </contact>
+      </sensor>
+
     </link>
 
     <joint name="button_joint" type="prismatic">
@@ -113,6 +127,14 @@
         </dynamics>
       </axis>
     </joint>
+
+    <plugin name="touch_valkyrie_patch" filename="libTouchPlugin.so">
+      <sensor>tool_contact_sensor</sensor>
+      <sensor>button_contact_sensor</sensor>
+      <target>valkyrie</target>
+      <time>0.5</time>
+      <namespace>task3/checkpoint6</namespace>
+    </plugin>
 
   </model>
 </sdf>

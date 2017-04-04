@@ -62,6 +62,14 @@ Task3::Task3(const sdf::ElementPtr &_sdf) : Task(_sdf)
   std::unique_ptr<Task3CP3> cp3(new Task3CP3(cp3Elem));
   this->checkpoints.push_back(std::move(cp3));
 
+  // Checkpoint 4: Lift detector
+  std::unique_ptr<Task3CP4> cp4(new Task3CP4(cp4Elem));
+  this->checkpoints.push_back(std::move(cp4));
+
+  // Checkpoint 6: Lift patch tool
+  std::unique_ptr<Task3CP6> cp6(new Task3CP6(cp6Elem));
+  this->checkpoints.push_back(std::move(cp6));
+
   // Checkpoint 8: Walk to final box
   std::unique_ptr<Task3CP8> cp8(new Task3CP8(cp8Elem));
   this->checkpoints.push_back(std::move(cp8));
@@ -85,6 +93,18 @@ bool Task3CP1::Check()
 bool Task3CP3::Check()
 {
   return this->CheckBox("/task3/checkpoint3");
+}
+
+/////////////////////////////////////////////////
+bool Task3CP4::Check()
+{
+  return this->CheckTouch("/task3/checkpoint4");
+}
+
+/////////////////////////////////////////////////
+bool Task3CP6::Check()
+{
+  return this->CheckTouch("/task3/checkpoint6");
 }
 
 /////////////////////////////////////////////////
