@@ -117,7 +117,7 @@ void Task2CP2::Skip()
   auto panel = world->GetModel("solar_panel");
   if (!panel)
   {
-    gzerr << "Failed to get world" << std::endl;
+    gzerr << "Failed to get [solar_panel] model" << std::endl;
     return;
   }
 
