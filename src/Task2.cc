@@ -15,6 +15,9 @@
  *
 */
 
+#include <gazebo/physics/physics.hh>
+#include <gazebo/sensors/SensorManager.hh>
+
 #include "srcsim/Task2.hh"
 
 using namespace gazebo;
@@ -39,6 +42,10 @@ Task2::Task2(const common::Time &_timeout,
   // Checkpoint 4: Lift cable
   std::unique_ptr<Task2CP4> cp4(new Task2CP4(_poses[3]));
   this->checkpoints.push_back(std::move(cp4));
+
+  // Checkpoint 5: Plug cable
+  std::unique_ptr<Task2CP5> cp5(new Task2CP5(_poses[4]));
+  this->checkpoints.push_back(std::move(cp5));
 
   // Checkpoint 6: Walk to final box
   std::unique_ptr<Task2CP6> cp6(new Task2CP6(_poses[5]));
@@ -136,6 +143,132 @@ void Task2CP3::Skip()
 bool Task2CP4::Check()
 {
   return this->CheckTouch("/task2/checkpoint4");
+}
+
+/////////////////////////////////////////////////
+bool Task2CP5::Check()
+{
+  // Previously finished
+  if (this->done)
+    return true;
+
+  // First time
+  if (!this->sensor)
+  {
+    this->world = physics::get_world();
+
+    if (this->world)
+    {
+      auto s = sensors::SensorManager::Instance()->GetSensor(this->sensorName);
+      if (!s)
+      {
+        gzerr << "Failed to get sensor [" << this->sensorName << "]" << std::endl;
+        return false;
+      }
+
+      this->sensor = std::dynamic_pointer_cast<sensors::ContactSensor>(s);
+      if (!this->sensor)
+      {
+        gzerr << "Failed to cast sensor [" << this->sensorName << "]" << std::endl;
+        return false;
+      }
+
+      this->sensor->SetActive(true);
+    }
+  }
+
+  // If couldn't get sensor
+  if (!this->sensor)
+  {
+    gzerr << "Couldn't get world or sensor pointer. "
+          << "Not checking Task 2 Checkpoint 5." << std::endl;
+    return false;
+  }
+
+  // Get all contacts
+  auto contacts = this->sensor->Contacts();
+
+  bool touching = false;
+
+  for (auto const &contact : contacts.contact())
+  {
+    // Check for the plug
+    bool col1Plug = contact.collision1().find(this->plug) != std::string::npos;
+    bool col2Plug = contact.collision2().find(this->plug) != std::string::npos;
+
+    // Check for the outlet
+    bool col1Outlet = contact.collision1().find(this->outlet) !=
+        std::string::npos;
+    bool col2Outlet = contact.collision2().find(this->outlet) !=
+        std::string::npos;
+
+    // We need at least one plug-outlet or outlet-plug contact
+    if ((col1Plug && col2Outlet) || (col1Outlet && col2Plug))
+    {
+      touching = true;
+      break;
+    }
+  }
+
+  auto simTime = world->GetSimTime();
+
+  // Not touching
+  if (!touching)
+  {
+    // Stopped touching
+    if (this->touchStart != common::Time::Zero)
+    {
+      gzmsg << "Plug stopped touching outlet at " << simTime
+            << " seconds" << std::endl;
+      this->touchStart = common::Time::Zero;
+    }
+    return false;
+  }
+
+  // Just started touching
+  if (this->touchStart == common::Time::Zero)
+  {
+    this->touchStart = simTime;
+    gzmsg << "Plug started touching outlet at " << this->touchStart
+          << " seconds" << std::endl;
+  }
+
+  // Check if it has been plugged for long enough
+  auto itsPlugTime = simTime - this->touchStart > this->targetTime;
+
+  if (!itsPlugTime)
+    return false;
+
+  // We set done to true because the checkpoint has technically been completed.
+  // If we fail to create a joint below, this is not the competitor's fault.
+  this->done = true;
+
+  // Create fixed joint
+
+  // Get models
+  auto cableModel = world->GetModel(this->cable);
+  auto plugLink = boost::dynamic_pointer_cast<physics::Link>(
+      world->GetEntity(this->plug));
+
+  auto outletLink = boost::dynamic_pointer_cast<physics::Link>(
+      world->GetEntity(this->outletParent));
+
+  if (!cableModel || !plugLink || !outletLink)
+  {
+    gzerr << "Failed to get a model, cable won't be plugged."
+          << std::endl;
+    return this->done;
+  }
+
+  auto fixedJoint = world->GetPhysicsEngine()->CreateJoint("fixed", cableModel);
+  fixedJoint->SetName(this->cable + "_plug_fixed_joint__");
+
+  fixedJoint->Load(plugLink, outletLink, ignition::math::Pose3d::Zero);
+  fixedJoint->Init();
+
+  gzmsg << "The cable plug has been fixed to the outlet" << std::endl;
+
+  return this->done;
 }
 
 /////////////////////////////////////////////////
