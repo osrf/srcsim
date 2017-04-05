@@ -203,13 +203,17 @@ install(TARGETS ${solar_panel_plugin_name}
 ## Install ##
 #############
 
-# Install all the world files
-install(DIRECTORY worlds/
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/worlds)
+# Install all the config files
+install(DIRECTORY config/
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/config)
 
 # Install all the launch files
 install(DIRECTORY launch/
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch)
+
+# Install all the world files
+install(DIRECTORY worlds/
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/worlds)
 
 # Install Misc. Scripts
 install(PROGRAMS scripts/init_robot.sh scripts/walk_test.py scripts/rossleep.py
