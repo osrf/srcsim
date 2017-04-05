@@ -40,7 +40,9 @@
   <%= Math::atan2($habitat_frame[1, 0], $habitat_frame[0, 0]) %>
   </pose>
 
-  <link name="link_stairs">
+  <link name="base">
+
+    <!-- Stairs collisions -->
 
     <%
       step_count = 7
@@ -63,6 +65,8 @@
     </collision>
 
     <% end %>
+
+    <!-- floor collisions -->
 
     <%
       size_x = 20.00
@@ -94,6 +98,8 @@
         </box>
       </geometry>
     </collision>
+
+    <!-- Rail collisions -->
 
     <%
       left_pos_x = -7.920
@@ -1191,183 +1197,7 @@
       </geometry>
     </collision>
 
-    <visual name="visual">
-      <pose>0 0 0 0 0 0</pose>
-      <geometry>
-        <mesh>
-          <uri>model://src_habitat/meshes/hdu.obj</uri>
-          <scale>0.0254 0.0254 0.0254</scale>
-          <submesh>
-            <name>Stairs</name>
-          </submesh>
-        </mesh>
-      </geometry>
-    </visual>
-  </link>
-
-  <link name="link_module_long">
-    <collision name="collision">
-      <pose>0 0 0 0 0 0</pose>
-      <geometry>
-        <mesh>
-          <uri>model://src_habitat/meshes/hdu.obj</uri>
-          <scale>0.0254 0.0254 0.0254</scale>
-          <submesh>
-            <name>Module_Long</name>
-          </submesh>
-        </mesh>
-      </geometry>
-    </collision>
-    <visual name="visual">
-      <pose>0 0 0 0 0 0</pose>
-      <geometry>
-        <mesh>
-          <uri>model://src_habitat/meshes/hdu.obj</uri>
-          <scale>0.0254 0.0254 0.0254</scale>
-          <submesh>
-            <name>Module_Long</name>
-          </submesh>
-        </mesh>
-      </geometry>
-    </visual>
-  </link>
-
-  <link name="finish_platform">
-    <collision name="collision">
-      <pose>0 0 0 0 0 0</pose>
-      <geometry>
-        <mesh>
-          <uri>model://src_habitat/meshes/hdu.obj</uri>
-          <scale>0.0254 0.0254 0.0254</scale>
-          <submesh>
-            <name>Finish_Platform</name>
-          </submesh>
-        </mesh>
-      </geometry>
-    </collision>
-    <visual name="visual">
-      <pose>0 0 0 0 0 0</pose>
-      <geometry>
-        <mesh>
-          <uri>model://src_habitat/meshes/hdu.obj</uri>
-          <scale>0.0254 0.0254 0.0254</scale>
-          <submesh>
-            <name>Finish_Platform</name>
-          </submesh>
-        </mesh>
-      </geometry>
-    </visual>
-  </link>
-
-  <link name="link_door_04">
-    <collision name="collision">
-      <pose>0 0 0 0 0 0</pose>
-      <geometry>
-        <mesh>
-          <uri>model://src_habitat/meshes/hdu.obj</uri>
-          <scale>0.0254 0.0254 0.0254</scale>
-          <submesh>
-            <name>Door_04</name>
-          </submesh>
-        </mesh>
-      </geometry>
-    </collision>
-    <visual name="visual">
-      <pose>0 0 0 0 0 0</pose>
-      <geometry>
-        <mesh>
-          <uri>model://src_habitat/meshes/hdu.obj</uri>
-          <scale>0.0254 0.0254 0.0254</scale>
-          <submesh>
-            <name>Door_04</name>
-          </submesh>
-        </mesh>
-      </geometry>
-    </visual>
-  </link>
-
-  <link name="link_module_large">
-    <collision name="collision">
-      <pose>0 0 0 0 0 0</pose>
-      <geometry>
-        <mesh>
-          <uri>model://src_habitat/meshes/hdu.obj</uri>
-          <scale>0.0254 0.0254 0.0254</scale>
-          <submesh>
-            <name>Module_Large</name>
-          </submesh>
-        </mesh>
-      </geometry>
-    </collision>
-    <visual name="visual">
-      <pose>0 0 0 0 0 0</pose>
-      <geometry>
-        <mesh>
-          <uri>model://src_habitat/meshes/hdu.obj</uri>
-          <scale>0.0254 0.0254 0.0254</scale>
-          <submesh>
-            <name>Module_Large</name>
-          </submesh>
-        </mesh>
-      </geometry>
-    </visual>
-  </link>
-
-  <link name="link_door_01">
-    <collision name="collision">
-      <pose>0 0 0 0 0 0</pose>
-      <geometry>
-        <mesh>
-          <uri>model://src_habitat/meshes/hdu.obj</uri>
-          <scale>0.0254 0.0254 0.0254</scale>
-          <submesh>
-            <name>Door_01</name>
-          </submesh>
-        </mesh>
-      </geometry>
-    </collision>
-    <visual name="visual">
-      <pose>0 0 0 0 0 0</pose>
-      <geometry>
-        <mesh>
-          <uri>model://src_habitat/meshes/hdu.obj</uri>
-          <scale>0.0254 0.0254 0.0254</scale>
-          <submesh>
-            <name>Door_01</name>
-          </submesh>
-        </mesh>
-      </geometry>
-    </visual>
-  </link>
-
-  <link name="door_03">
-    <collision name="collision">
-      <pose>0 0 0 0 0 0</pose>
-      <geometry>
-        <mesh>
-          <uri>model://src_habitat/meshes/hdu.obj</uri>
-          <scale>0.0254 0.0254 0.0254</scale>
-          <submesh>
-            <name>Door_03</name>
-          </submesh>
-        </mesh>
-      </geometry>
-    </collision>
-    <visual name="visual">
-      <pose>0 0 0 0 0 0</pose>
-      <geometry>
-        <mesh>
-          <uri>model://src_habitat/meshes/hdu.obj</uri>
-          <scale>0.0254 0.0254 0.0254</scale>
-          <submesh>
-            <name>Door_03</name>
-          </submesh>
-        </mesh>
-      </geometry>
-    </visual>
-  </link>
-
-  <link name="module_small">
+    <!-- Small module entrance door collisions -->
 
     <%
       pos_x = -7.447
@@ -1378,7 +1208,7 @@
       size_z = 2.2
     %>
 
-    <collision name="door_left">
+    <collision name="entrance_left">
       <pose><%= pos_x %> <%= pos_y %> <%= pos_z %> 0 0 0</pose>
       <geometry>
         <box>
@@ -1394,10 +1224,12 @@
     </collision>
 
     <%
+      size_y = 0.3
       pos_x = -5.923
+      pos_y = -1.276
     %>
 
-    <collision name="door_right">
+    <collision name="entrance_right">
       <pose><%= pos_x %> <%= pos_y %> <%= pos_z %> 0 0 0</pose>
       <geometry>
         <box>
@@ -1413,12 +1245,14 @@
     </collision>
 
     <%
-      pos_x = -7.75
+      pos_x = -7.80
       pos_y = -0.475
       pos_z = 2.9
       size_y = 1.2
-      yaw = 0.525
+      yaw = 0.495
     %>
+
+    <!-- Small module wall collisions -->
 
     <collision name="wall_1">
       <pose><%= pos_x %> <%= pos_y %> <%= pos_z %> 0 0 <%= yaw %></pose>
@@ -1430,7 +1264,7 @@
     </collision>
 
     <%
-      pos_x = -7.75
+      pos_x = -7.76
       pos_y = 0.505
       pos_z = 2.9
       size_y = 1.5
@@ -1448,7 +1282,7 @@
 
     <%
       pos_x = -6.69
-      pos_y = 1.16
+      pos_y = 1.185
       pos_z = 2.9
       size_y = 1.5
       yaw = Math::PI * 0.5
@@ -1464,7 +1298,7 @@
     </collision>
 
     <%
-      pos_x = -5.93
+      pos_x = -5.89
       pos_y = 1.00
       pos_z = 2.9
       size_y = 0.5
@@ -1503,7 +1337,55 @@
       </surface>
     </collision>
 
-    <visual name="visual">
+    <!-- Passage collisions -->
+
+    <%
+      pos_x = -5.295
+      pos_y = 0.928
+      pos_z = 2.9
+      size_x = 0.845
+      size_y = 0.5
+      size_z = 2.2
+    %>
+
+    <collision name="passage_left">
+      <pose><%= pos_x %> <%= pos_y %> <%= pos_z %> 0 0 0</pose>
+      <geometry>
+        <box>
+          <size><%= size_x %> <%= size_y %> <%= size_z %> </size>
+        </box>
+      </geometry>
+    </collision>
+
+    <%
+      pos_y = -0.93
+    %>
+
+    <collision name="passage_right">
+      <pose><%= pos_x %> <%= pos_y %> <%= pos_z %> 0 0 0</pose>
+      <geometry>
+        <box>
+          <size><%= size_x %> <%= size_y %> <%= size_z %> </size>
+        </box>
+      </geometry>
+    </collision>
+
+    <!-- VISUALS -->
+
+    <visual name="stairs">
+      <pose>0 0 0 0 0 0</pose>
+      <geometry>
+        <mesh>
+          <uri>model://src_habitat/meshes/hdu.obj</uri>
+          <scale>0.0254 0.0254 0.0254</scale>
+          <submesh>
+            <name>Stairs</name>
+          </submesh>
+        </mesh>
+      </geometry>
+    </visual>
+
+    <visual name="module_small">
       <pose>0 0 0 0 0 0</pose>
       <geometry>
         <mesh>
@@ -1515,6 +1397,71 @@
         </mesh>
       </geometry>
     </visual>
+
+    <visual name="door_01">
+      <pose>0 0 0 0 0 0</pose>
+      <geometry>
+        <mesh>
+          <uri>model://src_habitat/meshes/hdu.obj</uri>
+          <scale>0.0254 0.0254 0.0254</scale>
+          <submesh>
+            <name>Door_01</name>
+          </submesh>
+        </mesh>
+      </geometry>
+    </visual>
+
+    <visual name="door_03">
+      <geometry>
+        <mesh>
+          <uri>model://src_habitat/meshes/hdu.obj</uri>
+          <scale>0.0254 0.0254 0.0254</scale>
+          <submesh>
+            <name>Door_03</name>
+          </submesh>
+        </mesh>
+      </geometry>
+    </visual>
+
+    <visual name="door_04">
+      <pose>0 0 0 0 0 0</pose>
+      <geometry>
+        <mesh>
+          <uri>model://src_habitat/meshes/hdu.obj</uri>
+          <scale>0.0254 0.0254 0.0254</scale>
+          <submesh>
+            <name>Door_04</name>
+          </submesh>
+        </mesh>
+      </geometry>
+    </visual>
+
+    <visual name="module_large">
+      <pose>0 0 0 0 0 0</pose>
+      <geometry>
+        <mesh>
+          <uri>model://src_habitat/meshes/hdu.obj</uri>
+          <scale>0.0254 0.0254 0.0254</scale>
+          <submesh>
+            <name>Module_Large</name>
+          </submesh>
+        </mesh>
+      </geometry>
+    </visual>
+
+    <visual name="module_long">
+      <pose>0 0 0 0 0 0</pose>
+      <geometry>
+        <mesh>
+          <uri>model://src_habitat/meshes/hdu.obj</uri>
+          <scale>0.0254 0.0254 0.0254</scale>
+          <submesh>
+            <name>Module_Long</name>
+          </submesh>
+        </mesh>
+      </geometry>
+    </visual>
+
   </link>
 </model>
 
