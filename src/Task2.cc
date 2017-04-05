@@ -190,18 +190,16 @@ bool Task2CP5::Check()
 
   bool touching = false;
 
-  for (int i = 0; i < contacts.contact_size(); ++i)
+  for (auto const &contact : contacts.contact())
   {
     // Check for the plug
-    bool col1Plug = contacts.contact(i).collision1().find(this->plug) !=
-        std::string::npos;
-    bool col2Plug = contacts.contact(i).collision2().find(this->plug) !=
-        std::string::npos;
+    bool col1Plug = contact.collision1().find(this->plug) != std::string::npos;
+    bool col2Plug = contact.collision2().find(this->plug) != std::string::npos;
 
     // Check for the outlet
-    bool col1Outlet = contacts.contact(i).collision1().find(this->outlet) !=
+    bool col1Outlet = contact.collision1().find(this->outlet) !=
         std::string::npos;
-    bool col2Outlet = contacts.contact(i).collision2().find(this->outlet) !=
+    bool col2Outlet = contact.collision2().find(this->outlet) !=
         std::string::npos;
 
     // We need at least one plug-outlet or outlet-plug contact
