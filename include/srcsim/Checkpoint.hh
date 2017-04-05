@@ -19,6 +19,7 @@
 #define SRC_CHECKPOINT_HH_
 
 #include <ignition/math/Pose3.hh>
+#include <sdf/sdf.hh>
 #include <ros/ros.h>
 #include <gazebo/transport/transport.hh>
 
@@ -27,8 +28,8 @@ namespace gazebo
   class Checkpoint
   {
     /// \brief Constructor
-    /// \param[in] _startPose Pose to start from if skipped to this checkpoint.
-    public: Checkpoint(const ignition::math::Pose3d &_startPose);
+    /// \param[in] _sdf SDF element for this checkpoint.
+    public: Checkpoint(const sdf::ElementPtr &_sdf);
 
     /// \brief Check whether checkpoint has been completed.
     /// Any publishers or subscribers are created the first time this is
@@ -37,13 +38,14 @@ namespace gazebo
     public: virtual bool Check() = 0;
 
     /// \brief Skip this checkpoint.
-    /// This function should rearrange objects (not the robot) in the world
-    /// as if the checkpoint has been completed.
-    /// This function is optional.
+    /// This function rearranges the world as if the checkpoint had been
+    /// completed.
+    /// The base implementation teleports the robot, but checkpoints can
+    /// override the function to move other objects too.
     public: virtual void Skip();
 
-    /// \brief Start pose.
-    public: ignition::math::Pose3d startPose;
+    /// \brief The pose the robot should be in when this checkpoint is skipped.
+    public: ignition::math::Pose3d robotSkipPose;
   };
 
   /// \brief A checkpoint tied to a BoxContainsPlugin.
@@ -51,13 +53,13 @@ namespace gazebo
   {
     using Checkpoint::Checkpoint;
 
-    /// \brief Callback when messages are received from the BoxContainsPlugin.
-    /// \param[in] _msg 1 if robot is inside box, 0 otherwise.
-    public: void OnBox(ConstIntPtr &_msg);
-
     /// \brief Check whether the box checkpoint has been completed.
     /// \return True if completed.
     protected: bool CheckBox(const std::string &_namespace);
+
+    /// \brief Callback when messages are received from the BoxContainsPlugin.
+    /// \param[in] _msg 1 if robot is inside box, 0 otherwise.
+    private: void OnBox(ConstIntPtr &_msg);
 
     /// \brief Gazebo transport node for communication.
     protected: transport::NodePtr gzNode;

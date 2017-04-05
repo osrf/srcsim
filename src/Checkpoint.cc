@@ -16,20 +16,47 @@
 */
 
 #include <gazebo/common/Console.hh>
+#include <gazebo/physics/Model.hh>
+#include <gazebo/physics/PhysicsIface.hh>
+#include <gazebo/physics/World.hh>
 
 #include "srcsim/Checkpoint.hh"
 
 using namespace gazebo;
 
 /////////////////////////////////////////////////
-Checkpoint::Checkpoint(const ignition::math::Pose3d &_startPose)
-    : startPose(_startPose)
+Checkpoint::Checkpoint(const sdf::ElementPtr &_sdf)
 {
+  // Get robot pose
+  if (_sdf && _sdf->HasElement("skip_robot_pose"))
+  {
+    this->robotSkipPose = _sdf->Get<ignition::math::Pose3d>("skip_robot_pose");
+  }
 }
 
 /////////////////////////////////////////////////
 void Checkpoint::Skip()
 {
+  if (this->robotSkipPose == ignition::math::Pose3d::Zero)
+    return;
+
+  // Teleport robot
+  // TODO: Reset joints
+  auto world = physics::get_world();
+  if (!world)
+  {
+    gzerr << "Failed to get world pointer, robot won't be teleported."
+        << std::endl;
+    return;
+  }
+  auto robot = world->GetModel("valkyrie");
+  if (!robot)
+  {
+    gzerr << "Failed to get model pointer, robot won't be teleported."
+        << std::endl;
+    return;
+  }
+  robot->SetWorldPose(this->robotSkipPose);
 }
 
 /////////////////////////////////////////////////

@@ -23,32 +23,55 @@
 using namespace gazebo;
 
 /////////////////////////////////////////////////
-Task2::Task2(const common::Time &_timeout,
-    const std::vector<ignition::math::Pose3d> _poses)
-    : Task(_timeout)
+Task2::Task2(const sdf::ElementPtr &_sdf) : Task(_sdf)
 {
+  gzmsg << "Creating Task [2] ... ";
+
+  // Get SDF for each checkpoint
+  sdf::ElementPtr cp1Elem, cp2Elem, cp3Elem, cp4Elem, cp5Elem, cp6Elem;
+  if (_sdf)
+  {
+    if (_sdf->HasElement("checkpoint1"))
+      cp1Elem = _sdf->GetElement("checkpoint1");
+
+    if (_sdf->HasElement("checkpoint2"))
+      cp2Elem = _sdf->GetElement("checkpoint2");
+
+    if (_sdf->HasElement("checkpoint3"))
+      cp3Elem = _sdf->GetElement("checkpoint3");
+
+    if (_sdf->HasElement("checkpoint4"))
+      cp4Elem = _sdf->GetElement("checkpoint4");
+
+    if (_sdf->HasElement("checkpoint5"))
+      cp5Elem = _sdf->GetElement("checkpoint5");
+
+    if (_sdf->HasElement("checkpoint6"))
+      cp6Elem = _sdf->GetElement("checkpoint6");
+  }
+
   // Checkpoint 1: Lift solar panel
-  std::unique_ptr<Task2CP1> cp1(new Task2CP1(_poses[0]));
+  std::unique_ptr<Task2CP1> cp1(new Task2CP1(cp1Elem));
   this->checkpoints.push_back(std::move(cp1));
 
   // Checkpoint 2: Place solar panel near cable
-  std::unique_ptr<Task2CP2> cp2(new Task2CP2(_poses[1]));
+  std::unique_ptr<Task2CP2> cp2(new Task2CP2(cp2Elem));
   this->checkpoints.push_back(std::move(cp2));
 
   // Checkpoint 3: Deploy solar panel
-  std::unique_ptr<Task2CP3> cp3(new Task2CP3(_poses[2]));
+  std::unique_ptr<Task2CP3> cp3(new Task2CP3(cp3Elem));
   this->checkpoints.push_back(std::move(cp3));
 
   // Checkpoint 4: Lift cable
-  std::unique_ptr<Task2CP4> cp4(new Task2CP4(_poses[3]));
+  std::unique_ptr<Task2CP4> cp4(new Task2CP4(cp4Elem));
   this->checkpoints.push_back(std::move(cp4));
 
   // Checkpoint 5: Plug cable
-  std::unique_ptr<Task2CP5> cp5(new Task2CP5(_poses[4]));
+  std::unique_ptr<Task2CP5> cp5(new Task2CP5(cp5Elem));
   this->checkpoints.push_back(std::move(cp5));
 
   // Checkpoint 6: Walk to final box
-  std::unique_ptr<Task2CP6> cp6(new Task2CP6(_poses[5]));
+  std::unique_ptr<Task2CP6> cp6(new Task2CP6(cp6Elem));
   this->checkpoints.push_back(std::move(cp6));
 
   gzmsg << "Task [2] created" << std::endl;
@@ -67,9 +90,40 @@ bool Task2CP1::Check()
 }
 
 /////////////////////////////////////////////////
+Task2CP2::Task2CP2(const sdf::ElementPtr &_sdf) : BoxCheckpoint(_sdf)
+{
+  if (_sdf && _sdf->HasElement("panel_pose"))
+    this->panelSkipPose = _sdf->Get<ignition::math::Pose3d>("panel_pose");
+  else
+    gzwarn << "Missing <panel_pose>, using default value" << std::endl;
+}
+
+/////////////////////////////////////////////////
 bool Task2CP2::Check()
 {
   return this->CheckBox("/task2/checkpoint2");
+}
+
+/////////////////////////////////////////////////
+void Task2CP2::Skip()
+{
+  auto world = physics::get_world();
+  if (!world)
+  {
+    gzerr << "Failed to get world" << std::endl;
+    return;
+  }
+
+  auto panel = world->GetModel("solar_panel");
+  if (!panel)
+  {
+    gzerr << "Failed to get [solar_panel] model" << std::endl;
+    return;
+  }
+
+  panel->SetWorldPose(this->panelSkipPose);
+
+  Checkpoint::Skip();
 }
 
 /////////////////////////////////////////////////
@@ -137,6 +191,8 @@ void Task2CP3::Skip()
   this->enableGzPub->Publish(msg);
 
   this->enableGzPub.reset();
+
+  Checkpoint::Skip();
 }
 
 /////////////////////////////////////////////////
