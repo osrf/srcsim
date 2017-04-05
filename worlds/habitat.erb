@@ -1495,8 +1495,8 @@
     <axis>
       <xyz>0 1 0</xyz>
       <limit>
-        <lower>-12.5663706144</lower>
-        <upper>0</upper>
+        <lower>0</lower>
+        <upper><%= Math::PI * 2.1 %></upper>
       </limit>
       <dynamics>
         <damping>1.0</damping>
@@ -1531,5 +1531,12 @@
       </ode>
     </physics>
   </joint>
+
+  <!-- Door lock -->
+  <joint name="door_lock" type="fixed">
+    <parent>world</parent>
+    <child>base</child>
+  </joint>
+
 </model>
 

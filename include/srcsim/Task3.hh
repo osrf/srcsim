@@ -19,6 +19,8 @@
 #define SRC_TASK3_HH_
 
 #include <vector>
+#include <gazebo/physics/PhysicsTypes.hh>
+#include <ignition/math/Helpers.hh>
 #include <ignition/math/Pose3.hh>
 
 #include "Checkpoint.hh"
@@ -43,6 +45,33 @@ namespace gazebo
 
     /// \brief Check whether the robot is on the top of the stairs.
     public: bool Check();
+  };
+
+  /// \brief Task 3, Checkpoint 2: Open the door
+  class Task3CP2 : public Checkpoint
+  {
+    using Checkpoint::Checkpoint;
+
+    /// \brief Check whether the door is open
+    public: bool Check();
+
+    /// \brief Pointer to the door model
+    private: physics::ModelPtr model;
+
+    /// \brief Pointer to the valve joint
+    private: physics::JointPtr valveJoint;
+
+    /// \brief Pointer to the door hinge joint
+    private: physics::JointPtr hingeJoint;
+
+    /// \brief Target angle for the valve to be open
+    private: ignition::math::Angle valveTarget = IGN_PI * 2.0;
+
+    /// \brief Target angle for the door to be open
+    private: ignition::math::Angle hingeTarget = IGN_PI * 0.4;
+
+    /// \brief True if the door has been unlocked
+    private: bool unlocked = false;
   };
 
   /// \brief Task 3, Checkpoint 3: Pass through door
