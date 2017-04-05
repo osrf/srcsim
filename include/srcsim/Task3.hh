@@ -19,9 +19,14 @@
 #define SRC_TASK3_HH_
 
 #include <vector>
-#include <gazebo/physics/PhysicsTypes.hh>
+
 #include <ignition/math/Helpers.hh>
 #include <ignition/math/Pose3.hh>
+
+#include <ros/ros.h>
+
+#include <gazebo/physics/PhysicsTypes.hh>
+#include <gazebo/transport/transport.hh>
 
 #include "Checkpoint.hh"
 #include "Task.hh"
@@ -92,6 +97,39 @@ namespace gazebo
     /// nothing else for long enough.
     /// \return True if the checkpoint is complete.
     public: bool Check();
+  };
+
+  /// \brief Task 3, Checkpoint 5: Detect leak
+  class Task3CP5 : public Checkpoint
+  {
+    using Checkpoint::Checkpoint;
+
+    /// \brief Check whether the detector has detected the leak.
+    /// \return True if the checkpoint is complete.
+    public: bool Check();
+
+    /// \brief Callback when a logical camera message is received,
+    /// \param[in] _msg Logical camera message.
+    private: void OnCameraGzMsg(ConstLogicalCameraImagePtr &/*_msg*/);
+
+    /// \brief Gazebo transport node for communication.
+    private: transport::NodePtr gzNode;
+
+    /// \brief Subscribes to logical camera messages.
+    private: transport::SubscriberPtr cameraGzSub;
+
+    /// \brief Ros node handle
+    private: std::unique_ptr<ros::NodeHandle> rosNode;
+
+    /// \brief Ros publisher of leak messages
+    private: ros::Publisher leakRosPub;
+
+    /// \brief Topic for camera msgs
+    private: std::string cameraGzTopic =
+        "/gazebo/SRC_finals/air_leak_detector/base/logical_camera/models";
+
+    /// \brief Whether the leak has been detected
+    private: bool detected = false;
   };
 
   /// \brief Task 3, Checkpoint 6: Lift patch tool
