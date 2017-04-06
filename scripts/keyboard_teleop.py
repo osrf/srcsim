@@ -68,20 +68,29 @@ class KeyboardTeleop(object):
     ])
 
     HAND_BINDINGS = OrderedDict([
-        ('4', {'joint_index': 0, 'side': 'left', 'min': -0.55, 'max': 0.0, 'uppercase': '$',
-               'invert': True}),
-        ('3', {'joint_index': 1, 'side': 'left', 'min': -1.1, 'max': 0.0, 'uppercase': '#',
-               'invert': True}),
-        ('2', {'joint_index': 2, 'side': 'left', 'min': -0.9, 'max': 0.0, 'uppercase': '@',
-               'invert': True}),
-        ('1', {'joint_index': 3, 'side': 'left', 'min': -1.0, 'max': 0.0, 'uppercase': '!',
-               'invert': True}),  # left thumb
-        ('5', {'joint_index': 'reset', 'side': 'left', 'uppercase': '%'}),
-        ('7', {'joint_index': 0, 'side': 'right', 'min': 0.0, 'max': 0.55, 'uppercase': '&'}),  # right thumb
-        ('8', {'joint_index': 1, 'side': 'right', 'min': 0.0, 'max': 1.1, 'uppercase': '*'}),
-        ('9', {'joint_index': 2, 'side': 'right', 'min': 0.0, 'max': 0.9, 'uppercase': '('}),
-        ('0', {'joint_index': 3, 'side': 'right', 'min': 0.0, 'max': 1.0, 'uppercase': ')'}),
-        ('6', {'joint_index': 'reset', 'side': 'right', 'uppercase': '^'}),
+        ('5', {'joint_index': 0, 'side': 'left', 'min': 0.0, 'max': 1.8,
+               'uppercase': '%'}),  # left thumb roll
+        ('4', {'joint_index': 1, 'side': 'left', 'min': -0.55, 'max': 0.0,
+               'uppercase': '$', 'invert': True}),  # left thumb pitch
+        ('3', {'joint_index': 2, 'side': 'left', 'min': -1.1, 'max': 0.0,
+               'uppercase': '#', 'invert': True}),  # left index
+        ('2', {'joint_index': 3, 'side': 'left', 'min': -0.9, 'max': 0.0,
+               'uppercase': '@', 'invert': True}),  # left middle
+        ('1', {'joint_index': 4, 'side': 'left', 'min': -1.0, 'max': 0.0,
+               'uppercase': '!', 'invert': True}),  # left ring
+        ('`', {'joint_index': 'reset', 'side': 'left', 'uppercase': '~'}),
+
+        ('6', {'joint_index': 0, 'side': 'right', 'min': 0.0, 'max': 1.8,
+               'uppercase': '^'}),  # right thumb roll
+        ('7', {'joint_index': 1, 'side': 'right', 'min': 0.0, 'max': 0.55,
+               'uppercase': '&'}),  # right thumb pitch
+        ('8', {'joint_index': 2, 'side': 'right', 'min': 0.0, 'max': 1.1,
+               'uppercase': '*'}),  # right index
+        ('9', {'joint_index': 3, 'side': 'right', 'min': 0.0, 'max': 0.9,
+               'uppercase': '('}),  # right middle
+        ('0', {'joint_index': 4, 'side': 'right', 'min': 0.0, 'max': 1.0,
+               'uppercase': ')'}),  # right ring
+        ('-', {'joint_index': 'reset', 'side': 'right', 'uppercase': '_'}),
     ])
 
     HEAD_BINDINGS = OrderedDict([
@@ -107,8 +116,8 @@ class KeyboardTeleop(object):
         self.joint_values = {
             'left arm': [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
             'right arm': [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
-            'left hand': [0.0, 0.0, 0.0, 0.0],
-            'right hand': [0.0, 0.0, 0.0, 0.0],
+            'left hand': [0.0, 0.0, 0.0, 0.0, 0.0],
+            'right hand': [0.0, 0.0, 0.0, 0.0, 0.0],
             'head': [0.0, 0.0, 0.0],
             'neck': [0.0, 0.0, 0.0],
         }
@@ -219,18 +228,18 @@ class KeyboardTeleop(object):
         # left hand
         msg_args.append(', '.join([
             get_bound_char(self.HAND_BINDINGS, x)
-            for x in self.HAND_BINDINGS.keys()[0:4]]))
+            for x in self.HAND_BINDINGS.keys()[0:5]]))
         # left hand - reset
         msg_args.append(' or '.join([
-            self.HAND_BINDINGS.keys()[4], self.HAND_BINDINGS.values()[4].get('uppercase')]))
+            self.HAND_BINDINGS.keys()[5], self.HAND_BINDINGS.values()[5].get('uppercase')]))
 
         # right hand
         msg_args.append(', '.join([
             get_bound_char(self.HAND_BINDINGS, x)
-            for x in self.HAND_BINDINGS.keys()[5:9]]))
+            for x in self.HAND_BINDINGS.keys()[6:11]]))
         # right hand - reset
         msg_args.append(' or '.join([
-            self.HAND_BINDINGS.keys()[9], self.HAND_BINDINGS.values()[9].get('uppercase')]))
+            self.HAND_BINDINGS.keys()[11], self.HAND_BINDINGS.values()[11].get('uppercase')]))
 
         # head - roll, pitch, yaw
         msg_args += [
@@ -377,7 +386,7 @@ class KeyboardTeleop(object):
         dim.stride = 5
         msg.layout.dim = [dim]
         msg.layout.data_offset = 0
-        msg.data = [1.4]
+        msg.data = []
         for joint_value in self.joint_values['%s hand' % side]:
             msg.data.append(joint_value)
 
