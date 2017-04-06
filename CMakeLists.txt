@@ -179,17 +179,41 @@ install(TARGETS ${satellite_plugin_name}
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin)
 
+##########################
+##  Solar Panel plugin  ##
+##########################
+
+# Create the libSolarPanelPlugin.so library.
+set(solar_panel_plugin_name SolarPanelPlugin)
+add_library(${solar_panel_plugin_name} SHARED
+  src/SolarPanelPlugin.cc
+)
+target_link_libraries(${solar_panel_plugin_name}
+  ${catkin_LIBRARIES}
+  ${GAZEBO_LIBRARIES}
+  ${roscpp_LIBRARIES}
+)
+
+install(TARGETS ${solar_panel_plugin_name}
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin)
+
 #############
 ## Install ##
 #############
 
-# Install all the world files
-install(DIRECTORY worlds/
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/worlds)
+# Install all the config files
+install(DIRECTORY config/
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/config)
 
 # Install all the launch files
 install(DIRECTORY launch/
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch)
+
+# Install all the world files
+install(DIRECTORY worlds/
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/worlds)
 
 # Install Misc. Scripts
 install(PROGRAMS scripts/init_robot.sh scripts/walk_test.py scripts/rossleep.py
