@@ -1781,14 +1781,9 @@
         <upper><%= Math::PI * 2.1 %></upper>
       </limit>
       <dynamics>
-        <damping>1.0</damping>
+        <friction><%= rand(2.0...3.0) %></friction>
       </dynamics>
     </axis>
-    <physics>
-      <ode>
-        <cfm_damping>1</cfm_damping>
-      </ode>
-    </physics>
   </joint>
 
   <!-- Door hinge -->
@@ -1803,15 +1798,10 @@
         <upper>1.57</upper>
       </limit>
       <dynamics>
-        <damping>0</damping>
-        <friction>0</friction>
+        <friction><%= rand(10.0...20.0) %></friction>
+        <damping><%= rand(1.0...4.0) %></damping>
       </dynamics>
     </axis>
-    <physics>
-      <ode>
-        <cfm_damping>1</cfm_damping>
-      </ode>
-    </physics>
   </joint>
 
   <!-- Door lock -->
