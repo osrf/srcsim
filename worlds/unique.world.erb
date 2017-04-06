@@ -236,7 +236,7 @@
   # _list: either $walkways or $finish_walkways
   # _no90: do not pick a walkway with a +-90 degree turn. This is used before
   # and after large objects.
-  def nextWalkway(_list, _no90)
+  def nextWalkway(_list, _no90, limit = Math::PI / 2.0)
 
     # angle of previous walkway
     prev_angle = $current_walkway["angle"]
@@ -261,8 +261,8 @@
       # Total angle from the beginning of the walkway
       new_total = $total_angle + $current_walkway["angle"]
 
-      break if new_total <= Math::PI/2 &&
-               new_total >= -Math::PI/2 &&
+      break if new_total <= limit &&
+               new_total >= -limit &&
                !(new_angle < 0 && prev_angle < 0) &&
                !(new_angle > 0 && prev_angle > 0) &&
                !(_no90 && (new_angle.abs() == Math::PI/2))
@@ -301,7 +301,7 @@
   robot_z_pos_habitat = 2.8
 
   # Starting point
-  $current_frame = TMatrix(-0.3, 0, Math::PI*1.5)
+  $current_frame = TMatrix(0.09, 0, Math::PI)
 %>
 <sdf version="1.6">
   <world name="SRC_finals">
@@ -779,18 +779,13 @@
 
     <!-- Walkway -->
     <%=
-      t3cp2_frame = t2cp6_frame
-      t3cp5_frame = t2cp6_frame
-      t3cp7_frame = t2cp6_frame
-      t3cp8_frame = t2cp6_frame
-
       # Can't have 90 degrees near the final box
       nextWalkway($walkways, true)
     %>
 
     <!-- Walkway -->
     <%=
-      nextWalkway($walkways, false)
+      nextWalkway($walkways, false, Math::PI / 4.0)
     %>
 
     <!-- Habitat -->
@@ -806,6 +801,7 @@
     <!-- Checkpoint 1 - Climb the stairs -->
     <%
       t3cp1_frame = $habitat_frame * TMatrix(-6.68, -3.12, Math::PI / 2.0)
+      t3cp2_frame = t3cp1_frame
     %>
 
     <plugin name="boxT3CP1" filename="libBoxContainsPlugin.so">
@@ -825,6 +821,9 @@
     <!-- Checkpoint 3 - Pass through the door -->
     <%
       t3cp3_frame = $habitat_frame * TMatrix(-4.50, 0.0198, 0)
+      t3cp5_frame = t3cp3_frame
+      t3cp7_frame = t3cp3_frame
+      t3cp8_frame = t3cp3_frame
     %>
 
     <plugin name="boxT3CP3" filename="libBoxContainsPlugin.so">
