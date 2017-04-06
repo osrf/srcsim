@@ -86,7 +86,8 @@
     </collision>
 
     <%
-      size_x = 8.00
+      pos_x = 0.00
+      size_x = 10.00
       size_y = 12.00
     %>
 
@@ -1363,6 +1364,139 @@
 
     <collision name="passage_right">
       <pose><%= pos_x %> <%= pos_y %> <%= pos_z %> 0 0 0</pose>
+      <geometry>
+        <box>
+          <size><%= size_x %> <%= size_y %> <%= size_z %> </size>
+        </box>
+      </geometry>
+    </collision>
+
+    <!-- Large module wall collisions -->
+
+    <%
+      pos_x = -4.905
+      pos_y = 1.798
+      pos_z = 2.9
+      size_x = 0.1
+      size_y = 2.23
+      size_z = 2.2
+    %>
+
+    <collision name="wall_6">
+      <pose><%= pos_x %> <%= pos_y %> <%= pos_z %> 0 0 0</pose>
+      <geometry>
+        <box>
+          <size><%= size_x %> <%= size_y %> <%= size_z %> </size>
+        </box>
+      </geometry>
+    </collision>
+
+    <%
+      pos_x = -2.46
+      pos_y = 4.28
+      pos_z = 2.9
+      size_x = 0.1
+      size_y = 5.73
+      size_z = 2.2
+      yaw = -1.049
+    %>
+
+    <collision name="wall_7">
+      <pose><%= pos_x %> <%= pos_y %> <%= pos_z %> 0 0 <%= yaw %></pose>
+      <geometry>
+        <box>
+          <size><%= size_x %> <%= size_y %> <%= size_z %> </size>
+        </box>
+      </geometry>
+    </collision>
+
+    <%
+      pos_x = 2.46
+      yaw = 1.049
+    %>
+
+    <collision name="wall_8">
+      <pose><%= pos_x %> <%= pos_y %> <%= pos_z %> 0 0 <%= yaw %></pose>
+      <geometry>
+        <box>
+          <size><%= size_x %> <%= size_y %> <%= size_z %> </size>
+        </box>
+      </geometry>
+    </collision>
+
+    <%
+      pos_x = 5.0
+      pos_y = 1.798
+      size_x = 0.32
+      size_y = 2.23
+      yaw = 0.0
+    %>
+
+    <collision name="wall_9">
+      <pose><%= pos_x %> <%= pos_y %> <%= pos_z %> 0 0 <%= yaw %></pose>
+      <geometry>
+        <box>
+          <size><%= size_x %> <%= size_y %> <%= size_z %> </size>
+        </box>
+      </geometry>
+    </collision>
+
+    <%
+      pos_y = -1.798
+    %>
+
+    <collision name="wall_10">
+      <pose><%= pos_x %> <%= pos_y %> <%= pos_z %> 0 0 <%= yaw %></pose>
+      <geometry>
+        <box>
+          <size><%= size_x %> <%= size_y %> <%= size_z %> </size>
+        </box>
+      </geometry>
+    </collision>
+
+    <%
+      pos_x = 2.46
+      pos_y = -4.28
+      pos_z = 2.9
+      size_x = 0.1
+      size_y = 5.73
+      size_z = 2.2
+      yaw = -1.049
+    %>
+
+    <collision name="wall_11">
+      <pose><%= pos_x %> <%= pos_y %> <%= pos_z %> 0 0 <%= yaw %></pose>
+      <geometry>
+        <box>
+          <size><%= size_x %> <%= size_y %> <%= size_z %> </size>
+        </box>
+      </geometry>
+    </collision>
+
+    <%
+      pos_x = -2.46
+      yaw = 1.049
+    %>
+
+    <collision name="wall_12">
+      <pose><%= pos_x %> <%= pos_y %> <%= pos_z %> 0 0 <%= yaw %></pose>
+      <geometry>
+        <box>
+          <size><%= size_x %> <%= size_y %> <%= size_z %> </size>
+        </box>
+      </geometry>
+    </collision>
+
+    <%
+      pos_x = -5.0
+      pos_y = -1.798
+      size_x = 0.32
+      size_y = 2.23
+      yaw = 0.0
+    %>
+
+    <collision name="wall_13">
+      <pose><%= pos_x %> <%= pos_y %> <%= pos_z %> 0 0 <%= yaw %></pose>
       <geometry>
         <box>
           <size><%= size_x %> <%= size_y %> <%= size_z %> </size>
