@@ -28,6 +28,8 @@
 #include <gazebo/common/Console.hh>
 #include <gazebo/common/Time.hh>
 
+#include <gazebo/transport/transport.hh>
+
 #include "Checkpoint.hh"
 
 namespace gazebo
@@ -63,6 +65,10 @@ namespace gazebo
     /// \return Task number.
     public: virtual size_t Number() const = 0;
 
+    /// \brief Callback when messages are received from the BoxContainsPlugin.
+    /// \param[in] _msg 1 if robot is inside box, 0 otherwise.
+    private: void OnStartBox(ConstIntPtr &_msg);
+
     /// \brief Vector of checkpoints for this task.
     protected: std::vector<std::unique_ptr<Checkpoint> > checkpoints;
 
@@ -90,6 +96,18 @@ namespace gazebo
 
     /// \brief Ros publisher which publishes the task's status.
     private: ros::Publisher taskRosPub;
+
+    /// \brief Gazebo transport node for communication.
+    protected: transport::NodePtr gzNode;
+
+    /// \brief Gazebo subscriber of box contains messages.
+    private: transport::SubscriberPtr boxSub;
+
+    /// \brief Gazebo publisher of toggle messages.
+    private: transport::PublisherPtr togglePub;
+
+    /// \brief Flag to indicate whether the robot has reached the start box.
+    private: bool startBox = false;
   };
 }
 #endif

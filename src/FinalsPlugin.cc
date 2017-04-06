@@ -183,9 +183,9 @@ bool FinalsPlugin::OnStartTaskRosRequest(srcsim::StartTask::Request &_req,
 
   // We won't allow skipping directly to a few checkpoints. Shortcut this here.
   if ((_req.task_id == 2 && _req.checkpoint_id == 2) ||
-      (_req.task_id == 2 && _req.checkpoint_id == 4) ||
-      (_req.task_id == 3 && _req.checkpoint_id == 4) ||
-      (_req.task_id == 3 && _req.checkpoint_id == 6))
+      (_req.task_id == 2 && _req.checkpoint_id == 5) ||
+      (_req.task_id == 3 && _req.checkpoint_id == 5) ||
+      (_req.task_id == 3 && _req.checkpoint_id == 7))
   {
     auto tid = unsigned(_req.task_id);
     auto cpid = unsigned(_req.checkpoint_id);
