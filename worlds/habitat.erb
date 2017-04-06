@@ -1504,6 +1504,75 @@
       </geometry>
     </collision>
 
+    <!-- Passage collisions -->
+
+    <%
+      pos_x = 5.295
+      pos_y = 0.928
+      pos_z = 2.9
+      size_x = 0.845
+      size_y = 0.5
+      size_z = 2.2
+      roll = 0.0
+    %>
+
+    <collision name="passage_2_left">
+      <pose><%= pos_x %> <%= pos_y %> <%= pos_z %> 0 0 0</pose>
+      <geometry>
+        <box>
+          <size><%= size_x %> <%= size_y %> <%= size_z %> </size>
+        </box>
+      </geometry>
+    </collision>
+
+    <%
+      pos_y = -0.93
+    %>
+
+    <collision name="passage_2_right">
+      <pose><%= pos_x %> <%= pos_y %> <%= pos_z %> 0 0 0</pose>
+      <geometry>
+        <box>
+          <size><%= size_x %> <%= size_y %> <%= size_z %> </size>
+        </box>
+      </geometry>
+    </collision>
+
+    <!-- Long module -->
+
+    <%
+      pos_x = 8.919
+      pos_y = 1.161
+      pos_z = 2.3537
+      size_x = 6.159
+      size_y = 0.1319
+      size_z = 2.16955
+      roll = -0.518
+    %>
+
+    <collision name="wall_14">
+      <pose><%= pos_x %> <%= pos_y %> <%= pos_z %> <%= roll %> 0 <%= yaw %></pose>
+      <geometry>
+        <box>
+          <size><%= size_x %> <%= size_y %> <%= size_z %> </size>
+        </box>
+      </geometry>
+    </collision>
+
+    <%
+      pos_y = -1.161
+      roll = 0.518
+    %>
+
+    <collision name="wall_15">
+      <pose><%= pos_x %> <%= pos_y %> <%= pos_z %> <%= roll %> 0 <%= yaw %></pose>
+      <geometry>
+        <box>
+          <size><%= size_x %> <%= size_y %> <%= size_z %> </size>
+        </box>
+      </geometry>
+    </collision>
+
     <!-- VISUALS -->
 
     <visual name="stairs">
