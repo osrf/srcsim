@@ -917,7 +917,8 @@
 
     <!-- Checkpoint 8 - Box plugin -->
     <%
-      t3cp8_frame = $habitat_frame * TMatrix(10.244, 0.066, 0)
+      t3cp8_frame = $habitat_frame * TMatrix(9.0, 0.0, 0)
+      finish_box_3_length = 1.5
     %>
 
     <plugin name="boxT3CP8" filename="libBoxContainsPlugin.so">
@@ -931,7 +932,7 @@
         0
         <%= Math::atan2(t3cp8_frame[1, 0], t3cp8_frame[0, 0]) %>
       </pose>
-      <size><%= finish_walkway_length %> <%= finish_walkway_length %> <%= box_height %></size>
+      <size><%= finish_box_3_length %> <%= finish_box_3_length %> <%= box_height %></size>
     </plugin>
 
     <!-- /TASK 3 -->
