@@ -201,6 +201,7 @@ bool Task3CP4::Check()
 /////////////////////////////////////////////////
 bool Task3CP5::Check()
 {
+  // First time
   if (!this->cameraGzSub)
   {
     // Gazebo node
@@ -217,6 +218,21 @@ bool Task3CP5::Check()
     // Publish ROS leak messages
     this->leakRosPub = this->rosNode->advertise<srcsim::Leak>(
         "/task3/checkpoint5/leak", 1000);
+
+    // Calculate factor
+
+    // Furthest detectable point (frustum corner)
+    double c = this->camFar * tan(this->camFov / 2.0);
+    ignition::math::Vector3d corner(camFar, c, c);
+
+    // Maximum detectable distance
+    ignition::math::Vector3d antenaPos(this->camNear, 0, 0);
+    auto maxDist = corner.Distance(antenaPos);
+
+    // output = factor ^ distance
+    // We chose the factor so that the maximum distance results in the
+    // minimum value.
+    this->factor = pow(this->minValue, 1 / maxDist);
   }
 
   return this->detected;
@@ -225,10 +241,6 @@ bool Task3CP5::Check()
 //////////////////////////////////////////////////
 void Task3CP5::OnCameraGzMsg(ConstLogicalCameraImagePtr &_msg)
 {
-  // If there's a leak, republish on a ROS topic
-  if (_msg->model_size() == 0)
-    return;
-
   auto leakPos = ignition::math::Vector3d::Zero;
 
   for (const auto &model : _msg->model())
@@ -240,18 +252,27 @@ void Task3CP5::OnCameraGzMsg(ConstLogicalCameraImagePtr &_msg)
     break;
   }
 
-  if (leakPos == ignition::math::Vector3d::Zero)
-    return;
+  double value = this->minValue;
 
-  // Leak found, checkpoint complete!
-  this->detected = true;
+  // If leak within frustum
+  if (leakPos != ignition::math::Vector3d::Zero)
+  {
+    // Leak found, checkpoint complete!
+    this->detected = true;
+
+    // Get distance from leak to antena
+    ignition::math::Vector3d antenaPos(this->camNear, 0, 0);
+    auto distance = leakPos.Distance(antenaPos);
+
+    // Exclude some partial inclusion
+    if (leakPos.X() >= this->camNear)
+      value = std::max(pow(this->factor, distance), this->minValue);
+  }
 
   // We keep publishing messages even after complete in case they want to get a
   // better position
   srcsim::Leak msg;
-  msg.x = leakPos.X();
-  msg.y = leakPos.Y();
-  msg.z = leakPos.Z();
+  msg.value = value;
 
   this->leakRosPub.publish(msg);
 }

@@ -33,9 +33,16 @@
 
       <geometry>
         <sphere>
-          <radius>0.05</radius>
+          <radius>0.02</radius>
         </sphere>
       </geometry>
+
+      <surface>
+        <contact>
+          <!-- Only collide with patch tool -->
+          <collide_bitmask>0x10000</collide_bitmask>
+        </contact>
+      </surface>
 
     </collision>
 

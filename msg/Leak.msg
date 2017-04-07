@@ -1,5 +1,3 @@
-# Leak position on the logical camera frame
-float64 x
-float64 y
-float64 z
+# 0 to 1
+float64 value
 
