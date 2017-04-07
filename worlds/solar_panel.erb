@@ -247,9 +247,35 @@
       </geometry>
     </visual>
 
+    <collision name="outlet">
+      <pose>0.13675 0 0.369 <%= Math::PI / 2.0 %> 0 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.003222</length>
+          <radius>0.018693</radius>
+        </cylinder>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e5</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+      </surface>
+    </collision>
+
     <sensor name="panel2_sensor" type="contact">
       <contact>
         <collision>collision</collision>
+      </contact>
+    </sensor>
+
+    <sensor name="outlet_sensor" type="contact">
+      <contact>
+        <collision>outlet</collision>
       </contact>
     </sensor>
 
