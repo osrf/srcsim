@@ -61,6 +61,9 @@ namespace gazebo
     /// \brief Check whether the door is open
     public: bool Check();
 
+    /// \brief Unlock and open door
+    public: void Skip();
+
     /// \brief Pointer to the door model
     private: physics::ModelPtr model;
 

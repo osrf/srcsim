@@ -155,6 +155,38 @@ bool Task3CP2::Check()
 }
 
 /////////////////////////////////////////////////
+void Task3CP2::Skip()
+{
+  // Remove lock
+  auto world = physics::get_world();
+
+  if (!world)
+  {
+    gzerr << "Failed to get world" << std::endl;
+    return;
+  }
+
+  this->model = world->GetModel("habitat_door");
+  if (!this->model)
+  {
+    gzerr << "Failed to get model [habitat_door]" << std::endl;
+    return;
+  }
+
+  this->model->RemoveJoint("door_lock");
+
+  // Push door
+  this->hingeJoint = model->GetJoint("door_hinge");
+  if (!this->hingeJoint)
+  {
+    gzerr << "Failed to get joint [hinge_joint]" << std::endl;
+    return;
+  }
+
+  this->hingeJoint->SetForce(0, 100000);
+}
+
+/////////////////////////////////////////////////
 bool Task3CP3::Check()
 {
   return this->CheckBox("/task3/checkpoint3");
