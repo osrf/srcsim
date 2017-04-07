@@ -118,7 +118,7 @@
       </visual>
     </link>
 
-    <link name="wheel_yaw">
+    <link name="wheel_pitch">
       <pose>-0.2 -1.725 0.91 0.52 0 0</pose>
       <inertial>
         <inertia>
@@ -174,7 +174,7 @@
       </visual>
     </link>
 
-    <link name="wheel_pitch">
+    <link name="wheel_yaw">
       <pose>0.2 -1.725 0.91 0.52 0 0</pose>
       <inertial>
         <inertia>
@@ -234,7 +234,7 @@
       <parent>base</parent>
       <child>pivot</child>
       <axis>
-        <xyz>0 0 1</xyz>
+        <xyz>0 0 -1</xyz>
         <dynamics>
           <damping>1000</damping>
         </dynamics>
