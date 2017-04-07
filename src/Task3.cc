@@ -343,12 +343,19 @@ bool Task3CP7::Check()
   if (this->buttonJoint->GetAngle(0) > this->buttonTarget)
   {
     // Stopped pressing
-    if (this->touchStart != common::Time::Zero)
+    if (this->fixStart != common::Time::Zero)
     {
       gzmsg << "Released button at " << simTime << " seconds" << std::endl;
-      this->touchStart = common::Time::Zero;
+      this->fixStart = common::Time::Zero;
     }
     return false;
+  }
+
+  // Just started pressing
+  if (this->fixStart == common::Time::Zero)
+  {
+    gzmsg << "Pressed button at " << simTime << " seconds" << std::endl;
+    this->fixStart = common::Time::Zero;
   }
 
   // Check if tool is touching leak
@@ -383,25 +390,26 @@ bool Task3CP7::Check()
   if (!touching)
   {
     // Stopped touching
-    if (this->touchStart != common::Time::Zero)
+    if (this->fixStart != common::Time::Zero)
     {
       gzmsg << "Tool stopped touching leak at " << simTime
             << " seconds" << std::endl;
-      this->touchStart = common::Time::Zero;
+      this->fixStart = common::Time::Zero;
     }
     return false;
   }
 
   // Just started touching
-  if (this->touchStart == common::Time::Zero)
+  if (this->fixStart == common::Time::Zero)
   {
-    this->touchStart = simTime;
-    gzmsg << "Tool started touching leak at " << this->touchStart
+    this->fixStart = simTime;
+    // This is only printed if button is also pressed.
+    gzmsg << "Tool started touching leak at " << this->fixStart
           << " seconds" << std::endl;
   }
 
   // Check if it has been pressing for long enough
-  return simTime - this->touchStart > this->targetTime;
+  return simTime - this->fixStart > this->targetTime;
 }
 
 /////////////////////////////////////////////////

@@ -200,14 +200,14 @@ namespace gazebo
     /// \brief Name of leak collision
     private: std::string leak = "leak::base::collision";
 
-    /// \brief Time when started touching.
-    private: common::Time touchStart;
+    /// \brief Time when started fixing.
+    private: common::Time fixStart;
 
     /// \brief Target time to continuously touch.
     private: common::Time targetTime = 2.0;
 
     /// \brief Target time to continuously touch.
-    private: double buttonTarget = 0.001;
+    private: double buttonTarget = -0.004;
   };
 
   /// \brief Task 3, Checkpoint 8: Final box
