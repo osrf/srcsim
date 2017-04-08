@@ -344,18 +344,10 @@ bool Task3CP7::Check()
   {
     // Stopped pressing
     if (this->fixStart != common::Time::Zero)
-    {
       gzmsg << "Released button at " << simTime << " seconds" << std::endl;
-      this->fixStart = common::Time::Zero;
-    }
-    return false;
-  }
 
-  // Just started pressing
-  if (this->fixStart == common::Time::Zero)
-  {
-    gzmsg << "Pressed button at " << simTime << " seconds" << std::endl;
     this->fixStart = common::Time::Zero;
+    return false;
   }
 
   // Check if tool is touching leak
@@ -394,8 +386,8 @@ bool Task3CP7::Check()
     {
       gzmsg << "Tool stopped touching leak at " << simTime
             << " seconds" << std::endl;
-      this->fixStart = common::Time::Zero;
     }
+    this->fixStart = common::Time::Zero;
     return false;
   }
 
