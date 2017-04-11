@@ -37,20 +37,7 @@
         </sphere>
       </geometry>
 
-      <surface>
-        <contact>
-          <!-- Only collide with patch tool -->
-          <collide_bitmask>0x10000</collide_bitmask>
-        </contact>
-      </surface>
-
     </collision>
-
-    <sensor name="leak_sensor" type="contact">
-      <contact>
-        <collision>collision</collision>
-      </contact>
-    </sensor>
 
   </link>
 
