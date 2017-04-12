@@ -135,8 +135,10 @@
     $bling = $blings.keys[rand(3..4)]
     $bling_stack = rand(1..3)
 
-    min_angle = (2 * Math::PI / $bling_stack_total) * ($bling_stack_count - 1)
-    max_angle = (2 * Math::PI / $bling_stack_total) * $bling_stack_count
+    margin = Math::PI * 0.1
+
+    min_angle = (2 * Math::PI / $bling_stack_total) * ($bling_stack_count - 1) + margin
+    max_angle = (2 * Math::PI / $bling_stack_total) * $bling_stack_count - margin
     angle = rand(min_angle..max_angle)
 
     radius = rand(3.0..4.0)
@@ -927,8 +929,8 @@
     <!-- Table -->
     <%
       $table_frame = $habitat_frame *
-                     TMatrix(rand(-2.0..2.0),
-                             rand(-2.0..2.0),
+                     TMatrix(rand(-1.5..1.5),
+                             rand(-1.5..1.5),
                              rand(-Math::PI..Math::PI))
       $table_pos_z = 1.8
     %>
@@ -946,7 +948,11 @@
 
     <!-- Air leak detector -->
     <%
-      $air_leak_detector_frame = $table_frame
+      b = [-1, 1].sample
+      $air_leak_detector_frame = $table_frame *
+          TMatrix(b*rand(0.1..0.6),
+                  rand(0..0.3),
+                  rand(-Math::PI..Math::PI))
       $table_top_z = $table_pos_z + 0.7
     %>
 
@@ -954,7 +960,10 @@
 
     <!-- Leak patch tool -->
     <%
-      $leak_patch_tool_frame = $table_frame * TMatrix(0.3, 0, 0)
+      $leak_patch_tool_frame = $table_frame *
+          TMatrix(-b*rand(0.1..0.6),
+                  rand(0..0.3),
+                  rand(-Math::PI..Math::PI))
     %>
 
     <include>
