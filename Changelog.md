@@ -45,9 +45,10 @@
     * [Issue 89](https://bitbucket.org/osrf/srcsim/issues/89/update-walking-script-to-use-new-ihmc)
 
 * Random world generator
-    * [Pull request 26](https://bitbucket.org/osrf/srcsim/pull-requests/26)
     * [Pull request 33](https://bitbucket.org/osrf/srcsim/pull-requests/33)
     * [Random world generator tutorial](https://bitbucket.org/osrf/srcsim/wiki/world_generator)
 
 ### SRC Sim 0.3.0 (2017-02-15)
 
+* Random world generator
+    * [Pull request 26](https://bitbucket.org/osrf/srcsim/pull-requests/26)
