@@ -107,7 +107,20 @@
 
     </sensor>
 
+    <sensor name="contact_sensor" type="contact">
+      <contact>
+        <collision>collision</collision>
+      </contact>
+    </sensor>
+
   </link>
+
+  <plugin name="touch_valkyrie_detector" filename="libTouchPlugin.so">
+    <sensor>contact_sensor</sensor>
+    <target>valkyrie</target>
+    <time>0.5</time>
+    <namespace>task3/checkpoint4</namespace>
+  </plugin>
 
 </model>
 

@@ -15,6 +15,11 @@
  *
 */
 
+#include <gazebo/physics/Joint.hh>
+#include <gazebo/physics/Model.hh>
+#include <gazebo/physics/PhysicsIface.hh>
+#include <gazebo/physics/World.hh>
+
 #include "srcsim/Task3.hh"
 
 using namespace gazebo;
@@ -54,6 +59,22 @@ Task3::Task3(const sdf::ElementPtr &_sdf) : Task(_sdf)
       cp8Elem = _sdf->GetElement("checkpoint8");
   }
 
+  // Checkpoint 1: Climb the stairs
+  std::unique_ptr<Task3CP1> cp1(new Task3CP1(cp1Elem));
+  this->checkpoints.push_back(std::move(cp1));
+
+  // Checkpoint 2: Open the door
+  std::unique_ptr<Task3CP2> cp2(new Task3CP2(cp2Elem));
+  this->checkpoints.push_back(std::move(cp2));
+
+  // Checkpoint 3: Pass through the door
+  std::unique_ptr<Task3CP3> cp3(new Task3CP3(cp3Elem));
+  this->checkpoints.push_back(std::move(cp3));
+
+  // Checkpoint 4: Lift detector
+  std::unique_ptr<Task3CP4> cp4(new Task3CP4(cp4Elem));
+  this->checkpoints.push_back(std::move(cp4));
+
   // Checkpoint 8: Walk to final box
   std::unique_ptr<Task3CP8> cp8(new Task3CP8(cp8Elem));
   this->checkpoints.push_back(std::move(cp8));
@@ -65,6 +86,101 @@ Task3::Task3(const sdf::ElementPtr &_sdf) : Task(_sdf)
 size_t Task3::Number() const
 {
   return 3u;
+}
+
+/////////////////////////////////////////////////
+bool Task3CP1::Check()
+{
+  return this->CheckBox("/task3/checkpoint1");
+}
+
+/////////////////////////////////////////////////
+bool Task3CP2::Check()
+{
+  // First time
+  if (!this->valveJoint || !this->hingeJoint)
+  {
+    auto world = physics::get_world();
+
+    if (!world)
+    {
+      gzerr << "Failed to get world" << std::endl;
+      return false;
+    }
+
+    this->model = world->GetModel("habitat_door");
+    if (!this->model)
+    {
+      gzerr << "Failed to get model [habitat_door]" << std::endl;
+      return false;
+    }
+
+    this->valveJoint = model->GetJoint("valve_hinge");
+    this->hingeJoint = model->GetJoint("door_hinge");
+    if (!this->valveJoint || !this->hingeJoint)
+    {
+      gzerr << "Failed to get some joint" << std::endl;
+      return false;
+    }
+  }
+
+  // If valve is turned, remove lock
+  if (!this->unlocked && this->valveJoint->GetAngle(0) > this->valveTarget)
+  {
+    this->model->RemoveJoint("door_lock");
+    this->unlocked = true;
+    gzmsg << "Task [3] - Checkpoint [2] - Door unlocked" << std::endl;
+  }
+
+  if (!this->unlocked)
+    return false;
+
+  // Check if door is open
+  return this->hingeJoint->GetAngle(0) > this->hingeTarget;
+}
+
+/////////////////////////////////////////////////
+void Task3CP2::Skip()
+{
+  // Remove lock
+  auto world = physics::get_world();
+
+  if (!world)
+  {
+    gzerr << "Failed to get world" << std::endl;
+    return;
+  }
+
+  this->model = world->GetModel("habitat_door");
+  if (!this->model)
+  {
+    gzerr << "Failed to get model [habitat_door]" << std::endl;
+    return;
+  }
+
+  this->model->RemoveJoint("door_lock");
+
+  // Push door
+  this->hingeJoint = model->GetJoint("door_hinge");
+  if (!this->hingeJoint)
+  {
+    gzerr << "Failed to get joint [hinge_joint]" << std::endl;
+    return;
+  }
+
+  this->hingeJoint->SetForce(0, 100000);
+}
+
+/////////////////////////////////////////////////
+bool Task3CP3::Check()
+{
+  return this->CheckBox("/task3/checkpoint3");
+}
+
+/////////////////////////////////////////////////
+bool Task3CP4::Check()
+{
+  return this->CheckTouch("/task3/checkpoint4");
 }
 
 /////////////////////////////////////////////////
