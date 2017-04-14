@@ -40,6 +40,10 @@
     * [Task 1 tutorial](https://bitbucket.org/osrf/srcsim/wiki/finals_task1)
     * [Task 2 tutorial](https://bitbucket.org/osrf/srcsim/wiki/finals_task2)
 
+* Match ihmc message changes
+    * [Pull request 36](https://bitbucket.org/osrf/srcsim/pull-requests/36)
+    * [Issue 89](https://bitbucket.org/osrf/srcsim/issues/89/update-walking-script-to-use-new-ihmc)
+
 * Random world generator
     * [Pull request 26](https://bitbucket.org/osrf/srcsim/pull-requests/26)
     * [Pull request 33](https://bitbucket.org/osrf/srcsim/pull-requests/33)
