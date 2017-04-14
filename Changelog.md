@@ -11,6 +11,7 @@
     * [Pull request 39](https://bitbucket.org/osrf/srcsim/pull-requests/39)
     * [Pull request 50](https://bitbucket.org/osrf/srcsim/pull-requests/50)
     * [Pull request 52](https://bitbucket.org/osrf/srcsim/pull-requests/52)
+    * [Pull request 54](https://bitbucket.org/osrf/srcsim/pull-requests/54)
 
 * Task 2 plugins
     * [Pull request 44](https://bitbucket.org/osrf/srcsim/pull-requests/44)
