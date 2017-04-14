@@ -1,6 +1,6 @@
-## SRC Sim 0.x
+## SRC Sim 0.4
 
-### SRC Sim 0.x.x (2017-xx-xx)
+### SRC Sim 0.4.0 (2017-04-14)
 
 * Grasping controller
     * [Pull request 51](https://bitbucket.org/osrf/srcsim/pull-requests/51)
