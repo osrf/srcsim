@@ -236,7 +236,7 @@
   # _list: either $walkways or $finish_walkways
   # _no90: do not pick a walkway with a +-90 degree turn. This is used before
   # and after large objects.
-  def nextWalkway(_list, _no90)
+  def nextWalkway(_list, _no90, limit = Math::PI / 2.0)
 
     # angle of previous walkway
     prev_angle = $current_walkway["angle"]
@@ -261,8 +261,8 @@
       # Total angle from the beginning of the walkway
       new_total = $total_angle + $current_walkway["angle"]
 
-      break if new_total <= Math::PI/2 &&
-               new_total >= -Math::PI/2 &&
+      break if new_total <= limit &&
+               new_total >= -limit &&
                !(new_angle < 0 && prev_angle < 0) &&
                !(new_angle > 0 && prev_angle > 0) &&
                !(_no90 && (new_angle.abs() == Math::PI/2))
@@ -791,40 +791,63 @@
 
     <!-- Walkway -->
     <%=
-      nextWalkway($walkways, false)
-    %>
-
-    <!-- Bling -->
-    <%=
-      randomSlot()
-      nextBling()
-    %>
-
-    <!-- Bling -->
-    <%=
-      remainingSlot()
-      nextBling()
+      nextWalkway($walkways, false, Math::PI / 4.0)
     %>
 
     <!-- Habitat -->
     <%
-      # TODO: Habitat goes here
+      tHabitatSlotOrigin = TMatrix(6.7, 5.7, 0);
+      $current_frame = $current_frame * $current_walkway["tOriginExit"]
+      $habitat_frame = $current_frame *
+                       tHabitatSlotOrigin
     %>
 
-    <!-- TODO: Put the table inside the habitat -->
+    <%= fromFile("habitat.erb") %>
+
+
+    <!-- Lamp inside the habitat -->
+    <%
+      lamp_frame = $habitat_frame * TMatrix(-5.16, 0.238, Math::PI / 2.0)
+      lamp_pos_z = 4.2
+      lamp_roll = -1.462
+    %>
+
+    <light name='habitat_lamp' type='spot'>
+      <pose>
+        <%= lamp_frame[0, 2] %>
+        <%= lamp_frame[1, 2] %>
+        <%= lamp_pos_z %>
+        <%= lamp_roll %>
+        0
+        <%= Math::atan2(lamp_frame[1, 0], lamp_frame[0, 0]) %>
+      </pose>
+      <diffuse>1 1 1 1</diffuse>
+      <specular>0.1 0.1 0.1 1</specular>
+      <attenuation>
+        <range>10</range>
+        <constant>0.5</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <cast_shadows>0</cast_shadows>
+      <direction>0 0 -1</direction>
+      <spot>
+        <inner_angle>0.6</inner_angle>
+        <outer_angle><%= Math::PI %></outer_angle>
+        <falloff>0.5</falloff>
+      </spot>
+    </light>
 
     <!-- Table -->
     <%
-      $current_frame = $current_frame *
-                       $current_walkway["tOriginExit"]
-
-      $table_frame = $current_frame * TMatrix(0, 0.5, 0)
+      $table_frame = $habitat_frame
+      $table_pos_z = 1.8
     %>
     <include>
       <pose>
         <%= $table_frame[0, 2] %>
         <%= $table_frame[1, 2] %>
-        0
+        <%= $table_pos_z %>
         0
         0
         <%= Math::atan2($table_frame[1, 0], $table_frame[0, 0]) %>
@@ -835,7 +858,7 @@
     <!-- Air leak detector -->
     <%
       $air_leak_detector_frame = $table_frame
-      $table_top_z = 0.7
+      $table_top_z = $table_pos_z + 0.7
     %>
 
     <%= fromFile("air_leak_detector.erb") %>
@@ -863,17 +886,20 @@
     <!-- TODO: Put the box inside the habitat -->
 
     <!-- Checkpoint 8 - Box plugin -->
+    <%
+      t3cp8_frame = $habitat_frame * TMatrix(10.244, 0.066, 0)
+    %>
 
     <plugin name="boxT3CP8" filename="libBoxContainsPlugin.so">
       <entity>valkyrie</entity>
       <namespace>task3/checkpoint8</namespace>
       <pose>
-        <%= $current_frame[0, 2] %>
-        <%= $current_frame[1, 2] %>
-        <%= box_height * 0.5 %>
+        <%= t3cp8_frame[0, 2] %>
+        <%= t3cp8_frame[1, 2] %>
+        <%= 2.68 %>
         0
         0
-        <%= Math::atan2($current_frame[1, 0], $current_frame[0, 0]) %>
+        <%= Math::atan2(t3cp8_frame[1, 0], t3cp8_frame[0, 0]) %>
       </pose>
       <size><%= finish_walkway_length %> <%= finish_walkway_length %> <%= box_height %></size>
     </plugin>
