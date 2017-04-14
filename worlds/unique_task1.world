@@ -41,7 +41,7 @@
     <!-- A global light source -->
     <light type="directional" name="sun">
       <cast_shadows>true</cast_shadows>
-      <pose>0 0 1000 -0.15032395408892363 -1.570025791894213 0</pose>
+      <pose>0 0 1000 0.13354950705196278 -1.5478276144208802 0</pose>
       <diffuse>0.8 0.8 0.8 1</diffuse>
       <specular>0.2 0.2 0.2 1</specular>
       <attenuation>
@@ -77,31 +77,31 @@
 
     <!-- Bling -->
     <include>
-      <name>mars_crate_long_1</name>
+      <name>mars_rock_2_1</name>
       <pose>
-      0.08999999999999972
-      -2.324
-      0
-      0
-      0
-      -2.3561944901923453
-      </pose>
-      <uri>model://mars_crate_long</uri>
-    </include>
-
-
-    <!-- Bling -->
-    <include>
-      <name>mars_crate_2</name>
-      <pose>
-      0.09000000000000027
-      1.924
+      0.0900000000000003
+      2.024
       0
       0
       0
       -2.4492935982947064e-16
       </pose>
-      <uri>model://mars_crate</uri>
+      <uri>model://mars_rock_2</uri>
+    </include>
+
+
+    <!-- Bling -->
+    <include>
+      <name>mars_rock_1_2</name>
+      <pose>
+      0.08999999999999976
+      -1.924
+      0
+      0
+      0
+      3.141592653589793
+      </pose>
+      <uri>model://mars_rock_1</uri>
     </include>
 
 
@@ -137,7 +137,7 @@
       0
       -1.5707963267948968
       </pose>
-      <uri>model://walkway_metal_straight</uri>
+      <uri>model://walkway_metal_45</uri>
     </include>
 
 
@@ -149,12 +149,12 @@
 <model name="satellite_dish">
 
   <pose>
-    2.3759999999999994
-    -2.7620000000000005
+    4.384573562373095
+    2.0238135623730944
     0
     0
     0
-    3.141592653589793
+    -0.7853981633974485
   </pose>
 
   <link name="base">
@@ -173,20 +173,22 @@
     <collision name="collision">
       <geometry>
         <mesh>
-          <uri>model://satellite_dish/meshes/satellite_dish.dae</uri>
+          <uri>model://satellite_dish/meshes/satellite_dish.obj</uri>
           <submesh>
             <name>Base</name>
           </submesh>
+          <scale>0.001 0.001 0.001</scale>
         </mesh>
       </geometry>
     </collision>
     <visual name="visual">
       <geometry>
         <mesh>
-          <uri>model://satellite_dish/meshes/satellite_dish.dae</uri>
+          <uri>model://satellite_dish/meshes/satellite_dish.obj</uri>
           <submesh>
             <name>Base</name>
           </submesh>
+          <scale>0.001 0.001 0.001</scale>
         </mesh>
       </geometry>
     </visual>
@@ -209,10 +211,11 @@
       <pose>0 0 -1.595 0 0 0</pose>
       <geometry>
         <mesh>
-          <uri>model://satellite_dish/meshes/satellite_dish.dae</uri>
+          <uri>model://satellite_dish/meshes/satellite_dish.obj</uri>
           <submesh>
             <name>Pivot</name>
           </submesh>
+          <scale>0.001 0.001 0.001</scale>
         </mesh>
       </geometry>
     </collision>
@@ -220,10 +223,11 @@
       <pose>0 0 -1.595 0 0 0</pose>
       <geometry>
         <mesh>
-          <uri>model://satellite_dish/meshes/satellite_dish.dae</uri>
+          <uri>model://satellite_dish/meshes/satellite_dish.obj</uri>
           <submesh>
             <name>Pivot</name>
           </submesh>
+          <scale>0.001 0.001 0.001</scale>
         </mesh>
       </geometry>
     </visual>
@@ -247,10 +251,11 @@
       <pose>0 -0.6519041 -1.451541 -0.43 0 0</pose>
       <geometry>
         <mesh>
-          <uri>model://satellite_dish/meshes/satellite_dish.dae</uri>
+          <uri>model://satellite_dish/meshes/satellite_dish.obj</uri>
           <submesh>
             <name>Dish</name>
           </submesh>
+          <scale>0.001 0.001 0.001</scale>
         </mesh>
       </geometry>
     </collision>
@@ -258,10 +263,11 @@
       <pose>0 -0.6519041 -1.451541 -0.43 0 0</pose>
       <geometry>
         <mesh>
-          <uri>model://satellite_dish/meshes/satellite_dish.dae</uri>
+          <uri>model://satellite_dish/meshes/satellite_dish.obj</uri>
           <submesh>
             <name>Dish</name>
           </submesh>
+          <scale>0.001 0.001 0.001</scale>
         </mesh>
       </geometry>
     </visual>
@@ -284,10 +290,11 @@
       <pose>0.2 1.060 -1.64 -0.52 0 0</pose>
       <geometry>
         <mesh>
-          <uri>model://satellite_dish/meshes/satellite_dish.dae</uri>
+          <uri>model://satellite_dish/meshes/satellite_dish.obj</uri>
           <submesh>
             <name>Wheel_01</name>
           </submesh>
+          <scale>0.001 0.001 0.001</scale>
         </mesh>
       </geometry>
     </collision>
@@ -312,10 +319,11 @@
       <pose>0.2 1.060 -1.64 -0.52 0 0</pose>
       <geometry>
         <mesh>
-          <uri>model://satellite_dish/meshes/satellite_dish.dae</uri>
+          <uri>model://satellite_dish/meshes/satellite_dish.obj</uri>
           <submesh>
             <name>Wheel_01</name>
           </submesh>
+          <scale>0.001 0.001 0.001</scale>
         </mesh>
       </geometry>
     </visual>
@@ -338,10 +346,11 @@
       <pose>-0.2 1.060 -1.64 -0.52 0 0</pose>
       <geometry>
         <mesh>
-          <uri>model://satellite_dish/meshes/satellite_dish.dae</uri>
+          <uri>model://satellite_dish/meshes/satellite_dish.obj</uri>
           <submesh>
             <name>Wheel_02</name>
           </submesh>
+          <scale>0.001 0.001 0.001</scale>
         </mesh>
       </geometry>
     </collision>
@@ -366,10 +375,11 @@
       <pose>-0.2 1.060 -1.64 -0.52 0 0</pose>
       <geometry>
         <mesh>
-          <uri>model://satellite_dish/meshes/satellite_dish.dae</uri>
+          <uri>model://satellite_dish/meshes/satellite_dish.obj</uri>
           <submesh>
             <name>Wheel_02</name>
           </submesh>
+          <scale>0.001 0.001 0.001</scale>
         </mesh>
       </geometry>
     </visual>
@@ -379,7 +389,7 @@
     <parent>base</parent>
     <child>pivot</child>
     <axis>
-      <xyz>0 0 1</xyz>
+      <xyz>0 0 -1</xyz>
       <dynamics>
         <damping>1000</damping>
       </dynamics>
@@ -405,9 +415,9 @@
     <parent>base</parent>
     <child>wheel_yaw</child>
     <axis>
-      <xyz>0 0 1</xyz>
+      <xyz>0 0 -1</xyz>
       <dynamics>
-        <friction>2.7412450789542775</friction>
+        <friction>2.2025260686828436</friction>
       </dynamics>
     </axis>
   </joint>
@@ -416,9 +426,9 @@
     <parent>base</parent>
     <child>wheel_pitch</child>
     <axis>
-      <xyz>0 0 1</xyz>
+      <xyz>0 0 -1</xyz>
       <dynamics>
-        <friction>2.5821265696207845</friction>
+        <friction>2.9510399395121487</friction>
       </dynamics>
     </axis>
   </joint>
@@ -432,11 +442,11 @@
 
     <yaw_ratio>0.1</yaw_ratio>
     <yaw_pid>1000 0 10</yaw_pid>
-    <yaw_target>1.5776055696986777</yaw_target>
+    <yaw_target>-1.3327347452859146</yaw_target>
 
     <pitch_ratio>0.1</pitch_ratio>
     <pitch_pid>1000 100 10</pitch_pid>
-    <pitch_target>1.247417522479339</pitch_target>
+    <pitch_target>0.26677445925687693</pitch_target>
 
     <!-- Tolerance in degrees -->
     <tolerance>5</tolerance>
@@ -459,12 +469,12 @@
       <entity>valkyrie</entity>
       <namespace>task1/checkpoint1</namespace>
       <pose>
-        2.376
-        -0.36200000000000054
+        2.687517287525381
+        0.3267572875253808
         2.5
         0
         0
-        -1.5707963267948968
+        0.7853981633974481
       </pose>
       <size>1 1 5.0</size>
     </plugin>
@@ -488,44 +498,44 @@
     <include>
       <name>walkway_3</name>
       <pose>
-      3.138
-      -4.6659043047514155e-16
+      2.914734
+      -0.5394700920000004
       -0.052151
       0
       0
-      -1.5707963267948968
+      -2.356194490192345
       </pose>
-      <uri>model://walkway_metal_45</uri>
+      <uri>model://walkway_metal_straight</uri>
     </include>
 
 
     <!-- Bling -->
     <include>
-      <name>mars_rock_2_4</name>
+      <name>mars_crate_long_4</name>
       <pose>
-      4.847913390593274
-      0.963153390593273
+      4.558050159477537
+      0.026215332949237502
       0
       0
       0
-      -0.7853981633974485
-      </pose>
-      <uri>model://mars_rock_2</uri>
-    </include>
-
-
-    <!-- Bling -->
-    <include>
-      <name>mars_crate_long_5</name>
-      <pose>
-      3.9
-      1.5619999999999994
-      0
-      0
-      0
-      0.785398163397448
+      -2.220446049250313e-16
       </pose>
       <uri>model://mars_crate_long</uri>
+    </include>
+
+
+    <!-- Bling -->
+    <include>
+      <name>mars_rock_3_5</name>
+      <pose>
+      2.1369165406947976
+      -2.394918285833501
+      0
+      0
+      0
+      2.356194490192345
+      </pose>
+      <uri>model://mars_rock_3</uri>
     </include>
 
 
@@ -533,8 +543,8 @@
     <include>
       <name>walkway_4</name>
       <pose>
-      5.516364734528299
-      -1.6171008265282991
+      5.069995469056597
+      -2.6947315610565976
       -0.052151
       0
       0
@@ -549,8 +559,8 @@
       <entity>valkyrie</entity>
       <namespace>task1/checkpoint3</namespace>
       <pose>
-        5.516364734528299
-        -1.6171008265282991
+        5.069995469056597
+        -2.6947315610565976
         2.5
         0
         0
@@ -561,16 +571,16 @@
 
     <!-- Bling -->
     <include>
-      <name>mars_crate_6</name>
+      <name>mars_crate_long_6</name>
       <pose>
-      6.876838181531216
-      -2.977574273531217
+      6.713311628534133
+      -4.338047720534135
       0
       0
       0
-      -2.3561944901923453
+      -1.570796326794897
       </pose>
-      <uri>model://mars_crate</uri>
+      <uri>model://mars_crate_long</uri>
     </include>
 
 
@@ -578,8 +588,8 @@
     <include>
       <name>mars_crate_long_7</name>
       <pose>
-      3.873048575050762
-      -3.2604169860058354
+      3.4266793095790598
+      -4.338047720534134
       0
       0
       0
@@ -607,30 +617,30 @@
 
           <checkpoint1>
             <skip_robot_pose>
-              2.376
-              -0.36200000000000054
+              2.687517287525381
+              0.3267572875253808
               1.1
               0
               0
-              -1.5707963267948968
+              0.7853981633974481
             </skip_robot_pose>
           </checkpoint1>
 
           <checkpoint2>
             <skip_robot_pose>
-              2.376
-              -0.36200000000000054
+              2.687517287525381
+              0.3267572875253808
               1.1
               0
               0
-              -1.5707963267948968
+              0.7853981633974481
             </skip_robot_pose>
           </checkpoint2>
 
           <checkpoint3>
             <skip_robot_pose>
-              5.516364734528299
-              -1.6171008265282991
+              5.069995469056597
+              -2.6947315610565976
               1.1
               0
               0
