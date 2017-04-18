@@ -125,9 +125,9 @@
     "    </include>\n"
   end
 
-  # Print a random bling inside the habitat
-  # Uses: $blings, $habitat_frame, $table_pos_z
-  # Sets: $bling_count
+  # Calculate the pose for a random bling inside the habitat
+  # Uses: $blings, $bling_stack_total
+  # Sets: $bling_height, $bling, $bling_stack, $bling_stack_count, $bling_frame
   def calcHabitatBling
 
     $bling_height = 0.7
@@ -155,6 +155,10 @@
     $bling_stack_count += 1
   end
 
+
+  # Print a bling inside the habitat based on previous calculated pose
+  # Uses: $table_pos_z, $bling_stack_num, $bling_height, $bling_frame
+  # Sets: $bling_count, $bling_frame
   def printHabitatBling
     height = $table_pos_z + ($bling_stack_num-1)*$bling_height
     angle = rand(-Math::PI*0.2..Math::PI*0.2)
