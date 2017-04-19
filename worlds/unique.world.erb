@@ -354,6 +354,7 @@
   # Data for box region detection
   box_height = 5.0
   robot_z_pos = 1.1
+  robot_z_pos_habitat = 2.8
 
   # Starting point
   $current_frame = TMatrix(0.09, 0, Math::PI)
@@ -834,13 +835,6 @@
 
     <!-- Walkway -->
     <%=
-      t3cp1_frame = t2cp6_frame
-      t3cp2_frame = t2cp6_frame
-      t3cp3_frame = t2cp6_frame
-      t3cp5_frame = t2cp6_frame
-      t3cp7_frame = t2cp6_frame
-      t3cp8_frame = t2cp6_frame
-
       # Can't have 90 degrees near the final box
       nextWalkway($walkways, true)
     %>
@@ -859,6 +853,48 @@
     %>
 
     <%= fromFile("habitat.erb") %>
+
+    <!-- Checkpoint 1 - Climb the stairs -->
+    <%
+      t3cp1_frame = $habitat_frame * TMatrix(-6.68, -3.12, Math::PI / 2.0)
+      t3cp2_frame = t3cp1_frame
+    %>
+
+    <plugin name="boxT3CP1" filename="libBoxContainsPlugin.so">
+      <entity>valkyrie</entity>
+      <namespace>task3/checkpoint1</namespace>
+      <pose>
+        <%= t3cp1_frame[0, 2] %>
+        <%= t3cp1_frame[1, 2] %>
+        <%= 2.92 %>
+        0
+        0
+        <%= Math::atan2(t3cp1_frame[1, 0], t3cp1_frame[0, 0]) %>
+      </pose>
+      <size>1.0 2.50 2.44</size>
+    </plugin>
+
+    <!-- Checkpoint 3 - Pass through the door -->
+    <%
+      t3cp3_frame = $habitat_frame * TMatrix(-4.50, 0.0198, 0)
+      t3cp5_frame = t3cp3_frame
+      t3cp7_frame = t3cp3_frame
+      t3cp8_frame = t3cp3_frame
+    %>
+
+    <plugin name="boxT3CP3" filename="libBoxContainsPlugin.so">
+      <entity>valkyrie</entity>
+      <namespace>task3/checkpoint3</namespace>
+      <pose>
+        <%= t3cp3_frame[0, 2] %>
+        <%= t3cp3_frame[1, 2] %>
+        <%= 2.81 %>
+        0
+        0
+        <%= Math::atan2(t3cp3_frame[1, 0], t3cp3_frame[0, 0]) %>
+      </pose>
+      <size>1.00 1.55 2.88</size>
+    </plugin>
 
 
     <!-- Lamp inside the habitat -->
@@ -1187,7 +1223,7 @@
             <skip_robot_pose>
               <%= t3cp1_frame[0, 2] %>
               <%= t3cp1_frame[1, 2] %>
-              <%= robot_z_pos %>
+              <%= robot_z_pos_habitat %>
               0
               0
               <%= Math::atan2(t3cp1_frame[1, 0], t3cp1_frame[0, 0]) %>
@@ -1198,7 +1234,7 @@
             <skip_robot_pose>
               <%= t3cp2_frame[0, 2] %>
               <%= t3cp2_frame[1, 2] %>
-              <%= robot_z_pos %>
+              <%= robot_z_pos_habitat %>
               0
               0
               <%= Math::atan2(t3cp2_frame[1, 0], t3cp2_frame[0, 0]) %>
@@ -1209,7 +1245,7 @@
             <skip_robot_pose>
               <%= t3cp3_frame[0, 2] %>
               <%= t3cp3_frame[1, 2] %>
-              <%= robot_z_pos %>
+              <%= robot_z_pos_habitat %>
               0
               0
               <%= Math::atan2(t3cp3_frame[1, 0], t3cp3_frame[0, 0]) %>
@@ -1223,7 +1259,7 @@
             <skip_robot_pose>
               <%= t3cp5_frame[0, 2] %>
               <%= t3cp5_frame[1, 2] %>
-              <%= robot_z_pos %>
+              <%= robot_z_pos_habitat %>
               0
               0
               <%= Math::atan2(t3cp5_frame[1, 0], t3cp5_frame[0, 0]) %>
@@ -1237,7 +1273,7 @@
             <skip_robot_pose>
               <%= t3cp7_frame[0, 2] %>
               <%= t3cp7_frame[1, 2] %>
-              <%= robot_z_pos %>
+              <%= robot_z_pos_habitat %>
               0
               0
               <%= Math::atan2(t3cp7_frame[1, 0], t3cp7_frame[0, 0]) %>
@@ -1248,7 +1284,7 @@
             <skip_robot_pose>
               <%= t3cp8_frame[0, 2] %>
               <%= t3cp8_frame[1, 2] %>
-              <%= robot_z_pos %>
+              <%= robot_z_pos_habitat %>
               0
               0
               <%= Math::atan2(t3cp8_frame[1, 0], t3cp8_frame[0, 0]) %>
