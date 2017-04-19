@@ -3,6 +3,7 @@
 
   <model name="solar_panel">
 
+    <allow_auto_disable>0</allow_auto_disable>
     <pose>
       7.82084699580533
       2.840805954908925
