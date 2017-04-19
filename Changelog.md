@@ -1,5 +1,13 @@
 ## SRC Sim 0.4
 
+### SRC Sim x.x.x (2017-xx-xx)
+
+* Task 2: Teleport solar panel within reach
+    * [Pull request 63](https://bitbucket.org/osrf/srcsim/pull-requests/63)
+
+* Task 3: Randomize habitat objects
+    * [Pull request 60](https://bitbucket.org/osrf/srcsim/pull-requests/60)
+
 ### SRC Sim 0.4.0 (2017-04-14)
 
 * Grasping controller
