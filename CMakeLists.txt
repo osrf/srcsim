@@ -27,6 +27,7 @@ find_package(gazebo REQUIRED)
 add_message_files(
   FILES
   Console.msg
+  Leak.msg
   Satellite.msg
   Task.msg
 )

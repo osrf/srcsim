@@ -23,7 +23,10 @@
 #include <ignition/math/Helpers.hh>
 #include <ignition/math/Pose3.hh>
 
+#include <ros/ros.h>
+
 #include <gazebo/physics/PhysicsTypes.hh>
+#include <gazebo/transport/transport.hh>
 
 #include "Checkpoint.hh"
 #include "Task.hh"
@@ -97,6 +100,59 @@ namespace gazebo
     /// nothing else for long enough.
     /// \return True if the checkpoint is complete.
     public: bool Check();
+  };
+
+  /// \brief Task 3, Checkpoint 5: Detect leak
+  class Task3CP5 : public Checkpoint
+  {
+    using Checkpoint::Checkpoint;
+
+    /// \brief Check whether the detector has detected the leak.
+    /// \return True if the checkpoint is complete.
+    public: bool Check();
+
+    /// \brief Callback when a logical camera message is received,
+    /// \param[in] _msg Logical camera message.
+    private: void OnCameraGzMsg(ConstLogicalCameraImagePtr &/*_msg*/);
+
+    /// \brief Gazebo transport node for communication.
+    private: transport::NodePtr gzNode;
+
+    /// \brief Subscribes to logical camera messages.
+    private: transport::SubscriberPtr cameraGzSub;
+
+    /// \brief Ros node handle
+    private: std::unique_ptr<ros::NodeHandle> rosNode;
+
+    /// \brief Ros publisher of leak messages
+    private: ros::Publisher leakRosPub;
+
+    /// \brief Topic for camera msgs
+    private: std::string cameraGzTopic =
+        "/gazebo/SRC_finals/air_leak_detector/base/logical_camera/models";
+
+    /// \brief Whether the leak has been detected
+    private: bool detected = false;
+
+    /// \brief Minimum value reported by detector. This value is always
+    /// reported even when the leak is not in the frustum.
+    /// The maximum value is 1.0.
+    private: double minValue = 0.01;
+
+    /// \brief Camera far plane distance.
+    private: double camFar = 0.5;
+
+    /// \brief Camera near plane distance.
+    private: double camNear = 0.2;
+
+    /// \brief Camera field of view angle.
+    private: double camFov = IGN_PI / 9.0;
+
+    /// \brief Factor used to calculate the output: output = factor ^ distance.
+    /// The factor is calculated based on camera properties so that the
+    /// resulting output is 1 on a point on the antena, and minValue on the far
+    /// corner of the frustum.
+    private: double factor;
   };
 
   /// \brief Task 3, Checkpoint 8: Final box

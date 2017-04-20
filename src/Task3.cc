@@ -19,6 +19,9 @@
 #include <gazebo/physics/Model.hh>
 #include <gazebo/physics/PhysicsIface.hh>
 #include <gazebo/physics/World.hh>
+#include <gazebo/sensors/SensorManager.hh>
+
+#include <srcsim/Leak.h>
 
 #include "srcsim/Task3.hh"
 
@@ -74,6 +77,10 @@ Task3::Task3(const sdf::ElementPtr &_sdf) : Task(_sdf)
   // Checkpoint 4: Lift detector
   std::unique_ptr<Task3CP4> cp4(new Task3CP4(cp4Elem));
   this->checkpoints.push_back(std::move(cp4));
+
+  // Checkpoint 5: Detect leak
+  std::unique_ptr<Task3CP5> cp5(new Task3CP5(cp5Elem));
+  this->checkpoints.push_back(std::move(cp5));
 
   // Checkpoint 8: Walk to final box
   std::unique_ptr<Task3CP8> cp8(new Task3CP8(cp8Elem));
@@ -181,6 +188,85 @@ bool Task3CP3::Check()
 bool Task3CP4::Check()
 {
   return this->CheckTouch("/task3/checkpoint4");
+}
+
+/////////////////////////////////////////////////
+bool Task3CP5::Check()
+{
+  // First time
+  if (!this->cameraGzSub)
+  {
+    // Gazebo node
+    this->gzNode = transport::NodePtr(new transport::Node());
+    this->gzNode->Init();
+
+    // Subscribe to logical camera messages
+    this->cameraGzSub = this->gzNode->Subscribe(this->cameraGzTopic,
+        &Task3CP5::OnCameraGzMsg, this);
+
+    // ROS node
+    this->rosNode.reset(new ros::NodeHandle());
+
+    // Publish ROS leak messages
+    this->leakRosPub = this->rosNode->advertise<srcsim::Leak>(
+        "/task3/checkpoint5/leak", 1000);
+
+    // Calculate factor
+
+    // Furthest detectable point (frustum corner)
+    double c = this->camFar * tan(this->camFov / 2.0);
+    ignition::math::Vector3d corner(camFar, c, c);
+
+    // Maximum detectable distance
+    ignition::math::Vector3d antenaPos(this->camNear, 0, 0);
+    auto maxDist = corner.Distance(antenaPos);
+
+    // output = factor ^ distance
+    // We chose the factor so that the maximum distance results in the
+    // minimum value.
+    this->factor = pow(this->minValue, 1 / maxDist);
+  }
+
+  return this->detected;
+}
+
+//////////////////////////////////////////////////
+void Task3CP5::OnCameraGzMsg(ConstLogicalCameraImagePtr &_msg)
+{
+  auto leakPos = ignition::math::Vector3d::Zero;
+
+  for (const auto &model : _msg->model())
+  {
+    if (model.name() != "leak")
+      continue;
+
+    leakPos = msgs::ConvertIgn(model.pose().position());
+    break;
+  }
+
+  double value = this->minValue;
+
+  // If leak within frustum
+  if (leakPos != ignition::math::Vector3d::Zero)
+  {
+    // Leak found, checkpoint complete!
+    this->detected = true;
+
+    // Get distance from leak to antena
+    ignition::math::Vector3d antenaPos(this->camNear, 0, 0);
+    auto distance = leakPos.Distance(antenaPos);
+
+    // Exclude some partial inclusion
+    if (leakPos.X() >= this->camNear)
+      value = std::max(pow(this->factor, distance), this->minValue);
+  }
+
+  // We keep publishing messages even after complete in case they want to get a
+  // better position
+  srcsim::Leak msg;
+  msg.value = value;
+
+  this->leakRosPub.publish(msg);
 }
 
 /////////////////////////////////////////////////

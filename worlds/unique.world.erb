@@ -988,7 +988,7 @@
     <!-- Bling -->
     <%
       # Number of bling stacks inside the habitat
-      $bling_stack_total = 6
+      $bling_stack_total = 7
       $bling_stack_count = 1
 
       # Calculate pose of bling stack
@@ -1000,6 +1000,19 @@
     %>
     <%=
       # Print each bling on top of the other in this stack
+      printHabitatBling()
+    %>
+    <%
+      end
+    %>
+
+    <!-- Bling -->
+    <%
+      calcHabitatBling()
+      (1..$bling_stack).each do |i|
+      $bling_stack_num = i
+    %>
+    <%=
       printHabitatBling()
     %>
     <%
