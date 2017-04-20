@@ -4714,7 +4714,7 @@
     
 
     <collision name="wall_7">
-      <pose>-2.46 4.28 2.9 0 0 -1.049</pose>
+      <pose>-2.681 4.28 2.9 0 0 -1.047</pose>
       <geometry>
         <box>
           <size>0.1 5.73 2.2 </size>
