@@ -24,6 +24,7 @@
             </submesh>
           </mesh>
         </geometry>
+        <max_contacts>5</max_contacts>
         <surface>
           <contact>
             <ode>
@@ -44,6 +45,7 @@
             <radius>0.008</radius>
           </cylinder>
         </geometry>
+        <max_contacts>5</max_contacts>
         <surface>
           <contact>
             <ode>
@@ -71,6 +73,7 @@
       </visual>
 
       <sensor name="tool_contact_sensor" type="contact">
+        <update_rate>30</update_rate>
         <contact>
           <collision>collision</collision>
         </contact>
@@ -100,6 +103,7 @@
             </submesh>
           </mesh>
         </geometry>
+        <max_contacts>5</max_contacts>
         <surface>
           <contact>
             <ode>

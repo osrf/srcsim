@@ -13,6 +13,7 @@
            <length>0.648382</length>
           </cylinder>
         </geometry>
+        <max_contacts>5</max_contacts>
       </collision>
 
       <collision name="leg_2">
@@ -23,6 +24,7 @@
            <length>0.648382</length>
           </cylinder>
         </geometry>
+        <max_contacts>5</max_contacts>
       </collision>
 
       <collision name="leg_3">
@@ -33,6 +35,7 @@
            <length>0.648382</length>
           </cylinder>
         </geometry>
+        <max_contacts>5</max_contacts>
       </collision>
 
       <collision name="leg_4">
@@ -43,6 +46,7 @@
            <length>0.648382</length>
           </cylinder>
         </geometry>
+        <max_contacts>5</max_contacts>
       </collision>
 
       <collision name="top_1">
@@ -128,6 +132,7 @@
            <size>1.472479 0.025006 0.064007</size>
           </box>
         </geometry>
+        <max_contacts>5</max_contacts>
       </collision>
 
       <collision name="side_2">
@@ -137,6 +142,7 @@
            <size>1.472479 0.025006 0.064007</size>
           </box>
         </geometry>
+        <max_contacts>5</max_contacts>
       </collision>
 
       <collision name="side_3">
@@ -146,6 +152,7 @@
            <size>0.712958 0.025006 0.064007</size>
           </box>
         </geometry>
+        <max_contacts>5</max_contacts>
       </collision>
 
       <collision name="side_4">
@@ -155,6 +162,7 @@
            <size>0.712958 0.025006 0.064007</size>
           </box>
         </geometry>
+        <max_contacts>5</max_contacts>
       </collision>
 
       <collision name="corner_1">
@@ -165,6 +173,7 @@
            <length>0.066452</length>
           </cylinder>
         </geometry>
+        <max_contacts>5</max_contacts>
       </collision>
 
       <collision name="corner_2">
@@ -175,6 +184,7 @@
            <length>0.066452</length>
           </cylinder>
         </geometry>
+        <max_contacts>5</max_contacts>
       </collision>
 
       <collision name="corner_3">
@@ -185,6 +195,7 @@
            <length>0.066452</length>
           </cylinder>
         </geometry>
+        <max_contacts>5</max_contacts>
       </collision>
 
       <collision name="corner_4">
@@ -195,6 +206,7 @@
            <length>0.066452</length>
           </cylinder>
         </geometry>
+        <max_contacts>5</max_contacts>
       </collision>
 
       <collision name="corner_1_a">
@@ -204,6 +216,7 @@
            <size>0.075 0.025006 0.064007</size>
           </box>
         </geometry>
+        <max_contacts>5</max_contacts>
       </collision>
 
       <collision name="corner_1_b">
@@ -213,6 +226,7 @@
            <size>0.066 0.025006 0.064007</size>
           </box>
         </geometry>
+        <max_contacts>5</max_contacts>
       </collision>
 
       <collision name="corner_1_c">
@@ -222,6 +236,7 @@
            <size>0.067 0.025006 0.064007</size>
           </box>
         </geometry>
+        <max_contacts>5</max_contacts>
       </collision>
 
       <collision name="corner_1_d">
@@ -231,6 +246,7 @@
            <size>0.048 0.025006 0.064007</size>
           </box>
         </geometry>
+        <max_contacts>5</max_contacts>
       </collision>
 
       <collision name="corner_2_a">
@@ -240,6 +256,7 @@
            <size>0.075 0.025006 0.064007</size>
           </box>
         </geometry>
+        <max_contacts>5</max_contacts>
       </collision>
 
       <collision name="corner_2_b">
@@ -249,6 +266,7 @@
            <size>0.066 0.025006 0.064007</size>
           </box>
         </geometry>
+        <max_contacts>5</max_contacts>
       </collision>
 
       <collision name="corner_2_c">
@@ -258,6 +276,7 @@
            <size>0.067 0.025006 0.064007</size>
           </box>
         </geometry>
+        <max_contacts>5</max_contacts>
       </collision>
 
       <collision name="corner_2_d">
@@ -267,6 +286,7 @@
            <size>0.048 0.025006 0.064007</size>
           </box>
         </geometry>
+        <max_contacts>5</max_contacts>
       </collision>
 
       <collision name="corner_3_a">
@@ -276,6 +296,7 @@
            <size>0.075 0.025006 0.064007</size>
           </box>
         </geometry>
+        <max_contacts>5</max_contacts>
       </collision>
 
       <collision name="corner_3_b">
@@ -285,6 +306,7 @@
            <size>0.066 0.025006 0.064007</size>
           </box>
         </geometry>
+        <max_contacts>5</max_contacts>
       </collision>
 
       <collision name="corner_3_c">
@@ -294,6 +316,7 @@
            <size>0.067 0.025006 0.064007</size>
           </box>
         </geometry>
+        <max_contacts>5</max_contacts>
       </collision>
 
       <collision name="corner_3_d">
@@ -303,6 +326,7 @@
            <size>0.048 0.025006 0.064007</size>
           </box>
         </geometry>
+        <max_contacts>5</max_contacts>
       </collision>
 
       <collision name="corner_4_a">
@@ -312,6 +336,7 @@
            <size>0.075 0.025006 0.064007</size>
           </box>
         </geometry>
+        <max_contacts>5</max_contacts>
       </collision>
 
       <collision name="corner_4_b">
@@ -321,6 +346,7 @@
            <size>0.066 0.025006 0.064007</size>
           </box>
         </geometry>
+        <max_contacts>5</max_contacts>
       </collision>
 
       <collision name="corner_4_c">
@@ -330,6 +356,7 @@
            <size>0.067 0.025006 0.064007</size>
           </box>
         </geometry>
+        <max_contacts>5</max_contacts>
       </collision>
 
       <collision name="corner_4_d">
@@ -339,6 +366,7 @@
            <size>0.048 0.025006 0.064007</size>
           </box>
         </geometry>
+        <max_contacts>5</max_contacts>
       </collision>
 
       <visual name="visual">

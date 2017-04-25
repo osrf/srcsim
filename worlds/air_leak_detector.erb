@@ -41,6 +41,9 @@
   inertia_z = 2.673 * scale
 
   offset_z = 4.724 * scale
+
+  # Update rate for contact sensors
+  sensor_update_rate = 30
 %>
 
 <model name="air_leak_detector">
@@ -68,6 +71,7 @@
           <uri>model://air_leak_detector/meshes/air_leak_detector.obj</uri>
         </mesh>
       </geometry>
+      <max_contacts>5</max_contacts>
       <surface>
         <contact>
           <ode>
@@ -108,6 +112,7 @@
     </sensor>
 
     <sensor name="contact_sensor" type="contact">
+      <update_rate><%= sensor_update_rate %></update_rate>
       <contact>
         <collision>collision</collision>
       </contact>

@@ -10,6 +10,7 @@
             <size>1.08 0.72 0.72</size>
           </box>
         </geometry>
+        <max_contacts>5</max_contacts>
       </collision>
       <visual name="visual">
         <geometry>

@@ -20,6 +20,9 @@
 
   z = rand(min_height...max_height)
 
+  # Update rate for contact sensors
+  sensor_update_rate = 30
+
 %>
 
 <model name="leak">
@@ -47,6 +50,7 @@
     </collision>
 
     <sensor name="leak_sensor" type="contact">
+      <update_rate><%= sensor_update_rate %></update_rate>
       <contact>
         <collision>collision</collision>
       </contact>

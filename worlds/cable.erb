@@ -11,6 +11,7 @@
   min_inertia = 0.0001
   height = 0.85
   theta = Math::PI * 0.3
+  sensor_update_rate = 30
 %>
 
 <model name="solar_panel_cable">
@@ -93,6 +94,7 @@
           <radius><%= radius %></radius>
         </cylinder>
       </geometry>
+      <max_contacts>5</max_contacts>
       <surface>
         <contact>
           <ode>
@@ -116,6 +118,7 @@
           <radius><%= radius %></radius>
         </sphere>
       </geometry>
+      <max_contacts>5</max_contacts>
       <surface>
         <contact>
           <ode>
@@ -172,6 +175,7 @@
           <radius><%= radius * 1.1 %></radius>
         </cylinder>
       </geometry>
+      <max_contacts>5</max_contacts>
       <surface>
         <contact>
           <ode>
@@ -207,6 +211,7 @@
     </visual>
 
     <sensor name="tip_sensor" type="contact">
+      <update_rate><%= sensor_update_rate %></update_rate>
       <contact>
         <collision>plug_collision</collision>
         <collision>cylinder</collision>

@@ -20,6 +20,7 @@
             <size>0.057 1.905 0.51</size>
           </box>
         </geometry>
+        <max_contacts>5</max_contacts>
         <surface>
           <contact>
             <ode>
@@ -39,6 +40,7 @@
             <size>0.125 1.905 0.074</size>
           </box>
         </geometry>
+        <max_contacts>5</max_contacts>
         <surface>
           <contact>
             <ode>
@@ -58,6 +60,7 @@
             <size>0.220321 0.375 0.074</size>
           </box>
         </geometry>
+        <max_contacts>5</max_contacts>
         <surface>
           <contact>
             <ode>
@@ -77,6 +80,7 @@
             <size>0.1 0.2155 0.074</size>
           </box>
         </geometry>
+        <max_contacts>5</max_contacts>
         <surface>
           <contact>
             <ode>
@@ -96,6 +100,7 @@
             <size>0.1 0.2155 0.074</size>
           </box>
         </geometry>
+        <max_contacts>5</max_contacts>
         <surface>
           <contact>
             <ode>
@@ -115,6 +120,7 @@
             <size>0.057 1.915 0.51</size>
           </box>
         </geometry>
+        <max_contacts>5</max_contacts>
         <surface>
           <contact>
             <ode>
@@ -134,6 +140,7 @@
             <size>0.125 1.905 0.074</size>
           </box>
         </geometry>
+        <max_contacts>5</max_contacts>
         <surface>
           <contact>
             <ode>
@@ -153,6 +160,7 @@
             <size>0.220321 0.375 0.074</size>
           </box>
         </geometry>
+        <max_contacts>5</max_contacts>
         <surface>
           <contact>
             <ode>
@@ -172,6 +180,7 @@
             <size>0.1 0.2155 0.074</size>
           </box>
         </geometry>
+        <max_contacts>5</max_contacts>
         <surface>
           <contact>
             <ode>
@@ -191,6 +200,7 @@
             <size>0.1 0.2155 0.074</size>
           </box>
         </geometry>
+        <max_contacts>5</max_contacts>
         <surface>
           <contact>
             <ode>
@@ -210,10 +220,11 @@
             <size>1.16 1.905 0.065</size>
           </box>
         </geometry>
+        <max_contacts>5</max_contacts>
         <surface>
           <contact>
             <ode>
-              <kp>1e5</kp>
+              <kp>1e6</kp>
               <kd>1</kd>
               <max_vel>0.1</max_vel>
               <min_depth>0.0015</min_depth>
@@ -229,6 +240,7 @@
             <size>1.160 0.066 0.51</size>
           </box>
         </geometry>
+        <max_contacts>5</max_contacts>
         <surface>
           <contact>
             <ode>
@@ -249,6 +261,7 @@
             <length>0.49</length>
           </cylinder>
         </geometry>
+        <max_contacts>5</max_contacts>
         <surface>
           <contact>
             <ode>
@@ -269,6 +282,7 @@
             <length>0.49</length>
           </cylinder>
         </geometry>
+        <max_contacts>5</max_contacts>
         <surface>
           <contact>
             <ode>
@@ -289,6 +303,7 @@
             <length>0.63</length>
           </cylinder>
         </geometry>
+        <max_contacts>5</max_contacts>
         <surface>
           <contact>
             <ode>
@@ -309,6 +324,7 @@
             <length>0.63</length>
           </cylinder>
         </geometry>
+        <max_contacts>5</max_contacts>
         <surface>
           <contact>
             <ode>
@@ -329,6 +345,7 @@
             <length>0.63</length>
           </cylinder>
         </geometry>
+        <max_contacts>5</max_contacts>
         <surface>
           <contact>
             <ode>
@@ -349,6 +366,7 @@
             <length>0.63</length>
           </cylinder>
         </geometry>
+        <max_contacts>5</max_contacts>
         <surface>
           <contact>
             <ode>
@@ -368,6 +386,7 @@
             <size>2.332756 6.825834 2.262449</size>
           </box>
         </geometry>
+        <max_contacts>5</max_contacts>
         <surface>
           <contact>
             <ode>

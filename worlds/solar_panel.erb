@@ -57,6 +57,9 @@
   small_panel_inertia_x = 0.2
   small_panel_inertia_y = 0.025
   small_panel_inertia_z = 0.24
+
+  # Update rate for contact sensors
+  sensor_update_rate = 30
 %>
 
 <model name="solar_panel">
@@ -84,6 +87,7 @@
           <scale>0.001 0.001 0.001</scale>
         </mesh>
       </geometry>
+      <max_contacts>5</max_contacts>
       <surface>
         <contact>
           <ode>
@@ -108,6 +112,7 @@
     </visual>
 
     <sensor name="base_sensor" type="contact">
+      <update_rate><%= sensor_update_rate %></update_rate>
       <contact>
         <collision>collision</collision>
       </contact>
@@ -138,6 +143,7 @@
           <scale>0.001 0.001 0.001</scale>
         </mesh>
       </geometry>
+      <max_contacts>5</max_contacts>
       <surface>
         <contact>
           <ode>
@@ -170,6 +176,7 @@
           <scale>0.001 0.001 0.001</scale>
         </mesh>
       </geometry>
+      <max_contacts>5</max_contacts>
       <surface>
         <contact>
           <ode>
@@ -194,6 +201,7 @@
     </visual>
 
     <sensor name="panel1_sensor" type="contact">
+      <update_rate><%= sensor_update_rate %></update_rate>
       <contact>
         <collision>panel_collision</collision>
       </contact>
@@ -224,6 +232,7 @@
           <scale>0.001 0.001 0.001</scale>
         </mesh>
       </geometry>
+      <max_contacts>5</max_contacts>
       <surface>
         <contact>
           <ode>
@@ -255,6 +264,7 @@
           <radius>0.018693</radius>
         </cylinder>
       </geometry>
+      <max_contacts>5</max_contacts>
       <surface>
         <contact>
           <ode>
@@ -268,12 +278,14 @@
     </collision>
 
     <sensor name="panel2_sensor" type="contact">
+      <update_rate><%= sensor_update_rate %></update_rate>
       <contact>
         <collision>collision</collision>
       </contact>
     </sensor>
 
     <sensor name="outlet_sensor" type="contact">
+      <update_rate><%= sensor_update_rate %></update_rate>
       <contact>
         <collision>outlet</collision>
       </contact>
@@ -306,6 +318,7 @@
           <scale>0.001 0.001 0.001</scale>
         </mesh>
       </geometry>
+      <max_contacts>5</max_contacts>
       <surface>
         <contact>
           <ode>
@@ -356,6 +369,7 @@
           <scale>0.001 0.001 0.001</scale>
         </mesh>
       </geometry>
+      <max_contacts>5</max_contacts>
       <surface>
         <contact>
           <ode>
@@ -406,6 +420,7 @@
           <scale>0.001 0.001 0.001</scale>
         </mesh>
       </geometry>
+      <max_contacts>5</max_contacts>
       <surface>
         <contact>
           <ode>
@@ -456,6 +471,7 @@
           <scale>0.001 0.001 0.001</scale>
         </mesh>
       </geometry>
+      <max_contacts>5</max_contacts>
       <surface>
         <contact>
           <ode>
@@ -499,6 +515,7 @@
           <scale>0.001 0.001 0.001</scale>
         </mesh>
       </geometry>
+      <max_contacts>5</max_contacts>
       <surface>
         <contact>
           <ode>
@@ -524,6 +541,7 @@
     </visual>
 
     <sensor name="button_contact" type="contact">
+      <update_rate><%= sensor_update_rate %></update_rate>
       <contact>
         <collision>collision</collision>
       </contact>
