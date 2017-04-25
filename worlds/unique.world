@@ -729,7 +729,7 @@
       <surface>
         <contact>
           <ode>
-            <kp>1e5</kp>
+            <kp>1e6</kp>
             <kd>1</kd>
             <max_vel>0.1</max_vel>
             <min_depth>0.0015</min_depth>
@@ -792,7 +792,7 @@
       <surface>
         <contact>
           <ode>
-            <kp>1e5</kp>
+            <kp>1e6</kp>
             <kd>1</kd>
             <max_vel>0.1</max_vel>
             <min_depth>0.0015</min_depth>
@@ -825,7 +825,7 @@
       <surface>
         <contact>
           <ode>
-            <kp>1e5</kp>
+            <kp>1e6</kp>
             <kd>1</kd>
             <max_vel>0.1</max_vel>
             <min_depth>0.0015</min_depth>
@@ -889,7 +889,7 @@
       <surface>
         <contact>
           <ode>
-            <kp>1e5</kp>
+            <kp>1e6</kp>
             <kd>1</kd>
             <max_vel>0.1</max_vel>
             <min_depth>0.0015</min_depth>
@@ -921,7 +921,7 @@
       <surface>
         <contact>
           <ode>
-            <kp>1e5</kp>
+            <kp>1e6</kp>
             <kd>1</kd>
             <max_vel>0.1</max_vel>
             <min_depth>0.0015</min_depth>
@@ -983,7 +983,7 @@
       <surface>
         <contact>
           <ode>
-            <kp>1e5</kp>
+            <kp>1e6</kp>
             <kd>1</kd>
             <max_vel>0.1</max_vel>
             <min_depth>0.0015</min_depth>
@@ -1042,7 +1042,7 @@
       <surface>
         <contact>
           <ode>
-            <kp>1e5</kp>
+            <kp>1e6</kp>
             <kd>1</kd>
             <max_vel>0.1</max_vel>
             <min_depth>0.0015</min_depth>
@@ -1101,7 +1101,7 @@
       <surface>
         <contact>
           <ode>
-            <kp>1e5</kp>
+            <kp>1e6</kp>
             <kd>1</kd>
             <max_vel>0.1</max_vel>
             <min_depth>0.0015</min_depth>
@@ -1160,7 +1160,7 @@
       <surface>
         <contact>
           <ode>
-            <kp>1e5</kp>
+            <kp>1e6</kp>
             <kd>1</kd>
             <max_vel>0.1</max_vel>
             <min_depth>0.0015</min_depth>
@@ -1220,7 +1220,7 @@
       <surface>
         <contact>
           <ode>
-            <kp>1e5</kp>
+            <kp>1e6</kp>
             <kd>1</kd>
             <max_vel>0.1</max_vel>
             <min_depth>0.0015</min_depth>
