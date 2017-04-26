@@ -206,7 +206,7 @@ namespace gazebo
     /// \brief Target time to continuously touch.
     private: common::Time targetTime = 2.0;
 
-    /// \brief Target time to continuously touch.
+    /// \brief Target button press.
     private: double buttonTarget = -0.004;
   };
 
