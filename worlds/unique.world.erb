@@ -688,7 +688,7 @@
                     tArraySlotOrigin
 
       t2cp2_panel_skip_frame = array_frame *
-          TMatrix(rand(-0.4...-0.05), rand(-0.2...0.065), rand(-Math::PI...Math::PI));
+          TMatrix(rand(-0.4...-0.05), rand(-0.27...-0.12), rand(-Math::PI...Math::PI));
       t2cp2_panel_skip_z_pos = 0.7
 
       t2cp2_frame = array_frame * TMatrix(0, -1.2, Math::PI * 0.5);
@@ -988,7 +988,7 @@
     <!-- Bling -->
     <%
       # Number of bling stacks inside the habitat
-      $bling_stack_total = 6
+      $bling_stack_total = 7
       $bling_stack_count = 1
 
       # Calculate pose of bling stack
@@ -1000,6 +1000,19 @@
     %>
     <%=
       # Print each bling on top of the other in this stack
+      printHabitatBling()
+    %>
+    <%
+      end
+    %>
+
+    <!-- Bling -->
+    <%
+      calcHabitatBling()
+      (1..$bling_stack).each do |i|
+      $bling_stack_num = i
+    %>
+    <%=
       printHabitatBling()
     %>
     <%
