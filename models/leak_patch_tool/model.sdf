@@ -36,6 +36,28 @@
         </surface>
       </collision>
 
+      <collision name="tip">
+        <pose>0 0.242 0 1.57 0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.01</length>
+            <radius>0.008</radius>
+          </cylinder>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <kp>1e5</kp>
+              <kd>1</kd>
+              <max_vel>0.1</max_vel>
+              <min_depth>0.0015</min_depth>
+            </ode>
+            <!-- Only collide with leak -->
+            <collide_bitmask>0x10000</collide_bitmask>
+          </contact>
+        </surface>
+      </collision>
+
       <visual name="visual">
         <geometry>
           <mesh>
@@ -47,6 +69,13 @@
           </mesh>
         </geometry>
       </visual>
+
+      <sensor name="tool_contact_sensor" type="contact">
+        <contact>
+          <collision>collision</collision>
+        </contact>
+      </sensor>
+
     </link>
 
     <link name="button">
@@ -94,6 +123,13 @@
           </mesh>
         </geometry>
       </visual>
+
+      <sensor name="button_contact_sensor" type="contact">
+        <contact>
+          <collision>collision</collision>
+        </contact>
+      </sensor>
+
     </link>
 
     <joint name="button_joint" type="prismatic">
@@ -113,6 +149,14 @@
         </dynamics>
       </axis>
     </joint>
+
+    <plugin name="touch_valkyrie_patch" filename="libTouchPlugin.so">
+      <sensor>tool_contact_sensor</sensor>
+      <sensor>button_contact_sensor</sensor>
+      <target>valkyrie</target>
+      <time>0.5</time>
+      <namespace>task3/checkpoint6</namespace>
+    </plugin>
 
   </model>
 </sdf>

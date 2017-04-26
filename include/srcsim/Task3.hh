@@ -26,6 +26,7 @@
 #include <ros/ros.h>
 
 #include <gazebo/physics/PhysicsTypes.hh>
+#include <gazebo/sensors/ContactSensor.hh>
 #include <gazebo/transport/transport.hh>
 
 #include "Checkpoint.hh"
@@ -153,6 +154,60 @@ namespace gazebo
     /// resulting output is 1 on a point on the antena, and minValue on the far
     /// corner of the frustum.
     private: double factor;
+  };
+
+  /// \brief Task 3, Checkpoint 6: Lift patch tool
+  class Task3CP6 : public TouchCheckpoint
+  {
+    using TouchCheckpoint::TouchCheckpoint;
+
+    /// \brief Check whether the tool has been touching the robot and
+    /// nothing else for long enough.
+    /// \return True if the checkpoint is complete.
+    public: bool Check();
+  };
+
+  /// \brief Task 3, Checkpoint 7: Patch leak
+  class Task3CP7 : public Checkpoint
+  {
+    using Checkpoint::Checkpoint;
+
+    /// \brief Check whether the robot is in the final box region.
+    /// \return True if the checkpoint is complete.
+    public: bool Check();
+
+    /// \brief Pointer to contact sensor
+    private: sensors::ContactSensorPtr sensor;
+
+    /// \brief Pointer to the world
+    private: physics::WorldPtr world;
+
+    /// \brief Name of contact sensor
+    private: std::string sensorName = "leak_sensor";
+
+    /// \brief Name of leak patch tool model
+    private: std::string tool = "leak_patch_tool";
+
+    /// \brief Name of leak patch tool tip collision
+    private: std::string toolTip = "leak_patch_tool::tool::tip";
+
+    /// \brief Button joint name
+    private: std::string buttonName = "button_joint";
+
+    /// \brief Button joint
+    private: physics::JointPtr buttonJoint;
+
+    /// \brief Name of leak collision
+    private: std::string leak = "leak::base::collision";
+
+    /// \brief Time when started fixing.
+    private: common::Time fixStart;
+
+    /// \brief Target time to continuously touch.
+    private: common::Time targetTime = 2.0;
+
+    /// \brief Target button press.
+    private: double buttonTarget = -0.004;
   };
 
   /// \brief Task 3, Checkpoint 8: Final box

@@ -82,6 +82,14 @@ Task3::Task3(const sdf::ElementPtr &_sdf) : Task(_sdf)
   std::unique_ptr<Task3CP5> cp5(new Task3CP5(cp5Elem));
   this->checkpoints.push_back(std::move(cp5));
 
+  // Checkpoint 6: Lift patch tool
+  std::unique_ptr<Task3CP6> cp6(new Task3CP6(cp6Elem));
+  this->checkpoints.push_back(std::move(cp6));
+
+  // Checkpoint 7: Patch leak
+  std::unique_ptr<Task3CP7> cp7(new Task3CP7(cp7Elem));
+  this->checkpoints.push_back(std::move(cp7));
+
   // Checkpoint 8: Walk to final box
   std::unique_ptr<Task3CP8> cp8(new Task3CP8(cp8Elem));
   this->checkpoints.push_back(std::move(cp8));
@@ -267,6 +275,128 @@ void Task3CP5::OnCameraGzMsg(ConstLogicalCameraImagePtr &_msg)
   msg.value = value;
 
   this->leakRosPub.publish(msg);
+}
+
+/////////////////////////////////////////////////
+bool Task3CP6::Check()
+{
+  return this->CheckTouch("/task3/checkpoint6");
+}
+
+/////////////////////////////////////////////////
+bool Task3CP7::Check()
+{
+  // First time
+  if (!this->sensor || !this->buttonJoint)
+  {
+    this->world = physics::get_world();
+
+    if (!this->world)
+    {
+      gzerr << "Failed to get world" << std::endl;
+      return false;
+    }
+    // Get contact sensor
+    auto s = sensors::SensorManager::Instance()->GetSensor(this->sensorName);
+    if (!s)
+    {
+      gzerr << "Failed to get sensor [" << this->sensorName << "]" << std::endl;
+      return false;
+    }
+
+    this->sensor = std::dynamic_pointer_cast<sensors::ContactSensor>(s);
+    if (!this->sensor)
+    {
+      gzerr << "Failed to cast sensor [" << this->sensorName << "]" << std::endl;
+      return false;
+    }
+
+    this->sensor->SetActive(true);
+
+    // Get button joint
+    auto toolModel = world->GetModel(this->tool);
+    if (!toolModel)
+    {
+      gzerr << "Failed to get model [" << this->tool << "]" << std::endl;
+      return false;
+    }
+
+    this->buttonJoint = toolModel->GetJoint(this->buttonName);
+    if (!this->buttonJoint)
+    {
+      gzerr << "Failed to get joint [" << this->buttonJoint << "]"
+            << std::endl;
+      return false;
+    }
+  }
+
+  auto simTime = this->world->GetSimTime();
+
+  // Check if button is pressed
+  if (this->buttonJoint->GetAngle(0) > this->buttonTarget)
+  {
+    // Stopped pressing
+    if (this->fixStart != common::Time::Zero)
+    {
+      gzmsg << "Released button at " << simTime << " seconds" << std::endl;
+    }
+
+    this->fixStart = common::Time::Zero;
+    return false;
+  }
+
+  // Check if tool is touching leak
+  bool touching = false;
+
+  // Go through all contacts
+  auto contacts = this->sensor->Contacts();
+
+  for (auto const &contact : contacts.contact())
+  {
+    // Check for the tool
+    bool col1Tool = contact.collision1().find(this->toolTip) !=
+        std::string::npos;
+    bool col2Tool = contact.collision2().find(this->toolTip) !=
+        std::string::npos;
+
+    // Check for the leak
+    bool col1Leak = contact.collision1().find(this->leak) !=
+        std::string::npos;
+    bool col2Leak = contact.collision2().find(this->leak) !=
+        std::string::npos;
+
+    // We need at least one tool-leak or leak-tool contact
+    if ((col1Tool && col2Leak) || (col1Leak && col2Tool))
+    {
+      touching = true;
+      break;
+    }
+  }
+
+  // Not touching
+  if (!touching)
+  {
+    // Stopped touching
+    if (this->fixStart != common::Time::Zero)
+    {
+      gzmsg << "Tool stopped touching leak at " << simTime
+            << " seconds" << std::endl;
+    }
+    this->fixStart = common::Time::Zero;
+    return false;
+  }
+
+  // Just started touching
+  if (this->fixStart == common::Time::Zero)
+  {
+    this->fixStart = simTime;
+    // This is only printed if button is also pressed.
+    gzmsg << "Tool started touching leak at " << this->fixStart
+          << " seconds" << std::endl;
+  }
+
+  // Check if it has been pressing for long enough
+  return simTime - this->fixStart > this->targetTime;
 }
 
 /////////////////////////////////////////////////
