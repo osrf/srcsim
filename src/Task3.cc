@@ -330,13 +330,6 @@ bool Task3CP7::Check()
     }
   }
 
-  // If couldn't get sensor or joint
-  if (!this->sensor || !this->buttonJoint)
-  {
-    gzerr << "Couldn't get sensor or joint pointer." << std::endl;
-    return false;
-  }
-
   auto simTime = this->world->GetSimTime();
 
   // Check if button is pressed
@@ -344,7 +337,9 @@ bool Task3CP7::Check()
   {
     // Stopped pressing
     if (this->fixStart != common::Time::Zero)
+    {
       gzmsg << "Released button at " << simTime << " seconds" << std::endl;
+    }
 
     this->fixStart = common::Time::Zero;
     return false;
