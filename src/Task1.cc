@@ -77,6 +77,8 @@ bool Task1CP2::Check()
   // First time
   if (!this->satelliteRosSub && !this->satelliteDone)
   {
+    this->Start();
+
     // Subscribe to satellite msgs
     this->rosNode.reset(new ros::NodeHandle());
     this->satelliteRosSub = this->rosNode->subscribe(
