@@ -44,12 +44,18 @@ namespace gazebo
     /// override the function to move other objects too.
     public: virtual void Skip();
 
-    /// \brief Skip this checkpoint.
+    /// \brief Call this the first time the checkpoint is checked.
     public: virtual void Start();
 
     /// \brief The pose the robot should be in when this checkpoint is skipped.
-    public: ignition::math::Pose3d robotSkipPose;
+    private: ignition::math::Pose3d robotSkipPose;
+
+    /// \brief List of names of models which should be deleted when this
+    /// checkpoint starts.
     private: std::vector<std::string> deleteModels;
+
+    /// \brief List of SDF file strings of models which should be inserted when
+    // this checkpoint starts.
     private: std::vector<std::string> insertModels;
   };
 
