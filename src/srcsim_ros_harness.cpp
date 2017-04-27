@@ -48,7 +48,7 @@ SRCSimRosHarness::~SRCSimRosHarness()
 void SRCSimRosHarness::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf)
 {
   // Load the plugin
-  HarnessPlugin::Load(_parent, _sdf);
+  SRCHarnessPlugin::Load(_parent, _sdf);
 
   this->robotNamespace_ = "";
   if (_sdf->HasElement("robotNamespace"))
@@ -107,15 +107,15 @@ void SRCSimRosHarness::OnDetach(const std_msgs::Bool::ConstPtr &msg)
 void SRCSimRosHarness::OnAttach(const geometry_msgs::Pose::ConstPtr &msg)
 {
   ignition::math::Vector3d pos(
-      msg.position.x,
-      msg.position.y,
-      msg.position.z);
+      msg->position.x,
+      msg->position.y,
+      msg->position.z);
   ignition::math::Quaterniond rot(
-      msg.orientation.w,
-      msg.orientation.x,
-      msg.orientation.y,
-      msg.orientation.z);
-  this->Attach(ignition::math::Pose3d(pos, rot);
+      msg->orientation.w,
+      msg->orientation.x,
+      msg->orientation.y,
+      msg->orientation.z);
+  this->Attach(ignition::math::Pose3d(pos, rot));
 }
 
 /////////////////////////////////////////////////

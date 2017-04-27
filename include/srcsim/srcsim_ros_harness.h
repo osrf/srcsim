@@ -44,7 +44,7 @@ namespace gazebo
 ///  3. /<plugin_model_name>/harness/attach
 ///      - Message Type: geometry_msgs::Pose
 ///      - Purpose: Teleport the model to specified pose and re-attach harness.
-class SRCSimRosHarness : public HarnessPlugin
+class SRCSimRosHarness : public SRCHarnessPlugin
 {
     /// \brief Constructor
     public: SRCSimRosHarness();
