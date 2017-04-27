@@ -44,8 +44,13 @@ namespace gazebo
     /// override the function to move other objects too.
     public: virtual void Skip();
 
+    /// \brief Skip this checkpoint.
+    public: virtual void Start();
+
     /// \brief The pose the robot should be in when this checkpoint is skipped.
     public: ignition::math::Pose3d robotSkipPose;
+    private: std::vector<std::string> deleteModels;
+    private: std::vector<std::string> insertModels;
   };
 
   /// \brief A checkpoint tied to a BoxContainsPlugin.
