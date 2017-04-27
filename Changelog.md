@@ -2,11 +2,29 @@
 
 ### SRC Sim x.x.x (2017-xx-xx)
 
+* Launch file and 5 example worlds for finals
+    * [Pull request 61](https://bitbucket.org/osrf/srcsim/pull-requests/61)
+
 * Task 2: Teleport solar panel within reach
     * [Pull request 63](https://bitbucket.org/osrf/srcsim/pull-requests/63)
 
 * Task 3: Randomize habitat objects
     * [Pull request 60](https://bitbucket.org/osrf/srcsim/pull-requests/60)
+
+* Task 3: Checkpoints 1, 2, 3, 4
+    * [Pull request 59](https://bitbucket.org/osrf/srcsim/pull-requests/59)
+
+* Task 3, Checkpoint 5: Leak detection
+    * [Pull request 64](https://bitbucket.org/osrf/srcsim/pull-requests/64)
+
+* Task 3: Simple collision shapes for crates
+    * [Pull request 66](https://bitbucket.org/osrf/srcsim/pull-requests/66)
+
+* Task 3: Fix habitat wall collision
+    * [Pull request 65](https://bitbucket.org/osrf/srcsim/pull-requests/65)
+
+* Task 3: Integration
+    * [Pull request 57](https://bitbucket.org/osrf/srcsim/pull-requests/57)
 
 ### SRC Sim 0.4.0 (2017-04-14)
 
