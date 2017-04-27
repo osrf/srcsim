@@ -23,6 +23,9 @@
 * Task 3: Integration
     * [Pull request 57](https://bitbucket.org/osrf/srcsim/pull-requests/57)
 
+* Performance: Delete / insert models as we need them in view
+    * [Pull request 67](https://bitbucket.org/osrf/srcsim/pull-requests/67)
+
 ### SRC Sim 0.4.0 (2017-04-14)
 
 * Grasping controller
