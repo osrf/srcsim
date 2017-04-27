@@ -200,6 +200,46 @@ install(TARGETS ${solar_panel_plugin_name}
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin)
 
+##############################
+##  SRC Ros Harness plugin  ##
+##############################
+
+# Create the libSRCHarnessPlugin.so library.
+set(src_harness_plugin_name SRCSimRosHarness)
+add_library(${src_harness_plugin_name} SHARED
+  src/srcsim_ros_harness.cc
+)
+target_link_libraries(${src_harness_plugin_name}
+  ${catkin_LIBRARIES}
+  ${GAZEBO_LIBRARIES}
+  ${roscpp_LIBRARIES}
+)
+
+install(TARGETS ${src_harness_plugin_name}
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin)
+
+##########################
+##  SRC Harness plugin  ##
+##########################
+
+# Create the libSRCHarnessPlugin.so library.
+set(src_harness_plugin_name SRCHarnessPlugin)
+add_library(${src_harness_plugin_name} SHARED
+  src/SRCHarnessPlugin.cc
+)
+target_link_libraries(${src_harness_plugin_name}
+  ${catkin_LIBRARIES}
+  ${GAZEBO_LIBRARIES}
+  ${roscpp_LIBRARIES}
+)
+
+install(TARGETS ${src_harness_plugin_name}
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin)
+
 #############
 ## Install ##
 #############
