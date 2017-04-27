@@ -51,7 +51,8 @@ Checkpoint::Checkpoint(const sdf::ElementPtr &_sdf)
     auto elem = _sdf->GetElement("insert_model");
     while (elem)
     {
-      this->insertModels.push_back(elem->Get<std::string>());
+      auto inner = elem->GetElement("sdf");
+      this->insertModels.push_back(inner->ToString(""));
 
       elem = elem->GetNextElement("insert_model");
     }
@@ -83,13 +84,10 @@ void Checkpoint::Start()
 
   for (auto modelStr : this->insertModels)
   {
-    auto modelName = modelStr.substr(modelStr.find("name=") + 7,
-                                     modelStr.find("name=") + 17);
-
     msgs::Factory msg;
     msg.set_sdf(modelStr);
     factoryPub->Publish(msg);
-    gzmsg << "Requested to insert [" << modelName << "]" << std::endl;
+    gzmsg << "Requested to insert a model" << std::endl;
   }
   this->insertModels.clear();
   factoryPub.reset();
