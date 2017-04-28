@@ -487,7 +487,7 @@
                          tSatSlotOrigin
     %>
 
-    <%= fromFile("satellite.erb") %>
+    <%= fromFile("satellite_vis.erb") %>
 
     <!-- Checkpoint 1 - Box plugin -->
     <%
@@ -640,10 +640,10 @@
       $solar_panel_frame = $current_frame *
                            $current_walkway[$slot] *
                            tPanelSlotOrigin
-      $solar_panel_pos_z = 0.46
+      $solar_panel_pos_z = 0.497167
     %>
 
-    <%= fromFile("solar_panel.erb") %>
+    <%= fromFile("solar_panel_vis.erb") %>
 
     <!-- Bling -->
     <%=
@@ -983,6 +983,14 @@
           </checkpoint1>
 
           <checkpoint2>
+
+            <delete_model>VIS_satellite_dish</delete_model>
+            <insert_model>
+              <sdf version="1.6">
+                <%= fromFile("satellite.erb") %>
+              </sdf>
+            </insert_model>
+
             <skip_robot_pose>
               <%= t1cp2_frame[0, 2] %>
               <%= t1cp2_frame[1, 2] %>
@@ -1015,6 +1023,14 @@
           <timeout>3600</timeout>
 
           <checkpoint1>
+
+            <delete_model>VIS_solar_panel</delete_model>
+            <insert_model>
+              <sdf version="1.6">
+                <%= fromFile("solar_panel.erb") %>
+              </sdf>
+            </insert_model>
+
           </checkpoint1>
 
           <checkpoint2>
