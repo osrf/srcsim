@@ -429,7 +429,13 @@ void SRCHarnessPlugin::Detach()
 /////////////////////////////////////////////////
 double SRCHarnessPlugin::WinchVelocity() const
 {
-  return this->dataPtr->joints[this->dataPtr->winchIndex]->GetVelocity(0);
+  int winchIndex = this->dataPtr->winchIndex;
+  if (winchIndex < 0 ||
+      winchIndex >= static_cast<int>(this->dataPtr->joints.size()))
+  {
+    return this->dataPtr->joints[winchIndex]->GetVelocity(0);
+  }
+  return 0;
 }
 
 /////////////////////////////////////////////////
