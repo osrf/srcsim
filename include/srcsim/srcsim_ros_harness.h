@@ -52,7 +52,7 @@ class SRCSimRosHarness : public SRCHarnessPlugin
     /// \brief Destructor
     public: virtual ~SRCSimRosHarness();
 
-    /// \brief Load the plugin
+    // Documentation inherited
     public: virtual void Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf);
 
     /// \brief Receive winch velocity control messages.

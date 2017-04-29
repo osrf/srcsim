@@ -35,7 +35,7 @@ namespace gazebo
     /// \brief sdf pointer
     public: sdf::ElementPtr sdf;
 
-    /// \brief sdf pointer
+    /// \brief model pointer
     public: physics::ModelPtr model;
 
     /// \brief Vector of joints
@@ -455,7 +455,7 @@ void SRCHarnessPlugin::SetWinchVelocity(const float _value)
 /////////////////////////////////////////////////
 int SRCHarnessPlugin::JointIndex(const std::string &_name) const
 {
-  // Find the winch joint in our list of joints
+  // Find the given joint in our list of joints
   for (size_t i = 0; i < this->dataPtr->joints.size(); ++i)
   {
     if (this->dataPtr->joints[i]->GetName() == _name)
