@@ -21,9 +21,7 @@
 #include <string>
 #include <vector>
 
-#include "gazebo/transport/TransportTypes.hh"
-#include "gazebo/common/PID.hh"
-#include "gazebo/common/Plugin.hh"
+#include <gazebo/common/Plugin.hh>
 
 namespace gazebo
 {

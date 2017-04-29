@@ -16,14 +16,16 @@
 */
 #include <sdf/sdf.hh>
 
-#include "gazebo/transport/Node.hh"
-#include "gazebo/transport/Subscriber.hh"
+#include <gazebo/common/PID.hh>
 
-#include "gazebo/physics/Joint.hh"
-#include "gazebo/physics/Link.hh"
-#include "gazebo/physics/Model.hh"
-#include "gazebo/physics/PhysicsEngine.hh"
-#include "gazebo/physics/World.hh"
+#include <gazebo/transport/Node.hh>
+#include <gazebo/transport/Subscriber.hh>
+
+#include <gazebo/physics/Joint.hh>
+#include <gazebo/physics/Link.hh>
+#include <gazebo/physics/Model.hh>
+#include <gazebo/physics/PhysicsEngine.hh>
+#include <gazebo/physics/World.hh>
 
 #include "srcsim/SRCHarnessPlugin.hh"
 
