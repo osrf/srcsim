@@ -557,7 +557,7 @@
     <!-- Checkpoint 3 - Box plugin -->
     <plugin name="boxT1CP3" filename="libBoxContainsPlugin.so">
       <entity>valkyrie</entity>
-      <namespace>task1/checkpoint3</namespace>
+      <namespace>task1/checkpoint4</namespace>
       <pose>
         6.186
         -1.0264989470453114e-15
@@ -5600,7 +5600,7 @@
             </skip_robot_pose>
           </checkpoint2>
 
-          <checkpoint3>
+          <checkpoint4>
             <skip_robot_pose>
               6.186
               -9.331808609502831e-16
@@ -5609,7 +5609,7 @@
               0
               -2.4492935982947064e-16
             </skip_robot_pose>
-          </checkpoint3>
+          </checkpoint4>
         </task1>
       
 

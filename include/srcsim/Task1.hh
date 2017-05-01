@@ -75,8 +75,8 @@ namespace gazebo
     private: ros::Subscriber satelliteRosSub;
   };
 
-  /// \brief Task 1, Checkpoint 3: Final box
-  class Task1CP3 : public BoxCheckpoint
+  /// \brief Task 1, Checkpoint 4: Final box
+  class Task1CP4 : public BoxCheckpoint
   {
     using BoxCheckpoint::BoxCheckpoint;
 

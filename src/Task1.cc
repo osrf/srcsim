@@ -25,7 +25,7 @@ Task1::Task1(const sdf::ElementPtr &_sdf) : Task(_sdf)
   gzmsg << "Creating Task [1] ... ";
 
   // Get SDF for each checkpoint
-  sdf::ElementPtr cp1Elem, cp2Elem, cp3Elem;
+  sdf::ElementPtr cp1Elem, cp2Elem, cp4Elem;
   if (_sdf)
   {
     if (_sdf->HasElement("checkpoint1"))
@@ -34,8 +34,8 @@ Task1::Task1(const sdf::ElementPtr &_sdf) : Task(_sdf)
     if (_sdf->HasElement("checkpoint2"))
       cp2Elem = _sdf->GetElement("checkpoint2");
 
-    if (_sdf->HasElement("checkpoint3"))
-      cp3Elem = _sdf->GetElement("checkpoint3");
+    if (_sdf->HasElement("checkpoint4"))
+      cp4Elem = _sdf->GetElement("checkpoint4");
   }
 
   // Checkpoint 1: Walk to satellite dish
@@ -47,8 +47,8 @@ Task1::Task1(const sdf::ElementPtr &_sdf) : Task(_sdf)
   this->checkpoints.push_back(std::move(cp2));
 
   // Checkpoints 3: Walk to final box
-  std::unique_ptr<Task1CP3> cp3(new Task1CP3(cp3Elem));
-  this->checkpoints.push_back(std::move(cp3));
+  std::unique_ptr<Task1CP4> cp4(new Task1CP4(cp4Elem));
+  this->checkpoints.push_back(std::move(cp4));
 
   gzmsg << "Task [1] created" << std::endl;
 }
@@ -103,8 +103,8 @@ bool Task1CP2::Check()
 }
 
 /////////////////////////////////////////////////
-bool Task1CP3::Check()
+bool Task1CP4::Check()
 {
-  return this->CheckBox("/task1/checkpoint3");
+  return this->CheckBox("/task1/checkpoint4");
 }
 
