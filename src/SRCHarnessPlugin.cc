@@ -441,9 +441,10 @@ double SRCHarnessPlugin::WinchVelocity() const
   if (winchIndex < 0 ||
       winchIndex >= static_cast<int>(this->dataPtr->joints.size()))
   {
-    return this->dataPtr->joints[winchIndex]->GetVelocity(0);
+    gzerr << "No known winch joint to get velocity" << std::endl;
+    return 0;
   }
-  return 0;
+  return this->dataPtr->joints[winchIndex]->GetVelocity(0);
 }
 
 /////////////////////////////////////////////////
