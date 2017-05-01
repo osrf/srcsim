@@ -26,6 +26,9 @@
 * Task 3: Integration
     * [Pull request 57](https://bitbucket.org/osrf/srcsim/pull-requests/57)
 
+* Task 1: Split checkpoint 2
+    * [Pull request 70](https://bitbucket.org/osrf/srcsim/pull-requests/70)
+
 ### SRC Sim 0.4.0 (2017-04-14)
 
 * Grasping controller
