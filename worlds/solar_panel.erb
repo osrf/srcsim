@@ -57,6 +57,9 @@
   small_panel_inertia_x = 0.2
   small_panel_inertia_y = 0.025
   small_panel_inertia_z = 0.24
+
+  # contact parameters
+  kp = 1e6
 %>
 
 <model name="solar_panel">
@@ -87,7 +90,7 @@
       <surface>
         <contact>
           <ode>
-            <kp>1e5</kp>
+            <kp><%= kp %></kp>
             <kd>1</kd>
             <max_vel>0.1</max_vel>
             <min_depth>0.0015</min_depth>
@@ -141,7 +144,7 @@
       <surface>
         <contact>
           <ode>
-            <kp>1e5</kp>
+            <kp><%= kp %></kp>
             <kd>1</kd>
             <max_vel>0.1</max_vel>
             <min_depth>0.0015</min_depth>
@@ -173,7 +176,7 @@
       <surface>
         <contact>
           <ode>
-            <kp>1e5</kp>
+            <kp><%= kp %></kp>
             <kd>1</kd>
             <max_vel>0.1</max_vel>
             <min_depth>0.0015</min_depth>
@@ -227,7 +230,7 @@
       <surface>
         <contact>
           <ode>
-            <kp>1e5</kp>
+            <kp><%= kp %></kp>
             <kd>1</kd>
             <max_vel>0.1</max_vel>
             <min_depth>0.0015</min_depth>
@@ -258,7 +261,7 @@
       <surface>
         <contact>
           <ode>
-            <kp>1e5</kp>
+            <kp><%= kp %></kp>
             <kd>1</kd>
             <max_vel>0.1</max_vel>
             <min_depth>0.0015</min_depth>
@@ -309,7 +312,7 @@
       <surface>
         <contact>
           <ode>
-            <kp>1e5</kp>
+            <kp><%= kp %></kp>
             <kd>1</kd>
             <max_vel>0.1</max_vel>
             <min_depth>0.0015</min_depth>
@@ -359,7 +362,7 @@
       <surface>
         <contact>
           <ode>
-            <kp>1e5</kp>
+            <kp><%= kp %></kp>
             <kd>1</kd>
             <max_vel>0.1</max_vel>
             <min_depth>0.0015</min_depth>
@@ -409,7 +412,7 @@
       <surface>
         <contact>
           <ode>
-            <kp>1e5</kp>
+            <kp><%= kp %></kp>
             <kd>1</kd>
             <max_vel>0.1</max_vel>
             <min_depth>0.0015</min_depth>
@@ -459,7 +462,7 @@
       <surface>
         <contact>
           <ode>
-            <kp>1e5</kp>
+            <kp><%= kp %></kp>
             <kd>1</kd>
             <max_vel>0.1</max_vel>
             <min_depth>0.0015</min_depth>
@@ -502,7 +505,7 @@
       <surface>
         <contact>
           <ode>
-            <kp>1e5</kp>
+            <kp><%= kp %></kp>
             <kd>1</kd>
             <max_vel>0.1</max_vel>
             <min_depth>0.0015</min_depth>
