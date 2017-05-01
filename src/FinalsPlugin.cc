@@ -17,6 +17,9 @@
 
 #include <gazebo/common/Console.hh>
 
+#include <ros/time.h>
+#include <srcsim/Score.h>
+
 #include "srcsim/FinalsPlugin.hh"
 #include "srcsim/Task1.hh"
 #include "srcsim/Task2.hh"
@@ -100,6 +103,9 @@ void FinalsPlugin::Load(physics::WorldPtr _world, sdf::ElementPtr _sdf)
 
   this->startTaskRosService = this->rosNode->advertiseService(
       "/srcsim/finals/start_task", &FinalsPlugin::OnStartTaskRosRequest, this);
+
+  this->scoreRosPub = this->rosNode->advertise<srcsim::Score>(
+      "/srcsim/finals/score", 1000);
 
   this->taskRosSub = this->rosNode->subscribe("/srcsim/finals/task", 10,
       &FinalsPlugin::OnTaskRosMsg, this);
@@ -241,6 +247,40 @@ void FinalsPlugin::OnUpdate(const common::UpdateInfo &_info)
     return;
 
   this->tasks[this->current - 1]->Update(_info.simTime);
+
+  // Publish ROS score message
+  srcsim::Score msg;
+  for (auto i = 0; i < this->current; ++i)
+  {
+    if (!this->tasks[i])
+    {
+      continue;
+    }
+    for (size_t j = 0; j < this->tasks[i]->CurrentCheckpointId(); ++j)
+    {
+      ros::Time t(this->tasks[i]->GetCheckpointCompletion(j).Double());
+      msg.checkpoints_completion.push_back(t);
+    }
+  }
+
+  // Compute score based on checkpoint completion times from all tasks
+  msg.score = 0;
+  uint8_t last_checkpoint_score = 0;
+  for (auto t : msg.checkpoints_completion)
+  {
+    if (t.isZero())
+    {
+      // End winning streak in case of incomplete checkpoints
+      last_checkpoint_score = 0;
+    }
+    else
+    {
+      // Next checkpoint gets one more point than previous checkpoint
+      last_checkpoint_score += 1;
+      msg.score += last_checkpoint_score;
+    }
+  }
+  this->scoreRosPub.publish(msg);
 }
 
 /////////////////////////////////////////////////

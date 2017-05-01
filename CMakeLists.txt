@@ -29,6 +29,7 @@ add_message_files(
   Console.msg
   Leak.msg
   Satellite.msg
+  Score.msg
   Task.msg
 )
 

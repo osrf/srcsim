@@ -211,6 +211,16 @@ size_t Task::CurrentCheckpointId() const
   return this->current;
 }
 
+/////////////////////////////////////////////////
+common::Time Task::GetCheckpointCompletion(size_t index) const
+{
+  if (index < this->checkpointsCompletion.size())
+  {
+    return this->checkpointsCompletion[index];
+  }
+  return common::Time::Zero;
+}
+
 //////////////////////////////////////////////////
 void Task::OnStartBox(ConstIntPtr &_msg)
 {

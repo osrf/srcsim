@@ -61,6 +61,11 @@ namespace gazebo
     /// \return Index of current checkpoint.
     public: size_t CurrentCheckpointId() const;
 
+    /// \brief Return the completion time of a checkpoint.
+    /// \param[in] _index Index of the checkpoint
+    /// \return The competion time
+    public: common::Time GetCheckpointCompletion(size_t index) const;
+
     /// \brief Return this task's number.
     /// \return Task number.
     public: virtual size_t Number() const = 0;

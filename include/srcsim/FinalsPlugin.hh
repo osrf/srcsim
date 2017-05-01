@@ -71,6 +71,9 @@ namespace gazebo
     /// \brief Ros task service server
     private: ros::ServiceServer startTaskRosService;
 
+    /// \brief Ros publisher which publishes the score.
+    private: ros::Publisher scoreRosPub;
+
     /// \brief Ros task subscriber
     private: ros::Subscriber taskRosSub;
 
