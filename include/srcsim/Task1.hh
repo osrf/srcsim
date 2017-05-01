@@ -48,8 +48,35 @@ namespace gazebo
     public: bool Check();
   };
 
-  /// \brief Task 1, Checkpoint 2: Satellite pitch and yaw
+  /// \brief Task 1, Checkpoint 2: Satellite pitch or yaw
   class Task1CP2 : public Checkpoint
+  {
+    using Checkpoint::Checkpoint;
+
+    /// \brief Check whether the last message received from the satellite had
+    /// the checkpoint complete.
+    /// \return True if the checkpoint is compelete.
+    public: bool Check();
+
+    /// \brief Callback when a satellite message is received.
+    /// \param[in] _msg Satellite message
+    private: void OnSatelliteRosMsg(const srcsim::Satellite &_msg);
+
+    /// \brief Whether the checkpoint is complete or not.
+    private: bool oneAxisDone = false;
+
+    /// \brief Ros node handle
+    private: std::unique_ptr<ros::NodeHandle> rosNode;
+
+    /// \brief Gazebo transport node for communication.
+    private: transport::NodePtr gzNode;
+
+    /// \brief Subscribes to ROS satellite messages.
+    private: ros::Subscriber satelliteRosSub;
+  };
+
+  /// \brief Task 1, Checkpoint 3: Satellite pitch and yaw
+  class Task1CP3 : public Checkpoint
   {
     using Checkpoint::Checkpoint;
 
