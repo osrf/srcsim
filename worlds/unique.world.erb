@@ -531,10 +531,10 @@
       nextWalkway($finish_walkways, false)
     %>
 
-    <!-- Checkpoint 3 - Box plugin -->
-    <plugin name="boxT1CP3" filename="libBoxContainsPlugin.so">
+    <!-- Checkpoint 4 - Box plugin -->
+    <plugin name="boxT1CP4" filename="libBoxContainsPlugin.so">
       <entity>valkyrie</entity>
-      <namespace>task1/checkpoint3</namespace>
+      <namespace>task1/checkpoint4</namespace>
       <pose>
         <%= $current_frame[0, 2] %>
         <%= $current_frame[1, 2] %>
@@ -1142,7 +1142,7 @@
             </skip_robot_pose>
           </checkpoint2>
 
-          <checkpoint3>
+          <checkpoint4>
             <skip_robot_pose>
               <%= t1cp3_frame[0, 2] %>
               <%= t1cp3_frame[1, 2] %>
@@ -1151,7 +1151,7 @@
               0
               <%= Math::atan2(t1cp3_frame[1, 0], t1cp3_frame[0, 0]) %>
             </skip_robot_pose>
-          </checkpoint3>
+          </checkpoint4>
         </task1>
       <%
         end
