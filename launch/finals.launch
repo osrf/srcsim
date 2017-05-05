@@ -50,6 +50,6 @@
   -->
 
   <!-- Launch image processing and robot_state_publisher for multisense camera -->
-  <include file $(find srcsim)/launch/multisense.launch>
+  <include file="$(find srcsim)/launch/multisense.launch" />
 
 </launch>
