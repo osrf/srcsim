@@ -25,7 +25,7 @@ Task1::Task1(const sdf::ElementPtr &_sdf) : Task(_sdf)
   gzmsg << "Creating Task [1] ... ";
 
   // Get SDF for each checkpoint
-  sdf::ElementPtr cp1Elem, cp2Elem, cp3Elem;
+  sdf::ElementPtr cp1Elem, cp2Elem, cp4Elem;
   if (_sdf)
   {
     if (_sdf->HasElement("checkpoint1"))
@@ -34,21 +34,27 @@ Task1::Task1(const sdf::ElementPtr &_sdf) : Task(_sdf)
     if (_sdf->HasElement("checkpoint2"))
       cp2Elem = _sdf->GetElement("checkpoint2");
 
-    if (_sdf->HasElement("checkpoint3"))
-      cp3Elem = _sdf->GetElement("checkpoint3");
+    if (_sdf->HasElement("checkpoint4"))
+      cp4Elem = _sdf->GetElement("checkpoint4");
   }
 
   // Checkpoint 1: Walk to satellite dish
   std::unique_ptr<Task1CP1> cp1(new Task1CP1(cp1Elem));
   this->checkpoints.push_back(std::move(cp1));
 
-  // Checkpoints 2: Correct pitch / yaw
+  // Checkpoints 2: Correct pitch or yaw
   std::unique_ptr<Task1CP2> cp2(new Task1CP2(cp2Elem));
   this->checkpoints.push_back(std::move(cp2));
 
-  // Checkpoints 3: Walk to final box
-  std::unique_ptr<Task1CP3> cp3(new Task1CP3(cp3Elem));
+  // Checkpoints 3: Correct pitch and yaw
+  // it is not supported to skip the previous checkpoint and start with this
+  // therefore simply reusing checkpoint 2
+  std::unique_ptr<Task1CP3> cp3(new Task1CP3(cp2Elem));
   this->checkpoints.push_back(std::move(cp3));
+
+  // Checkpoints 3: Walk to final box
+  std::unique_ptr<Task1CP4> cp4(new Task1CP4(cp4Elem));
+  this->checkpoints.push_back(std::move(cp4));
 
   gzmsg << "Task [1] created" << std::endl;
 }
@@ -68,11 +74,42 @@ bool Task1CP1::Check()
 /////////////////////////////////////////////////
 void Task1CP2::OnSatelliteRosMsg(const srcsim::Satellite &_msg)
 {
-  this->satelliteDone = _msg.yaw_completed && _msg.pitch_completed;
+  this->oneAxisDone = _msg.yaw_completed || _msg.pitch_completed;
 }
 
 /////////////////////////////////////////////////
 bool Task1CP2::Check()
+{
+  // First time
+  if (!this->satelliteRosSub && !this->oneAxisDone)
+  {
+    // Subscribe to satellite msgs
+    this->rosNode.reset(new ros::NodeHandle());
+    this->satelliteRosSub = this->rosNode->subscribe(
+        "/task1/checkpoint2/satellite", 10, &Task1CP2::OnSatelliteRosMsg, this);
+
+    this->gzNode = transport::NodePtr(new transport::Node());
+    this->gzNode->Init();
+
+    auto togglePub = this->gzNode->Advertise<msgs::Int>(
+        "/task1/checkpoint2/toggle");
+
+    msgs::Int msg;
+    msg.set_data(1);
+    togglePub->Publish(msg);
+  }
+
+  return this->oneAxisDone;
+}
+
+/////////////////////////////////////////////////
+void Task1CP3::OnSatelliteRosMsg(const srcsim::Satellite &_msg)
+{
+  this->satelliteDone = _msg.yaw_completed && _msg.pitch_completed;
+}
+
+/////////////////////////////////////////////////
+bool Task1CP3::Check()
 {
   // First time
   if (!this->satelliteRosSub && !this->satelliteDone)
@@ -80,7 +117,7 @@ bool Task1CP2::Check()
     // Subscribe to satellite msgs
     this->rosNode.reset(new ros::NodeHandle());
     this->satelliteRosSub = this->rosNode->subscribe(
-        "/task1/checkpoint2/satellite", 10, &Task1CP2::OnSatelliteRosMsg, this);
+        "/task1/checkpoint2/satellite", 10, &Task1CP3::OnSatelliteRosMsg, this);
   }
 
   if (this->satelliteDone && this->rosNode)
@@ -103,8 +140,8 @@ bool Task1CP2::Check()
 }
 
 /////////////////////////////////////////////////
-bool Task1CP3::Check()
+bool Task1CP4::Check()
 {
-  return this->CheckBox("/task1/checkpoint3");
+  return this->CheckBox("/task1/checkpoint4");
 }
 
