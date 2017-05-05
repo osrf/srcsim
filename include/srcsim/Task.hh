@@ -75,9 +75,14 @@ namespace gazebo
     private: void OnStartBox(ConstIntPtr &_msg);
 
     /// \brief Vector of checkpoints for this task.
+    /// checkpoints[0]: Checkpoint 1
+    /// checkpoints[1]: Checkpoint 2
+    /// checkpoints[2]: Checkpoint 3
+    /// ...
     protected: std::vector<std::unique_ptr<Checkpoint> > checkpoints;
 
-    /// \brief Current checkpoint number
+    /// \brief Current checkpoint number, starting from 1. Zero means no
+    /// checkpoint, either the task hasn't started or has finished.
     protected: size_t current = 0;
 
     /// \brief Vector of times when checkpoints were completed.

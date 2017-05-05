@@ -56,10 +56,13 @@ namespace gazebo
     /// \brief Connection to world update
     private: event::ConnectionPtr updateConnection;
 
-    /// \brief Vector of tasks
+    /// \brief Vector of tasks.
+    /// tasks[0]: Task 1
+    /// tasks[1]: Task 2
+    /// tasks[2]: Task 3
     private: std::vector<std::unique_ptr<Task> > tasks;
 
-    /// \brief Current task number
+    /// \brief Current task number, starting from 1. Zero means no task.
     private: uint8_t current = 0;
 
     /// \brief Pointer to the world
