@@ -2,6 +2,9 @@
 
 ### SRC Sim x.x.x (2017-xx-xx)
 
+* Fix Hokuyo transform publication
+    * [Pull request 72](https://bitbucket.org/osrf/srcsim/pull-requests/72)
+
 * Launch file and 5 example worlds for finals
     * [Pull request 61](https://bitbucket.org/osrf/srcsim/pull-requests/61)
 
