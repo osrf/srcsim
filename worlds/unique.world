@@ -41,7 +41,7 @@
     <!-- A global light source -->
     <light type="directional" name="sun">
       <cast_shadows>true</cast_shadows>
-      <pose>0 0 1000 -0.9763763250810842 -1.0828660042812976 0</pose>
+      <pose>0 0 1000 0.3040367621207234 -1.0022934168492812 0</pose>
       <diffuse>0.8 0.8 0.8 1</diffuse>
       <specular>0.2 0.2 0.2 1</specular>
       <attenuation>
@@ -64,44 +64,44 @@
     <include>
       <name>walkway_1</name>
       <pose>
-      -0.3
+      0.09
       0
       -0.052151
       0
       0
-      -1.5707963267948968
+      3.141592653589793
       </pose>
-      <uri>model://walkway_metal_straight</uri>
+      <uri>model://walkway_finish_opposite</uri>
     </include>
 
 
     <!-- Bling -->
     <include>
-      <name>mars_crate_long_1</name>
+      <name>mars_rock_3_1</name>
       <pose>
-      0.4619999999999998
-      -1.5620000000000003
+      0.09000000000000044
+      2.624
       0
       0
       0
-      -2.3561944901923453
+      -2.4492935982947064e-16
       </pose>
-      <uri>model://mars_crate_long</uri>
+      <uri>model://mars_rock_3</uri>
     </include>
 
 
     <!-- Bling -->
     <include>
-      <name>mars_crate_long_2</name>
+      <name>mars_rock_1_2</name>
       <pose>
-      0.46200000000000035
-      1.5619999999999998
+      0.08999999999999976
+      -1.924
       0
       0
       0
-      0.785398163397448
+      3.141592653589793
       </pose>
-      <uri>model://mars_crate_long</uri>
+      <uri>model://mars_rock_1</uri>
     </include>
 
 
@@ -109,12 +109,29 @@
 
     <!-- TASK 1 -->
 
+    <!-- Task 1 start - Box plugin -->
+    
+
+    <plugin name="boxT1Start" filename="libBoxContainsPlugin.so">
+      <entity>valkyrie</entity>
+      <namespace>task1/start</namespace>
+      <pose>
+        2.114
+        -2.784846821261081e-16
+        2.5
+        0
+        0
+        -1.5707963267948968
+      </pose>
+      <size>1.524 1 5.0</size>
+    </plugin>
+
     <!-- Walkway -->
     <include>
       <name>walkway_2</name>
       <pose>
-      1.224
-      -2.7995425828508494e-16
+      1.614
+      -1.8663617219005663e-16
       -0.052151
       0
       0
@@ -132,12 +149,12 @@
 <model name="satellite_dish">
 
   <pose>
-    1.9860000000000007
-    2.7619999999999996
+    2.3759999999999994
+    -2.7620000000000005
     0
     0
     0
-    -2.4492935982947064e-16
+    3.141592653589793
   </pose>
 
   <link name="base">
@@ -156,20 +173,22 @@
     <collision name="collision">
       <geometry>
         <mesh>
-          <uri>model://satellite_dish/meshes/satellite_dish.dae</uri>
+          <uri>model://satellite_dish/meshes/satellite_dish.obj</uri>
           <submesh>
             <name>Base</name>
           </submesh>
+          <scale>0.001 0.001 0.001</scale>
         </mesh>
       </geometry>
     </collision>
     <visual name="visual">
       <geometry>
         <mesh>
-          <uri>model://satellite_dish/meshes/satellite_dish.dae</uri>
+          <uri>model://satellite_dish/meshes/satellite_dish.obj</uri>
           <submesh>
             <name>Base</name>
           </submesh>
+          <scale>0.001 0.001 0.001</scale>
         </mesh>
       </geometry>
     </visual>
@@ -192,10 +211,11 @@
       <pose>0 0 -1.595 0 0 0</pose>
       <geometry>
         <mesh>
-          <uri>model://satellite_dish/meshes/satellite_dish.dae</uri>
+          <uri>model://satellite_dish/meshes/satellite_dish.obj</uri>
           <submesh>
             <name>Pivot</name>
           </submesh>
+          <scale>0.001 0.001 0.001</scale>
         </mesh>
       </geometry>
     </collision>
@@ -203,10 +223,11 @@
       <pose>0 0 -1.595 0 0 0</pose>
       <geometry>
         <mesh>
-          <uri>model://satellite_dish/meshes/satellite_dish.dae</uri>
+          <uri>model://satellite_dish/meshes/satellite_dish.obj</uri>
           <submesh>
             <name>Pivot</name>
           </submesh>
+          <scale>0.001 0.001 0.001</scale>
         </mesh>
       </geometry>
     </visual>
@@ -230,10 +251,11 @@
       <pose>0 -0.6519041 -1.451541 -0.43 0 0</pose>
       <geometry>
         <mesh>
-          <uri>model://satellite_dish/meshes/satellite_dish.dae</uri>
+          <uri>model://satellite_dish/meshes/satellite_dish.obj</uri>
           <submesh>
             <name>Dish</name>
           </submesh>
+          <scale>0.001 0.001 0.001</scale>
         </mesh>
       </geometry>
     </collision>
@@ -241,10 +263,11 @@
       <pose>0 -0.6519041 -1.451541 -0.43 0 0</pose>
       <geometry>
         <mesh>
-          <uri>model://satellite_dish/meshes/satellite_dish.dae</uri>
+          <uri>model://satellite_dish/meshes/satellite_dish.obj</uri>
           <submesh>
             <name>Dish</name>
           </submesh>
+          <scale>0.001 0.001 0.001</scale>
         </mesh>
       </geometry>
     </visual>
@@ -267,10 +290,11 @@
       <pose>0.2 1.060 -1.64 -0.52 0 0</pose>
       <geometry>
         <mesh>
-          <uri>model://satellite_dish/meshes/satellite_dish.dae</uri>
+          <uri>model://satellite_dish/meshes/satellite_dish.obj</uri>
           <submesh>
             <name>Wheel_01</name>
           </submesh>
+          <scale>0.001 0.001 0.001</scale>
         </mesh>
       </geometry>
     </collision>
@@ -295,10 +319,11 @@
       <pose>0.2 1.060 -1.64 -0.52 0 0</pose>
       <geometry>
         <mesh>
-          <uri>model://satellite_dish/meshes/satellite_dish.dae</uri>
+          <uri>model://satellite_dish/meshes/satellite_dish.obj</uri>
           <submesh>
             <name>Wheel_01</name>
           </submesh>
+          <scale>0.001 0.001 0.001</scale>
         </mesh>
       </geometry>
     </visual>
@@ -321,10 +346,11 @@
       <pose>-0.2 1.060 -1.64 -0.52 0 0</pose>
       <geometry>
         <mesh>
-          <uri>model://satellite_dish/meshes/satellite_dish.dae</uri>
+          <uri>model://satellite_dish/meshes/satellite_dish.obj</uri>
           <submesh>
             <name>Wheel_02</name>
           </submesh>
+          <scale>0.001 0.001 0.001</scale>
         </mesh>
       </geometry>
     </collision>
@@ -349,10 +375,11 @@
       <pose>-0.2 1.060 -1.64 -0.52 0 0</pose>
       <geometry>
         <mesh>
-          <uri>model://satellite_dish/meshes/satellite_dish.dae</uri>
+          <uri>model://satellite_dish/meshes/satellite_dish.obj</uri>
           <submesh>
             <name>Wheel_02</name>
           </submesh>
+          <scale>0.001 0.001 0.001</scale>
         </mesh>
       </geometry>
     </visual>
@@ -362,7 +389,7 @@
     <parent>base</parent>
     <child>pivot</child>
     <axis>
-      <xyz>0 0 1</xyz>
+      <xyz>0 0 -1</xyz>
       <dynamics>
         <damping>1000</damping>
       </dynamics>
@@ -388,9 +415,9 @@
     <parent>base</parent>
     <child>wheel_yaw</child>
     <axis>
-      <xyz>0 0 1</xyz>
+      <xyz>0 0 -1</xyz>
       <dynamics>
-        <friction>2.0790153313505306</friction>
+        <friction>2.4716836216039066</friction>
       </dynamics>
     </axis>
   </joint>
@@ -399,9 +426,9 @@
     <parent>base</parent>
     <child>wheel_pitch</child>
     <axis>
-      <xyz>0 0 1</xyz>
+      <xyz>0 0 -1</xyz>
       <dynamics>
-        <friction>2.7711241266723015</friction>
+        <friction>2.945124378351458</friction>
       </dynamics>
     </axis>
   </joint>
@@ -415,11 +442,11 @@
 
     <yaw_ratio>0.1</yaw_ratio>
     <yaw_pid>1000 0 10</yaw_pid>
-    <yaw_target>-0.5742926633280723</yaw_target>
+    <yaw_target>1.1205471674235241</yaw_target>
 
     <pitch_ratio>0.1</pitch_ratio>
     <pitch_pid>1000 100 10</pitch_pid>
-    <pitch_target>1.0487358924979095</pitch_target>
+    <pitch_target>0.5802387142053382</pitch_target>
 
     <!-- Tolerance in degrees -->
     <tolerance>5</tolerance>
@@ -442,28 +469,28 @@
       <entity>valkyrie</entity>
       <namespace>task1/checkpoint1</namespace>
       <pose>
-        1.9860000000000002
-        0.5619999999999994
+        2.376
+        -0.36200000000000054
         2.5
         0
         0
-        1.5707963267948963
+        -1.5707963267948968
       </pose>
-      <size>1 1 5</size>
+      <size>1 1 5.0</size>
     </plugin>
 
     <!-- Bling -->
     <include>
-      <name>mars_crate_long_3</name>
+      <name>mars_crate_3</name>
       <pose>
-      1.9859999999999998
-      -1.5620000000000005
+      2.3760000000000003
+      1.1619999999999997
       0
       0
       0
-      -2.3561944901923453
+      -2.4492935982947064e-16
       </pose>
-      <uri>model://mars_crate_long</uri>
+      <uri>model://mars_crate</uri>
     </include>
 
 
@@ -471,44 +498,44 @@
     <include>
       <name>walkway_3</name>
       <pose>
-      2.748
-      -5.599085165701699e-16
+      3.138
+      -4.6659043047514155e-16
       -0.052151
       0
       0
       -1.5707963267948968
       </pose>
-      <uri>model://walkway_metal_45</uri>
+      <uri>model://walkway_metal_straight</uri>
     </include>
 
 
     <!-- Bling -->
     <include>
-      <name>mars_rock_1_4</name>
+      <name>mars_rock_2_4</name>
       <pose>
-      4.38720271247462
-      0.8924427124746181
+      3.9
+      -1.2620000000000005
       0
       0
       0
-      -0.7853981633974485
+      3.141592653589793
       </pose>
-      <uri>model://mars_rock_1</uri>
+      <uri>model://mars_rock_2</uri>
     </include>
 
 
     <!-- Bling -->
     <include>
-      <name>mars_rock_3_5</name>
+      <name>mars_rock_2_5</name>
       <pose>
-      3.5100000000000007
-      1.8619999999999994
+      3.9
+      1.2619999999999996
       0
       0
       0
       -2.4492935982947064e-16
       </pose>
-      <uri>model://mars_rock_3</uri>
+      <uri>model://mars_rock_2</uri>
     </include>
 
 
@@ -516,12 +543,12 @@
     <include>
       <name>walkway_4</name>
       <pose>
-      5.126364734528298
-      -1.6171008265282993
+      6.186
+      -1.0264989470453114e-15
       -0.052151
       0
       0
-      2.356194490192345
+      3.141592653589793
       </pose>
       <uri>model://walkway_finish_opposite</uri>
     </include>
@@ -530,47 +557,49 @@
     <!-- Checkpoint 3 - Box plugin -->
     <plugin name="boxT1CP3" filename="libBoxContainsPlugin.so">
       <entity>valkyrie</entity>
-      <namespace>task1/checkpoint3</namespace>
+      <namespace>task1/checkpoint4</namespace>
       <pose>
-        5.126364734528298
-        -1.6171008265282993
+        6.186
+        -1.0264989470453114e-15
         2.5
         0
         0
-        2.356194490192345
+        3.141592653589793
       </pose>
-      <size>3.048 3.048 5</size>
+      <size>3.048 3.048 5.0</size>
     </plugin>
 
     <!-- Bling -->
     <include>
-      <name>mars_rock_2_6</name>
+      <name>mars_rock_3_6</name>
       <pose>
-      3.6951806094067257
-      -3.0482849516498716
+      6.186
+      -2.6240000000000014
       0
       0
       0
-      2.356194490192345
+      3.141592653589793
       </pose>
-      <uri>model://mars_rock_2</uri>
+      <uri>model://mars_rock_3</uri>
     </include>
 
 
     <!-- Bling -->
     <include>
-      <name>mars_crate_7</name>
+      <name>mars_rock_1_7</name>
       <pose>
-      6.486838181531216
-      -0.2566273795253821
+      6.186
+      1.923999999999999
       0
       0
       0
-      -0.7853981633974485
+      -2.449293598294706e-16
       </pose>
-      <uri>model://mars_crate</uri>
+      <uri>model://mars_rock_1</uri>
     </include>
 
+
+    
 
     <!-- /TASK 1 -->
     
@@ -579,48 +608,35 @@
 
     <!-- TASK 2 -->
 
+    <!-- Task 2 start - Box plugin -->
+    
+
+    <plugin name="boxT2Start" filename="libBoxContainsPlugin.so">
+      <entity>valkyrie</entity>
+      <namespace>task2/start</namespace>
+      <pose>
+        8.21
+        -1.3049836291714196e-15
+        2.5
+        0
+        0
+        -1.5707963267948968
+      </pose>
+      <size>1.524 1 5.0</size>
+    </plugin>
+
     <!-- Walkway -->
     <include>
       <name>walkway_5</name>
       <pose>
-      6.203995469056597
-      -2.6947315610565976
+      7.71
+      -1.213135119235368e-15
       -0.052151
       0
       0
-      -2.356194490192345
+      -1.5707963267948968
       </pose>
       <uri>model://walkway_metal_straight</uri>
-    </include>
-
-
-    <!-- Bling -->
-    <include>
-      <name>mars_rock_2_8</name>
-      <pose>
-      7.63517959417817
-      -2.3411781704633237
-      0
-      0
-      0
-      -0.7853981633974484
-      </pose>
-      <uri>model://mars_rock_2</uri>
-    </include>
-
-
-    <!-- Bling -->
-    <include>
-      <name>mars_rock_3_9</name>
-      <pose>
-      5.4261780097513945
-      -4.550179754890098
-      0
-      0
-      0
-      2.356194490192345
-      </pose>
-      <uri>model://mars_rock_3</uri>
     </include>
 
 
@@ -628,12 +644,12 @@
     <include>
       <name>walkway_6</name>
       <pose>
-      7.281626203584896
-      -3.7723622955848963
+      9.234
+      -1.493089377520453e-15
       -0.052151
       0
       0
-      -2.356194490192345
+      -1.5707963267948968
       </pose>
       <uri>model://walkway_metal_straight</uri>
     </include>
@@ -642,18 +658,729 @@
     <!-- Rover -->
     
 
+    <include>
+      <pose>
+        9.996
+        -5.262000000000001
+        0
+        0
+        0
+        -2.449293598294706e-16
+      </pose>
+      <uri>model://mars_explorer</uri>
+    </include>
+
+    <!-- Solar panel -->
+    
+
+    
+
+<model name="solar_panel">
+
+  <pose>
+    9.996
+    -0.5620000000000016
+    0.46
+    0
+    0
+    -1.7643281519487684
+  </pose>
+
+  <link name="base">
+
+    <inertial>
+      <pose>
+      0
+      0
+      0.04
+      0
+      0
+      0
+      </pose>
+      <inertia>
+        <ixx>0.0041666666666666675</ixx>
+        <iyy>0.05577866666666667</iyy>
+        <izz>0.05827866666666667</izz>
+      </inertia>
+      <mass>4.0</mass>
+    </inertial>
+
+
+    <collision name="collision">
+      <geometry>
+        <mesh>
+          <uri>model://solar_panel/meshes/solar_panel.obj</uri>
+          <submesh>
+            <name>Base</name>
+          </submesh>
+          <scale>0.001 0.001 0.001</scale>
+        </mesh>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e6</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+      </surface>
+    </collision>
+    <visual name="visual">
+      <geometry>
+        <mesh>
+          <uri>model://solar_panel/meshes/solar_panel.obj</uri>
+          <submesh>
+            <name>Base</name>
+          </submesh>
+          <scale>0.001 0.001 0.001</scale>
+        </mesh>
+      </geometry>
+    </visual>
+
+    <sensor name="base_sensor" type="contact">
+      <contact>
+        <collision>collision</collision>
+      </contact>
+    </sensor>
+
+  </link>
+
+  <link name="panel_01">
+
+    <inertial>
+      <pose>
+      0
+      0.05
+      0.24
+      0
+      0
+      0
+      </pose>
+      <inertia>
+        <ixx>0.00237075</ixx>
+        <iyy>0.005786083333333334</iyy>
+        <izz>0.003452833333333334</izz>
+      </inertia>
+      <mass>0.25</mass>
+    </inertial>
+
+
+    <collision name="panel_collision">
+      <geometry>
+        <mesh>
+          <uri>model://solar_panel/meshes/solar_panel.obj</uri>
+          <submesh>
+            <name>Panel_Large_01</name>
+          </submesh>
+          <scale>0.001 0.001 0.001</scale>
+        </mesh>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e6</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+      </surface>
+    </collision>
+    <visual name="panel_visual">
+      <geometry>
+        <mesh>
+          <uri>model://solar_panel/meshes/solar_panel.obj</uri>
+          <submesh>
+            <name>Panel_Large_01</name>
+          </submesh>
+          <scale>0.001 0.001 0.001</scale>
+        </mesh>
+      </geometry>
+    </visual>
+    <collision name="button_housing_collision">
+      <geometry>
+        <mesh>
+          <uri>model://solar_panel/meshes/solar_panel.obj</uri>
+          <submesh>
+            <name>ButtonHousing</name>
+          </submesh>
+          <scale>0.001 0.001 0.001</scale>
+        </mesh>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e6</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+      </surface>
+    </collision>
+    <visual name="button_housing_visual">
+      <geometry>
+        <mesh>
+          <uri>model://solar_panel/meshes/solar_panel.obj</uri>
+          <submesh>
+            <name>ButtonHousing</name>
+          </submesh>
+          <scale>0.001 0.001 0.001</scale>
+        </mesh>
+      </geometry>
+    </visual>
+
+    <sensor name="panel1_sensor" type="contact">
+      <contact>
+        <collision>panel_collision</collision>
+      </contact>
+    </sensor>
+
+  </link>
+
+
+  <link name="panel_02">
+
+    <inertial>
+      <pose>
+      0
+      -0.05
+      0.24
+      0
+      0
+      0
+      </pose>
+      <inertia>
+        <ixx>0.00237075</ixx>
+        <iyy>0.005786083333333334</iyy>
+        <izz>0.003452833333333334</izz>
+      </inertia>
+      <mass>0.25</mass>
+    </inertial>
+
+
+    <collision name="collision">
+      <geometry>
+        <mesh>
+          <uri>model://solar_panel/meshes/solar_panel.obj</uri>
+          <submesh>
+            <name>Panel_Large_02</name>
+          </submesh>
+          <scale>0.001 0.001 0.001</scale>
+        </mesh>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e6</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+      </surface>
+    </collision>
+    <visual name="visual">
+      <geometry>
+        <mesh>
+          <uri>model://solar_panel/meshes/solar_panel.obj</uri>
+          <submesh>
+            <name>Panel_Large_02</name>
+          </submesh>
+          <scale>0.001 0.001 0.001</scale>
+        </mesh>
+      </geometry>
+    </visual>
+
+    <collision name="outlet">
+      <pose>0.13675 0 0.369 1.5707963267948966 0 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.003222</length>
+          <radius>0.018693</radius>
+        </cylinder>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e6</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+      </surface>
+    </collision>
+
+    <sensor name="panel2_sensor" type="contact">
+      <contact>
+        <collision>collision</collision>
+      </contact>
+    </sensor>
+
+    <sensor name="outlet_sensor" type="contact">
+      <contact>
+        <collision>outlet</collision>
+      </contact>
+    </sensor>
+
+  </link>
+
+  <link name="panel_small_01">
+
+    <pose>0.2 0.03 0.2 0 0 0</pose>
+
+    <inertial>
+      <pose>
+      -0.1
+      -0.015
+      0.005
+      0
+      0
+      0
+      </pose>
+      <inertia>
+        <ixx>0.0004852083333333333</ixx>
+        <iyy>0.0008133333333333333</iyy>
+        <izz>0.00033854166666666673</izz>
+      </inertia>
+      <mass>0.1</mass>
+    </inertial>
+
+
+    <collision name="collision">
+      <pose>-0.2 -0.03 -0.2 0 0 0</pose>
+      <geometry>
+        <mesh>
+          <uri>model://solar_panel/meshes/solar_panel.obj</uri>
+          <submesh>
+            <name>Panel_Small_01</name>
+          </submesh>
+          <scale>0.001 0.001 0.001</scale>
+        </mesh>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e6</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+      </surface>
+    </collision>
+    <visual name="visual">
+      <pose>-0.2 -0.03 -0.2 0 0 0</pose>
+      <geometry>
+        <mesh>
+          <uri>model://solar_panel/meshes/solar_panel.obj</uri>
+          <submesh>
+            <name>Panel_Small_01</name>
+          </submesh>
+          <scale>0.001 0.001 0.001</scale>
+        </mesh>
+      </geometry>
+    </visual>
+  </link>
+
+  <link name="panel_small_02">
+
+    <pose>0.2 -0.03 0.2 0 0 0</pose>
+
+    <inertial>
+      <pose>
+      -0.1
+      0.015
+      0.005
+      0
+      0
+      0
+      </pose>
+      <inertia>
+        <ixx>0.0004852083333333333</ixx>
+        <iyy>0.0008133333333333333</iyy>
+        <izz>0.00033854166666666673</izz>
+      </inertia>
+      <mass>0.1</mass>
+    </inertial>
+
+
+    <collision name="collision">
+      <pose>-0.2 0.03 -0.2 0 0 0</pose>
+      <geometry>
+        <mesh>
+          <uri>model://solar_panel/meshes/solar_panel.obj</uri>
+          <submesh>
+            <name>Panel_Small_02</name>
+          </submesh>
+          <scale>0.001 0.001 0.001</scale>
+        </mesh>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e6</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+      </surface>
+    </collision>
+    <visual name="visual">
+      <pose>-0.2 0.03 -0.2 0 0 0</pose>
+      <geometry>
+        <mesh>
+          <uri>model://solar_panel/meshes/solar_panel.obj</uri>
+          <submesh>
+            <name>Panel_Small_02</name>
+          </submesh>
+          <scale>0.001 0.001 0.001</scale>
+        </mesh>
+      </geometry>
+    </visual>
+  </link>
+
+  <link name="panel_small_03">
+
+    <pose>-0.2 0.03 0.2 0 0 0</pose>
+
+    <inertial>
+      <pose>
+      0.1
+      -0.015
+      0.005
+      0
+      0
+      0
+      </pose>
+      <inertia>
+        <ixx>0.0004852083333333333</ixx>
+        <iyy>0.0008133333333333333</iyy>
+        <izz>0.00033854166666666673</izz>
+      </inertia>
+      <mass>0.1</mass>
+    </inertial>
+
+
+    <collision name="collision">
+      <pose>0.2 -0.03 -0.2 0 0 0</pose>
+      <geometry>
+        <mesh>
+          <uri>model://solar_panel/meshes/solar_panel.obj</uri>
+          <submesh>
+            <name>Panel_Small_03</name>
+          </submesh>
+          <scale>0.001 0.001 0.001</scale>
+        </mesh>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e6</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+      </surface>
+    </collision>
+    <visual name="visual">
+      <pose>0.2 -0.03 -0.2 0 0 0</pose>
+      <geometry>
+        <mesh>
+          <uri>model://solar_panel/meshes/solar_panel.obj</uri>
+          <submesh>
+            <name>Panel_Small_03</name>
+          </submesh>
+          <scale>0.001 0.001 0.001</scale>
+        </mesh>
+      </geometry>
+    </visual>
+  </link>
+
+  <link name="panel_small_04">
+
+    <pose>-0.2 -0.03 0.2 0 0 0</pose>
+
+    <inertial>
+      <pose>
+      0.1
+      0.015
+      0.005
+      0
+      0
+      0
+      </pose>
+      <inertia>
+        <ixx>0.0004852083333333333</ixx>
+        <iyy>0.0008133333333333333</iyy>
+        <izz>0.00033854166666666673</izz>
+      </inertia>
+      <mass>0.1</mass>
+    </inertial>
+
+
+    <collision name="collision">
+      <pose>0.2 0.03 -0.2 0 0 0</pose>
+      <geometry>
+        <mesh>
+          <uri>model://solar_panel/meshes/solar_panel.obj</uri>
+          <submesh>
+            <name>Panel_Small_04</name>
+          </submesh>
+          <scale>0.001 0.001 0.001</scale>
+        </mesh>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e6</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+      </surface>
+    </collision>
+    <visual name="visual">
+      <pose>0.2 0.03 -0.2 0 0 0</pose>
+      <geometry>
+        <mesh>
+          <uri>model://solar_panel/meshes/solar_panel.obj</uri>
+          <submesh>
+            <name>Panel_Small_04</name>
+          </submesh>
+          <scale>0.001 0.001 0.001</scale>
+        </mesh>
+      </geometry>
+    </visual>
+  </link>
+
+
+  <link name="button">
+
+    <pose>-0.155 0 0.4 0 0 0</pose>
+
+    <inertial>
+      <pose>
+      0
+      0
+      0.017
+      0
+      0
+      0
+      </pose>
+      <inertia>
+        <ixx>4.8333333333333334e-05</ixx>
+        <iyy>4.8333333333333334e-05</iyy>
+        <izz>8.166666666666668e-05</izz>
+      </inertia>
+      <mass>0.1</mass>
+    </inertial>
+
+
+    <collision name="collision">
+      <pose>0.155 0 -0.4 0 0 0</pose>
+      <geometry>
+        <mesh>
+          <uri>model://solar_panel/meshes/solar_panel.obj</uri>
+          <submesh>
+            <name>Button</name>
+          </submesh>
+          <scale>0.001 0.001 0.001</scale>
+        </mesh>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e6</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+      </surface>
+    </collision>
+    <visual name="visual">
+      <pose>0.155 0 -0.4 0 0 0</pose>
+      <geometry>
+        <mesh>
+          <uri>model://solar_panel/meshes/solar_panel.obj</uri>
+          <submesh>
+            <name>Button</name>
+          </submesh>
+          <scale>0.001 0.001 0.001</scale>
+        </mesh>
+      </geometry>
+    </visual>
+
+    <sensor name="button_contact" type="contact">
+      <contact>
+        <collision>collision</collision>
+      </contact>
+    </sensor>
+
+  </link>
+
+  
+
+  <joint name="base_panel_01" type="revolute">
+    <pose>0 0.0455 0.095 0 0 0</pose>
+    <parent>base</parent>
+    <child>panel_01</child>
+    <axis>
+      <xyz>1 0 0</xyz>
+      <limit>
+       <lower>-1.5707963267948966</lower>
+       <upper>0</upper>
+      </limit>
+      <dynamics>
+        <damping>0.1</damping>
+      </dynamics>
+    </axis>
+  </joint>
+
+  <joint name="base_panel_02" type="revolute">
+    <pose>0 -0.0455 0.095 0 0 0</pose>
+    <parent>base</parent>
+    <child>panel_02</child>
+    <axis>
+      <xyz>1 0 0</xyz>
+      <limit>
+       <lower>0</lower>
+       <upper>1.5707963267948966</upper>
+      </limit>
+      <dynamics>
+        <damping>0.1</damping>
+      </dynamics>
+    </axis>
+  </joint>
+
+  <joint name="panel_01_panel_small_01" type="revolute">
+    <parent>panel_01</parent>
+    <child>panel_small_01</child>
+    <axis>
+      <xyz>0 0 1</xyz>
+      <limit>
+       <lower>0</lower>
+       <upper>3.141592653589793</upper>
+      </limit>
+      <dynamics>
+        <damping>0.1</damping>
+      </dynamics>
+    </axis>
+  </joint>
+
+  <joint name="panel_02_panel_small_02" type="revolute">
+    <parent>panel_02</parent>
+    <child>panel_small_02</child>
+    <axis>
+      <xyz>0 0 1</xyz>
+      <limit>
+       <lower>-3.141592653589793</lower>
+       <upper>0</upper>
+      </limit>
+      <dynamics>
+        <damping>0.1</damping>
+      </dynamics>
+    </axis>
+  </joint>
+
+  <joint name="panel_01_panel_small_03" type="revolute">
+    <parent>panel_01</parent>
+    <child>panel_small_03</child>
+    <axis>
+      <xyz>0 0 1</xyz>
+      <limit>
+       <lower>-3.141592653589793</lower>
+       <upper>0</upper>
+      </limit>
+      <dynamics>
+        <damping>0.1</damping>
+      </dynamics>
+    </axis>
+  </joint>
+
+  <joint name="panel_02_panel_small_04" type="revolute">
+    <parent>panel_02</parent>
+    <child>panel_small_04</child>
+    <axis>
+      <xyz>0 0 1</xyz>
+      <limit>
+       <lower>0</lower>
+       <upper>3.141592653589793</upper>
+      </limit>
+      <dynamics>
+        <damping>0.1</damping>
+      </dynamics>
+    </axis>
+  </joint>
+
+  
+  <joint name="button" type="prismatic">
+    <pose>0 0 0.005 0 0 0</pose>
+    <parent>panel_01</parent>
+    <child>button</child>
+    <axis>
+      <xyz>0 0 1</xyz>
+      <limit>
+       <lower>-0.005</lower>
+       <upper>0</upper>
+      </limit>
+      <dynamics>
+        <damping>10</damping>
+        <spring_stiffness>1000</spring_stiffness>
+        <spring_reference>0</spring_reference>
+      </dynamics>
+    </axis>
+  </joint>
+
+  <joint name="lock_1" type="fixed">
+    <parent>panel_01</parent>
+    <child>panel_02</child>
+  </joint>
+
+  <joint name="lock_2" type="fixed">
+    <parent>panel_small_01</parent>
+    <child>panel_small_03</child>
+  </joint>
+
+  <joint name="lock_3" type="fixed">
+    <parent>panel_small_02</parent>
+    <child>panel_small_04</child>
+  </joint>
+
+  <plugin name="solar_panel_plugin" filename="libSolarPanelPlugin.so">
+  </plugin>
+
+  <plugin name="touch_valkyrie_panel" filename="libTouchPlugin.so">
+    <sensor>base_sensor</sensor>
+    <sensor>panel1_sensor</sensor>
+    <sensor>panel2_sensor</sensor>
+    <target>valkyrie</target>
+    <time>0.5</time>
+    <namespace>task2/checkpoint1</namespace>
+  </plugin>
+
+</model>
+
+
     <!-- Bling -->
     <include>
-      <name>mars_rock_3_10</name>
+      <name>mars_crate_long_8</name>
       <pose>
-      9.137074397418397
-      -2.994544836279694
+      9.996
+      1.5619999999999985
       0
       0
       0
-      -0.7853981633974484
+      0.785398163397448
       </pose>
-      <uri>model://mars_rock_3</uri>
+      <uri>model://mars_crate_long</uri>
     </include>
 
 
@@ -661,32 +1388,14 @@
     <include>
       <name>walkway_7</name>
       <pose>
-      9.436887672641493
-      -4.849993030113195
+      12.058734
+      0.539470091999998
       -0.052151
       0
       0
       2.356194490192345
       </pose>
-      <uri>model://walkway_metal_90</uri>
-    </include>
-
-
-    <!-- Solar Array -->
-    
-
-    <!-- Bling -->
-    <include>
-      <name>mars_rock_2_11</name>
-      <pose>
-      9.790441063234766
-      -6.281177155234768
-      0
-      0
-      0
-      -2.356194490192345
-      </pose>
-      <uri>model://mars_rock_2</uri>
+      <uri>model://walkway_metal_45</uri>
     </include>
 
 
@@ -694,8 +1403,8 @@
     <include>
       <name>walkway_8</name>
       <pose>
-      9.436887672641493
-      -4.849993030113195
+      12.058734
+      0.539470091999998
       -0.052151
       0
       0
@@ -705,16 +1414,2140 @@
     </include>
 
 
-    <!-- Final Box 2 -->
+    <!-- Bling -->
+    <include>
+      <name>mars_crate_9</name>
+      <pose>
+      11.775891287525381
+      1.8999435390029156
+      0
+      0
+      0
+      0.7853981633974481
+      </pose>
+      <uri>model://mars_crate</uri>
+    </include>
+
+
+    <!-- Bling -->
+    <include>
+      <name>mars_rock_2_10</name>
+      <pose>
+      12.586773059918865
+      2.429613739541503
+      0
+      0
+      0
+      -2.7755575615628914e-16
+      </pose>
+      <uri>model://mars_rock_2</uri>
+    </include>
+
+
+    <!-- Walkway -->
     <include>
       <name>walkway_9</name>
       <pose>
-      12.262108464861928
-      -4.311698158493823
+      14.660688792220434
+      1.6172350556193695
       -0.052151
       0
       0
-      3.141592653589793
+      2.356194490192345
+      </pose>
+      <uri>model://walkway_metal_45</uri>
+    </include>
+
+
+    <!-- Solar Array -->
+    
+
+    <include>
+      <pose>
+        15.049597521873034
+        0.15069559143847006
+        0
+        0
+        0
+        -2.356194490192345
+      </pose>
+      <uri>model://solar_array</uri>
+    </include>
+
+    <!-- Cable -->
+    
+
+    
+
+<model name="solar_panel_cable">
+
+  <self_collide>true</self_collide>
+
+  <pose>
+    15.191018878110345
+    -0.5564111897480775
+    0.85
+    0
+    0
+    2.356194490192345
+  </pose>
+
+  <link name="link_0">
+    <inertial>
+      <mass>0.05</mass>
+      <inertia>
+        <ixx>0.0001</ixx>
+        <iyy>0.0001</iyy>
+        <izz>0.0001</izz>
+      </inertia>
+    </inertial>
+    <visual name="visual">
+      <geometry>
+        <sphere>
+          <radius>0.02</radius>
+        </sphere>
+      </geometry>
+      <material>
+        <ambient>0 0 0 1</ambient>
+        <emissive>0 0 0 1</emissive>
+        <diffuse>0 0 0 1</diffuse>
+        <specular>1 1 1 1</specular>
+      </material>
+    </visual>
+  </link>
+
+  
+
+  <link name="link_1">
+    <pose>0.0 0 0 0 1.5707963267948966 0.9424777960769379</pose>
+    <inertial>
+      <pose>0 0 0.05 0 0 0</pose>
+      <mass>0.05</mass>
+      <inertia>
+        <ixx>0.0001</ixx>
+        <iyy>0.0001</iyy>
+        <izz>0.0001</izz>
+      </inertia>
+    </inertial>
+    <collision name="cylinder">
+      <pose>0 0 0.05 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.1</length>
+          <radius>0.01</radius>
+        </cylinder>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e5</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+        <friction>
+          <ode>
+            <mu>1.0</mu>
+            <mu2>1.0</mu2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+    <collision name="sphere">
+      <geometry>
+        <sphere>
+          <radius>0.01</radius>
+        </sphere>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e5</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+        <friction>
+          <ode>
+            <mu>1.0</mu>
+            <mu2>1.0</mu2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+    <visual name="cylinder">
+      <pose>0 0 0.05 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.1</length>
+          <radius>0.01</radius>
+        </cylinder>
+      </geometry>
+      <material>
+        <ambient>0 0 0 1</ambient>
+        <emissive>0 0 0 1</emissive>
+        <diffuse>0.1 0.1 0.1 1</diffuse>
+        <specular>1 1 1 1</specular>
+      </material>
+    </visual>
+    <visual name="sphere">
+      <geometry>
+        <sphere>
+          <radius>0.01</radius>
+        </sphere>
+      </geometry>
+      <material>
+        <ambient>0 0 0 1</ambient>
+        <emissive>0 0 0 1</emissive>
+        <diffuse>0.1 0.1 0.1 1</diffuse>
+        <specular>1 1 1 1</specular>
+      </material>
+    </visual>
+
+    
+
+  </link>
+
+  <joint name="joint_1" type="universal">
+    <child>link_1</child>
+    <parent>link_0</parent>
+    <axis>
+      <xyz>0 1 0</xyz>
+      <limit>
+        <lower>-1.5707963267948966</lower>
+        <upper>1.5707963267948966</upper>
+      </limit>
+    </axis>
+    <axis2>
+      <xyz>-1 0 0</xyz>
+      <limit>
+        <lower>-1.5707963267948966</lower>
+        <upper>1.5707963267948966</upper>
+      </limit>
+    </axis2>
+    <physics>
+      <ode>
+        <cfm_damping>1</cfm_damping>
+      </ode>
+    </physics>
+  </joint>
+
+  
+
+  <link name="link_2">
+    <pose>0.058778525229247314 0.08090169943749476 0 0 1.5707963267948966 -0.9424777960769379</pose>
+    <inertial>
+      <pose>0 0 0.05 0 0 0</pose>
+      <mass>0.05</mass>
+      <inertia>
+        <ixx>0.0001</ixx>
+        <iyy>0.0001</iyy>
+        <izz>0.0001</izz>
+      </inertia>
+    </inertial>
+    <collision name="cylinder">
+      <pose>0 0 0.05 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.1</length>
+          <radius>0.01</radius>
+        </cylinder>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e5</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+        <friction>
+          <ode>
+            <mu>1.0</mu>
+            <mu2>1.0</mu2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+    <collision name="sphere">
+      <geometry>
+        <sphere>
+          <radius>0.01</radius>
+        </sphere>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e5</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+        <friction>
+          <ode>
+            <mu>1.0</mu>
+            <mu2>1.0</mu2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+    <visual name="cylinder">
+      <pose>0 0 0.05 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.1</length>
+          <radius>0.01</radius>
+        </cylinder>
+      </geometry>
+      <material>
+        <ambient>0 0 0 1</ambient>
+        <emissive>0 0 0 1</emissive>
+        <diffuse>0.1 0.1 0.1 1</diffuse>
+        <specular>1 1 1 1</specular>
+      </material>
+    </visual>
+    <visual name="sphere">
+      <geometry>
+        <sphere>
+          <radius>0.01</radius>
+        </sphere>
+      </geometry>
+      <material>
+        <ambient>0 0 0 1</ambient>
+        <emissive>0 0 0 1</emissive>
+        <diffuse>0.1 0.1 0.1 1</diffuse>
+        <specular>1 1 1 1</specular>
+      </material>
+    </visual>
+
+    
+
+  </link>
+
+  <joint name="joint_2" type="universal">
+    <child>link_2</child>
+    <parent>link_1</parent>
+    <axis>
+      <xyz>0 1 0</xyz>
+      <limit>
+        <lower>-1.5707963267948966</lower>
+        <upper>1.5707963267948966</upper>
+      </limit>
+    </axis>
+    <axis2>
+      <xyz>-1 0 0</xyz>
+      <limit>
+        <lower>-1.5707963267948966</lower>
+        <upper>1.5707963267948966</upper>
+      </limit>
+    </axis2>
+    <physics>
+      <ode>
+        <cfm_damping>1</cfm_damping>
+      </ode>
+    </physics>
+  </joint>
+
+  
+
+  <link name="link_3">
+    <pose>0.11755705045849463 0 0 0 1.5707963267948966 -0.9424777960769379</pose>
+    <inertial>
+      <pose>0 0 0.05 0 0 0</pose>
+      <mass>0.05</mass>
+      <inertia>
+        <ixx>0.0001</ixx>
+        <iyy>0.0001</iyy>
+        <izz>0.0001</izz>
+      </inertia>
+    </inertial>
+    <collision name="cylinder">
+      <pose>0 0 0.05 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.1</length>
+          <radius>0.01</radius>
+        </cylinder>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e5</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+        <friction>
+          <ode>
+            <mu>1.0</mu>
+            <mu2>1.0</mu2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+    <collision name="sphere">
+      <geometry>
+        <sphere>
+          <radius>0.01</radius>
+        </sphere>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e5</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+        <friction>
+          <ode>
+            <mu>1.0</mu>
+            <mu2>1.0</mu2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+    <visual name="cylinder">
+      <pose>0 0 0.05 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.1</length>
+          <radius>0.01</radius>
+        </cylinder>
+      </geometry>
+      <material>
+        <ambient>0 0 0 1</ambient>
+        <emissive>0 0 0 1</emissive>
+        <diffuse>0.1 0.1 0.1 1</diffuse>
+        <specular>1 1 1 1</specular>
+      </material>
+    </visual>
+    <visual name="sphere">
+      <geometry>
+        <sphere>
+          <radius>0.01</radius>
+        </sphere>
+      </geometry>
+      <material>
+        <ambient>0 0 0 1</ambient>
+        <emissive>0 0 0 1</emissive>
+        <diffuse>0.1 0.1 0.1 1</diffuse>
+        <specular>1 1 1 1</specular>
+      </material>
+    </visual>
+
+    
+
+  </link>
+
+  <joint name="joint_3" type="universal">
+    <child>link_3</child>
+    <parent>link_2</parent>
+    <axis>
+      <xyz>0 1 0</xyz>
+      <limit>
+        <lower>-1.5707963267948966</lower>
+        <upper>1.5707963267948966</upper>
+      </limit>
+    </axis>
+    <axis2>
+      <xyz>-1 0 0</xyz>
+      <limit>
+        <lower>-1.5707963267948966</lower>
+        <upper>1.5707963267948966</upper>
+      </limit>
+    </axis2>
+    <physics>
+      <ode>
+        <cfm_damping>1</cfm_damping>
+      </ode>
+    </physics>
+  </joint>
+
+  
+
+  <link name="link_4">
+    <pose>0.17633557568774197 -0.08090169943749476 0 0 1.5707963267948966 0.9424777960769379</pose>
+    <inertial>
+      <pose>0 0 0.05 0 0 0</pose>
+      <mass>0.05</mass>
+      <inertia>
+        <ixx>0.0001</ixx>
+        <iyy>0.0001</iyy>
+        <izz>0.0001</izz>
+      </inertia>
+    </inertial>
+    <collision name="cylinder">
+      <pose>0 0 0.05 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.1</length>
+          <radius>0.01</radius>
+        </cylinder>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e5</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+        <friction>
+          <ode>
+            <mu>1.0</mu>
+            <mu2>1.0</mu2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+    <collision name="sphere">
+      <geometry>
+        <sphere>
+          <radius>0.01</radius>
+        </sphere>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e5</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+        <friction>
+          <ode>
+            <mu>1.0</mu>
+            <mu2>1.0</mu2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+    <visual name="cylinder">
+      <pose>0 0 0.05 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.1</length>
+          <radius>0.01</radius>
+        </cylinder>
+      </geometry>
+      <material>
+        <ambient>0 0 0 1</ambient>
+        <emissive>0 0 0 1</emissive>
+        <diffuse>0.1 0.1 0.1 1</diffuse>
+        <specular>1 1 1 1</specular>
+      </material>
+    </visual>
+    <visual name="sphere">
+      <geometry>
+        <sphere>
+          <radius>0.01</radius>
+        </sphere>
+      </geometry>
+      <material>
+        <ambient>0 0 0 1</ambient>
+        <emissive>0 0 0 1</emissive>
+        <diffuse>0.1 0.1 0.1 1</diffuse>
+        <specular>1 1 1 1</specular>
+      </material>
+    </visual>
+
+    
+
+  </link>
+
+  <joint name="joint_4" type="universal">
+    <child>link_4</child>
+    <parent>link_3</parent>
+    <axis>
+      <xyz>0 1 0</xyz>
+      <limit>
+        <lower>-1.5707963267948966</lower>
+        <upper>1.5707963267948966</upper>
+      </limit>
+    </axis>
+    <axis2>
+      <xyz>-1 0 0</xyz>
+      <limit>
+        <lower>-1.5707963267948966</lower>
+        <upper>1.5707963267948966</upper>
+      </limit>
+    </axis2>
+    <physics>
+      <ode>
+        <cfm_damping>1</cfm_damping>
+      </ode>
+    </physics>
+  </joint>
+
+  
+
+  <link name="link_5">
+    <pose>0.23511410091698925 0 0 0 1.5707963267948966 0.9424777960769379</pose>
+    <inertial>
+      <pose>0 0 0.05 0 0 0</pose>
+      <mass>0.05</mass>
+      <inertia>
+        <ixx>0.0001</ixx>
+        <iyy>0.0001</iyy>
+        <izz>0.0001</izz>
+      </inertia>
+    </inertial>
+    <collision name="cylinder">
+      <pose>0 0 0.05 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.1</length>
+          <radius>0.01</radius>
+        </cylinder>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e5</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+        <friction>
+          <ode>
+            <mu>1.0</mu>
+            <mu2>1.0</mu2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+    <collision name="sphere">
+      <geometry>
+        <sphere>
+          <radius>0.01</radius>
+        </sphere>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e5</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+        <friction>
+          <ode>
+            <mu>1.0</mu>
+            <mu2>1.0</mu2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+    <visual name="cylinder">
+      <pose>0 0 0.05 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.1</length>
+          <radius>0.01</radius>
+        </cylinder>
+      </geometry>
+      <material>
+        <ambient>0 0 0 1</ambient>
+        <emissive>0 0 0 1</emissive>
+        <diffuse>0.1 0.1 0.1 1</diffuse>
+        <specular>1 1 1 1</specular>
+      </material>
+    </visual>
+    <visual name="sphere">
+      <geometry>
+        <sphere>
+          <radius>0.01</radius>
+        </sphere>
+      </geometry>
+      <material>
+        <ambient>0 0 0 1</ambient>
+        <emissive>0 0 0 1</emissive>
+        <diffuse>0.1 0.1 0.1 1</diffuse>
+        <specular>1 1 1 1</specular>
+      </material>
+    </visual>
+
+    
+
+  </link>
+
+  <joint name="joint_5" type="universal">
+    <child>link_5</child>
+    <parent>link_4</parent>
+    <axis>
+      <xyz>0 1 0</xyz>
+      <limit>
+        <lower>-1.5707963267948966</lower>
+        <upper>1.5707963267948966</upper>
+      </limit>
+    </axis>
+    <axis2>
+      <xyz>-1 0 0</xyz>
+      <limit>
+        <lower>-1.5707963267948966</lower>
+        <upper>1.5707963267948966</upper>
+      </limit>
+    </axis2>
+    <physics>
+      <ode>
+        <cfm_damping>1</cfm_damping>
+      </ode>
+    </physics>
+  </joint>
+
+  
+
+  <link name="link_6">
+    <pose>0.29389262614623657 0.08090169943749476 0 0 1.5707963267948966 -0.9424777960769379</pose>
+    <inertial>
+      <pose>0 0 0.05 0 0 0</pose>
+      <mass>0.05</mass>
+      <inertia>
+        <ixx>0.0001</ixx>
+        <iyy>0.0001</iyy>
+        <izz>0.0001</izz>
+      </inertia>
+    </inertial>
+    <collision name="cylinder">
+      <pose>0 0 0.05 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.1</length>
+          <radius>0.01</radius>
+        </cylinder>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e5</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+        <friction>
+          <ode>
+            <mu>1.0</mu>
+            <mu2>1.0</mu2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+    <collision name="sphere">
+      <geometry>
+        <sphere>
+          <radius>0.01</radius>
+        </sphere>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e5</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+        <friction>
+          <ode>
+            <mu>1.0</mu>
+            <mu2>1.0</mu2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+    <visual name="cylinder">
+      <pose>0 0 0.05 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.1</length>
+          <radius>0.01</radius>
+        </cylinder>
+      </geometry>
+      <material>
+        <ambient>0 0 0 1</ambient>
+        <emissive>0 0 0 1</emissive>
+        <diffuse>0.1 0.1 0.1 1</diffuse>
+        <specular>1 1 1 1</specular>
+      </material>
+    </visual>
+    <visual name="sphere">
+      <geometry>
+        <sphere>
+          <radius>0.01</radius>
+        </sphere>
+      </geometry>
+      <material>
+        <ambient>0 0 0 1</ambient>
+        <emissive>0 0 0 1</emissive>
+        <diffuse>0.1 0.1 0.1 1</diffuse>
+        <specular>1 1 1 1</specular>
+      </material>
+    </visual>
+
+    
+
+  </link>
+
+  <joint name="joint_6" type="universal">
+    <child>link_6</child>
+    <parent>link_5</parent>
+    <axis>
+      <xyz>0 1 0</xyz>
+      <limit>
+        <lower>-1.5707963267948966</lower>
+        <upper>1.5707963267948966</upper>
+      </limit>
+    </axis>
+    <axis2>
+      <xyz>-1 0 0</xyz>
+      <limit>
+        <lower>-1.5707963267948966</lower>
+        <upper>1.5707963267948966</upper>
+      </limit>
+    </axis2>
+    <physics>
+      <ode>
+        <cfm_damping>1</cfm_damping>
+      </ode>
+    </physics>
+  </joint>
+
+  
+
+  <link name="link_7">
+    <pose>0.35267115137548394 0 0 0 1.5707963267948966 -0.9424777960769379</pose>
+    <inertial>
+      <pose>0 0 0.05 0 0 0</pose>
+      <mass>0.05</mass>
+      <inertia>
+        <ixx>0.0001</ixx>
+        <iyy>0.0001</iyy>
+        <izz>0.0001</izz>
+      </inertia>
+    </inertial>
+    <collision name="cylinder">
+      <pose>0 0 0.05 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.1</length>
+          <radius>0.01</radius>
+        </cylinder>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e5</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+        <friction>
+          <ode>
+            <mu>1.0</mu>
+            <mu2>1.0</mu2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+    <collision name="sphere">
+      <geometry>
+        <sphere>
+          <radius>0.01</radius>
+        </sphere>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e5</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+        <friction>
+          <ode>
+            <mu>1.0</mu>
+            <mu2>1.0</mu2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+    <visual name="cylinder">
+      <pose>0 0 0.05 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.1</length>
+          <radius>0.01</radius>
+        </cylinder>
+      </geometry>
+      <material>
+        <ambient>0 0 0 1</ambient>
+        <emissive>0 0 0 1</emissive>
+        <diffuse>0.1 0.1 0.1 1</diffuse>
+        <specular>1 1 1 1</specular>
+      </material>
+    </visual>
+    <visual name="sphere">
+      <geometry>
+        <sphere>
+          <radius>0.01</radius>
+        </sphere>
+      </geometry>
+      <material>
+        <ambient>0 0 0 1</ambient>
+        <emissive>0 0 0 1</emissive>
+        <diffuse>0.1 0.1 0.1 1</diffuse>
+        <specular>1 1 1 1</specular>
+      </material>
+    </visual>
+
+    
+
+  </link>
+
+  <joint name="joint_7" type="universal">
+    <child>link_7</child>
+    <parent>link_6</parent>
+    <axis>
+      <xyz>0 1 0</xyz>
+      <limit>
+        <lower>-1.5707963267948966</lower>
+        <upper>1.5707963267948966</upper>
+      </limit>
+    </axis>
+    <axis2>
+      <xyz>-1 0 0</xyz>
+      <limit>
+        <lower>-1.5707963267948966</lower>
+        <upper>1.5707963267948966</upper>
+      </limit>
+    </axis2>
+    <physics>
+      <ode>
+        <cfm_damping>1</cfm_damping>
+      </ode>
+    </physics>
+  </joint>
+
+  
+
+  <link name="link_8">
+    <pose>0.41144967660473125 -0.08090169943749476 0 0 1.5707963267948966 0.9424777960769379</pose>
+    <inertial>
+      <pose>0 0 0.05 0 0 0</pose>
+      <mass>0.05</mass>
+      <inertia>
+        <ixx>0.0001</ixx>
+        <iyy>0.0001</iyy>
+        <izz>0.0001</izz>
+      </inertia>
+    </inertial>
+    <collision name="cylinder">
+      <pose>0 0 0.05 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.1</length>
+          <radius>0.01</radius>
+        </cylinder>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e5</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+        <friction>
+          <ode>
+            <mu>1.0</mu>
+            <mu2>1.0</mu2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+    <collision name="sphere">
+      <geometry>
+        <sphere>
+          <radius>0.01</radius>
+        </sphere>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e5</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+        <friction>
+          <ode>
+            <mu>1.0</mu>
+            <mu2>1.0</mu2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+    <visual name="cylinder">
+      <pose>0 0 0.05 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.1</length>
+          <radius>0.01</radius>
+        </cylinder>
+      </geometry>
+      <material>
+        <ambient>0 0 0 1</ambient>
+        <emissive>0 0 0 1</emissive>
+        <diffuse>0.1 0.1 0.1 1</diffuse>
+        <specular>1 1 1 1</specular>
+      </material>
+    </visual>
+    <visual name="sphere">
+      <geometry>
+        <sphere>
+          <radius>0.01</radius>
+        </sphere>
+      </geometry>
+      <material>
+        <ambient>0 0 0 1</ambient>
+        <emissive>0 0 0 1</emissive>
+        <diffuse>0.1 0.1 0.1 1</diffuse>
+        <specular>1 1 1 1</specular>
+      </material>
+    </visual>
+
+    
+
+  </link>
+
+  <joint name="joint_8" type="universal">
+    <child>link_8</child>
+    <parent>link_7</parent>
+    <axis>
+      <xyz>0 1 0</xyz>
+      <limit>
+        <lower>-1.5707963267948966</lower>
+        <upper>1.5707963267948966</upper>
+      </limit>
+    </axis>
+    <axis2>
+      <xyz>-1 0 0</xyz>
+      <limit>
+        <lower>-1.5707963267948966</lower>
+        <upper>1.5707963267948966</upper>
+      </limit>
+    </axis2>
+    <physics>
+      <ode>
+        <cfm_damping>1</cfm_damping>
+      </ode>
+    </physics>
+  </joint>
+
+  
+
+  <link name="link_9">
+    <pose>0.4702282018339785 0 0 0 1.5707963267948966 0.9424777960769379</pose>
+    <inertial>
+      <pose>0 0 0.05 0 0 0</pose>
+      <mass>0.05</mass>
+      <inertia>
+        <ixx>0.0001</ixx>
+        <iyy>0.0001</iyy>
+        <izz>0.0001</izz>
+      </inertia>
+    </inertial>
+    <collision name="cylinder">
+      <pose>0 0 0.05 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.1</length>
+          <radius>0.01</radius>
+        </cylinder>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e5</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+        <friction>
+          <ode>
+            <mu>1.0</mu>
+            <mu2>1.0</mu2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+    <collision name="sphere">
+      <geometry>
+        <sphere>
+          <radius>0.01</radius>
+        </sphere>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e5</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+        <friction>
+          <ode>
+            <mu>1.0</mu>
+            <mu2>1.0</mu2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+    <visual name="cylinder">
+      <pose>0 0 0.05 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.1</length>
+          <radius>0.01</radius>
+        </cylinder>
+      </geometry>
+      <material>
+        <ambient>0 0 0 1</ambient>
+        <emissive>0 0 0 1</emissive>
+        <diffuse>0.1 0.1 0.1 1</diffuse>
+        <specular>1 1 1 1</specular>
+      </material>
+    </visual>
+    <visual name="sphere">
+      <geometry>
+        <sphere>
+          <radius>0.01</radius>
+        </sphere>
+      </geometry>
+      <material>
+        <ambient>0 0 0 1</ambient>
+        <emissive>0 0 0 1</emissive>
+        <diffuse>0.1 0.1 0.1 1</diffuse>
+        <specular>1 1 1 1</specular>
+      </material>
+    </visual>
+
+    
+
+  </link>
+
+  <joint name="joint_9" type="universal">
+    <child>link_9</child>
+    <parent>link_8</parent>
+    <axis>
+      <xyz>0 1 0</xyz>
+      <limit>
+        <lower>-1.5707963267948966</lower>
+        <upper>1.5707963267948966</upper>
+      </limit>
+    </axis>
+    <axis2>
+      <xyz>-1 0 0</xyz>
+      <limit>
+        <lower>-1.5707963267948966</lower>
+        <upper>1.5707963267948966</upper>
+      </limit>
+    </axis2>
+    <physics>
+      <ode>
+        <cfm_damping>1</cfm_damping>
+      </ode>
+    </physics>
+  </joint>
+
+  
+
+  <link name="link_10">
+    <pose>0.5290067270632258 0.08090169943749476 0 0 1.5707963267948966 -0.9424777960769379</pose>
+    <inertial>
+      <pose>0 0 0.05 0 0 0</pose>
+      <mass>0.05</mass>
+      <inertia>
+        <ixx>0.0001</ixx>
+        <iyy>0.0001</iyy>
+        <izz>0.0001</izz>
+      </inertia>
+    </inertial>
+    <collision name="cylinder">
+      <pose>0 0 0.05 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.1</length>
+          <radius>0.01</radius>
+        </cylinder>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e5</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+        <friction>
+          <ode>
+            <mu>1.0</mu>
+            <mu2>1.0</mu2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+    <collision name="sphere">
+      <geometry>
+        <sphere>
+          <radius>0.01</radius>
+        </sphere>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e5</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+        <friction>
+          <ode>
+            <mu>1.0</mu>
+            <mu2>1.0</mu2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+    <visual name="cylinder">
+      <pose>0 0 0.05 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.1</length>
+          <radius>0.01</radius>
+        </cylinder>
+      </geometry>
+      <material>
+        <ambient>0 0 0 1</ambient>
+        <emissive>0 0 0 1</emissive>
+        <diffuse>0.1 0.1 0.1 1</diffuse>
+        <specular>1 1 1 1</specular>
+      </material>
+    </visual>
+    <visual name="sphere">
+      <geometry>
+        <sphere>
+          <radius>0.01</radius>
+        </sphere>
+      </geometry>
+      <material>
+        <ambient>0 0 0 1</ambient>
+        <emissive>0 0 0 1</emissive>
+        <diffuse>0.1 0.1 0.1 1</diffuse>
+        <specular>1 1 1 1</specular>
+      </material>
+    </visual>
+
+    
+
+  </link>
+
+  <joint name="joint_10" type="universal">
+    <child>link_10</child>
+    <parent>link_9</parent>
+    <axis>
+      <xyz>0 1 0</xyz>
+      <limit>
+        <lower>-1.5707963267948966</lower>
+        <upper>1.5707963267948966</upper>
+      </limit>
+    </axis>
+    <axis2>
+      <xyz>-1 0 0</xyz>
+      <limit>
+        <lower>-1.5707963267948966</lower>
+        <upper>1.5707963267948966</upper>
+      </limit>
+    </axis2>
+    <physics>
+      <ode>
+        <cfm_damping>1</cfm_damping>
+      </ode>
+    </physics>
+  </joint>
+
+  
+
+  <link name="link_11">
+    <pose>0.5877852522924731 0 0 0 1.5707963267948966 -0.9424777960769379</pose>
+    <inertial>
+      <pose>0 0 0.05 0 0 0</pose>
+      <mass>0.05</mass>
+      <inertia>
+        <ixx>0.0001</ixx>
+        <iyy>0.0001</iyy>
+        <izz>0.0001</izz>
+      </inertia>
+    </inertial>
+    <collision name="cylinder">
+      <pose>0 0 0.05 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.1</length>
+          <radius>0.01</radius>
+        </cylinder>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e5</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+        <friction>
+          <ode>
+            <mu>1.0</mu>
+            <mu2>1.0</mu2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+    <collision name="sphere">
+      <geometry>
+        <sphere>
+          <radius>0.01</radius>
+        </sphere>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e5</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+        <friction>
+          <ode>
+            <mu>1.0</mu>
+            <mu2>1.0</mu2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+    <visual name="cylinder">
+      <pose>0 0 0.05 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.1</length>
+          <radius>0.01</radius>
+        </cylinder>
+      </geometry>
+      <material>
+        <ambient>0 0 0 1</ambient>
+        <emissive>0 0 0 1</emissive>
+        <diffuse>0.1 0.1 0.1 1</diffuse>
+        <specular>1 1 1 1</specular>
+      </material>
+    </visual>
+    <visual name="sphere">
+      <geometry>
+        <sphere>
+          <radius>0.01</radius>
+        </sphere>
+      </geometry>
+      <material>
+        <ambient>0 0 0 1</ambient>
+        <emissive>0 0 0 1</emissive>
+        <diffuse>0.1 0.1 0.1 1</diffuse>
+        <specular>1 1 1 1</specular>
+      </material>
+    </visual>
+
+    
+
+  </link>
+
+  <joint name="joint_11" type="universal">
+    <child>link_11</child>
+    <parent>link_10</parent>
+    <axis>
+      <xyz>0 1 0</xyz>
+      <limit>
+        <lower>-1.5707963267948966</lower>
+        <upper>1.5707963267948966</upper>
+      </limit>
+    </axis>
+    <axis2>
+      <xyz>-1 0 0</xyz>
+      <limit>
+        <lower>-1.5707963267948966</lower>
+        <upper>1.5707963267948966</upper>
+      </limit>
+    </axis2>
+    <physics>
+      <ode>
+        <cfm_damping>1</cfm_damping>
+      </ode>
+    </physics>
+  </joint>
+
+  
+
+  <link name="link_12">
+    <pose>0.6465637775217205 -0.08090169943749476 0 0 1.5707963267948966 0.9424777960769379</pose>
+    <inertial>
+      <pose>0 0 0.05 0 0 0</pose>
+      <mass>0.05</mass>
+      <inertia>
+        <ixx>0.0001</ixx>
+        <iyy>0.0001</iyy>
+        <izz>0.0001</izz>
+      </inertia>
+    </inertial>
+    <collision name="cylinder">
+      <pose>0 0 0.05 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.1</length>
+          <radius>0.01</radius>
+        </cylinder>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e5</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+        <friction>
+          <ode>
+            <mu>1.0</mu>
+            <mu2>1.0</mu2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+    <collision name="sphere">
+      <geometry>
+        <sphere>
+          <radius>0.01</radius>
+        </sphere>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e5</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+        <friction>
+          <ode>
+            <mu>1.0</mu>
+            <mu2>1.0</mu2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+    <visual name="cylinder">
+      <pose>0 0 0.05 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.1</length>
+          <radius>0.01</radius>
+        </cylinder>
+      </geometry>
+      <material>
+        <ambient>0 0 0 1</ambient>
+        <emissive>0 0 0 1</emissive>
+        <diffuse>0.1 0.1 0.1 1</diffuse>
+        <specular>1 1 1 1</specular>
+      </material>
+    </visual>
+    <visual name="sphere">
+      <geometry>
+        <sphere>
+          <radius>0.01</radius>
+        </sphere>
+      </geometry>
+      <material>
+        <ambient>0 0 0 1</ambient>
+        <emissive>0 0 0 1</emissive>
+        <diffuse>0.1 0.1 0.1 1</diffuse>
+        <specular>1 1 1 1</specular>
+      </material>
+    </visual>
+
+    
+
+  </link>
+
+  <joint name="joint_12" type="universal">
+    <child>link_12</child>
+    <parent>link_11</parent>
+    <axis>
+      <xyz>0 1 0</xyz>
+      <limit>
+        <lower>-1.5707963267948966</lower>
+        <upper>1.5707963267948966</upper>
+      </limit>
+    </axis>
+    <axis2>
+      <xyz>-1 0 0</xyz>
+      <limit>
+        <lower>-1.5707963267948966</lower>
+        <upper>1.5707963267948966</upper>
+      </limit>
+    </axis2>
+    <physics>
+      <ode>
+        <cfm_damping>1</cfm_damping>
+      </ode>
+    </physics>
+  </joint>
+
+  
+
+  <link name="link_13">
+    <pose>0.7053423027509679 0 0 0 1.5707963267948966 0.9424777960769379</pose>
+    <inertial>
+      <pose>0 0 0.05 0 0 0</pose>
+      <mass>0.05</mass>
+      <inertia>
+        <ixx>0.0001</ixx>
+        <iyy>0.0001</iyy>
+        <izz>0.0001</izz>
+      </inertia>
+    </inertial>
+    <collision name="cylinder">
+      <pose>0 0 0.05 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.1</length>
+          <radius>0.01</radius>
+        </cylinder>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e5</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+        <friction>
+          <ode>
+            <mu>1.0</mu>
+            <mu2>1.0</mu2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+    <collision name="sphere">
+      <geometry>
+        <sphere>
+          <radius>0.01</radius>
+        </sphere>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e5</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+        <friction>
+          <ode>
+            <mu>1.0</mu>
+            <mu2>1.0</mu2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+    <visual name="cylinder">
+      <pose>0 0 0.05 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.1</length>
+          <radius>0.01</radius>
+        </cylinder>
+      </geometry>
+      <material>
+        <ambient>0 0 0 1</ambient>
+        <emissive>0 0 0 1</emissive>
+        <diffuse>0.1 0.1 0.1 1</diffuse>
+        <specular>1 1 1 1</specular>
+      </material>
+    </visual>
+    <visual name="sphere">
+      <geometry>
+        <sphere>
+          <radius>0.01</radius>
+        </sphere>
+      </geometry>
+      <material>
+        <ambient>0 0 0 1</ambient>
+        <emissive>0 0 0 1</emissive>
+        <diffuse>0.1 0.1 0.1 1</diffuse>
+        <specular>1 1 1 1</specular>
+      </material>
+    </visual>
+
+    
+
+  </link>
+
+  <joint name="joint_13" type="universal">
+    <child>link_13</child>
+    <parent>link_12</parent>
+    <axis>
+      <xyz>0 1 0</xyz>
+      <limit>
+        <lower>-1.5707963267948966</lower>
+        <upper>1.5707963267948966</upper>
+      </limit>
+    </axis>
+    <axis2>
+      <xyz>-1 0 0</xyz>
+      <limit>
+        <lower>-1.5707963267948966</lower>
+        <upper>1.5707963267948966</upper>
+      </limit>
+    </axis2>
+    <physics>
+      <ode>
+        <cfm_damping>1</cfm_damping>
+      </ode>
+    </physics>
+  </joint>
+
+  
+
+  <link name="link_14">
+    <pose>0.7641208279802151 0.08090169943749476 0 0 1.5707963267948966 -0.9424777960769379</pose>
+    <inertial>
+      <pose>0 0 0.05 0 0 0</pose>
+      <mass>0.05</mass>
+      <inertia>
+        <ixx>0.0001</ixx>
+        <iyy>0.0001</iyy>
+        <izz>0.0001</izz>
+      </inertia>
+    </inertial>
+    <collision name="cylinder">
+      <pose>0 0 0.05 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.1</length>
+          <radius>0.01</radius>
+        </cylinder>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e5</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+        <friction>
+          <ode>
+            <mu>1.0</mu>
+            <mu2>1.0</mu2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+    <collision name="sphere">
+      <geometry>
+        <sphere>
+          <radius>0.01</radius>
+        </sphere>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e5</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+        <friction>
+          <ode>
+            <mu>1.0</mu>
+            <mu2>1.0</mu2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+    <visual name="cylinder">
+      <pose>0 0 0.05 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.1</length>
+          <radius>0.01</radius>
+        </cylinder>
+      </geometry>
+      <material>
+        <ambient>0 0 0 1</ambient>
+        <emissive>0 0 0 1</emissive>
+        <diffuse>0.1 0.1 0.1 1</diffuse>
+        <specular>1 1 1 1</specular>
+      </material>
+    </visual>
+    <visual name="sphere">
+      <geometry>
+        <sphere>
+          <radius>0.01</radius>
+        </sphere>
+      </geometry>
+      <material>
+        <ambient>0 0 0 1</ambient>
+        <emissive>0 0 0 1</emissive>
+        <diffuse>0.1 0.1 0.1 1</diffuse>
+        <specular>1 1 1 1</specular>
+      </material>
+    </visual>
+
+    
+
+  </link>
+
+  <joint name="joint_14" type="universal">
+    <child>link_14</child>
+    <parent>link_13</parent>
+    <axis>
+      <xyz>0 1 0</xyz>
+      <limit>
+        <lower>-1.5707963267948966</lower>
+        <upper>1.5707963267948966</upper>
+      </limit>
+    </axis>
+    <axis2>
+      <xyz>-1 0 0</xyz>
+      <limit>
+        <lower>-1.5707963267948966</lower>
+        <upper>1.5707963267948966</upper>
+      </limit>
+    </axis2>
+    <physics>
+      <ode>
+        <cfm_damping>1</cfm_damping>
+      </ode>
+    </physics>
+  </joint>
+
+  
+
+  <link name="link_15">
+    <pose>0.8228993532094625 0 0 0 1.5707963267948966 -0.9424777960769379</pose>
+    <inertial>
+      <pose>0 0 0.05 0 0 0</pose>
+      <mass>0.05</mass>
+      <inertia>
+        <ixx>0.0001</ixx>
+        <iyy>0.0001</iyy>
+        <izz>0.0001</izz>
+      </inertia>
+    </inertial>
+    <collision name="cylinder">
+      <pose>0 0 0.05 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.1</length>
+          <radius>0.01</radius>
+        </cylinder>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e5</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+        <friction>
+          <ode>
+            <mu>1.0</mu>
+            <mu2>1.0</mu2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+    <collision name="sphere">
+      <geometry>
+        <sphere>
+          <radius>0.01</radius>
+        </sphere>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e5</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+        <friction>
+          <ode>
+            <mu>1.0</mu>
+            <mu2>1.0</mu2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+    <visual name="cylinder">
+      <pose>0 0 0.05 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.1</length>
+          <radius>0.01</radius>
+        </cylinder>
+      </geometry>
+      <material>
+        <ambient>0 0 0 1</ambient>
+        <emissive>0 0 0 1</emissive>
+        <diffuse>0.1 0.1 0.1 1</diffuse>
+        <specular>1 1 1 1</specular>
+      </material>
+    </visual>
+    <visual name="sphere">
+      <geometry>
+        <sphere>
+          <radius>0.01</radius>
+        </sphere>
+      </geometry>
+      <material>
+        <ambient>0 0 0 1</ambient>
+        <emissive>0 0 0 1</emissive>
+        <diffuse>0.1 0.1 0.1 1</diffuse>
+        <specular>1 1 1 1</specular>
+      </material>
+    </visual>
+
+    
+
+  </link>
+
+  <joint name="joint_15" type="universal">
+    <child>link_15</child>
+    <parent>link_14</parent>
+    <axis>
+      <xyz>0 1 0</xyz>
+      <limit>
+        <lower>-1.5707963267948966</lower>
+        <upper>1.5707963267948966</upper>
+      </limit>
+    </axis>
+    <axis2>
+      <xyz>-1 0 0</xyz>
+      <limit>
+        <lower>-1.5707963267948966</lower>
+        <upper>1.5707963267948966</upper>
+      </limit>
+    </axis2>
+    <physics>
+      <ode>
+        <cfm_damping>1</cfm_damping>
+      </ode>
+    </physics>
+  </joint>
+
+  
+
+  <link name="link_16">
+    <pose>0.8816778784387097 -0.08090169943749476 0 0 1.5707963267948966 0.9424777960769379</pose>
+    <inertial>
+      <pose>0 0 0.05 0 0 0</pose>
+      <mass>0.05</mass>
+      <inertia>
+        <ixx>0.0001</ixx>
+        <iyy>0.0001</iyy>
+        <izz>0.0001</izz>
+      </inertia>
+    </inertial>
+    <collision name="cylinder">
+      <pose>0 0 0.05 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.1</length>
+          <radius>0.01</radius>
+        </cylinder>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e5</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+        <friction>
+          <ode>
+            <mu>1.0</mu>
+            <mu2>1.0</mu2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+    <collision name="sphere">
+      <geometry>
+        <sphere>
+          <radius>0.01</radius>
+        </sphere>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e5</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+        <friction>
+          <ode>
+            <mu>1.0</mu>
+            <mu2>1.0</mu2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+    <visual name="cylinder">
+      <pose>0 0 0.05 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.1</length>
+          <radius>0.01</radius>
+        </cylinder>
+      </geometry>
+      <material>
+        <ambient>0 0 0 1</ambient>
+        <emissive>0 0 0 1</emissive>
+        <diffuse>0.1 0.1 0.1 1</diffuse>
+        <specular>1 1 1 1</specular>
+      </material>
+    </visual>
+    <visual name="sphere">
+      <geometry>
+        <sphere>
+          <radius>0.01</radius>
+        </sphere>
+      </geometry>
+      <material>
+        <ambient>0 0 0 1</ambient>
+        <emissive>0 0 0 1</emissive>
+        <diffuse>0.1 0.1 0.1 1</diffuse>
+        <specular>1 1 1 1</specular>
+      </material>
+    </visual>
+
+    
+
+    <collision name="plug_collision">
+      <pose>0 0 0.1 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.010000000000000002</length>
+          <radius>0.011000000000000001</radius>
+        </cylinder>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e5</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+        <friction>
+          <ode>
+            <mu>1.0</mu>
+            <mu2>1.0</mu2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+
+    <visual name="plug_visual">
+      <pose>0 0 0.1 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.010000000000000002</length>
+          <radius>0.011000000000000001</radius>
+        </cylinder>
+      </geometry>
+      <material>
+        <ambient>0 0 0.3 1</ambient>
+        <emissive>0 0 0.2 1</emissive>
+        <diffuse>0 0 0.1 1</diffuse>
+        <specular>1 1 1 1</specular>
+      </material>
+    </visual>
+
+    <sensor name="tip_sensor" type="contact">
+      <contact>
+        <collision>plug_collision</collision>
+        <collision>cylinder</collision>
+        <collision>sphere</collision>
+      </contact>
+    </sensor>
+
+    
+
+  </link>
+
+  <joint name="joint_16" type="universal">
+    <child>link_16</child>
+    <parent>link_15</parent>
+    <axis>
+      <xyz>0 1 0</xyz>
+      <limit>
+        <lower>-1.5707963267948966</lower>
+        <upper>1.5707963267948966</upper>
+      </limit>
+    </axis>
+    <axis2>
+      <xyz>-1 0 0</xyz>
+      <limit>
+        <lower>-1.5707963267948966</lower>
+        <upper>1.5707963267948966</upper>
+      </limit>
+    </axis2>
+    <physics>
+      <ode>
+        <cfm_damping>1</cfm_damping>
+      </ode>
+    </physics>
+  </joint>
+
+  
+
+  <joint name="world" type="fixed">
+    <child>link_0</child>
+    <parent>world</parent>
+  </joint>
+
+  <plugin name="touch_valkyrie_cable" filename="libTouchPlugin.so">
+    <sensor>tip_sensor</sensor>
+    <target>valkyrie</target>
+    <time>0.5</time>
+    <namespace>task2/checkpoint4</namespace>
+  </plugin>
+
+</model>
+
+
+    <!-- Checkpoint 2 - Box plugin -->
+    
+
+    <plugin name="boxT2CP2" filename="libBoxContainsPlugin.so">
+      <entity>solar_panel</entity>
+      <namespace>task2/checkpoint2</namespace>
+      <pose>
+        15.049597521873034
+        0.15069559143847006
+        0.9
+        0
+        0
+        -2.356194490192345
+      </pose>
+      <size>1.47 0.95 0.45</size>
+    </plugin>
+
+    <!-- Bling -->
+    
+
+    <!-- Walkway -->
+    <include>
+      <name>walkway_10</name>
+      <pose>
+      14.660688792220434
+      1.6172350556193695
+      -0.052151
+      0
+      0
+      -0.7853981633974485
+      </pose>
+      <uri>model://walkway_metal_straight</uri>
+    </include>
+
+
+    <!-- Bling -->
+    <include>
+      <name>mars_crate_11</name>
+      <pose>
+      16.02116223922335
+      1.3343923431447502
+      0
+      0
+      0
+      -2.3561944901923453
+      </pose>
+      <uri>model://mars_crate</uri>
+    </include>
+
+
+    <!-- Bling -->
+    <include>
+      <name>mars_rock_1_12</name>
+      <pose>
+      14.377846079745815
+      2.977708502622287
+      0
+      0
+      0
+      0.7853981633974481
+      </pose>
+      <uri>model://mars_rock_1</uri>
+    </include>
+
+
+    <!-- Final Box 2 -->
+    <include>
+      <name>walkway_11</name>
+      <pose>
+      16.81595026127703
+      3.772496524675966
+      -0.052151
+      0
+      0
+      -2.3561944901923453
       </pose>
       <uri>model://walkway_finish_opposite</uri>
     </include>
@@ -725,45 +3558,47 @@
       <entity>valkyrie</entity>
       <namespace>task2/checkpoint6</namespace>
       <pose>
-        12.262108464861928
-        -4.311698158493823
+        16.81595026127703
+        3.772496524675966
         2.5
         0
         0
-        3.141592653589793
+        -2.3561944901923453
       </pose>
-      <size>3.048 3.048 5</size>
+      <size>3.048 3.048 5.0</size>
     </plugin>
 
     <!-- Bling -->
     <include>
-      <name>mars_crate_12</name>
+      <name>mars_rock_1_13</name>
       <pose>
-      12.262108464861928
-      -2.3876981584938233
+      15.455476814274114
+      5.132969971678884
       0
       0
       0
-      -2.83276944882399e-16
+      0.785398163397448
       </pose>
-      <uri>model://mars_crate</uri>
+      <uri>model://mars_rock_1</uri>
     </include>
 
 
     <!-- Bling -->
     <include>
-      <name>mars_rock_2_13</name>
+      <name>mars_crate_long_14</name>
       <pose>
-      12.262108464861928
-      -6.335698158493823
+      18.459266420754567
+      2.129180365198429
       0
       0
       0
-      3.141592653589793
+      -1.570796326794897
       </pose>
-      <uri>model://mars_rock_2</uri>
+      <uri>model://mars_crate_long</uri>
     </include>
 
+
+    
 
     <!-- /TASK 2 -->
     
@@ -772,27 +3607,44 @@
 
     <!-- TASK 3 -->
 
+    <!-- Task 3 start - Box plugin -->
+    
+
+    <plugin name="boxT3Start" filename="libBoxContainsPlugin.so">
+      <entity>valkyrie</entity>
+      <namespace>task3/start</namespace>
+      <pose>
+        18.247134386398603
+        5.203680649797538
+        2.5
+        0
+        0
+        -0.7853981633974485
+      </pose>
+      <size>1.524 1 5.0</size>
+    </plugin>
+
     <!-- Walkway -->
     <include>
-      <name>walkway_10</name>
+      <name>walkway_12</name>
       <pose>
-      15.08684246486193
-      -3.7722280664938235
+      17.89358099580533
+      4.850127259204264
       -0.052151
       0
       0
-      2.356194490192345
+      -0.7853981633974485
       </pose>
-      <uri>model://walkway_metal_45</uri>
+      <uri>model://walkway_metal_straight</uri>
     </include>
 
 
     <!-- Walkway -->
     <include>
-      <name>walkway_11</name>
+      <name>walkway_13</name>
       <pose>
-      15.08684246486193
-      -3.7722280664938235
+      18.97121173033363
+      5.927757993732563
       -0.052151
       0
       0
@@ -802,55 +3654,1918 @@
     </include>
 
 
-    <!-- Bling -->
-    <include>
-      <name>mars_rock_3_14</name>
-      <pose>
-      14.309025005556727
-      -1.9167798726603227
-      0
-      0
-      0
-      0.7853981633974481
-      </pose>
-      <uri>model://mars_rock_3</uri>
-    </include>
-
-
-    <!-- Bling -->
-    <include>
-      <name>mars_rock_2_15</name>
-      <pose>
-      15.614881524780795
-      -1.8820844189523185
-      0
-      0
-      0
-      -2.7755575615628914e-16
-      </pose>
-      <uri>model://mars_rock_2</uri>
-    </include>
-
-
     <!-- Habitat -->
+    
+
+    
+
+<!-- Base model - static frame -->
+
+<model name="habitat_base">
+  <static>true</static>
+
+  <pose>
+  25.97243252255406
+  -0.2339471346480666
+  0
+  0
+  0
+  -1.5707963267948968
+  </pose>
+
+  <link name="base">
+
+    <!-- Stairs collisions -->
+
+    
+
+    <collision name="step_0">
+      <pose>-6.686 -5.597 0.1079 0 0 0</pose>
+      <geometry>
+        <box>
+          <size>2.46997 0.317063 0.21 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="step_1">
+      <pose>-6.686 -5.3581 0.311 0 0 0</pose>
+      <geometry>
+        <box>
+          <size>2.46997 0.317063 0.21 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="step_2">
+      <pose>-6.686 -5.1192 0.5141 0 0 0</pose>
+      <geometry>
+        <box>
+          <size>2.46997 0.317063 0.21 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="step_3">
+      <pose>-6.686 -4.8803 0.7172 0 0 0</pose>
+      <geometry>
+        <box>
+          <size>2.46997 0.317063 0.21 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="step_4">
+      <pose>-6.686 -4.641400000000001 0.9203 0 0 0</pose>
+      <geometry>
+        <box>
+          <size>2.46997 0.317063 0.21 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="step_5">
+      <pose>-6.686 -4.4025 1.1234000000000002 0 0 0</pose>
+      <geometry>
+        <box>
+          <size>2.46997 0.317063 0.21 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="step_6">
+      <pose>-6.686 -4.163600000000001 1.3264999999999998 0 0 0</pose>
+      <geometry>
+        <box>
+          <size>2.46997 0.317063 0.21 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="step_7">
+      <pose>-6.686 -3.9247000000000005 1.5295999999999998 0 0 0</pose>
+      <geometry>
+        <box>
+          <size>2.46997 0.317063 0.21 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <!-- floor collisions -->
+
+    
+
+    <collision name="floor_1">
+      <pose>2.0 0.155 1.71 0 0 0</pose>
+      <geometry>
+        <box>
+          <size>20.0 8.0 0.21 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="floor_2">
+      <pose>0.0 0.155 1.71 0 0 0</pose>
+      <geometry>
+        <box>
+          <size>8.0 12.0 0.21 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    <!-- Rail collisions -->
+
+    
+
+    <collision name="rail_1_left">
+      <pose>-7.92 -4.838 1.828 0 -0.7133 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>2.46 0.055 0.034 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_1_right">
+      <pose>-5.4505 -4.838 1.828 0 -0.7133 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>2.46 0.055 0.034 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_2_left">
+      <pose>-7.92 -4.678 1.368 0 -0.709 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>2.52 0.055 0.037 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_2_right">
+      <pose>-5.4505 -4.678 1.368 0 -0.709 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>2.52 0.055 0.037 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_3_left">
+      <pose>-7.92 -2.13 2.625 0 0 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>1.96 0.055 0.048 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_3_right">
+      <pose>-5.4305 -2.13 2.625 0 0 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>1.96 0.055 0.048 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_4_left">
+      <pose>-7.92 -2.13 2.153 0 0 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>1.96 0.055 0.048 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_4_right">
+      <pose>-5.4305 -2.13 2.153 0 0 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>1.96 0.055 0.048 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_5_left">
+      <pose>-7.92 -3.64 2.153 0 0 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.16 0.055 0.048 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_5_right">
+      <pose>-5.4505 -3.64 2.153 0 0 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.16 0.055 0.048 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_6_left">
+      <pose>-7.92 -3.735 2.625 0 0 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.37 0.055 0.048 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_6_right">
+      <pose>-5.4505 -3.735 2.625 0 0 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.37 0.055 0.048 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_7_left">
+      <pose>-7.92 -5.88 0.555 0 0 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.46 0.055 0.048 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_7_right">
+      <pose>-5.4505 -5.88 0.555 0 0 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.46 0.055 0.048 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_8_left">
+      <pose>-7.92 -5.935 1.027 0 0 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.35 0.055 0.048 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_8_right">
+      <pose>-5.4505 -5.935 1.027 0 0 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.35 0.055 0.048 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_9_left">
+      <pose>-7.92 -5.65 0.335 0 0 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.05 0.055 0.478 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_9_right">
+      <pose>-5.4505 -5.65 0.335 0 0 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.05 0.055 0.478 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_10_left">
+      <pose>-7.92 -5.722 0.795 0 -0.325 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.046 0.055 0.478 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_10_right">
+      <pose>-5.4505 -5.722 0.795 0 -0.325 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.046 0.055 0.478 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_11_left">
+      <pose>-7.92 -3.738 1.89 0 0 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.05 0.055 0.568 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_11_right">
+      <pose>-5.4505 -3.738 1.89 0 0 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.05 0.055 0.568 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_12_left">
+      <pose>-7.92 -3.81 2.39 0 -0.325 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.046 0.055 0.478 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_12_right">
+      <pose>-5.4505 -3.81 2.39 0 -0.325 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.046 0.055 0.478 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_13_left">
+      <pose>-7.92 -2.842 2.12 0 0 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.046 0.055 1.028 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_13_right">
+      <pose>-5.4305 -2.842 2.12 0 0 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.046 0.055 1.028 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_14_left">
+      <pose>-7.92 -1.595 2.12 0 0 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.046 0.055 1.028 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_14_right">
+      <pose>-5.4305 -1.595 2.12 0 0 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.046 0.055 1.028 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_15_left">
+      <pose>-7.92 -6.15 0.568 0 0.29 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.1 0.055 0.048 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_15_right">
+      <pose>-5.4505 -6.15 0.568 0 0.29 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.1 0.055 0.048 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_16_left">
+      <pose>-7.92 -6.224 0.612 0 0.78 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.11 0.055 0.046 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_16_right">
+      <pose>-5.4505 -6.224 0.612 0 0.78 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.11 0.055 0.046 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_17_left">
+      <pose>-7.92 -6.271 0.691 0 1.3 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.1 0.055 0.047 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_17_right">
+      <pose>-5.4505 -6.271 0.691 0 1.3 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.1 0.055 0.047 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_18_left">
+      <pose>-7.92 -6.283 0.791 0 1.5707963267948966 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.12 0.055 0.05 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_18_right">
+      <pose>-5.4505 -6.283 0.791 0 1.5707963267948966 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.12 0.055 0.05 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_19_left">
+      <pose>-7.92 -6.271 0.891 0 1.86 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.1 0.055 0.048 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_19_right">
+      <pose>-5.4505 -6.271 0.891 0 1.86 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.1 0.055 0.048 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_20_left">
+      <pose>-7.92 -6.225 0.968 0 2.36 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.107 0.055 0.048 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_20_right">
+      <pose>-5.4505 -6.225 0.968 0 2.36 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.107 0.055 0.048 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_21_left">
+      <pose>-7.92 -6.15 1.014 0 -0.29 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.1 0.055 0.048 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_21_right">
+      <pose>-5.4505 -6.15 1.014 0 -0.29 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.1 0.055 0.048 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_22_left">
+      <pose>-7.92 -3.152 2.166 0 0.29 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.1 0.055 0.048 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_22_right">
+      <pose>-5.4305 -3.152 2.166 0 0.29 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.1 0.055 0.048 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_23_left">
+      <pose>-7.92 -3.226 2.21 0 0.78 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.11 0.055 0.046 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_23_right">
+      <pose>-5.4305 -3.226 2.21 0 0.78 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.11 0.055 0.046 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_24_left">
+      <pose>-7.92 -3.2729999999999997 2.289 0 1.3 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.1 0.055 0.047 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_24_right">
+      <pose>-5.4305 -3.2729999999999997 2.289 0 1.3 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.1 0.055 0.047 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_25_left">
+      <pose>-7.92 -3.285 2.3890000000000002 0 1.5707963267948966 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.12 0.055 0.05 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_25_right">
+      <pose>-5.4305 -3.285 2.3890000000000002 0 1.5707963267948966 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.12 0.055 0.05 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_26_left">
+      <pose>-7.92 -3.2729999999999997 2.489 0 1.86 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.1 0.055 0.048 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_26_right">
+      <pose>-5.4305 -3.2729999999999997 2.489 0 1.86 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.1 0.055 0.048 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_27_left">
+      <pose>-7.92 -3.2269999999999994 2.566 0 2.36 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.107 0.055 0.048 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_27_right">
+      <pose>-5.4305 -3.2269999999999994 2.566 0 2.36 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.107 0.055 0.048 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_28_left">
+      <pose>-7.92 -3.152 2.612 0 -0.29 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.1 0.055 0.048 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_28_right">
+      <pose>-5.4305 -3.152 2.612 0 -0.29 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.1 0.055 0.048 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_29_left">
+      <pose>-7.92 -3.515 2.166 0 -0.29 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.1 0.055 0.048 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_29_right">
+      <pose>-5.4505 -3.515 2.166 0 -0.29 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.1 0.055 0.048 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_30_left">
+      <pose>-7.92 -3.444 2.21 0 -0.78 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.11 0.055 0.046 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_30_right">
+      <pose>-5.4505 -3.444 2.21 0 -0.78 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.11 0.055 0.046 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_31_left">
+      <pose>-7.92 -3.397 2.289 0 -1.3 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.1 0.055 0.047 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_31_right">
+      <pose>-5.4505 -3.397 2.289 0 -1.3 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.1 0.055 0.047 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_32_left">
+      <pose>-7.92 -3.384 2.3890000000000002 0 -1.5707963267948966 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.12 0.055 0.05 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_32_right">
+      <pose>-5.4505 -3.384 2.3890000000000002 0 -1.5707963267948966 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.12 0.055 0.05 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_33_left">
+      <pose>-7.92 -3.396 2.489 0 -1.86 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.1 0.055 0.048 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_33_right">
+      <pose>-5.4505 -3.396 2.489 0 -1.86 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.1 0.055 0.048 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_34_left">
+      <pose>-7.92 -3.442 2.566 0 -2.36 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.107 0.055 0.048 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_34_right">
+      <pose>-5.4505 -3.442 2.566 0 -2.36 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.107 0.055 0.048 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_35_left">
+      <pose>-7.92 -3.52 2.612 0 0.29 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.1 0.055 0.048 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="rail_35_right">
+      <pose>-5.4505 -3.52 2.612 0 0.29 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.1 0.055 0.048 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    <!-- Small module entrance door collisions -->
+
+    
+
+    <collision name="entrance_left">
+      <pose>-7.447 -1.175 2.9 0 0 0</pose>
+      <geometry>
+        <box>
+          <size>0.16 0.5 2.2 </size>
+        </box>
+      </geometry>
+      <surface>
+        <contact>
+          <!-- Don't collide with door -->
+          <collide_bitmask>0x01</collide_bitmask>
+        </contact>
+      </surface>
+    </collision>
+
+    
+
+    <collision name="entrance_right">
+      <pose>-5.923 -1.276 2.9 0 0 0</pose>
+      <geometry>
+        <box>
+          <size>0.16 0.3 2.2 </size>
+        </box>
+      </geometry>
+      <surface>
+        <contact>
+          <!-- Don't collide with door -->
+          <collide_bitmask>0x01</collide_bitmask>
+        </contact>
+      </surface>
+    </collision>
+
+    
+
+    <!-- Small module wall collisions -->
+
+    <collision name="wall_1">
+      <pose>-7.8 -0.475 2.9 0 0 0.495</pose>
+      <geometry>
+        <box>
+          <size>0.16 1.2 2.2 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="wall_2">
+      <pose>-7.76 0.505 2.9 0 0 -0.525</pose>
+      <geometry>
+        <box>
+          <size>0.16 1.5 2.2 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="wall_3">
+      <pose>-6.69 1.185 2.9 0 0 1.5707963267948966</pose>
+      <geometry>
+        <box>
+          <size>0.16 1.5 2.2 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="wall_4">
+      <pose>-5.89 1.0 2.9 0 0 0.525</pose>
+      <geometry>
+        <box>
+          <size>0.16 0.5 2.2 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="wall_5">
+      <pose>-5.93 -1.04 2.9 0 0 -0.525</pose>
+      <geometry>
+        <box>
+          <size>0.16 0.5 2.2 </size>
+        </box>
+      </geometry>
+      <surface>
+        <contact>
+          <!-- Don't collide with door -->
+          <collide_bitmask>0x01</collide_bitmask>
+        </contact>
+      </surface>
+    </collision>
+
+    <!-- Passage collisions -->
+
+    
+
+    <collision name="passage_left">
+      <pose>-5.295 0.928 2.9 0 0 0</pose>
+      <geometry>
+        <box>
+          <size>0.845 0.5 2.2 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="passage_right">
+      <pose>-5.295 -0.93 2.9 0 0 0</pose>
+      <geometry>
+        <box>
+          <size>0.845 0.5 2.2 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    <!-- Large module wall collisions -->
+
+    
+
+    <collision name="wall_6">
+      <pose>-4.905 1.798 2.9 0 0 0</pose>
+      <geometry>
+        <box>
+          <size>0.1 2.23 2.2 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="wall_7">
+      <pose>-2.681 4.28 2.9 0 0 -1.047</pose>
+      <geometry>
+        <box>
+          <size>0.1 5.73 2.2 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="wall_8">
+      <pose>2.46 4.28 2.9 0 0 1.049</pose>
+      <geometry>
+        <box>
+          <size>0.1 5.73 2.2 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="wall_9">
+      <pose>5.0 1.798 2.9 0 0 0.0</pose>
+      <geometry>
+        <box>
+          <size>0.32 2.23 2.2 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="wall_10">
+      <pose>5.0 -1.798 2.9 0 0 0.0</pose>
+      <geometry>
+        <box>
+          <size>0.32 2.23 2.2 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="wall_11">
+      <pose>2.46 -4.28 2.9 0 0 -1.049</pose>
+      <geometry>
+        <box>
+          <size>0.1 5.73 2.2 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="wall_12">
+      <pose>-2.46 -4.28 2.9 0 0 1.049</pose>
+      <geometry>
+        <box>
+          <size>0.1 5.73 2.2 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="wall_13">
+      <pose>-5.0 -1.798 2.9 0 0 0.0</pose>
+      <geometry>
+        <box>
+          <size>0.32 2.23 2.2 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    <!-- Passage collisions -->
+
+    
+
+    <collision name="passage_2_left">
+      <pose>5.295 0.928 2.9 0 0 0</pose>
+      <geometry>
+        <box>
+          <size>0.845 0.5 2.2 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="passage_2_right">
+      <pose>5.295 -0.93 2.9 0 0 0</pose>
+      <geometry>
+        <box>
+          <size>0.845 0.5 2.2 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    <!-- Long module -->
+
+    
+
+    <collision name="wall_14">
+      <pose>8.919 1.161 2.3537 -0.518 0 0.0</pose>
+      <geometry>
+        <box>
+          <size>6.159 0.1319 2.16955 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+
+    <collision name="wall_15">
+      <pose>8.919 -1.161 2.3537 0.518 0 0.0</pose>
+      <geometry>
+        <box>
+          <size>6.159 0.1319 2.16955 </size>
+        </box>
+      </geometry>
+    </collision>
+
+    <!-- VISUALS -->
+
+    <visual name="stairs">
+      <pose>0 0 0 0 0 0</pose>
+      <geometry>
+        <mesh>
+          <uri>model://src_habitat/meshes/hdu.obj</uri>
+          <scale>0.0254 0.0254 0.0254</scale>
+          <submesh>
+            <name>Stairs</name>
+          </submesh>
+        </mesh>
+      </geometry>
+    </visual>
+
+    <visual name="module_small">
+      <pose>0 0 0 0 0 0</pose>
+      <geometry>
+        <mesh>
+          <uri>model://src_habitat/meshes/hdu.obj</uri>
+          <scale>0.0254 0.0254 0.0254</scale>
+          <submesh>
+            <name>Module_Small</name>
+          </submesh>
+        </mesh>
+      </geometry>
+    </visual>
+
+    <visual name="door_01">
+      <pose>0 0 0 0 0 0</pose>
+      <geometry>
+        <mesh>
+          <uri>model://src_habitat/meshes/hdu.obj</uri>
+          <scale>0.0254 0.0254 0.0254</scale>
+          <submesh>
+            <name>Door_01</name>
+          </submesh>
+        </mesh>
+      </geometry>
+    </visual>
+
+    <visual name="door_03">
+      <geometry>
+        <mesh>
+          <uri>model://src_habitat/meshes/hdu.obj</uri>
+          <scale>0.0254 0.0254 0.0254</scale>
+          <submesh>
+            <name>Door_03</name>
+          </submesh>
+        </mesh>
+      </geometry>
+    </visual>
+
+    <visual name="door_04">
+      <pose>0 0 0 0 0 0</pose>
+      <geometry>
+        <mesh>
+          <uri>model://src_habitat/meshes/hdu.obj</uri>
+          <scale>0.0254 0.0254 0.0254</scale>
+          <submesh>
+            <name>Door_04</name>
+          </submesh>
+        </mesh>
+      </geometry>
+    </visual>
+
+    <visual name="module_large">
+      <pose>0 0 0 0 0 0</pose>
+      <geometry>
+        <mesh>
+          <uri>model://src_habitat/meshes/hdu.obj</uri>
+          <scale>0.0254 0.0254 0.0254</scale>
+          <submesh>
+            <name>Module_Large</name>
+          </submesh>
+        </mesh>
+      </geometry>
+    </visual>
+
+    <visual name="module_long">
+      <pose>0 0 0 0 0 0</pose>
+      <geometry>
+        <mesh>
+          <uri>model://src_habitat/meshes/hdu.obj</uri>
+          <scale>0.0254 0.0254 0.0254</scale>
+          <submesh>
+            <name>Module_Long</name>
+          </submesh>
+        </mesh>
+      </geometry>
+    </visual>
+
+    <visual name="finish_box">
+      <pose>9.0 0.0 1.814 0 0 0</pose>
+      <geometry>
+        <box>
+          <size>1.5 1.5 0.01 </size>
+        </box>
+      </geometry>
+      <material>
+        <script>
+          <uri>model://src_habitat/materials/scripts</uri>
+          <uri>model://src_habitat/materials/textures</uri>
+          <name>FinishBox</name>
+        </script>
+      </material>
+    </visual>
+
+  </link>
+</model>
+
+<!-- Door -->
+<model name="habitat_door">
+
+  <pose>
+    24.757432522554062
+    6.446052865351933
+    2.88
+    0
+    0
+    -1.5707963267948968
+  </pose>
+
+  <!-- door body -->
+  <link name="base">
+
+    <inertial>
+      <mass>18</mass>
+      <inertia>
+        <ixx>6.304</ixx>
+        <ixy>0</ixy>
+        <ixz>0</ixz>
+        <iyy>6.9932</iyy>
+        <iyz>0</iyz>
+        <izz>0.7979</izz>
+      </inertia>
+    </inertial>
+
+    <collision name="collision">
+      <geometry>
+        <box>
+          <size>1.27 0.25 1.99</size>
+        </box>
+      </geometry>
+      <surface>
+        <contact>
+          <!-- Don't collide with habitat -->
+          <collide_bitmask>0x10</collide_bitmask>
+        </contact>
+      </surface>
+    </collision>
+
+    <visual name="visual">
+      <pose>6.68 1.215 -2.88 0 0 0</pose>
+      <geometry>
+        <mesh>
+          <uri>model://src_habitat/meshes/hdu.obj</uri>
+          <scale>0.0254 0.0254 0.0254</scale>
+          <submesh>
+            <name>Door_02</name>
+          </submesh>
+        </mesh>
+      </geometry>
+    </visual>
+  </link>
+
+  <!-- door valve -->
+  <link name="valve">
+    <pose>0 -0.12 0.08 0 0 3.14</pose>
+    <inertial>
+      <mass>7.8219</mass>
+      <pose>0 0.0615 0 0 0 0</pose>
+      <inertia>
+        <ixx>0.0695</ixx>
+        <ixy>0.0000</ixy>
+        <ixz>0.0000</ixz>
+        <iyy>0.1349</iyy>
+        <iyz>0.0000</iyz>
+        <izz>0.0695</izz>
+      </inertia>
+    </inertial>
+    <collision name="collision">
+      <geometry>
+        <mesh>
+          <uri>model://src_habitat/meshes/wheel_valve_large.dae</uri>
+        </mesh>
+      </geometry>
+      <surface>
+        <friction>
+          <ode>
+            <mu>1</mu>
+            <mu2>1</mu2>
+          </ode>
+        </friction>
+        <contact>
+          <ode>
+            <kp>1000000.0</kp>
+            <kd>100.0</kd>
+            <max_vel>0.01</max_vel>
+            <min_depth>0.001</min_depth>
+          </ode>
+        </contact>
+      </surface>
+    </collision>
+    <visual name="visual">
+      <geometry>
+        <mesh>
+          <uri>model://src_habitat/meshes/wheel_valve_large.dae</uri>
+        </mesh>
+      </geometry>
+    </visual>
+  </link>
+
+  <!-- Joint connecting the valve and the door -->
+  <joint name="valve_hinge" type="revolute">
+    <parent>base</parent>
+    <child>valve</child>
+    <axis>
+      <xyz>0 1 0</xyz>
+      <limit>
+        <lower>0</lower>
+        <upper>6.5973445725385655</upper>
+      </limit>
+      <dynamics>
+        <friction>1.4889609209124062</friction>
+        <damping>0.020281645727726394</damping>
+      </dynamics>
+    </axis>
+  </joint>
+
+  <!-- Door hinge -->
+  <joint name="door_hinge" type="revolute">
+    <parent>world</parent>
+    <child>base</child>
+    <pose>-0.8 0.125 0.2 0 0 0</pose>
+    <axis>
+      <xyz>0 0 1</xyz>
+      <limit>
+        <lower>0</lower>
+        <upper>1.57</upper>
+      </limit>
+      <dynamics>
+        <friction>19.880084633382967</friction>
+        <damping>2.7958268084173965</damping>
+      </dynamics>
+    </axis>
+  </joint>
+
+  <!-- Door lock -->
+  <joint name="door_lock" type="fixed">
+    <parent>world</parent>
+    <child>base</child>
+  </joint>
+
+</model>
+
+
+
+    <!-- Checkpoint 1 - Climb the stairs -->
+    
+
+    <plugin name="boxT3CP1" filename="libBoxContainsPlugin.so">
+      <entity>valkyrie</entity>
+      <namespace>task3/checkpoint1</namespace>
+      <pose>
+        22.852432522554064
+        6.446052865351934
+        2.92
+        0
+        0
+        -2.83276944882399e-16
+      </pose>
+      <size>1.0 2.50 2.44</size>
+    </plugin>
+
+    <!-- Checkpoint 3 - Pass through the door -->
+    
+
+    <plugin name="boxT3CP3" filename="libBoxContainsPlugin.so">
+      <entity>valkyrie</entity>
+      <namespace>task3/checkpoint3</namespace>
+      <pose>
+        25.992232522554062
+        4.266052865351933
+        2.81
+        0
+        0
+        -1.5707963267948968
+      </pose>
+      <size>1.00 1.55 2.88</size>
+    </plugin>
+
+
+    <!-- Lamp inside the habitat -->
+    
+
+    <light name='habitat_lamp' type='spot'>
+      <pose>
+        26.21043252255406
+        4.9260528653519335
+        4.2
+        -1.462
+        0
+        -2.83276944882399e-16
+      </pose>
+      <diffuse>1 1 1 1</diffuse>
+      <specular>0.1 0.1 0.1 1</specular>
+      <attenuation>
+        <range>10</range>
+        <constant>0.5</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <cast_shadows>0</cast_shadows>
+      <direction>0 0 -1</direction>
+      <spot>
+        <inner_angle>0.6</inner_angle>
+        <outer_angle>3.141592653589793</outer_angle>
+        <falloff>0.5</falloff>
+      </spot>
+    </light>
+
+    <!-- Table -->
+    
+    <include>
+      <pose>
+        27.45587534845219
+        -0.198232210530925
+        1.8
+        0
+        0
+        -0.8979854676692919
+      </pose>
+      <uri>model://space_table</uri>
+    </include>
+
+    <!-- Air leak detector -->
+    
+
+    
+
+<model name="air_leak_detector">
+
+  <pose>
+    27.320621402812467
+    0.31154294599923416
+    2.59448
+    0
+    0
+    -0.9045159056225569
+  </pose>
+
+  <link name="base">
+
+    <inertial>
+      <pose>
+      0
+      -0.00063
+      0
+      0
+      0
+      0
+      </pose>
+      <inertia>
+        <ixx>0.0006035883333333333</ixx>
+        <iyy>0.003206729933333333</iyy>
+        <izz>0.003333989666666666</izz>
+      </inertia>
+      <mass>1.0</mass>
+    </inertial>
+
+
+    <collision name="collision">
+
+      <pose>0 0 -0.022000000000000002 0 0 -1.5707963267948966</pose>
+
+      <geometry>
+        <mesh>
+          <scale>0.02 0.02 0.02</scale>
+          <uri>model://air_leak_detector/meshes/air_leak_detector.obj</uri>
+        </mesh>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e5</kp>
+            <kd>1</kd>
+            <max_vel>0.1</max_vel>
+            <min_depth>0.0015</min_depth>
+          </ode>
+        </contact>
+      </surface>
+    </collision>
+
+    <visual name="visual">
+
+      <pose>0 0 -0.022000000000000002 0 0 -1.5707963267948966</pose>
+
+      <geometry>
+        <mesh>
+          <scale>0.02 0.02 0.02</scale>
+          <uri>model://air_leak_detector/meshes/air_leak_detector.obj</uri>
+        </mesh>
+      </geometry>
+    </visual>
+
+    <sensor name="logical_camera" type="logical_camera">
+
+      <logical_camera>
+        <near>0.2</near>
+        <far>0.5</far>
+        <horizontal_fov>0.3490658503988659</horizontal_fov>
+        <aspect_ratio>1</aspect_ratio>
+      </logical_camera>
+
+      <visualize>true</visualize>
+      <always_on>true</always_on>
+      <update_rate>10</update_rate>
+
+    </sensor>
+
+    <sensor name="contact_sensor" type="contact">
+      <contact>
+        <collision>collision</collision>
+      </contact>
+    </sensor>
+
+  </link>
+
+  <plugin name="touch_valkyrie_detector" filename="libTouchPlugin.so">
+    <sensor>contact_sensor</sensor>
+    <target>valkyrie</target>
+    <time>0.5</time>
+    <namespace>task3/checkpoint4</namespace>
+  </plugin>
+
+</model>
+
+
+
+    <!-- Leak patch tool -->
+    
+
+    <include>
+      <pose>
+        27.9435286725527
+        -0.40170070817577286
+        2.6
+        0
+        0
+        -1.7242163525355678
+      </pose>
+      <uri>model://leak_patch_tool</uri>
+    </include>
+
+    <!-- Leak -->
+    
+
+<model name="leak">
+  <static>true</static>
+
+  <pose>31.60820412528263 0.005328196173080002 2.715650494794968 0 0 0</pose>
+
+  <link name="base">
+
+    <collision name="collision">
+
+      <geometry>
+        <sphere>
+          <radius>0.02</radius>
+        </sphere>
+      </geometry>
+
+      <surface>
+        <contact>
+          <!-- Only collide with patch tool -->
+          <collide_bitmask>0x10000</collide_bitmask>
+        </contact>
+      </surface>
+
+    </collision>
+
+    <sensor name="leak_sensor" type="contact">
+      <contact>
+        <collision>collision</collision>
+      </contact>
+    </sensor>
+
+  </link>
+
+</model>
+
+
+
+    <!-- Bling -->
+    
+    <include>
+      <name>mars_crate_long_15</name>
+      <pose>
+      29.363125571941527
+      -2.3023137705368293
+      1.8
+      0
+      0
+      -1.549662195030797
+      </pose>
+      <uri>model://mars_crate_long</uri>
+    </include>
+
+    
+
+    <!-- Bling -->
+    
+    <include>
+      <name>mars_crate_16</name>
+      <pose>
+      26.78104906447811
+      -4.0852760483838075
+      1.8
+      0
+      0
+      -0.37460497577918817
+      </pose>
+      <uri>model://mars_crate</uri>
+    </include>
+
+    
+    <include>
+      <name>mars_crate_17</name>
+      <pose>
+      26.78104906447811
+      -4.0852760483838075
+      2.5
+      0
+      0
+      -0.5005203128306044
+      </pose>
+      <uri>model://mars_crate</uri>
+    </include>
+
+    
+    <include>
+      <name>mars_crate_18</name>
+      <pose>
+      26.78104906447811
+      -4.0852760483838075
+      3.2
+      0
+      0
+      -0.05096606386132391
+      </pose>
+      <uri>model://mars_crate</uri>
+    </include>
+
+    
+
+    <!-- Bling -->
+    
+    <include>
+      <name>mars_crate_19</name>
+      <pose>
+      24.04674526209481
+      -2.8255377872235465
+      1.8
+      0
+      0
+      -2.0483534696572407
+      </pose>
+      <uri>model://mars_crate</uri>
+    </include>
+
+    
+
+    <!-- Bling -->
+    
+    <include>
+      <name>mars_crate_20</name>
+      <pose>
+      22.21851878926865
+      -0.11420632621774453
+      1.8
+      0
+      0
+      -0.0979365111750279
+      </pose>
+      <uri>model://mars_crate</uri>
+    </include>
+
+    
+    <include>
+      <name>mars_crate_21</name>
+      <pose>
+      22.21851878926865
+      -0.11420632621774453
+      2.5
+      0
+      0
+      -0.07202660248806105
+      </pose>
+      <uri>model://mars_crate</uri>
+    </include>
+
+    
+
+    <!-- Bling -->
+    
+    <include>
+      <name>mars_crate_long_22</name>
+      <pose>
+      24.25368084181235
+      2.3055198094651055
+      1.8
+      0
+      0
+      -3.056672406712772
+      </pose>
+      <uri>model://mars_crate_long</uri>
+    </include>
+
+    
+    <include>
+      <name>mars_crate_long_23</name>
+      <pose>
+      24.25368084181235
+      2.3055198094651055
+      2.5
+      0
+      0
+      -3.0531982913978526
+      </pose>
+      <uri>model://mars_crate_long</uri>
+    </include>
+
+    
+    <include>
+      <name>mars_crate_long_24</name>
+      <pose>
+      24.25368084181235
+      2.3055198094651055
+      3.2
+      0
+      0
+      -2.8514950647561106
+      </pose>
+      <uri>model://mars_crate_long</uri>
+    </include>
+
+    
+
+    <!-- Bling -->
+    
+    <include>
+      <name>mars_crate_25</name>
+      <pose>
+      26.518615918042507
+      2.892061881419193
+      1.8
+      0
+      0
+      -1.726708635163785
+      </pose>
+      <uri>model://mars_crate</uri>
+    </include>
+
+    
+    <include>
+      <name>mars_crate_26</name>
+      <pose>
+      26.518615918042507
+      2.892061881419193
+      2.5
+      0
+      0
+      -1.6045195878113119
+      </pose>
+      <uri>model://mars_crate</uri>
+    </include>
+
+    
+    <include>
+      <name>mars_crate_27</name>
+      <pose>
+      26.518615918042507
+      2.892061881419193
+      3.2
+      0
+      0
+      -2.0399877244769478
+      </pose>
+      <uri>model://mars_crate</uri>
+    </include>
+
+    
+
+    <!-- Bling -->
+    
+    <include>
+      <name>mars_crate_long_28</name>
+      <pose>
+      29.684105684946125
+      1.1008434282028394
+      1.8
+      0
+      0
+      0.30557993090736196
+      </pose>
+      <uri>model://mars_crate_long</uri>
+    </include>
+
+    
+    <include>
+      <name>mars_crate_long_29</name>
+      <pose>
+      29.684105684946125
+      1.1008434282028394
+      2.5
+      0
+      0
+      0.4574370131597683
+      </pose>
+      <uri>model://mars_crate_long</uri>
+    </include>
+
     
 
     <!-- TODO: Put the box inside the habitat -->
 
     <!-- Checkpoint 8 - Box plugin -->
+    
 
     <plugin name="boxT3CP8" filename="libBoxContainsPlugin.so">
       <entity>valkyrie</entity>
       <namespace>task3/checkpoint8</namespace>
       <pose>
-        15.08684246486193
-        -3.7722280664938235
-        2.5
+        25.972432522554058
+        -9.233947134648066
+        2.68
         0
         0
-        -0.7853981633974485
+        -1.5707963267948968
       </pose>
-      <size>3.048 3.048 5</size>
+      <size>1.5 1.5 5.0</size>
     </plugin>
 
     <!-- /TASK 3 -->
@@ -860,159 +5575,187 @@
     <plugin name="finals" filename="libFinalsPlugin.so">
 
       
-        <task_1_timeout>1800</task_1_timeout>
+        <task1>
+          <timeout>1800</timeout>
 
-        <task_1_checkpoint_2_pose>
-          1.9860000000000002
-          0.5619999999999994
-          1.1
-          0
-          0
-          1.5707963267948963
-        </task_1_checkpoint_2_pose>
+          <checkpoint1>
+            <skip_robot_pose>
+              2.376
+              -0.36200000000000054
+              1.1
+              0
+              0
+              -1.5707963267948968
+            </skip_robot_pose>
+          </checkpoint1>
 
-        <task_1_checkpoint_3_pose>
-          1.9860000000000002
-          0.5619999999999994
-          1.1
-          0
-          0
-          1.5707963267948963
-        </task_1_checkpoint_3_pose>
+          <checkpoint2>
+            <skip_robot_pose>
+              2.376
+              -0.36200000000000054
+              1.1
+              0
+              0
+              -1.5707963267948968
+            </skip_robot_pose>
+          </checkpoint2>
+
+          <checkpoint4>
+            <skip_robot_pose>
+              6.186
+              -9.331808609502831e-16
+              1.1
+              0
+              0
+              -2.4492935982947064e-16
+            </skip_robot_pose>
+          </checkpoint4>
+        </task1>
       
 
       
-        <task_2_timeout>3600</task_2_timeout>
+        <task2>
+          <timeout>3600</timeout>
 
-        <task_2_checkpoint_1_pose>
-          5.126364734528298
-          -1.6171008265282993
-          1.1
-          0
-          0
-          2.356194490192345
-        </task_2_checkpoint_1_pose>
+          <checkpoint1>
+          </checkpoint1>
 
-        <task_2_checkpoint_2_pose>
-          6.203995469056597
-          -2.6947315610565976
-          1.1
-          0
-          0
-          -2.356194490192345
-        </task_2_checkpoint_2_pose>
+          <checkpoint2>
+            <skip_robot_pose>
+              14.201069384449177
+              0.9992237288623271
+              1.1
+              0
+              0
+              -0.7853981633974484
+            </skip_robot_pose>
+            <panel_pose>
+              15.034008521946525
+              0.4445730970181026
+              0.7
+              0
+              0
+              2.5351558915494525
+            </panel_pose>
+          </checkpoint2>
 
-        <task_2_checkpoint_3_pose>
-          6.203995469056597
-          -2.6947315610565976
-          1.1
-          0
-          0
-          -2.356194490192345
-        </task_2_checkpoint_3_pose>
+          <checkpoint3>
+            <skip_robot_pose>
+              14.201069384449177
+              0.9992237288623271
+              1.1
+              0
+              0
+              -0.7853981633974484
+            </skip_robot_pose>
+          </checkpoint3>
 
-        <task_2_checkpoint_4_pose>
-          6.203995469056597
-          -2.6947315610565976
-          1.1
-          0
-          0
-          -2.356194490192345
-        </task_2_checkpoint_4_pose>
+          <checkpoint4>
+          </checkpoint4>
 
-        <task_2_checkpoint_5_pose>
-          6.203995469056597
-          -2.6947315610565976
-          1.1
-          0
-          0
-          -2.356194490192345
-        </task_2_checkpoint_5_pose>
+          <checkpoint5>
+            <skip_robot_pose>
+              14.201069384449177
+              0.9992237288623271
+              1.1
+              0
+              0
+              -0.7853981633974484
+            </skip_robot_pose>
+          </checkpoint5>
 
-        <task_2_checkpoint_6_pose>
-          6.203995469056597
-          -2.6947315610565976
-          1.1
-          0
-          0
-          -2.356194490192345
-        </task_2_checkpoint_6_pose>
+          <checkpoint6>
+            <skip_robot_pose>
+              16.81595026127703
+              3.7724965246759656
+              1.1
+              0
+              0
+              0.7853981633974481
+            </skip_robot_pose>
+          </checkpoint6>
+
+        </task2>
+
       
 
       
-        <task_3_timeout>7200</task_3_timeout>
+        <task3>
+          <timeout>7200</timeout>
 
-        <task_3_checkpoint_1_pose>
-          12.262108464861928
-          -4.311698158493823
-          1.1
-          0
-          0
-          3.141592653589793
-        </task_3_checkpoint_1_pose>
+          <checkpoint1>
+            <skip_robot_pose>
+              22.852432522554064
+              6.446052865351934
+              2.8
+              0
+              0
+              -2.83276944882399e-16
+            </skip_robot_pose>
+          </checkpoint1>
 
-        <task_3_checkpoint_2_pose>
-          12.262108464861928
-          -4.311698158493823
-          1.1
-          0
-          0
-          3.141592653589793
-        </task_3_checkpoint_2_pose>
+          <checkpoint2>
+            <skip_robot_pose>
+              22.852432522554064
+              6.446052865351934
+              2.8
+              0
+              0
+              -2.83276944882399e-16
+            </skip_robot_pose>
+          </checkpoint2>
 
-        <task_3_checkpoint_3_pose>
-          12.262108464861928
-          -4.311698158493823
-          1.1
-          0
-          0
-          3.141592653589793
-        </task_3_checkpoint_3_pose>
+          <checkpoint3>
+            <skip_robot_pose>
+              25.992232522554062
+              4.266052865351933
+              2.8
+              0
+              0
+              -1.5707963267948968
+            </skip_robot_pose>
+          </checkpoint3>
 
-        <task_3_checkpoint_4_pose>
-          12.262108464861928
-          -4.311698158493823
-          1.1
-          0
-          0
-          3.141592653589793
-        </task_3_checkpoint_4_pose>
+          <checkpoint4>
+          </checkpoint4>
 
-        <task_3_checkpoint_5_pose>
-          12.262108464861928
-          -4.311698158493823
-          1.1
-          0
-          0
-          3.141592653589793
-        </task_3_checkpoint_5_pose>
+          <checkpoint5>
+            <skip_robot_pose>
+              25.992232522554062
+              4.266052865351933
+              2.8
+              0
+              0
+              -1.5707963267948968
+            </skip_robot_pose>
+          </checkpoint5>
 
-        <task_3_checkpoint_6_pose>
-          12.262108464861928
-          -4.311698158493823
-          1.1
-          0
-          0
-          3.141592653589793
-        </task_3_checkpoint_6_pose>
+          <checkpoint6>
+          </checkpoint6>
 
-        <task_3_checkpoint_7_pose>
-          12.262108464861928
-          -4.311698158493823
-          1.1
-          0
-          0
-          3.141592653589793
-        </task_3_checkpoint_7_pose>
+          <checkpoint7>
+            <skip_robot_pose>
+              25.992232522554062
+              4.266052865351933
+              2.8
+              0
+              0
+              -1.5707963267948968
+            </skip_robot_pose>
+          </checkpoint7>
 
-        <task_3_checkpoint_8_pose>
-          12.262108464861928
-          -4.311698158493823
-          1.1
-          0
-          0
-          3.141592653589793
-        </task_3_checkpoint_8_pose>
+          <checkpoint8>
+            <skip_robot_pose>
+              25.972432522554058
+              -9.233947134648066
+              2.8
+              0
+              0
+              -1.5707963267948968
+            </skip_robot_pose>
+          </checkpoint8>
+
+        </task3>
       
 
     </plugin>

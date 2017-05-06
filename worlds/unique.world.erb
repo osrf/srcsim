@@ -125,6 +125,62 @@
     "    </include>\n"
   end
 
+  # Calculate the pose for a random bling inside the habitat
+  # Uses: $blings, $bling_stack_total
+  # Sets: $bling_height, $bling, $bling_stack, $bling_stack_count, $bling_frame
+  def calcHabitatBling
+
+    $bling_height = 0.7
+
+    $bling = $blings.keys[rand(3..4)]
+    $bling_stack = rand(1..3)
+
+    margin = Math::PI * 0.1
+
+    min_angle = (2 * Math::PI / $bling_stack_total) * ($bling_stack_count - 1) + margin
+    max_angle = (2 * Math::PI / $bling_stack_total) * $bling_stack_count - margin
+    angle = rand(min_angle..max_angle)
+
+    radius = rand(3.0..4.0)
+
+    x = radius * Math::sin(angle)
+    y = radius * Math::cos(angle)
+
+    angle = rand(-Math::PI..Math::PI)
+
+    $bling_frame = $habitat_frame *
+                  TMatrix(x, y, angle)
+                  $blings[$bling]
+
+    $bling_stack_count += 1
+  end
+
+
+  # Print a bling inside the habitat based on previous calculated pose
+  # Uses: $table_pos_z, $bling_stack_num, $bling_height, $bling_frame
+  # Sets: $bling_count, $bling_frame
+  def printHabitatBling
+    height = $table_pos_z + ($bling_stack_num-1)*$bling_height
+    angle = rand(-Math::PI*0.2..Math::PI*0.2)
+
+    $bling_frame = $bling_frame * TMatrix(0, 0, angle)
+
+    $bling_count += 1
+
+    "<include>\n"\
+    "      <name>" + $bling + "_" + $bling_count.to_s() + "</name>\n"\
+    "      <pose>\n"\
+    "      " + $bling_frame[0, 2].to_s() + "\n"\
+    "      " + $bling_frame[1, 2].to_s() + "\n"\
+    "      " + height.to_s() + "\n"\
+    "      " + 0.to_s() + "\n"\
+    "      " + 0.to_s() + "\n"\
+    "      " + Math::atan2($bling_frame[1, 0], $bling_frame[0, 0]).to_s() + "\n"\
+    "      </pose>\n"\
+    "      <uri>model://" + $bling + "</uri>\n"\
+    "    </include>\n"
+  end
+
   ###############################################
   #                                             #
   #                  WALKWAYS                   #
@@ -235,8 +291,8 @@
   # Parameters:
   # _list: either $walkways or $finish_walkways
   # _no90: do not pick a walkway with a +-90 degree turn. This is used before
-  # and after finish boxes.
-  def nextWalkway(_list, _no90)
+  # and after large objects.
+  def nextWalkway(_list, _no90, limit = Math::PI / 2.0)
 
     # angle of previous walkway
     prev_angle = $current_walkway["angle"]
@@ -261,8 +317,8 @@
       # Total angle from the beginning of the walkway
       new_total = $total_angle + $current_walkway["angle"]
 
-      break if new_total <= Math::PI/2 &&
-               new_total >= -Math::PI/2 &&
+      break if new_total <= limit &&
+               new_total >= -limit &&
                !(new_angle < 0 && prev_angle < 0) &&
                !(new_angle > 0 && prev_angle > 0) &&
                !(_no90 && (new_angle.abs() == Math::PI/2))
@@ -298,9 +354,10 @@
   # Data for box region detection
   box_height = 5.0
   robot_z_pos = 1.1
+  robot_z_pos_habitat = 2.8
 
   # Starting point
-  $current_frame = TMatrix(-0.3, 0, Math::PI*1.5)
+  $current_frame = TMatrix(0.09, 0, Math::PI)
 %>
 <sdf version="1.6">
   <world name="SRC_finals">
@@ -365,7 +422,7 @@
     <!-- Walkway -->
     <%=
       # Start with a straight walkway
-      $current_walkway = $walkways["straight"]
+      $current_walkway = $finish_walkways["straight"]
       $total_angle = $current_walkway["angle"]
       $walkway_count += 1
       printWalkway()
@@ -389,9 +446,30 @@
 
     <!-- TASK 1 -->
 
+    <!-- Task 1 start - Box plugin -->
+    <%
+      t1start_frame = $current_frame * $current_walkway["tOriginExit"] *
+                      TMatrix(0, 0.5, 0)
+    %>
+
+    <plugin name="boxT1Start" filename="libBoxContainsPlugin.so">
+      <entity>valkyrie</entity>
+      <namespace>task1/start</namespace>
+      <pose>
+        <%= t1start_frame[0, 2] %>
+        <%= t1start_frame[1, 2] %>
+        <%= box_height * 0.5 %>
+        0
+        0
+        <%= Math::atan2(t1start_frame[1, 0], t1start_frame[0, 0]) %>
+      </pose>
+      <size><%= walkway_length %> 1 <%= box_height %></size>
+    </plugin>
+
     <!-- Walkway -->
     <%=
-      nextWalkway($walkways, false)
+      # Can't have 90 degrees near the final box
+      nextWalkway($walkways, true)
     %>
 
     <!-- Satellite -->
@@ -399,30 +477,30 @@
       randomSlot()
       tSatSlotOrigin = TMatrix(0, 2, 0);
       $satellite_frame = $current_frame *
-                        $current_walkway[$slot] *
-                        tSatSlotOrigin
+                         $current_walkway[$slot] *
+                         tSatSlotOrigin
     %>
 
     <%= fromFile("satellite.erb") %>
 
     <!-- Checkpoint 1 - Box plugin -->
     <%
-      t1cp2_frame = $satellite_frame * TMatrix(0, -2.2, Math::PI * 0.5)
-      t1cp3_frame = t1cp2_frame
+      t1cp1_frame = $satellite_frame * TMatrix(0, -2.4, Math::PI * 0.5)
+      t1cp2_frame = t1cp1_frame
     %>
 
     <plugin name="boxT1CP1" filename="libBoxContainsPlugin.so">
       <entity>valkyrie</entity>
       <namespace>task1/checkpoint1</namespace>
       <pose>
-        <%= t1cp2_frame[0, 2] %>
-        <%= t1cp2_frame[1, 2] %>
+        <%= t1cp1_frame[0, 2] %>
+        <%= t1cp1_frame[1, 2] %>
         <%= box_height * 0.5 %>
         0
         0
-        <%= Math::atan2(t1cp2_frame[1, 0], t1cp2_frame[0, 0]) %>
+        <%= Math::atan2(t1cp1_frame[1, 0], t1cp1_frame[0, 0]) %>
       </pose>
-      <size>1 1 5</size>
+      <size>1 1 <%= box_height %></size>
     </plugin>
 
     <!-- Bling -->
@@ -453,10 +531,10 @@
       nextWalkway($finish_walkways, false)
     %>
 
-    <!-- Checkpoint 3 - Box plugin -->
-    <plugin name="boxT1CP3" filename="libBoxContainsPlugin.so">
+    <!-- Checkpoint 4 - Box plugin -->
+    <plugin name="boxT1CP4" filename="libBoxContainsPlugin.so">
       <entity>valkyrie</entity>
-      <namespace>task1/checkpoint3</namespace>
+      <namespace>task1/checkpoint4</namespace>
       <pose>
         <%= $current_frame[0, 2] %>
         <%= $current_frame[1, 2] %>
@@ -465,7 +543,7 @@
         0
         <%= Math::atan2($current_frame[1, 0], $current_frame[0, 0]) %>
       </pose>
-      <size><%= finish_walkway_length %> <%= finish_walkway_length %> 5</size>
+      <size><%= finish_walkway_length %> <%= finish_walkway_length %> <%= box_height %></size>
     </plugin>
 
     <!-- Bling -->
@@ -480,6 +558,12 @@
       nextBling()
     %>
 
+    <%
+      t1cp3_frame = $current_frame *
+                    $current_walkway["tOriginExit"] *
+                    TMatrix(0, -finish_walkway_length * 0.5, Math::PI * 0.5)
+    %>
+
     <!-- /TASK 1 -->
     <%
       end
@@ -491,38 +575,95 @@
 
     <!-- TASK 2 -->
 
+    <!-- Task 2 start - Box plugin -->
+    <%
+      t2start_frame = $current_frame * $current_walkway["tOriginExit"] *
+                      TMatrix(0, 0.5, 0)
+    %>
+
+    <plugin name="boxT2Start" filename="libBoxContainsPlugin.so">
+      <entity>valkyrie</entity>
+      <namespace>task2/start</namespace>
+      <pose>
+        <%= t2start_frame[0, 2] %>
+        <%= t2start_frame[1, 2] %>
+        <%= box_height * 0.5 %>
+        0
+        0
+        <%= Math::atan2(t2start_frame[1, 0], t2start_frame[0, 0]) %>
+      </pose>
+      <size><%= walkway_length %> 1 <%= box_height %></size>
+    </plugin>
+
     <!-- Walkway -->
     <%=
-      t2cp1_frame = $current_frame
       nextWalkway($walkways, true)
     %>
 
-    <!-- Bling -->
-    <%=
-      randomSlot()
-      nextBling()
-    %>
-
-    <!-- Bling -->
-    <%=
-      remainingSlot()
-      nextBling()
-    %>
-
     <!-- Walkway -->
     <%=
-      t2cp2_frame = $current_frame
-      t2cp3_frame = $current_frame
-      t2cp4_frame = $current_frame
-      t2cp5_frame = $current_frame
-      t2cp6_frame = $current_frame
-      nextWalkway($walkways, false)
+      # Can't have 90 degrees near the rover
+      nextWalkway($walkways, true)
     %>
 
     <!-- Rover -->
     <%
       randomSlot()
-      # TODO: Rover goes here
+
+      tRoverSlotOrigin = TMatrix(0, 4.5, Math::PI);
+      rover_frame = $current_frame *
+                    $current_walkway[$slot] *
+                    tRoverSlotOrigin
+    %>
+
+    <include>
+      <pose>
+        <%= rover_frame[0, 2] %>
+        <%= rover_frame[1, 2] %>
+        0
+        0
+        0
+        <%= Math::atan2(rover_frame[1, 0], rover_frame[0, 0]) %>
+      </pose>
+      <uri>model://mars_explorer</uri>
+    </include>
+
+    <!-- Solar panel -->
+    <%
+      tPanelSlotOrigin = TMatrix(0, -0.2, rand(-Math::PI...Math::PI));
+      $solar_panel_frame = $current_frame *
+                           $current_walkway[$slot] *
+                           tPanelSlotOrigin
+      $solar_panel_pos_z = 0.46
+    %>
+
+    <%= fromFile("solar_panel.erb") %>
+
+    <!-- Bling -->
+    <%=
+      # No room for bling if it's a 45 turn
+      if $current_walkway['angle'].abs() != Math::PI/4
+        remainingSlot()
+        nextBling()
+      end
+    %>
+
+    <!-- Walkway -->
+    <%=
+      # Can't have 90 degrees near the rover
+      nextWalkway($walkways, true)
+    %>
+
+    <!-- Walkway -->
+    <%=
+      # Can't have 90 degrees between the rover and the array
+      nextWalkway($walkways, true)
+    %>
+
+    <!-- Bling -->
+    <%=
+      randomSlot()
+      nextBling()
     %>
 
     <!-- Bling -->
@@ -533,24 +674,94 @@
 
     <!-- Walkway -->
     <%=
-      nextWalkway($walkways, false)
+      # Can't have 90 degrees near the array
+      nextWalkway($walkways, true)
     %>
 
     <!-- Solar Array -->
     <%
       randomSlot()
-      # TODO: Array goes here
+
+      tArraySlotOrigin = TMatrix(0, 0.55, 0);
+      array_frame = $current_frame *
+                    $current_walkway[$slot] *
+                    tArraySlotOrigin
+
+      t2cp2_panel_skip_frame = array_frame *
+          TMatrix(rand(-0.4...-0.05), rand(-0.27...-0.12), rand(-Math::PI...Math::PI));
+      t2cp2_panel_skip_z_pos = 0.7
+
+      t2cp2_frame = array_frame * TMatrix(0, -1.2, Math::PI * 0.5);
+      t2cp3_frame = t2cp2_frame
+      t2cp5_frame = t2cp2_frame
+    %>
+
+    <include>
+      <pose>
+        <%= array_frame[0, 2] %>
+        <%= array_frame[1, 2] %>
+        0
+        0
+        0
+        <%= Math::atan2(array_frame[1, 0], array_frame[0, 0]) %>
+      </pose>
+      <uri>model://solar_array</uri>
+    </include>
+
+    <!-- Cable -->
+    <%
+      tCableSlotOrigin = TMatrix(0.4, 1.15, -Math::PI / 2);
+      $cable_frame = $current_frame *
+                     $current_walkway[$slot] *
+                     tCableSlotOrigin
+    %>
+
+    <%= fromFile("cable.erb") %>
+
+    <!-- Checkpoint 2 - Box plugin -->
+    <%
+      panel_goal_frame = array_frame
+    %>
+
+    <plugin name="boxT2CP2" filename="libBoxContainsPlugin.so">
+      <entity>solar_panel</entity>
+      <namespace>task2/checkpoint2</namespace>
+      <pose>
+        <%= panel_goal_frame[0, 2] %>
+        <%= panel_goal_frame[1, 2] %>
+        0.9
+        0
+        0
+        <%= Math::atan2(panel_goal_frame[1, 0], panel_goal_frame[0, 0]) %>
+      </pose>
+      <size>1.47 0.95 0.45</size>
+    </plugin>
+
+    <!-- Bling -->
+    <%=
+      # No room for bling if it's a 45 turn
+      if $current_walkway['angle'].abs() != Math::PI/4
+        remainingSlot()
+        nextBling()
+      end
+    %>
+
+    <!-- Walkway -->
+    <%=
+      # Can't have 90 degrees near the array or the final box
+      nextWalkway($walkways, true)
+    %>
+
+    <!-- Bling -->
+    <%=
+      randomSlot()
+      nextBling()
     %>
 
     <!-- Bling -->
     <%=
       remainingSlot()
       nextBling()
-    %>
-
-    <!-- Walkway -->
-    <%=
-      nextWalkway($walkways, true)
     %>
 
     <!-- Final Box 2 -->
@@ -570,7 +781,7 @@
         0
         <%= Math::atan2($current_frame[1, 0], $current_frame[0, 0]) %>
       </pose>
-      <size><%= finish_walkway_length %> <%= finish_walkway_length %> 5</size>
+      <size><%= finish_walkway_length %> <%= finish_walkway_length %> <%= box_height %></size>
     </plugin>
 
     <!-- Bling -->
@@ -583,6 +794,12 @@
     <%=
       remainingSlot()
       nextBling()
+    %>
+
+    <%
+      t2cp6_frame = $current_frame *
+                    $current_walkway["tOriginExit"] *
+                    TMatrix(0, -finish_walkway_length * 0.5, Math::PI * 0.5)
     %>
 
     <!-- /TASK 2 -->
@@ -596,57 +813,297 @@
 
     <!-- TASK 3 -->
 
+    <!-- Task 3 start - Box plugin -->
+    <%
+      t3start_frame = $current_frame * $current_walkway["tOriginExit"] *
+                      TMatrix(0, 0.5, 0)
+    %>
+
+    <plugin name="boxT3Start" filename="libBoxContainsPlugin.so">
+      <entity>valkyrie</entity>
+      <namespace>task3/start</namespace>
+      <pose>
+        <%= t3start_frame[0, 2] %>
+        <%= t3start_frame[1, 2] %>
+        <%= box_height * 0.5 %>
+        0
+        0
+        <%= Math::atan2(t3start_frame[1, 0], t3start_frame[0, 0]) %>
+      </pose>
+      <size><%= walkway_length %> 1 <%= box_height %></size>
+    </plugin>
+
     <!-- Walkway -->
     <%=
-      t3cp1_frame = $current_frame
-      t3cp2_frame = $current_frame
-      t3cp3_frame = $current_frame
-      t3cp4_frame = $current_frame
-      t3cp5_frame = $current_frame
-      t3cp6_frame = $current_frame
-      t3cp7_frame = $current_frame
-      t3cp8_frame = $current_frame
+      # Can't have 90 degrees near the final box
       nextWalkway($walkways, true)
     %>
 
     <!-- Walkway -->
     <%=
-      nextWalkway($walkways, false)
-    %>
-
-    <!-- Bling -->
-    <%=
-      randomSlot()
-      nextBling()
-    %>
-
-    <!-- Bling -->
-    <%=
-      remainingSlot()
-      nextBling()
+      nextWalkway($walkways, false, Math::PI / 4.0)
     %>
 
     <!-- Habitat -->
     <%
-      # TODO: Habitat goes here
+      tHabitatSlotOrigin = TMatrix(6.7, 5.7, 0);
+      $current_frame = $current_frame * $current_walkway["tOriginExit"]
+      $habitat_frame = $current_frame *
+                       tHabitatSlotOrigin
+    %>
+
+    <%= fromFile("habitat.erb") %>
+
+    <!-- Checkpoint 1 - Climb the stairs -->
+    <%
+      t3cp1_frame = $habitat_frame * TMatrix(-6.68, -3.12, Math::PI / 2.0)
+      t3cp2_frame = t3cp1_frame
+    %>
+
+    <plugin name="boxT3CP1" filename="libBoxContainsPlugin.so">
+      <entity>valkyrie</entity>
+      <namespace>task3/checkpoint1</namespace>
+      <pose>
+        <%= t3cp1_frame[0, 2] %>
+        <%= t3cp1_frame[1, 2] %>
+        <%= 2.92 %>
+        0
+        0
+        <%= Math::atan2(t3cp1_frame[1, 0], t3cp1_frame[0, 0]) %>
+      </pose>
+      <size>1.0 2.50 2.44</size>
+    </plugin>
+
+    <!-- Checkpoint 3 - Pass through the door -->
+    <%
+      t3cp3_frame = $habitat_frame * TMatrix(-4.50, 0.0198, 0)
+      t3cp5_frame = t3cp3_frame
+      t3cp7_frame = t3cp3_frame
+      t3cp8_frame = t3cp3_frame
+    %>
+
+    <plugin name="boxT3CP3" filename="libBoxContainsPlugin.so">
+      <entity>valkyrie</entity>
+      <namespace>task3/checkpoint3</namespace>
+      <pose>
+        <%= t3cp3_frame[0, 2] %>
+        <%= t3cp3_frame[1, 2] %>
+        <%= 2.81 %>
+        0
+        0
+        <%= Math::atan2(t3cp3_frame[1, 0], t3cp3_frame[0, 0]) %>
+      </pose>
+      <size>1.00 1.55 2.88</size>
+    </plugin>
+
+
+    <!-- Lamp inside the habitat -->
+    <%
+      lamp_frame = $habitat_frame * TMatrix(-5.16, 0.238, Math::PI / 2.0)
+      lamp_pos_z = 4.2
+      lamp_roll = -1.462
+    %>
+
+    <light name='habitat_lamp' type='spot'>
+      <pose>
+        <%= lamp_frame[0, 2] %>
+        <%= lamp_frame[1, 2] %>
+        <%= lamp_pos_z %>
+        <%= lamp_roll %>
+        0
+        <%= Math::atan2(lamp_frame[1, 0], lamp_frame[0, 0]) %>
+      </pose>
+      <diffuse>1 1 1 1</diffuse>
+      <specular>0.1 0.1 0.1 1</specular>
+      <attenuation>
+        <range>10</range>
+        <constant>0.5</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <cast_shadows>0</cast_shadows>
+      <direction>0 0 -1</direction>
+      <spot>
+        <inner_angle>0.6</inner_angle>
+        <outer_angle><%= Math::PI %></outer_angle>
+        <falloff>0.5</falloff>
+      </spot>
+    </light>
+
+    <!-- Table -->
+    <%
+      $table_frame = $habitat_frame *
+                     TMatrix(rand(-1.5..1.5),
+                             rand(-1.5..1.5),
+                             rand(-Math::PI..Math::PI))
+      $table_pos_z = 1.8
+    %>
+    <include>
+      <pose>
+        <%= $table_frame[0, 2] %>
+        <%= $table_frame[1, 2] %>
+        <%= $table_pos_z %>
+        0
+        0
+        <%= Math::atan2($table_frame[1, 0], $table_frame[0, 0]) %>
+      </pose>
+      <uri>model://space_table</uri>
+    </include>
+
+    <!-- Air leak detector -->
+    <%
+      b = [-1, 1].sample
+      $air_leak_detector_frame = $table_frame *
+          TMatrix(b*rand(0.1..0.6),
+                  rand(0..0.3),
+                  rand(-Math::PI..Math::PI))
+      $table_top_z = $table_pos_z + 0.7
+    %>
+
+    <%= fromFile("air_leak_detector.erb") %>
+
+    <!-- Leak patch tool -->
+    <%
+      $leak_patch_tool_frame = $table_frame *
+          TMatrix(-b*rand(0.1..0.6),
+                  rand(0..0.3),
+                  rand(-Math::PI..Math::PI))
+    %>
+
+    <include>
+      <pose>
+        <%= $leak_patch_tool_frame[0, 2] %>
+        <%= $leak_patch_tool_frame[1, 2] %>
+        <%= $table_top_z + 0.1 %>
+        0
+        0
+        <%= Math::atan2($leak_patch_tool_frame[1, 0], $leak_patch_tool_frame[0, 0]) %>
+      </pose>
+      <uri>model://leak_patch_tool</uri>
+    </include>
+
+    <!-- Leak -->
+    <%= fromFile("leak.erb") %>
+
+    <!-- Bling -->
+    <%
+      # Number of bling stacks inside the habitat
+      $bling_stack_total = 7
+      $bling_stack_count = 1
+
+      # Calculate pose of bling stack
+      calcHabitatBling()
+
+      # Iterate over all the blings on this stack
+      (1..$bling_stack).each do |i|
+        $bling_stack_num = i
+    %>
+    <%=
+      # Print each bling on top of the other in this stack
+      printHabitatBling()
+    %>
+    <%
+      end
+    %>
+
+    <!-- Bling -->
+    <%
+      calcHabitatBling()
+      (1..$bling_stack).each do |i|
+      $bling_stack_num = i
+    %>
+    <%=
+      printHabitatBling()
+    %>
+    <%
+      end
+    %>
+
+    <!-- Bling -->
+    <%
+      calcHabitatBling()
+      (1..$bling_stack).each do |i|
+      $bling_stack_num = i
+    %>
+    <%=
+      printHabitatBling()
+    %>
+    <%
+      end
+    %>
+
+    <!-- Bling -->
+    <%
+      calcHabitatBling()
+      (1..$bling_stack).each do |i|
+      $bling_stack_num = i
+    %>
+    <%=
+      printHabitatBling()
+    %>
+    <%
+      end
+    %>
+
+    <!-- Bling -->
+    <%
+      calcHabitatBling()
+      (1..$bling_stack).each do |i|
+      $bling_stack_num = i
+    %>
+    <%=
+      printHabitatBling()
+    %>
+    <%
+      end
+    %>
+
+    <!-- Bling -->
+    <%
+      calcHabitatBling()
+      (1..$bling_stack).each do |i|
+      $bling_stack_num = i
+    %>
+    <%=
+      printHabitatBling()
+    %>
+    <%
+      end
+    %>
+
+    <!-- Bling -->
+    <%
+      calcHabitatBling()
+      (1..$bling_stack).each do |i|
+      $bling_stack_num = i
+    %>
+    <%=
+      printHabitatBling()
+    %>
+    <%
+      end
     %>
 
     <!-- TODO: Put the box inside the habitat -->
 
     <!-- Checkpoint 8 - Box plugin -->
+    <%
+      t3cp8_frame = $habitat_frame * TMatrix(9.0, 0.0, 0)
+      finish_box_3_length = 1.5
+    %>
 
     <plugin name="boxT3CP8" filename="libBoxContainsPlugin.so">
       <entity>valkyrie</entity>
       <namespace>task3/checkpoint8</namespace>
       <pose>
-        <%= $current_frame[0, 2] %>
-        <%= $current_frame[1, 2] %>
-        <%= box_height * 0.5 %>
+        <%= t3cp8_frame[0, 2] %>
+        <%= t3cp8_frame[1, 2] %>
+        <%= 2.68 %>
         0
         0
-        <%= Math::atan2($current_frame[1, 0], $current_frame[0, 0]) %>
+        <%= Math::atan2(t3cp8_frame[1, 0], t3cp8_frame[0, 0]) %>
       </pose>
-      <size><%= finish_walkway_length %> <%= finish_walkway_length %> 5</size>
+      <size><%= finish_box_3_length %> <%= finish_box_3_length %> <%= box_height %></size>
     </plugin>
 
     <!-- /TASK 3 -->
@@ -660,25 +1117,42 @@
       <%
         if (task == '0' || task == '1')
       %>
-        <task_1_timeout>1800</task_1_timeout>
+        <task1>
+          <timeout>1800</timeout>
 
-        <task_1_checkpoint_2_pose>
-          <%= t1cp2_frame[0, 2] %>
-          <%= t1cp2_frame[1, 2] %>
-          <%= robot_z_pos %>
-          0
-          0
-          <%= Math::atan2(t1cp2_frame[1, 0], t1cp2_frame[0, 0]) %>
-        </task_1_checkpoint_2_pose>
+          <checkpoint1>
+            <skip_robot_pose>
+              <%= t1cp1_frame[0, 2] %>
+              <%= t1cp1_frame[1, 2] %>
+              <%= robot_z_pos %>
+              0
+              0
+              <%= Math::atan2(t1cp1_frame[1, 0], t1cp1_frame[0, 0]) %>
+            </skip_robot_pose>
+          </checkpoint1>
 
-        <task_1_checkpoint_3_pose>
-          <%= t1cp3_frame[0, 2] %>
-          <%= t1cp3_frame[1, 2] %>
-          <%= robot_z_pos %>
-          0
-          0
-          <%= Math::atan2(t1cp3_frame[1, 0], t1cp3_frame[0, 0]) %>
-        </task_1_checkpoint_3_pose>
+          <checkpoint2>
+            <skip_robot_pose>
+              <%= t1cp2_frame[0, 2] %>
+              <%= t1cp2_frame[1, 2] %>
+              <%= robot_z_pos %>
+              0
+              0
+              <%= Math::atan2(t1cp2_frame[1, 0], t1cp2_frame[0, 0]) %>
+            </skip_robot_pose>
+          </checkpoint2>
+
+          <checkpoint4>
+            <skip_robot_pose>
+              <%= t1cp3_frame[0, 2] %>
+              <%= t1cp3_frame[1, 2] %>
+              <%= robot_z_pos %>
+              0
+              0
+              <%= Math::atan2(t1cp3_frame[1, 0], t1cp3_frame[0, 0]) %>
+            </skip_robot_pose>
+          </checkpoint4>
+        </task1>
       <%
         end
       %>
@@ -686,61 +1160,69 @@
       <%
         if (task == '0' || task == '2')
       %>
-        <task_2_timeout>3600</task_2_timeout>
+        <task2>
+          <timeout>3600</timeout>
 
-        <task_2_checkpoint_1_pose>
-          <%= t2cp1_frame[0, 2] %>
-          <%= t2cp1_frame[1, 2] %>
-          <%= robot_z_pos %>
-          0
-          0
-          <%= Math::atan2(t2cp1_frame[1, 0], t2cp1_frame[0, 0]) %>
-        </task_2_checkpoint_1_pose>
+          <checkpoint1>
+          </checkpoint1>
 
-        <task_2_checkpoint_2_pose>
-          <%= t2cp2_frame[0, 2] %>
-          <%= t2cp2_frame[1, 2] %>
-          <%= robot_z_pos %>
-          0
-          0
-          <%= Math::atan2(t2cp2_frame[1, 0], t2cp2_frame[0, 0]) %>
-        </task_2_checkpoint_2_pose>
+          <checkpoint2>
+            <skip_robot_pose>
+              <%= t2cp2_frame[0, 2] %>
+              <%= t2cp2_frame[1, 2] %>
+              <%= robot_z_pos %>
+              0
+              0
+              <%= Math::atan2(t2cp2_frame[1, 0], t2cp2_frame[0, 0]) %>
+            </skip_robot_pose>
+            <panel_pose>
+              <%= t2cp2_panel_skip_frame[0, 2] %>
+              <%= t2cp2_panel_skip_frame[1, 2] %>
+              <%= t2cp2_panel_skip_z_pos %>
+              0
+              0
+              <%= Math::atan2(t2cp2_panel_skip_frame[1, 0], t2cp2_panel_skip_frame[0, 0]) %>
+            </panel_pose>
+          </checkpoint2>
 
-        <task_2_checkpoint_3_pose>
-          <%= t2cp3_frame[0, 2] %>
-          <%= t2cp3_frame[1, 2] %>
-          <%= robot_z_pos %>
-          0
-          0
-          <%= Math::atan2(t2cp3_frame[1, 0], t2cp3_frame[0, 0]) %>
-        </task_2_checkpoint_3_pose>
+          <checkpoint3>
+            <skip_robot_pose>
+              <%= t2cp3_frame[0, 2] %>
+              <%= t2cp3_frame[1, 2] %>
+              <%= robot_z_pos %>
+              0
+              0
+              <%= Math::atan2(t2cp3_frame[1, 0], t2cp3_frame[0, 0]) %>
+            </skip_robot_pose>
+          </checkpoint3>
 
-        <task_2_checkpoint_4_pose>
-          <%= t2cp4_frame[0, 2] %>
-          <%= t2cp4_frame[1, 2] %>
-          <%= robot_z_pos %>
-          0
-          0
-          <%= Math::atan2(t2cp4_frame[1, 0], t2cp4_frame[0, 0]) %>
-        </task_2_checkpoint_4_pose>
+          <checkpoint4>
+          </checkpoint4>
 
-        <task_2_checkpoint_5_pose>
-          <%= t2cp5_frame[0, 2] %>
-          <%= t2cp5_frame[1, 2] %>
-          <%= robot_z_pos %>
-          0
-          0
-          <%= Math::atan2(t2cp5_frame[1, 0], t2cp5_frame[0, 0]) %>
-        </task_2_checkpoint_5_pose>
+          <checkpoint5>
+            <skip_robot_pose>
+              <%= t2cp5_frame[0, 2] %>
+              <%= t2cp5_frame[1, 2] %>
+              <%= robot_z_pos %>
+              0
+              0
+              <%= Math::atan2(t2cp5_frame[1, 0], t2cp5_frame[0, 0]) %>
+            </skip_robot_pose>
+          </checkpoint5>
 
-        <task_2_checkpoint_6_pose>
-          <%= t2cp6_frame[0, 2] %>
-          <%= t2cp6_frame[1, 2] %>
-          <%= robot_z_pos %>
-          0
-          0
-          <%= Math::atan2(t2cp6_frame[1, 0], t2cp6_frame[0, 0]) %>
-        </task_2_checkpoint_6_pose>
+          <checkpoint6>
+            <skip_robot_pose>
+              <%= t2cp6_frame[0, 2] %>
+              <%= t2cp6_frame[1, 2] %>
+              <%= robot_z_pos %>
+              0
+              0
+              <%= Math::atan2(t2cp6_frame[1, 0], t2cp6_frame[0, 0]) %>
+            </skip_robot_pose>
+          </checkpoint6>
+
+        </task2>
+
       <%
         end
       %>
@@ -748,79 +1230,82 @@
       <%
         if (task == '0' || task == '3')
       %>
-        <task_3_timeout>7200</task_3_timeout>
+        <task3>
+          <timeout>7200</timeout>
 
-        <task_3_checkpoint_1_pose>
-          <%= t3cp1_frame[0, 2] %>
-          <%= t3cp1_frame[1, 2] %>
-          <%= robot_z_pos %>
-          0
-          0
-          <%= Math::atan2(t3cp1_frame[1, 0], t3cp1_frame[0, 0]) %>
-        </task_3_checkpoint_1_pose>
+          <checkpoint1>
+            <skip_robot_pose>
+              <%= t3cp1_frame[0, 2] %>
+              <%= t3cp1_frame[1, 2] %>
+              <%= robot_z_pos_habitat %>
+              0
+              0
+              <%= Math::atan2(t3cp1_frame[1, 0], t3cp1_frame[0, 0]) %>
+            </skip_robot_pose>
+          </checkpoint1>
 
-        <task_3_checkpoint_2_pose>
-          <%= t3cp2_frame[0, 2] %>
-          <%= t3cp2_frame[1, 2] %>
-          <%= robot_z_pos %>
-          0
-          0
-          <%= Math::atan2(t3cp2_frame[1, 0], t3cp2_frame[0, 0]) %>
-        </task_3_checkpoint_2_pose>
+          <checkpoint2>
+            <skip_robot_pose>
+              <%= t3cp2_frame[0, 2] %>
+              <%= t3cp2_frame[1, 2] %>
+              <%= robot_z_pos_habitat %>
+              0
+              0
+              <%= Math::atan2(t3cp2_frame[1, 0], t3cp2_frame[0, 0]) %>
+            </skip_robot_pose>
+          </checkpoint2>
 
-        <task_3_checkpoint_3_pose>
-          <%= t3cp3_frame[0, 2] %>
-          <%= t3cp3_frame[1, 2] %>
-          <%= robot_z_pos %>
-          0
-          0
-          <%= Math::atan2(t3cp3_frame[1, 0], t3cp3_frame[0, 0]) %>
-        </task_3_checkpoint_3_pose>
+          <checkpoint3>
+            <skip_robot_pose>
+              <%= t3cp3_frame[0, 2] %>
+              <%= t3cp3_frame[1, 2] %>
+              <%= robot_z_pos_habitat %>
+              0
+              0
+              <%= Math::atan2(t3cp3_frame[1, 0], t3cp3_frame[0, 0]) %>
+            </skip_robot_pose>
+          </checkpoint3>
 
-        <task_3_checkpoint_4_pose>
-          <%= t3cp4_frame[0, 2] %>
-          <%= t3cp4_frame[1, 2] %>
-          <%= robot_z_pos %>
-          0
-          0
-          <%= Math::atan2(t3cp4_frame[1, 0], t3cp4_frame[0, 0]) %>
-        </task_3_checkpoint_4_pose>
+          <checkpoint4>
+          </checkpoint4>
 
-        <task_3_checkpoint_5_pose>
-          <%= t3cp5_frame[0, 2] %>
-          <%= t3cp5_frame[1, 2] %>
-          <%= robot_z_pos %>
-          0
-          0
-          <%= Math::atan2(t3cp5_frame[1, 0], t3cp5_frame[0, 0]) %>
-        </task_3_checkpoint_5_pose>
+          <checkpoint5>
+            <skip_robot_pose>
+              <%= t3cp5_frame[0, 2] %>
+              <%= t3cp5_frame[1, 2] %>
+              <%= robot_z_pos_habitat %>
+              0
+              0
+              <%= Math::atan2(t3cp5_frame[1, 0], t3cp5_frame[0, 0]) %>
+            </skip_robot_pose>
+          </checkpoint5>
 
-        <task_3_checkpoint_6_pose>
-          <%= t3cp6_frame[0, 2] %>
-          <%= t3cp6_frame[1, 2] %>
-          <%= robot_z_pos %>
-          0
-          0
-          <%= Math::atan2(t3cp6_frame[1, 0], t3cp6_frame[0, 0]) %>
-        </task_3_checkpoint_6_pose>
+          <checkpoint6>
+          </checkpoint6>
 
-        <task_3_checkpoint_7_pose>
-          <%= t3cp7_frame[0, 2] %>
-          <%= t3cp7_frame[1, 2] %>
-          <%= robot_z_pos %>
-          0
-          0
-          <%= Math::atan2(t3cp7_frame[1, 0], t3cp7_frame[0, 0]) %>
-        </task_3_checkpoint_7_pose>
+          <checkpoint7>
+            <skip_robot_pose>
+              <%= t3cp7_frame[0, 2] %>
+              <%= t3cp7_frame[1, 2] %>
+              <%= robot_z_pos_habitat %>
+              0
+              0
+              <%= Math::atan2(t3cp7_frame[1, 0], t3cp7_frame[0, 0]) %>
+            </skip_robot_pose>
+          </checkpoint7>
 
-        <task_3_checkpoint_8_pose>
-          <%= t3cp8_frame[0, 2] %>
-          <%= t3cp8_frame[1, 2] %>
-          <%= robot_z_pos %>
-          0
-          0
-          <%= Math::atan2(t3cp8_frame[1, 0], t3cp8_frame[0, 0]) %>
-        </task_3_checkpoint_8_pose>
+          <checkpoint8>
+            <skip_robot_pose>
+              <%= t3cp8_frame[0, 2] %>
+              <%= t3cp8_frame[1, 2] %>
+              <%= robot_z_pos_habitat %>
+              0
+              0
+              <%= Math::atan2(t3cp8_frame[1, 0], t3cp8_frame[0, 0]) %>
+            </skip_robot_pose>
+          </checkpoint8>
+
+        </task3>
       <%
         end
       %>
