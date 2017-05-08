@@ -1,23 +1,21 @@
 <launch>
   <!-- start with robot harnessed by default. -->
+  <!-- automatically lower robot harnessed, start high level controller and detach harness. -->
   <!-- set:
-         roslaunch srcsim unique_task3.launch init:=true
-       to automatically lower robot harnessed, start high level controller and detach harness. -->
-  <!-- set:
-         roslaunch srcsim unique_task3.launch init:=true walk_test:=walk
-       to automatically walk forward after harness detach. -->
+         roslaunch srcsim finals.launch final_number:=2
+       with a number from 1 to 5 to start a specific final world. -->
   <arg name="debug" default="false" />
   <arg name="extra_gazebo_args" default=""/>
   <arg name="grasping_init" default="true"/>
   <arg name="grasping_init_wait_time" default="20"/>
-  <arg name="init" default="false" />
+  <arg name="init" default="true" />
   <arg name="paused" default="false" />
   <arg name="use_local_build" default="false" />
   <arg name="verbose" default="true" />
+  <arg name="gui" default="false" />
   <arg name="walk_test" default="false"/>
-
-  <arg if="$(optenv USE_CUSTOM_WORLD 0)" name="world_name" default="$(env CUSTOM_WORLD_PATH)" />
-  <arg unless="$(optenv USE_CUSTOM_WORLD 0)" name="world_name" default="$(find srcsim)/worlds/unique_task3.world" />
+  <arg name="final_number" default="1"/>
+  <arg name="world_name" value="$(find srcsim)/worlds/final_$(arg final_number).world"/>
 
   <include file="$(find val_gazebo)/launch/val_sim_gazebo_sync.launch" pass_all_args="false">
     <env name="GAZEBO_RESOURCE_PATH" value="$(find srcsim)/worlds"/>
@@ -27,6 +25,7 @@
     <arg name="extra_gazebo_args" default="$(arg extra_gazebo_args)"/>
     <arg name="paused" value="$(arg paused)" />
     <arg name="verbose" value="$(arg verbose)" />
+    <arg name="gui" value="$(arg gui)" />
     <arg name="world_name" value="$(arg world_name)" />
   </include>
 

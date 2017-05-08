@@ -2,6 +2,12 @@
 
 ### SRC Sim x.x.x (2017-xx-xx)
 
+* Fix Hokuyo transform publication
+    * [Pull request 72](https://bitbucket.org/osrf/srcsim/pull-requests/72)
+
+* Launch file and 5 example worlds for finals
+    * [Pull request 61](https://bitbucket.org/osrf/srcsim/pull-requests/61)
+
 * Task 2: Teleport solar panel within reach
     * [Pull request 63](https://bitbucket.org/osrf/srcsim/pull-requests/63)
 
@@ -25,6 +31,9 @@
 
 * Performance: Delete / insert models as we need them in view
     * [Pull request 67](https://bitbucket.org/osrf/srcsim/pull-requests/67)
+
+* Task 1: Split checkpoint 2
+    * [Pull request 70](https://bitbucket.org/osrf/srcsim/pull-requests/70)
 
 ### SRC Sim 0.4.0 (2017-04-14)
 
