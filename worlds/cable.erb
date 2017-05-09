@@ -2,14 +2,14 @@
   # Template for solar panel cable for SRC finals world
 
   # Requires the following global variables:
-  # $cable_frame
+  # $cable_frame, $array_z_offset
 
   radius = 0.010
   length = 0.1
   link_count = 16
   link_mass = 0.05
   min_inertia = 0.0001
-  height = 0.85
+  height = 0.85 + $array_z_offset
   theta = Math::PI * 0.3
 %>
 
