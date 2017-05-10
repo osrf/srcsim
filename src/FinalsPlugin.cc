@@ -250,15 +250,32 @@ void FinalsPlugin::OnUpdate(const common::UpdateInfo &_info)
 
   // Publish ROS score message
   srcsim::Score msg;
-  for (auto i = 0; i < this->current; ++i)
+
+  // Check up to the current task
+  for (auto i = 1; i <= this->current; ++i)
   {
-    if (!this->tasks[i])
+    if (!this->tasks[i-1])
     {
       continue;
     }
-    for (size_t j = 0; j < this->tasks[i]->CurrentCheckpointId(); ++j)
+
+    // If it's a previous task
+    bool finishedTask = i != this->current;
+
+    // Task hasn't started yet
+    if (!finishedTask && this->tasks[i-1]->CurrentCheckpointId() == 0)
     {
-      ros::Time t(this->tasks[i]->GetCheckpointCompletion(j).Double());
+      continue;
+    }
+
+    // Finished tasks: check until last checkpoint
+    // Current task: check until previous checkpoint
+    auto totalCP = finishedTask ? this->tasks[i-1]->CheckpointCount() :
+                                  this->tasks[i-1]->CurrentCheckpointId() - 1;
+
+    for (size_t j = 1; j <= totalCP; ++j)
+    {
+      ros::Time t(this->tasks[i-1]->GetCheckpointCompletion(j-1).Double());
       msg.checkpoints_completion.push_back(t);
     }
   }
