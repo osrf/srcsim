@@ -254,26 +254,14 @@ void FinalsPlugin::OnUpdate(const common::UpdateInfo &_info)
   // Check up to the current task
   for (auto i = 1; i <= this->current; ++i)
   {
+    // Skip tasks which haven't been created
     if (!this->tasks[i-1])
     {
       continue;
     }
 
-    // If it's a previous task
-    bool finishedTask = i != this->current;
-
-    // Task hasn't started yet
-    if (!finishedTask && this->tasks[i-1]->CurrentCheckpointId() == 0)
-    {
-      continue;
-    }
-
-    // Finished tasks: check until last checkpoint
-    // Current task: check until previous checkpoint
-    auto totalCP = finishedTask ? this->tasks[i-1]->CheckpointCount() :
-                                  this->tasks[i-1]->CurrentCheckpointId() - 1;
-
-    for (size_t j = 1; j <= totalCP; ++j)
+    // Add completion time for all past checkpoints
+    for (size_t j = 1; j < this->tasks[i-1]->CurrentCheckpointId(); ++j)
     {
       ros::Time t(this->tasks[i-1]->GetCheckpointCompletion(j-1).Double());
       msg.checkpoints_completion.push_back(t);
@@ -285,6 +273,9 @@ void FinalsPlugin::OnUpdate(const common::UpdateInfo &_info)
   uint8_t last_checkpoint_score = 0;
   for (auto t : msg.checkpoints_completion)
   {
+    // TODO The data structure doesn't provide the information if the
+    // checkpoint was reset (which isn't suppot yet). In that case the
+    // last_checkpoint_score needs to be reset too.
     if (t.isZero())
     {
       // End winning streak in case of incomplete checkpoints
