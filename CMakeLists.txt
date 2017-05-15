@@ -276,6 +276,11 @@ if(NOT BUILD_MSGS_ONLY)
   catkin_add_env_hooks(99_srcsim_setup
     DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/cmake
     SHELLS sh)
+  # Configure the setup.bash system script
+  configure_file(${CMAKE_SOURCE_DIR}/cmake/setup.bash.in
+    ${PROJECT_BINARY_DIR}/setup.bash @ONLY)
+  install(FILES ${PROJECT_BINARY_DIR}/setup.bash
+    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
 
   # Packaging configuration
   set (CPACK_PACKAGE_VERSION "${DRC_SIM_VERSION_FULL}")
