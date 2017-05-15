@@ -11,6 +11,9 @@
 * Task 2: Teleport solar panel within reach
     * [Pull request 63](https://bitbucket.org/osrf/srcsim/pull-requests/63)
 
+* Task 2: Solar panel from 5 kg to 3 kg
+    * [Pull request 74](https://bitbucket.org/osrf/srcsim/pull-requests/74)
+
 * Task 3: Randomize habitat objects
     * [Pull request 60](https://bitbucket.org/osrf/srcsim/pull-requests/60)
 
@@ -28,6 +31,9 @@
 
 * Task 3: Integration
     * [Pull request 57](https://bitbucket.org/osrf/srcsim/pull-requests/57)
+
+* Performance: Delete / insert models as we need them in view
+    * [Pull request 67](https://bitbucket.org/osrf/srcsim/pull-requests/67)
 
 * Task 1: Split checkpoint 2
     * [Pull request 70](https://bitbucket.org/osrf/srcsim/pull-requests/70)
