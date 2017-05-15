@@ -138,6 +138,8 @@ bool Task2CP3::Check()
   // First time
   if (!this->panelGzSub && !this->panelDone)
   {
+    this->Start();
+
     this->gzNode = transport::NodePtr(new transport::Node());
     this->gzNode->Init();
 
@@ -211,6 +213,8 @@ bool Task2CP5::Check()
   // First time
   if (!this->sensor)
   {
+    this->Start();
+
     this->world = physics::get_world();
 
     if (this->world)
