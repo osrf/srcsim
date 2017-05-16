@@ -157,10 +157,10 @@
 
 
   # Print a bling inside the habitat based on previous calculated pose
-  # Uses: $table_pos_z, $bling_stack_num, $bling_height, $bling_frame
+  # Uses: $habitat_floor_z, $bling_stack_num, $bling_height, $bling_frame
   # Sets: $bling_count, $bling_frame
   def printHabitatBling
-    height = $table_pos_z + ($bling_stack_num-1)*$bling_height
+    height = $habitat_floor_z + ($bling_stack_num-1)*$bling_height
     angle = rand(-Math::PI*0.2..Math::PI*0.2)
 
     $bling_frame = $bling_frame * TMatrix(0, 0, angle)
@@ -330,7 +330,8 @@
     end
     $total_angle = new_total
 
-    $table_pos_z = 2.0
+    $habitat_floor_z = 1.8
+    $table_pos_z = $habitat_floor_z + 0.2
 
     # Take tile transform into account
     $current_frame = $current_frame * $current_walkway["tEntranceOrigin"]
