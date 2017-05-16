@@ -105,12 +105,28 @@
     </include>
 
 
+    
 
-
-
+    
 
     <!-- TASK 2 -->
 
+    <!-- Task 2 start - Box plugin -->
+    
+
+    <plugin name="boxT2Start" filename="libBoxContainsPlugin.so">
+      <entity>valkyrie</entity>
+      <namespace>task2/start</namespace>
+      <pose>
+        2.114
+        -2.784846821261081e-16
+        2.5
+        0
+        0
+        -1.5707963267948968
+      </pose>
+      <size>1.524 1 5.0</size>
+    </plugin>
 
     <!-- Walkway -->
     <include>
@@ -143,7 +159,7 @@
 
 
     <!-- Rover -->
-
+    
 
     <include>
       <pose>
@@ -158,9 +174,9 @@
     </include>
 
     <!-- Solar panel -->
+    
 
-
-
+    
 
 <model name="solar_panel">
 
@@ -713,7 +729,7 @@
 
   </link>
 
-
+  
 
   <joint name="base_panel_01" type="revolute">
     <pose>0 0.0455 0.095 0 0 0</pose>
@@ -807,7 +823,7 @@
     </axis>
   </joint>
 
-
+  
   <joint name="button" type="prismatic">
     <pose>0 0 0.005 0 0 0</pose>
     <parent>panel_01</parent>
@@ -841,6 +857,17 @@
     <child>panel_small_04</child>
   </joint>
 
+  <plugin name="solar_panel_plugin" filename="libSolarPanelPlugin.so">
+  </plugin>
+
+  <plugin name="touch_valkyrie_panel" filename="libTouchPlugin.so">
+    <sensor>base_sensor</sensor>
+    <sensor>panel1_sensor</sensor>
+    <sensor>panel2_sensor</sensor>
+    <target>valkyrie</target>
+    <time>0.5</time>
+    <namespace>task2/checkpoint1</namespace>
+  </plugin>
 
 </model>
 
@@ -936,13 +963,13 @@
 
 
     <!-- Solar Array -->
-
+    
 
     <include>
       <pose>
         6.205410797096131
         4.161405254328569
-        0.2
+        0
         0
         0
         0.7853981633974481
@@ -951,9 +978,9 @@
     </include>
 
     <!-- Cable -->
+    
 
-
-
+    
 
 <model name="solar_panel_cable">
 
@@ -962,7 +989,7 @@
   <pose>
     6.063989440858822
     4.868512035515117
-    1.05
+    0.85
     0
     0
     -0.7853981633974485
@@ -992,7 +1019,7 @@
     </visual>
   </link>
 
-
+  
 
   <link name="link_1">
     <pose>0.0 0 0 0 1.5707963267948966 0.9424777960769379</pose>
@@ -1082,7 +1109,7 @@
       </material>
     </visual>
 
-
+    
 
   </link>
 
@@ -1110,7 +1137,7 @@
     </physics>
   </joint>
 
-
+  
 
   <link name="link_2">
     <pose>0.058778525229247314 0.08090169943749476 0 0 1.5707963267948966 -0.9424777960769379</pose>
@@ -1200,7 +1227,7 @@
       </material>
     </visual>
 
-
+    
 
   </link>
 
@@ -1228,7 +1255,7 @@
     </physics>
   </joint>
 
-
+  
 
   <link name="link_3">
     <pose>0.11755705045849463 0 0 0 1.5707963267948966 -0.9424777960769379</pose>
@@ -1318,7 +1345,7 @@
       </material>
     </visual>
 
-
+    
 
   </link>
 
@@ -1346,7 +1373,7 @@
     </physics>
   </joint>
 
-
+  
 
   <link name="link_4">
     <pose>0.17633557568774197 -0.08090169943749476 0 0 1.5707963267948966 0.9424777960769379</pose>
@@ -1436,7 +1463,7 @@
       </material>
     </visual>
 
-
+    
 
   </link>
 
@@ -1464,7 +1491,7 @@
     </physics>
   </joint>
 
-
+  
 
   <link name="link_5">
     <pose>0.23511410091698925 0 0 0 1.5707963267948966 0.9424777960769379</pose>
@@ -1554,7 +1581,7 @@
       </material>
     </visual>
 
-
+    
 
   </link>
 
@@ -1582,7 +1609,7 @@
     </physics>
   </joint>
 
-
+  
 
   <link name="link_6">
     <pose>0.29389262614623657 0.08090169943749476 0 0 1.5707963267948966 -0.9424777960769379</pose>
@@ -1672,7 +1699,7 @@
       </material>
     </visual>
 
-
+    
 
   </link>
 
@@ -1700,7 +1727,7 @@
     </physics>
   </joint>
 
-
+  
 
   <link name="link_7">
     <pose>0.35267115137548394 0 0 0 1.5707963267948966 -0.9424777960769379</pose>
@@ -1790,7 +1817,7 @@
       </material>
     </visual>
 
-
+    
 
   </link>
 
@@ -1818,7 +1845,7 @@
     </physics>
   </joint>
 
-
+  
 
   <link name="link_8">
     <pose>0.41144967660473125 -0.08090169943749476 0 0 1.5707963267948966 0.9424777960769379</pose>
@@ -1908,7 +1935,7 @@
       </material>
     </visual>
 
-
+    
 
   </link>
 
@@ -1936,7 +1963,7 @@
     </physics>
   </joint>
 
-
+  
 
   <link name="link_9">
     <pose>0.4702282018339785 0 0 0 1.5707963267948966 0.9424777960769379</pose>
@@ -2026,7 +2053,7 @@
       </material>
     </visual>
 
-
+    
 
   </link>
 
@@ -2054,7 +2081,7 @@
     </physics>
   </joint>
 
-
+  
 
   <link name="link_10">
     <pose>0.5290067270632258 0.08090169943749476 0 0 1.5707963267948966 -0.9424777960769379</pose>
@@ -2144,7 +2171,7 @@
       </material>
     </visual>
 
-
+    
 
   </link>
 
@@ -2172,7 +2199,7 @@
     </physics>
   </joint>
 
-
+  
 
   <link name="link_11">
     <pose>0.5877852522924731 0 0 0 1.5707963267948966 -0.9424777960769379</pose>
@@ -2262,7 +2289,7 @@
       </material>
     </visual>
 
-
+    
 
   </link>
 
@@ -2290,7 +2317,7 @@
     </physics>
   </joint>
 
-
+  
 
   <link name="link_12">
     <pose>0.6465637775217205 -0.08090169943749476 0 0 1.5707963267948966 0.9424777960769379</pose>
@@ -2380,7 +2407,7 @@
       </material>
     </visual>
 
-
+    
 
   </link>
 
@@ -2408,7 +2435,7 @@
     </physics>
   </joint>
 
-
+  
 
   <link name="link_13">
     <pose>0.7053423027509679 0 0 0 1.5707963267948966 0.9424777960769379</pose>
@@ -2498,7 +2525,7 @@
       </material>
     </visual>
 
-
+    
 
   </link>
 
@@ -2526,7 +2553,7 @@
     </physics>
   </joint>
 
-
+  
 
   <link name="link_14">
     <pose>0.7641208279802151 0.08090169943749476 0 0 1.5707963267948966 -0.9424777960769379</pose>
@@ -2616,7 +2643,7 @@
       </material>
     </visual>
 
-
+    
 
   </link>
 
@@ -2644,7 +2671,7 @@
     </physics>
   </joint>
 
-
+  
 
   <link name="link_15">
     <pose>0.8228993532094625 0 0 0 1.5707963267948966 -0.9424777960769379</pose>
@@ -2734,7 +2761,7 @@
       </material>
     </visual>
 
-
+    
 
   </link>
 
@@ -2762,7 +2789,7 @@
     </physics>
   </joint>
 
-
+  
 
   <link name="link_16">
     <pose>0.8816778784387097 -0.08090169943749476 0 0 1.5707963267948966 0.9424777960769379</pose>
@@ -2852,14 +2879,14 @@
       </material>
     </visual>
 
+    
 
-
-    <collision name="plug_collision">
+    <collision name="plug_collision_1">
       <pose>0 0 0.1 0 0 0</pose>
       <geometry>
         <cylinder>
           <length>0.010000000000000002</length>
-          <radius>0.020000000000000001</radius>
+          <radius>0.02</radius>
         </cylinder>
       </geometry>
       <surface>
@@ -2879,13 +2906,29 @@
         </friction>
       </surface>
     </collision>
+
+    <visual name="plug_visual_1">
+      <pose>0 0 0.1 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.010000000000000002</length>
+          <radius>0.02</radius>
+        </cylinder>
+      </geometry>
+      <material>
+        <ambient>0 0 0.3 1</ambient>
+        <emissive>0 0 0.5 1</emissive>
+        <diffuse>0 0 0.1 1</diffuse>
+        <specular>1 1 1 1</specular>
+      </material>
+    </visual>
 
     <collision name="plug_collision_2">
       <pose>0 0 0.1 0 0 0</pose>
       <geometry>
         <cylinder>
-          <length>0.020000000000000002</length>
-          <radius>0.015000000000000001</radius>
+          <length>0.020000000000000004</length>
+          <radius>0.015</radius>
         </cylinder>
       </geometry>
       <surface>
@@ -2906,11 +2949,27 @@
       </surface>
     </collision>
 
-    <collision name="plug_collision_3">
-      <pose>0 0 0.09 0 0 0</pose>
+    <visual name="plug_visual_2">
+      <pose>0 0 0.1 0 0 0</pose>
       <geometry>
         <cylinder>
-          <length>0.050000000000000002</length>
+          <length>0.020000000000000004</length>
+          <radius>0.015</radius>
+        </cylinder>
+      </geometry>
+      <material>
+        <ambient>0 0 0.7 1</ambient>
+        <emissive>0 0 0.2 1</emissive>
+        <diffuse>0 0 0.1 1</diffuse>
+        <specular>1 1 1 1</specular>
+      </material>
+    </visual>
+
+    <collision name="plug_collision_3">
+      <pose>0 0 0.09000000000000001 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.05</length>
           <radius>0.011000000000000001</radius>
         </cylinder>
       </geometry>
@@ -2932,43 +2991,11 @@
       </surface>
     </collision>
 
-    <visual name="plug_visual">
-      <pose>0 0 0.1 0 0 0</pose>
-      <geometry>
-        <cylinder>
-          <length>0.010000000000000002</length>
-          <radius>0.020000000000000001</radius>
-        </cylinder>
-      </geometry>
-      <material>
-        <ambient>0 0 0.3 1</ambient>
-        <emissive>0 0 0.5 1</emissive>
-        <diffuse>0 0 0.1 1</diffuse>
-        <specular>1 1 1 1</specular>
-      </material>
-    </visual>
-
-    <visual name="plug_visual_2">
-      <pose>0 0 0.1 0 0 0</pose>
-      <geometry>
-        <cylinder>
-          <length>0.020000000000000002</length>
-          <radius>0.015000000000000001</radius>
-        </cylinder>
-      </geometry>
-      <material>
-        <ambient>0 0 0.7 1</ambient>
-        <emissive>0 0 0.2 1</emissive>
-        <diffuse>0 0 0.1 1</diffuse>
-        <specular>1 1 1 1</specular>
-      </material>
-    </visual>
-
     <visual name="plug_visual_3">
-      <pose>0 0 0.09 0 0 0</pose>
+      <pose>0 0 0.09000000000000001 0 0 0</pose>
       <geometry>
         <cylinder>
-          <length>0.050000000000000002</length>
+          <length>0.05</length>
           <radius>0.011000000000000001</radius>
         </cylinder>
       </geometry>
@@ -2987,8 +3014,7 @@
         <collision>sphere</collision>
       </contact>
     </sensor>
-
-
+    
 
   </link>
 
@@ -3016,20 +3042,42 @@
     </physics>
   </joint>
 
-
+  
 
   <joint name="world" type="fixed">
     <child>link_0</child>
     <parent>world</parent>
   </joint>
 
+  <plugin name="touch_valkyrie_cable" filename="libTouchPlugin.so">
+    <sensor>tip_sensor</sensor>
+    <target>valkyrie</target>
+    <time>0.5</time>
+    <namespace>task2/checkpoint4</namespace>
+  </plugin>
 
 </model>
 
 
+    <!-- Checkpoint 2 - Box plugin -->
+    
+
+    <plugin name="boxT2CP2" filename="libBoxContainsPlugin.so">
+      <entity>solar_panel</entity>
+      <namespace>task2/checkpoint2</namespace>
+      <pose>
+        6.205410797096131
+        4.161405254328569
+        0.9
+        0
+        0
+        0.7853981633974481
+      </pose>
+      <size>1.47 0.95 0.45</size>
+    </plugin>
 
     <!-- Bling -->
-
+    
 
     <!-- Walkway -->
     <include>
@@ -3091,6 +3139,20 @@
     </include>
 
 
+    <!-- Checkpoint 6 - Box plugin -->
+    <plugin name="boxT2CP6" filename="libBoxContainsPlugin.so">
+      <entity>valkyrie</entity>
+      <namespace>task2/checkpoint6</namespace>
+      <pose>
+        10.943540318969166
+        3.2331606617670405
+        2.5
+        0
+        0
+        3.141592653589793
+      </pose>
+      <size>3.048 3.048 5.0</size>
+    </plugin>
 
     <!-- Bling -->
     <include>
@@ -3122,13 +3184,87 @@
     </include>
 
 
-
+    
 
     <!-- /TASK 2 -->
+    
 
+    
 
+    <!-- Finals plugin -->
+    <plugin name="finals" filename="libFinalsPlugin.so">
 
+      
 
+      
+        <task2>
+          <timeout>3600</timeout>
+
+          <checkpoint1>
+          </checkpoint1>
+
+          <checkpoint2>
+            <skip_robot_pose>
+              7.053938934519988
+              3.312877116904712
+              1.1
+              0
+              0
+              2.356194490192345
+            </skip_robot_pose>
+            <panel_pose>
+              6.205684
+              3.887435
+              0.7
+              0
+              0
+              -2.9333258265337734
+            </panel_pose>
+          </checkpoint2>
+
+          <checkpoint3>
+            <skip_robot_pose>
+              7.053938934519988
+              3.312877116904712
+              1.1
+              0
+              0
+              2.356194490192345
+            </skip_robot_pose>
+          </checkpoint3>
+
+          <checkpoint4>
+          </checkpoint4>
+
+          <checkpoint5>
+            <skip_robot_pose>
+              7.053938934519988
+              3.312877116904712
+              1.1
+              0
+              0
+              2.356194490192345
+            </skip_robot_pose>
+          </checkpoint5>
+
+          <checkpoint6>
+            <skip_robot_pose>
+              10.943540318969166
+              3.2331606617670405
+              1.1
+              0
+              0
+              -2.83276944882399e-16
+            </skip_robot_pose>
+          </checkpoint6>
+
+        </task2>
+
+      
+
+      
+
+    </plugin>
 
   </world>
 </sdf>
