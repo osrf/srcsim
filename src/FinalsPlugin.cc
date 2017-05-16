@@ -261,8 +261,12 @@ void FinalsPlugin::OnUpdate(const common::UpdateInfo &_info)
     }
 
     // Add completion time for all past checkpoints
-    for (size_t j = 1; j < this->tasks[i-1]->CurrentCheckpointId(); ++j)
+    for (size_t j = 1; j <= this->tasks[i-1]->CheckpointCount(); ++j)
     {
+      if (i == this->current && j >= this->tasks[i-1]->CurrentCheckpointId()) {
+        // Skip the current (and future) checkpoints of the current task
+        continue;
+      }
       ros::Time t(this->tasks[i-1]->GetCheckpointCompletion(j-1).Double());
       msg.checkpoints_completion.push_back(t);
     }
