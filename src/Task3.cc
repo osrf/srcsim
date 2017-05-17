@@ -115,6 +115,8 @@ bool Task3CP2::Check()
   // First time
   if (!this->valveJoint || !this->hingeJoint)
   {
+    this->Start();
+
     auto world = physics::get_world();
 
     if (!world)
@@ -204,6 +206,8 @@ bool Task3CP5::Check()
   // First time
   if (!this->cameraGzSub)
   {
+    this->Start();
+
     // Gazebo node
     this->gzNode = transport::NodePtr(new transport::Node());
     this->gzNode->Init();
@@ -289,6 +293,8 @@ bool Task3CP7::Check()
   // First time
   if (!this->sensor || !this->buttonJoint)
   {
+    this->Start();
+
     this->world = physics::get_world();
 
     if (!this->world)

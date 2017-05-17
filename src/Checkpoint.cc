@@ -32,11 +32,75 @@ Checkpoint::Checkpoint(const sdf::ElementPtr &_sdf)
   {
     this->robotSkipPose = _sdf->Get<ignition::math::Pose3d>("skip_robot_pose");
   }
+
+  // Get models to delete when checkpoint begins
+  if (_sdf && _sdf->HasElement("delete_model"))
+  {
+    auto elem = _sdf->GetElement("delete_model");
+    while (elem)
+    {
+      this->deleteModels.push_back(elem->Get<std::string>());
+
+      elem = elem->GetNextElement("delete_model");
+    }
+  }
+
+  // Get models to insert when checkpoint begins
+  if (_sdf && _sdf->HasElement("insert_model"))
+  {
+    auto elem = _sdf->GetElement("insert_model");
+    while (elem)
+    {
+      auto inner = elem->GetElement("sdf");
+      this->insertModels.push_back(inner->ToString(""));
+
+      elem = elem->GetNextElement("insert_model");
+    }
+  }
+}
+
+/////////////////////////////////////////////////
+void Checkpoint::Start()
+{
+  if (this->insertModels.empty() && this->deleteModels.empty())
+    return;
+
+  auto tmpGzNode = transport::NodePtr(new transport::Node());
+  tmpGzNode->Init();
+
+  // Delete models
+  for (auto modelName : this->deleteModels)
+  {
+    transport::requestNoReply(tmpGzNode, "entity_delete", modelName);
+    gzmsg << "Requested to delete [" << modelName << "]" << std::endl;
+  }
+  this->deleteModels.clear();
+
+  // Insert models
+  if (this->insertModels.empty())
+    return;
+
+  auto factoryPub = tmpGzNode->Advertise<msgs::Factory>("~/factory");
+
+  for (auto modelStr : this->insertModels)
+  {
+    msgs::Factory msg;
+    msg.set_sdf(modelStr);
+    factoryPub->Publish(msg);
+    gzmsg << "Requested to insert a model" << std::endl;
+  }
+  this->insertModels.clear();
+  factoryPub.reset();
+  tmpGzNode->Fini();
+  tmpGzNode.reset();
 }
 
 /////////////////////////////////////////////////
 void Checkpoint::Skip()
 {
+  // Perform start so models are inserted/deleted
+  this->Start();
+
   if (this->robotSkipPose == ignition::math::Pose3d::Zero)
     return;
 
@@ -65,6 +129,8 @@ bool BoxCheckpoint::CheckBox(const std::string &_namespace)
   // First time checking
   if (!this->gzNode && !this->boxDone)
   {
+    this->Start();
+
     // Initialize node
     this->gzNode = transport::NodePtr(new transport::Node());
     this->gzNode->Init();
@@ -111,6 +177,8 @@ bool TouchCheckpoint::CheckTouch(const std::string &_namespace)
   // First time checking
   if (!this->touchGzSub && !this->touchDone)
   {
+    this->Start();
+
     // Initialize node
     this->gzNode = transport::NodePtr(new transport::Node());
     this->gzNode->Init();
