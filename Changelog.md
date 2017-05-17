@@ -5,10 +5,12 @@
 ### SRC Sim 0.5.0 (2017-05-16)
 
 * Task 1 changes
+    * [Task 1 tutorial updated](https://bitbucket.org/osrf/srcsim/wiki/finals_task1)
     * Task 1: Split checkpoint 2
         * [Pull request 70](https://bitbucket.org/osrf/srcsim/pull-requests/70)
 
 * Task 2 changes
+    * No changes to tutorial needed
     * Task 2: Teleport solar panel within reach
         * [Pull request 63](https://bitbucket.org/osrf/srcsim/pull-requests/63)
 
@@ -19,6 +21,7 @@
         * [Pull request 62](https://bitbucket.org/osrf/srcsim/pull-requests/62)
 
 * Adding Task 3
+    * [Task 3 tutorial](https://bitbucket.org/osrf/srcsim/wiki/finals_task3)
     * Task 3: Checkpoints 1, 2, 3, 4
         * [Pull request 59](https://bitbucket.org/osrf/srcsim/pull-requests/59)
 
