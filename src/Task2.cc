@@ -74,6 +74,7 @@ Task2::Task2(const sdf::ElementPtr &_sdf) : Task(_sdf)
   std::unique_ptr<Task2CP6> cp6(new Task2CP6(cp6Elem));
   this->checkpoints.push_back(std::move(cp6));
 
+  this->logFilter = "solar_panel*|valkyrie*";
   gzmsg << "Task [2] created" << std::endl;
 }
 

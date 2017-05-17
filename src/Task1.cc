@@ -15,7 +15,6 @@
  *
 */
 
-#include <gazebo/util/LogRecord.hh>
 #include "srcsim/Task1.hh"
 
 using namespace gazebo;
@@ -57,6 +56,8 @@ Task1::Task1(const sdf::ElementPtr &_sdf) : Task(_sdf)
   std::unique_ptr<Task1CP4> cp4(new Task1CP4(cp4Elem));
   this->checkpoints.push_back(std::move(cp4));
 
+  this->logFilter = "satellite_dish*|valkyrie*";
+
   gzmsg << "Task [1] created" << std::endl;
 }
 
@@ -84,9 +85,6 @@ bool Task1CP2::Check()
   // First time
   if (!this->satelliteRosSub && !this->oneAxisDone)
   {
-    // Start logging satellite
-    gazebo::util::LogRecord::Instance()->SetFilter("satellite_dish*|valkyrie*");
-
     // Subscribe to satellite msgs
     this->rosNode.reset(new ros::NodeHandle());
     this->satelliteRosSub = this->rosNode->subscribe(
