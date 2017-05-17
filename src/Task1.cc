@@ -15,6 +15,7 @@
  *
 */
 
+#include <gazebo/util/LogRecord.hh>
 #include "srcsim/Task1.hh"
 
 using namespace gazebo;
@@ -83,6 +84,9 @@ bool Task1CP2::Check()
   // First time
   if (!this->satelliteRosSub && !this->oneAxisDone)
   {
+    // Start logging satellite
+    gazebo::util::LogRecord::Instance()->SetFilter("satellite_dish*|valkyrie*");
+
     // Subscribe to satellite msgs
     this->rosNode.reset(new ros::NodeHandle());
     this->satelliteRosSub = this->rosNode->subscribe(
