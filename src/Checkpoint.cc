@@ -120,7 +120,20 @@ void Checkpoint::Skip()
         << std::endl;
     return;
   }
-  robot->SetWorldPose(this->robotSkipPose);
+
+  // Reattach harness
+  auto gzNode = transport::NodePtr(new transport::Node());
+  gzNode->Init();
+
+  auto attachPub = gzNode->Advertise<msgs::Pose>(
+      "~/valkyrie/harness/attach");
+
+  // Toggle box plugin on
+  msgs::Pose msg;
+  msgs::Set(&msg, this->robotSkipPose);
+  attachPub->Publish(msg);
+
+  // TODO: trigger lowering and detaching
 }
 
 /////////////////////////////////////////////////
