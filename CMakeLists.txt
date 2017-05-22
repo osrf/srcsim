@@ -17,7 +17,7 @@ endif()
 find_package(catkin REQUIRED COMPONENTS ${COMPONENT_LIST})
 
 set (SRCSIM_MAJOR_VERSION 0)
-set (SRCSIM_MINOR_VERSION 4)
+set (SRCSIM_MINOR_VERSION 5)
 set (SRCSIM_PATCH_VERSION 0)
 set (SRCSIM_VERSION_FULL ${SRCSIM_MAJOR_VERSION}.${SRCSIM_MINOR_VERSION}.${SRCSIM_PATCH_VERSION})
 
@@ -34,6 +34,7 @@ add_message_files(
   Console.msg
   Leak.msg
   Satellite.msg
+  Score.msg
   Task.msg
 )
 
@@ -276,6 +277,11 @@ if(NOT BUILD_MSGS_ONLY)
   catkin_add_env_hooks(99_srcsim_setup
     DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/cmake
     SHELLS sh)
+  # Configure the setup.bash system script
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/setup.bash.in
+    ${PROJECT_BINARY_DIR}/setup.bash @ONLY)
+  install(FILES ${PROJECT_BINARY_DIR}/setup.bash
+    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
 
   # Packaging configuration
   set (CPACK_PACKAGE_VERSION "${DRC_SIM_VERSION_FULL}")
