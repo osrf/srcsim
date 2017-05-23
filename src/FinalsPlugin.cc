@@ -111,7 +111,11 @@ void FinalsPlugin::Load(physics::WorldPtr _world, sdf::ElementPtr _sdf)
   this->taskRosSub = this->rosNode->subscribe("/srcsim/finals/task", 10,
       &FinalsPlugin::OnTaskRosMsg, this);
 
-  gzmsg << "Finals plugin loaded. Call start service to start a task."
+  // Trigger update at every world iteration
+  this->updateConnection = event::Events::ConnectWorldUpdateBegin(
+      std::bind(&FinalsPlugin::OnUpdate, this, std::placeholders::_1));
+
+  gzmsg << "Finals plugin loaded. Wait for harness to be lowered."
         << std::endl;
 }
 
@@ -225,13 +229,6 @@ bool FinalsPlugin::OnStartTaskRosRequest(srcsim::StartTask::Request &_req,
     this->current++;
   }
 
-  // Start update
-  if (!this->updateConnection)
-  {
-    this->updateConnection = event::Events::ConnectWorldUpdateBegin(
-        std::bind(&FinalsPlugin::OnUpdate, this, std::placeholders::_1));
-  }
-
   this->current = _req.task_id;
 
   // Start task
@@ -244,10 +241,19 @@ bool FinalsPlugin::OnStartTaskRosRequest(srcsim::StartTask::Request &_req,
 /////////////////////////////////////////////////
 void FinalsPlugin::OnUpdate(const common::UpdateInfo &_info)
 {
+  static bool initialized = false;
+  if (!initialized && _info.simTime > this->deharnessTime)
+  {
+    HarnessManager::Instance()->NewGoal(
+        ignition::math::Pose3d(0, 0, 1.257, 0, 0, 0));
+    initialized = true;
+  }
+
+  if (initialized)
+    HarnessManager::Instance()->Update(_info.simTime);
+
   if (this->current == 0)
     return;
-
-  HarnessManager::Instance()->Update(_info.simTime);
 
   this->tasks[this->current - 1]->Update(_info.simTime);
 

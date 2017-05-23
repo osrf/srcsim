@@ -82,5 +82,8 @@ namespace gazebo
 
     /// \brief Product used to know which tasks are in the world
     private: int product;
+
+    /// \brief
+    private: gazebo::common::Time deharnessTime = 15.0;
   };
 }
