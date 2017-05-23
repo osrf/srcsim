@@ -129,6 +129,7 @@ if(NOT BUILD_MSGS_ONLY)
   set(finals_plugin_name FinalsPlugin)
   add_library(${finals_plugin_name} SHARED
     src/FinalsPlugin.cc
+    src/HarnessManager.cc
     src/Task.cc
     src/Task1.cc
     src/Task2.cc

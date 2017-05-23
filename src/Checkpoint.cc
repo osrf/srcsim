@@ -21,6 +21,7 @@
 #include <gazebo/physics/World.hh>
 
 #include "srcsim/Checkpoint.hh"
+#include "srcsim/HarnessManager.hh"
 
 using namespace gazebo;
 
@@ -105,35 +106,7 @@ void Checkpoint::Skip()
     return;
 
   // Teleport robot
-  // TODO: Reset joints
-  auto world = physics::get_world();
-  if (!world)
-  {
-    gzerr << "Failed to get world pointer, robot won't be teleported."
-        << std::endl;
-    return;
-  }
-  auto robot = world->GetModel("valkyrie");
-  if (!robot)
-  {
-    gzerr << "Failed to get model pointer, robot won't be teleported."
-        << std::endl;
-    return;
-  }
-
-  // Reattach harness
-  auto gzNode = transport::NodePtr(new transport::Node());
-  gzNode->Init();
-
-  auto attachPub = gzNode->Advertise<msgs::Pose>(
-      "~/valkyrie/harness/attach");
-
-  // Toggle box plugin on
-  msgs::Pose msg;
-  msgs::Set(&msg, this->robotSkipPose);
-  attachPub->Publish(msg);
-
-  // TODO: trigger lowering and detaching
+  HarnessManager::Instance()->NewGoal(this->robotSkipPose);
 }
 
 /////////////////////////////////////////////////

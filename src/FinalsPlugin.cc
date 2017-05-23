@@ -21,6 +21,7 @@
 #include <srcsim/Score.h>
 
 #include "srcsim/FinalsPlugin.hh"
+#include "srcsim/HarnessManager.hh"
 #include "srcsim/Task1.hh"
 #include "srcsim/Task2.hh"
 #include "srcsim/Task3.hh"
@@ -245,6 +246,8 @@ void FinalsPlugin::OnUpdate(const common::UpdateInfo &_info)
 {
   if (this->current == 0)
     return;
+
+  HarnessManager::Instance()->Update(_info.simTime);
 
   this->tasks[this->current - 1]->Update(_info.simTime);
 
