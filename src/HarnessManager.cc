@@ -101,42 +101,54 @@ void HarnessManager::Update(const common::Time &_time)
   // No matter what we're doing, if a new goal is received, detach first
   if (this->goalChanged)
   {
-    gzmsg << "[Harness] New goal ... ";
+    gzmsg << "[Harness | " <<
+        _time.FormattedString(common::Time::MINUTES, common::Time::MILLISECONDS)
+        << "] New goal ... ";
     this->TriggerDetach();
     std::cout << "detaching" << std::endl;
     this->transition = DETACH_TO_ATTACH;
     this->goalChanged = false;
   }
 
-  if (this->transition == DETACH_TO_ATTACH && !this->IsAttached())
+  if (this->transition == DETACH_TO_ATTACH && this->IsDetached())
   {
-    gzmsg << "[Harness] Detached ... ";
+    gzmsg << "[Harness | " <<
+        _time.FormattedString(common::Time::MINUTES, common::Time::MILLISECONDS)
+        << "] Detached ... ";
     this->TriggerAttach();
     std::cout << "reattaching" << std::endl;
     this->transition = ATTACH_TO_LOWER;
   }
   else if (this->transition == ATTACH_TO_LOWER && this->IsAttached())
   {
-    gzmsg << "[Harness] Attached ... ";
+    gzmsg << "[Harness | " <<
+        _time.FormattedString(common::Time::MINUTES, common::Time::MILLISECONDS)
+        << "] Attached ... ";
     this->TriggerLower();
     std::cout << "lowering" << std::endl;
     this->transition = LOWER_TO_STAND;
+    this->itLowering = 0;
   }
   else if (this->transition == LOWER_TO_STAND && this->IsLowered())
   {
-    gzmsg << "[Harness] Lowered ... ";
+    gzmsg << "[Harness | " <<
+        _time.FormattedString(common::Time::MINUTES, common::Time::MILLISECONDS)
+        << "] Lowered ... ";
     this->TriggerStand();
     std::cout << "switching to high level control" << std::endl;
     this->transition = STAND_TO_DETACH;
+    this->itStanding = 0;
   }
   else if (this->transition == STAND_TO_DETACH && this->IsStanding())
   {
-    gzmsg << "[Harness] Standing up ... ";
+    gzmsg << "[Harness | " <<
+        _time.FormattedString(common::Time::MINUTES, common::Time::MILLISECONDS)
+        << "] Standing up ... ";
     this->TriggerDetach();
     std::cout << "detaching" << std::endl;
     this->transition = DETACH_TO_NONE;
   }
-  else if (this->transition == DETACH_TO_NONE && !this->IsAttached())
+  else if (this->transition == DETACH_TO_NONE && this->IsDetached())
   {
     gzmsg << "[Harness] Detached" << std::endl;
     this->transition = NONE;
@@ -180,6 +192,12 @@ void HarnessManager::TriggerStand()
 }
 
 //////////////////////////////////////////////////
+bool HarnessManager::IsDetached()
+{
+  return this->model->GetJoint("harness_joint") == nullptr;
+}
+
+//////////////////////////////////////////////////
 bool HarnessManager::IsAttached()
 {
   return this->model->GetJoint("harness_joint") != nullptr;
@@ -188,13 +206,14 @@ bool HarnessManager::IsAttached()
 //////////////////////////////////////////////////
 bool HarnessManager::IsLowered()
 {
-  // TODO: check for a few iterations
-  return this->lastSensor > 50;
+  this->itLowering = this->lastSensor > 50 ? this->itLowering + 1 : 0;
+  return this->itLowering >= this->itThreshold;
 }
 
 //////////////////////////////////////////////////
 bool HarnessManager::IsStanding()
 {
-  return this->lastSensor > 250;
+  this->itStanding = this->lastSensor > 250 ? this->itStanding + 1 : 0;
+  return this->itStanding >= this->itThreshold;
 }
 

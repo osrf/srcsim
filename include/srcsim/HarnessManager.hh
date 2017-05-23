@@ -47,6 +47,7 @@ namespace gazebo
     public: void TriggerAttach();
     public: void TriggerLower();
     public: void TriggerStand();
+    public: bool IsDetached();
     public: bool IsAttached();
     public: bool IsLowered();
     public: bool IsStanding();
@@ -67,6 +68,9 @@ namespace gazebo
     private: bool goalChanged = false;
     private: gazebo::physics::ModelPtr model;
     private: double lastSensor = 0.0;
+    private: const unsigned int itThreshold = 500;
+    private: unsigned int itLowering = 0;
+    private: unsigned int itStanding = 0;
 
     private: gazebo::transport::NodePtr gzNode;
     private: gazebo::transport::PublisherPtr attachGzPub;
