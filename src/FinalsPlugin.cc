@@ -180,7 +180,7 @@ bool FinalsPlugin::OnStartTaskRosRequest(srcsim::StartTask::Request &_req,
     return true;
   }
 
-  if (_req.task_id == this->current && _req.checkpoint_id <=
+  if (_req.task_id == this->current && _req.checkpoint_id <
       this->tasks[_req.task_id - 1]->CurrentCheckpointId())
   {
     gzerr << "Trying to start task [" << unsigned(this->current) <<
@@ -189,6 +189,20 @@ bool FinalsPlugin::OnStartTaskRosRequest(srcsim::StartTask::Request &_req,
         this->tasks[_req.task_id - 1]->CurrentCheckpointId() << "]. " <<
         "It's not possible to go back to a previous checkpoint." << std::endl;
     _res.success = false;
+    return true;
+  }
+
+  auto time = this->world->GetSimTime();
+
+  // Restarting current checkpoint
+  if (_req.task_id == this->current && _req.checkpoint_id ==
+      this->tasks[_req.task_id - 1]->CurrentCheckpointId())
+  {
+    gzmsg << "Task [" << unsigned(this->current)  << "] checkpoint [" <<
+        this->tasks[_req.task_id - 1]->CurrentCheckpointId() << "] " <<
+        "Restarted" << std::endl;
+    this->tasks[this->current - 1]->Start(time, _req.checkpoint_id);
+    _res.success = true;
     return true;
   }
 
@@ -211,8 +225,6 @@ bool FinalsPlugin::OnStartTaskRosRequest(srcsim::StartTask::Request &_req,
     _res.success = false;
     return true;
   }
-
-  auto time = this->world->GetSimTime();
 
   // Tasks being skipped
   while (this->current < _req.task_id)
@@ -278,18 +290,24 @@ void FinalsPlugin::OnUpdate(const common::UpdateInfo &_info)
       }
       ros::Time t(this->tasks[i-1]->GetCheckpointCompletion(j-1).Double());
       msg.checkpoints_completion.push_back(t);
+      msg.checkpoints_restarted.push_back(
+          this->tasks[i-1]->GetCheckpointRestarted(j-1));
     }
   }
 
   // Compute score based on checkpoint completion times from all tasks
   msg.score = 0;
   uint8_t last_checkpoint_score = 0;
-  for (auto t : msg.checkpoints_completion)
+  for (unsigned int i = 0; i < msg.checkpoints_completion.size(); ++i)
   {
-    // TODO The data structure doesn't provide the information if the
-    // checkpoint was reset (which isn't suppot yet). In that case the
-    // last_checkpoint_score needs to be reset too.
-    if (t.isZero())
+    // End winning streak in case the checkpoint has been restarted.
+    // The checkpoint itself will still be scored.
+    if (msg.checkpoints_restarted[i])
+    {
+      last_checkpoint_score = 0;
+    }
+
+    if (msg.checkpoints_completion[i].isZero())
     {
       // End winning streak in case of incomplete checkpoints
       last_checkpoint_score = 0;

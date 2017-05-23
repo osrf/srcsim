@@ -110,6 +110,18 @@ void Checkpoint::Skip()
 }
 
 /////////////////////////////////////////////////
+void Checkpoint::Restart()
+{
+  this->restarted = true;
+}
+
+/////////////////////////////////////////////////
+bool Checkpoint::Restarted()
+{
+  return this->restarted;
+}
+
+/////////////////////////////////////////////////
 bool BoxCheckpoint::CheckBox(const std::string &_namespace)
 {
   // First time checking

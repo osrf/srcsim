@@ -49,12 +49,24 @@ Task::Task(const sdf::ElementPtr &_sdf)
 void Task::Start(const common::Time &_time, const size_t _checkpoint)
 {
   // Double-check that we're not going back to a previous checkpoint
-  if (_checkpoint <= this->current)
+  if (_checkpoint < this->current)
   {
     gzerr << "Trying to start task [" << unsigned(this->Number()) <<
         "] checkpoint [" << unsigned(_checkpoint) <<
         "], and current checkpoint is [" << unsigned(this->current) << "]. " <<
         "It's not possible to go back to a previous checkpoint." << std::endl;
+    return;
+  }
+
+  // Restarting current checkpoint
+  if (_checkpoint == this->current)
+  {
+    // Trigger skip on previous cp to rearrange world
+    this->checkpoints[this->current - 2]->Skip();
+
+    // Flag this checkpoint as restarted (for scoring)
+    this->checkpoints[this->current - 1]->Restart();
+
     return;
   }
 
@@ -206,13 +218,23 @@ size_t Task::CurrentCheckpointId() const
 }
 
 /////////////////////////////////////////////////
-common::Time Task::GetCheckpointCompletion(size_t index) const
+common::Time Task::GetCheckpointCompletion(const size_t index) const
 {
   if (index < this->checkpointsCompletion.size())
   {
     return this->checkpointsCompletion[index];
   }
   return common::Time::Zero;
+}
+
+/////////////////////////////////////////////////
+bool Task::GetCheckpointRestarted(const size_t index) const
+{
+  if (index < this->checkpointsCompletion.size())
+  {
+    return this->checkpoints[index]->Restarted();
+  }
+  return false;
 }
 
 //////////////////////////////////////////////////

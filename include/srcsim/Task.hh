@@ -62,9 +62,14 @@ namespace gazebo
     public: size_t CurrentCheckpointId() const;
 
     /// \brief Return the completion time of a checkpoint.
-    /// \param[in] _index Index of the checkpoint
+    /// \param[in] _index Index of the checkpoint in the array (0~n-1)
     /// \return The competion time
-    public: common::Time GetCheckpointCompletion(size_t index) const;
+    public: common::Time GetCheckpointCompletion(const size_t index) const;
+
+    /// \brief Return whether a checkpoint has been restarted.
+    /// \param[in] _index Index of the checkpoint in the array (0~n-1)
+    /// \return Trye if the checkpoint was restarted.
+    public: bool GetCheckpointRestarted(const size_t index) const;
 
     /// \brief Return this task's number.
     /// \return Task number.
