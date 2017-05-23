@@ -32,6 +32,7 @@ endif()
 add_message_files(
   FILES
   Console.msg
+  Harness.msg
   Leak.msg
   Satellite.msg
   Score.msg

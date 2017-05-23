@@ -83,6 +83,7 @@ namespace gazebo
 
     /// \brief Ros publisher for control messages.
     private: ros::Publisher controlRosPub;
+    private: ros::Publisher statusRosPub;
 
     // Singleton implementation
     private: friend class SingletonT<HarnessManager>;

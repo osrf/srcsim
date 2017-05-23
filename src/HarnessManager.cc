@@ -20,6 +20,7 @@
 #include <gazebo/physics/Joint.hh>
 #include <gazebo/physics/PhysicsIface.hh>
 #include <gazebo/physics/World.hh>
+#include <srcsim/Harness.h>
 #include "srcsim/HarnessManager.hh"
 
 using namespace gazebo;
@@ -63,6 +64,9 @@ HarnessManager::HarnessManager()
   this->controlRosPub = this->rosNode->advertise<
       ihmc_valkyrie_ros::ValkyrieLowLevelControlModeRosMessage>(
       "/ihmc_ros/valkyrie/control/low_level_control_mode", 1000);
+
+  this->statusRosPub = this->rosNode->advertise<srcsim::Harness>(
+      "/srcsim/finals/harness", 1000);
 }
 
 //////////////////////////////////////////////////
@@ -153,6 +157,10 @@ void HarnessManager::Update(const common::Time &_time)
     gzmsg << "[Harness] Detached" << std::endl;
     this->transition = NONE;
   }
+
+  srcsim::Harness msg;
+  msg.status = this->transition;
+  this->statusRosPub.publish(msg);
 }
 
 //////////////////////////////////////////////////
