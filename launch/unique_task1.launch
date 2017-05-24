@@ -1,7 +1,7 @@
 <launch>
   <!-- start with robot harnessed by default. -->
   <!-- set:
-         roslaunch srcsim unique_task1.launch init:=true walk_test:=walk
+         roslaunch srcsim unique_task1.launch walk_test:=walk
        to automatically walk forward after harness detach. -->
   <arg name="debug" default="false" />
   <arg name="extra_gazebo_args" default=""/>

@@ -16,9 +16,6 @@
 */
 
 #include <gazebo/common/Console.hh>
-#include <gazebo/physics/Model.hh>
-#include <gazebo/physics/PhysicsIface.hh>
-#include <gazebo/physics/World.hh>
 
 #include "srcsim/Checkpoint.hh"
 #include "srcsim/HarnessManager.hh"
