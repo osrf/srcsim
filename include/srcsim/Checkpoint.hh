@@ -48,11 +48,16 @@ namespace gazebo
     public: virtual void Start();
 
     /// \brief Flag this checkpoint as restarted (for scoring).
-    public: void Restart();
+    public: virtual void Restart();
 
     /// \brief Get whether this checkpoint has been restarted.
     /// \return True if it has been restarted.
     public: bool Restarted();
+
+    /// \brief The pose the robot should be in when this checkpoint is
+    /// restarted. This is only used by the first checkpoint of a task, otherwise
+    /// we start from the skip pose of the previous task.
+    protected: ignition::math::Pose3d robotStartPose;
 
     /// \brief The pose the robot should be in when this checkpoint is skipped.
     private: ignition::math::Pose3d robotSkipPose;

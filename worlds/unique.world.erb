@@ -565,7 +565,7 @@
     %>
 
     <%
-      t1cp3_frame = $current_frame *
+      t1cp4_frame = $current_frame *
                     $current_walkway["tOriginExit"] *
                     TMatrix(0, -finish_walkway_length * 0.5, Math::PI * 0.5)
     %>
@@ -580,6 +580,16 @@
     %>
 
     <!-- TASK 2 -->
+
+    <%
+      # Get from task 1
+      if (task == '0')
+        t2cp1_start_frame = t1cp4_frame
+      # Or zero for task-2-only world
+      else
+        t2cp1_start_frame = TMatrix(0, 0, 0)
+      end
+    %>
 
     <!-- Task 2 start - Box plugin -->
     <%
@@ -819,6 +829,16 @@
 
     <!-- TASK 3 -->
 
+    <%
+      # Get from task 2
+      if (task == '0')
+        t3cp1_start_frame = t2cp6_frame
+      # Or zero for task-3-only world
+      else
+        t3cp1_start_frame = TMatrix(0, 0, 0)
+      end
+    %>
+
     <!-- Task 3 start - Box plugin -->
     <%
       t3start_frame = $current_frame * $current_walkway["tOriginExit"] *
@@ -993,14 +1013,16 @@
             </skip_robot_pose>
           </checkpoint2>
 
+          <!-- checkpoint 3 copies checkpoint 2's skip pose -->
+
           <checkpoint4>
             <skip_robot_pose>
-              <%= t1cp3_frame[0, 2] %>
-              <%= t1cp3_frame[1, 2] %>
+              <%= t1cp4_frame[0, 2] %>
+              <%= t1cp4_frame[1, 2] %>
               <%= robot_z_pos %>
               0
               0
-              <%= Math::atan2(t1cp3_frame[1, 0], t1cp3_frame[0, 0]) %>
+              <%= Math::atan2(t1cp4_frame[1, 0], t1cp4_frame[0, 0]) %>
             </skip_robot_pose>
           </checkpoint4>
         </task1>
@@ -1015,6 +1037,22 @@
           <timeout>3600</timeout>
 
           <checkpoint1>
+            <start_robot_pose>
+              <%= t2cp1_start_frame[0, 2] %>
+              <%= t2cp1_start_frame[1, 2] %>
+              <%= robot_z_pos %>
+              0
+              0
+              <%= Math::atan2(t2cp1_start_frame[1, 0], t2cp1_start_frame[0, 0]) %>
+            </start_robot_pose>
+            <skip_robot_pose>
+              <%= t2cp1_start_frame[0, 2] %>
+              <%= t2cp1_start_frame[1, 2] %>
+              <%= robot_z_pos %>
+              0
+              0
+              <%= Math::atan2(t2cp1_start_frame[1, 0], t2cp1_start_frame[0, 0]) %>
+            </skip_robot_pose>
           </checkpoint1>
 
           <checkpoint2>
@@ -1048,6 +1086,14 @@
           </checkpoint3>
 
           <checkpoint4>
+            <skip_robot_pose>
+              <%= t2cp3_frame[0, 2] %>
+              <%= t2cp3_frame[1, 2] %>
+              <%= robot_z_pos %>
+              0
+              0
+              <%= Math::atan2(t2cp3_frame[1, 0], t2cp3_frame[0, 0]) %>
+            </skip_robot_pose>
           </checkpoint4>
 
           <checkpoint5>
@@ -1085,6 +1131,14 @@
           <timeout>7200</timeout>
 
           <checkpoint1>
+            <start_robot_pose>
+              <%= t3cp1_start_frame[0, 2] %>
+              <%= t3cp1_start_frame[1, 2] %>
+              <%= robot_z_pos %>
+              0
+              0
+              <%= Math::atan2(t3cp1_start_frame[1, 0], t3cp1_start_frame[0, 0]) %>
+            </start_robot_pose>
             <skip_robot_pose>
               <%= t3cp1_frame[0, 2] %>
               <%= t3cp1_frame[1, 2] %>
@@ -1303,6 +1357,14 @@
             <% for i in 1..14 %>
               <delete_model>bling_<%= i %></delete_model>
             <% end %>
+            <skip_robot_pose>
+              <%= t3cp5_frame[0, 2] %>
+              <%= t3cp5_frame[1, 2] %>
+              <%= robot_z_pos_habitat %>
+              0
+              0
+              <%= Math::atan2(t3cp5_frame[1, 0], t3cp5_frame[0, 0]) %>
+            </skip_robot_pose>
           </checkpoint4>
 
           <checkpoint5>
@@ -1317,6 +1379,14 @@
           </checkpoint5>
 
           <checkpoint6>
+            <skip_robot_pose>
+              <%= t3cp5_frame[0, 2] %>
+              <%= t3cp5_frame[1, 2] %>
+              <%= robot_z_pos_habitat %>
+              0
+              0
+              <%= Math::atan2(t3cp5_frame[1, 0], t3cp5_frame[0, 0]) %>
+            </skip_robot_pose>
           </checkpoint6>
 
           <checkpoint7>

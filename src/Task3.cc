@@ -23,6 +23,7 @@
 
 #include <srcsim/Leak.h>
 
+#include "srcsim/HarnessManager.hh"
 #include "srcsim/Task3.hh"
 
 using namespace gazebo;
@@ -110,6 +111,15 @@ bool Task3CP1::Check()
 }
 
 /////////////////////////////////////////////////
+void Task3CP1::Restart()
+{
+  // This is the 1st CP of the task: reharness back at start box
+  HarnessManager::Instance()->NewGoal(this->robotStartPose);
+
+  Checkpoint::Restart();
+}
+
+/////////////////////////////////////////////////
 bool Task3CP2::Check()
 {
   // First time
@@ -186,6 +196,8 @@ void Task3CP2::Skip()
   }
 
   this->hingeJoint->SetForce(0, 100000);
+
+  Checkpoint::Skip();
 }
 
 /////////////////////////////////////////////////

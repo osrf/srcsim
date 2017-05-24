@@ -48,6 +48,9 @@ namespace gazebo
     /// nothing else for long enough.
     /// \return True if the checkpoint is complete.
     public: bool Check();
+
+    /// \brief Reharness at start box
+    public: void Restart();
   };
 
   /// \brief Task 2, Checkpoint 2: Place panel near cable

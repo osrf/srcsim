@@ -28,10 +28,16 @@ using namespace gazebo;
 /////////////////////////////////////////////////
 Checkpoint::Checkpoint(const sdf::ElementPtr &_sdf)
 {
-  // Get robot pose
+  // Get robot skip pose
   if (_sdf && _sdf->HasElement("skip_robot_pose"))
   {
     this->robotSkipPose = _sdf->Get<ignition::math::Pose3d>("skip_robot_pose");
+  }
+
+  // Get robot start pose
+  if (_sdf && _sdf->HasElement("start_robot_pose"))
+  {
+    this->robotStartPose = _sdf->Get<ignition::math::Pose3d>("start_robot_pose");
   }
 
   // Get models to delete when checkpoint begins

@@ -15,6 +15,7 @@
  *
 */
 
+#include "srcsim/HarnessManager.hh"
 #include "srcsim/Task1.hh"
 
 using namespace gazebo;
@@ -69,6 +70,16 @@ size_t Task1::Number() const
 bool Task1CP1::Check()
 {
   return this->CheckBox("/task1/checkpoint1");
+}
+
+/////////////////////////////////////////////////
+void Task1CP1::Restart()
+{
+  // This is the 1st CP of the task: reharness back at start box
+  HarnessManager::Instance()->NewGoal(
+      ignition::math::Pose3d(0, 0, 1.257, 0, 0, 0));
+
+  Checkpoint::Restart();
 }
 
 /////////////////////////////////////////////////

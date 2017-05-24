@@ -62,7 +62,8 @@ void Task::Start(const common::Time &_time, const size_t _checkpoint)
   if (_checkpoint == this->current)
   {
     // Trigger skip on previous cp to rearrange world
-    this->checkpoints[this->current - 2]->Skip();
+    if (this->current > 1)
+      this->checkpoints[this->current - 2]->Skip();
 
     // Flag this checkpoint as restarted (for scoring)
     this->checkpoints[this->current - 1]->Restart();
@@ -131,8 +132,23 @@ void Task::Start(const common::Time &_time, const size_t _checkpoint)
 /////////////////////////////////////////////////
 void Task::Update(const common::Time &_time)
 {
-  if (this->current < 1 || this->current > this->checkpoints.size())
+  // Task has finished
+  if (this->current > this->checkpoints.size())
     return;
+
+  // While in start box (before time starts counting)
+  if (this->current < 1)
+  {
+    // Publish ROS task message with zero CP and start time
+    srcsim::Task msg;
+    msg.task = this->Number();
+    msg.current_checkpoint = this->current;
+    msg.start_time.fromSec(0);
+    msg.elapsed_time.fromSec(0);
+
+    this->taskRosPub.publish(msg);
+    return;
+  }
 
   // Terminate start transport
   if (this->gzNode)
