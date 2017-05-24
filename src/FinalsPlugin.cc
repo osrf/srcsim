@@ -298,7 +298,7 @@ void FinalsPlugin::OnUpdate(const common::UpdateInfo &_info)
   // Compute score based on checkpoint completion times from all tasks
   msg.score = 0;
   uint8_t last_checkpoint_score = 0;
-  for (unsigned int i = 0; i < msg.checkpoints_completion.size(); ++i)
+  for (size_t i = 0; i < msg.checkpoints_completion.size(); ++i)
   {
     // End winning streak in case the checkpoint has been restarted.
     // The checkpoint itself will still be scored.

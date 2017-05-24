@@ -68,7 +68,7 @@ namespace gazebo
 
     /// \brief Return whether a checkpoint has been restarted.
     /// \param[in] _index Index of the checkpoint in the array (0~n-1)
-    /// \return Trye if the checkpoint was restarted.
+    /// \return True if the checkpoint was restarted.
     public: bool GetCheckpointRestarted(const size_t index) const;
 
     /// \brief Return this task's number.
