@@ -26,7 +26,7 @@
 
 namespace gazebo
 {
-  /// \brief Manages topics and their subscriptions
+  /// \brief Manages harness
   class HarnessManager : public SingletonT<HarnessManager>
   {
     /// \brief Constructor
@@ -43,16 +43,40 @@ namespace gazebo
     /// \brief _time Sim time
     public: void Update(const common::Time &_time);
 
+    /// \brief Send a message requesting detach.
     public: void TriggerDetach();
+
+    /// \brief Send a message requesting attach, according to the latest pose
+    /// goal.
     public: void TriggerAttach();
+
+    /// \brief Send a message requesting to lower the harness.
     public: void TriggerLower();
+
+    /// \brief Send a message requesting to switch to high level control.
     public: void TriggerStand();
+
+    /// \brief Returns true if harness is detached
+    /// \return True if detached
     public: bool IsDetached();
+
+    /// \brief Returns true if harness is attached
+    /// \return True if attached
     public: bool IsAttached();
+
+    /// \brief Returns true if harness has been lowered enough
+    /// \return True if lowered
     public: bool IsLowered();
+
+    /// \brief Returns true if robot can stand without the harness
+    /// \return True if standing
     public: bool IsStanding();
+
+    /// \brief Callback when receiving wrench message from ankle.
+    /// \param[in] _msg The message
     private: void OnSensorMsg(ConstWrenchStampedPtr &_msg);
 
+    /// \brief Enum of possible transitions
     private: enum Transition
     {
       NONE,
@@ -63,19 +87,44 @@ namespace gazebo
       DETACH_TO_NONE,
     };
 
+    /// \brief Current transition
     private: Transition transition = NONE;
+
+    /// \brief latest pose goal
     private: ignition::math::Pose3d goal;
+
+    /// \brief True if a new goal has been received
     private: bool goalChanged = false;
+
+    /// \brief Pointer to model being harnessed (hardcoded valkyrie)
     private: gazebo::physics::ModelPtr model;
+
+    /// \brief Stores latest sensor message
     private: double lastSensor = 0.0;
+
+    /// \brief Number of iterations to check sensor efore being sure that robot
+    /// has been lowered or is standing.
     private: const unsigned int itThreshold = 500;
+
+    /// \brief How many iterations has it been lowered
     private: unsigned int itLowering = 0;
+
+    /// \brief How many iterations has it been standing
     private: unsigned int itStanding = 0;
 
+    /// \brief Gazebo node for communication
     private: gazebo::transport::NodePtr gzNode;
+
+    /// \brief Publishes attach messages
     private: gazebo::transport::PublisherPtr attachGzPub;
+
+    /// \brief Publishes detach messages
     private: gazebo::transport::PublisherPtr detachGzPub;
+
+    /// \brief Publishes lower messages
     private: gazebo::transport::PublisherPtr lowerGzPub;
+
+    /// \brief Subscribe to sensor messages
     private: gazebo::transport::SubscriberPtr sensorGzSub;
 
     /// \brief Ros node handle
@@ -83,6 +132,8 @@ namespace gazebo
 
     /// \brief Ros publisher for control messages.
     private: ros::Publisher controlRosPub;
+
+    /// \brief Ros publisher for harness status messages.
     private: ros::Publisher statusRosPub;
 
     // Singleton implementation

@@ -83,7 +83,8 @@ namespace gazebo
     /// \brief Product used to know which tasks are in the world
     private: int product;
 
-    /// \brief
+    /// \brief Time to wait before deharnessing for the first time (give
+    /// controllers time to start)
     private: gazebo::common::Time deharnessTime = 15.0;
   };
 }
