@@ -265,7 +265,7 @@ if(NOT BUILD_MSGS_ONLY)
     DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/worlds)
 
   # Install Misc. Scripts
-  install(PROGRAMS scripts/init_robot.sh scripts/walk_test.py scripts/rossleep.py
+  install(PROGRAMS scripts/init_robot.sh scripts/walk_test.py scripts/rossleep.py scripts/wait_for_controller.bash
     DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
     )
 
