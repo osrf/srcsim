@@ -48,6 +48,7 @@ Task::Task(const sdf::ElementPtr &_sdf)
 /////////////////////////////////////////////////
 void Task::Start(const common::Time &_time, const size_t _checkpoint)
 {
+  std::lock_guard<std::mutex> lock(this->updateMutex);
   // Double-check that we're not going back to a previous checkpoint
   if (_checkpoint < this->current)
   {
@@ -132,6 +133,7 @@ void Task::Start(const common::Time &_time, const size_t _checkpoint)
 /////////////////////////////////////////////////
 void Task::Update(const common::Time &_time)
 {
+  std::lock_guard<std::mutex> lock(this->updateMutex);
   // Task has finished
   if (this->current > this->checkpoints.size())
     return;

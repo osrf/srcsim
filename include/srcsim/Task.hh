@@ -123,6 +123,9 @@ namespace gazebo
 
     /// \brief Flag to indicate whether the robot has reached the start box.
     private: bool startBox = false;
+
+    /// \brief Mutex used to protect the update loop
+    private: std::mutex updateMutex;
   };
 }
 #endif
