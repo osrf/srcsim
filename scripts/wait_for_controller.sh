@@ -1,10 +1,8 @@
 #!/bin/sh
 
-bridge=""
-while [ -z "$bridge" ]; do
-  bridge=`rosparam list | grep ihmc_valkyrie_control_java_bridge`
-  sleep 1
+while [ -z "$(rosparam list | grep ihmc_valkyrie_control_java_bridge)" ]; do
   echo "waiting for ihmc_valkyrie_control_java_bridge"
+  sleep 1
 done
 
 echo "Found ihmc_valkyrie_control_java_bridge! Launching grasp_init."
