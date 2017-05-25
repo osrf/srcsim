@@ -73,13 +73,13 @@ bool Task1CP1::Check()
 }
 
 /////////////////////////////////////////////////
-void Task1CP1::Restart()
+void Task1CP1::Restart(const common::Time &_penalty)
 {
   // This is the 1st CP of the task: reharness back at start box
   HarnessManager::Instance()->NewGoal(
       ignition::math::Pose3d(0, 0, 1.257, 0, 0, 0));
 
-  Checkpoint::Restart();
+  Checkpoint::Restart(_penalty);
 }
 
 /////////////////////////////////////////////////

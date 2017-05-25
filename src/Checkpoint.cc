@@ -16,6 +16,8 @@
 */
 
 #include <gazebo/common/Console.hh>
+#include <gazebo/physics/PhysicsIface.hh>
+#include <gazebo/physics/World.hh>
 
 #include "srcsim/Checkpoint.hh"
 #include "srcsim/HarnessManager.hh"
@@ -64,8 +66,26 @@ Checkpoint::Checkpoint(const sdf::ElementPtr &_sdf)
 }
 
 /////////////////////////////////////////////////
+common::Time Checkpoint::StartTime() const
+{
+  return this->startTime;
+}
+
+/////////////////////////////////////////////////
 void Checkpoint::Start()
 {
+  auto world = physics::get_world();
+  if (!world)
+  {
+    gzerr << "Failed to get world pointer, can't start checkpoint."
+        << std::endl;
+    return;
+  }
+
+  // Now the checkpoint starts
+  this->startTime = world->GetSimTime();
+
+  // Insert / delete models
   if (this->insertModels.empty() && this->deleteModels.empty())
     return;
 
@@ -148,15 +168,15 @@ void Checkpoint::Skip()
 }
 
 /////////////////////////////////////////////////
-void Checkpoint::Restart()
+void Checkpoint::Restart(const common::Time &_penalty)
 {
-  this->restarted = true;
+  this->totalPenalty += _penalty;
 }
 
 /////////////////////////////////////////////////
-bool Checkpoint::Restarted()
+common::Time Checkpoint::PenaltyTime() const
 {
-  return this->restarted;
+  return this->totalPenalty;
 }
 
 /////////////////////////////////////////////////

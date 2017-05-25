@@ -91,12 +91,12 @@ bool Task2CP1::Check()
 }
 
 /////////////////////////////////////////////////
-void Task2CP1::Restart()
+void Task2CP1::Restart(const common::Time &_penalty)
 {
   // This is the 1st CP of the task: reharness back at start box
   HarnessManager::Instance()->NewGoal(this->robotStartPose);
 
-  Checkpoint::Restart();
+  Checkpoint::Restart(_penalty);
 }
 
 /////////////////////////////////////////////////

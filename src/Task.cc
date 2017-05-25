@@ -24,6 +24,8 @@
 
 using namespace gazebo;
 
+common::Time Task::previousPenalty = common::Time::Zero;
+
 /////////////////////////////////////////////////
 Task::Task(const sdf::ElementPtr &_sdf)
 {
@@ -66,8 +68,8 @@ void Task::Start(const common::Time &_time, const size_t _checkpoint)
     if (this->current > 1)
       this->checkpoints[this->current - 2]->Skip();
 
-    // Flag this checkpoint as restarted (for scoring)
-    this->checkpoints[this->current - 1]->Restart();
+    // Apply time penalty to current checkpoint
+    this->ApplyPenaltyTime();
 
     return;
   }
@@ -109,19 +111,7 @@ void Task::Start(const common::Time &_time, const size_t _checkpoint)
     this->startTime = _time;
 
   // Check if there are checkpoints being skipped
-  while (this->current < _checkpoint)
-  {
-    if (this->current > 0)
-    {
-      this->checkpoints[this->current - 1]->Skip();
-
-      gzmsg << "Task [" << this->Number() << "] - Checkpoint ["
-            << this->current << "] - Skipped (" << _time << ")" << std::endl;
-      this->checkpointsCompletion.push_back(common::Time::Zero);
-    }
-
-    this->current++;
-  }
+  this->SkipUpTo(_checkpoint - 1);
 
   // Checkpoint
   this->current = _checkpoint;
@@ -162,7 +152,7 @@ void Task::Update(const common::Time &_time)
   }
 
   // Timeout
-  auto elapsed = _time - this->startTime;
+  auto elapsed = _time - this->startTime + this->totalPenalty;
   this->timedOut = !this->finished && elapsed > this->timeout;
 
   if (this->timedOut)
@@ -180,10 +170,11 @@ void Task::Update(const common::Time &_time)
             << "] - Completed (" << _time << ")" << std::endl;
 
       // Sanity check
-      if (this->checkpointsCompletion.size() >= this->checkpoints.size())
+      if (this->cpCompletion.size() >= this->checkpoints.size())
         gzerr << "Too many checkpoint completions!" << std::endl;
 
-      this->checkpointsCompletion.push_back(_time);
+      this->cpCompletion.push_back(_time -
+          this->checkpoints[this->current - 1]->StartTime());
 
       this->current++;
 
@@ -208,10 +199,13 @@ void Task::Update(const common::Time &_time)
   msg.start_time.fromSec(this->startTime.Double());
   msg.elapsed_time.fromSec(elapsed.Double());
 
-  for (const auto &time : this->checkpointsCompletion)
+  for (size_t i = 0; i < this->cpCompletion.size(); ++i)
   {
-    ros::Time t(time.Double());
-    msg.checkpoints_completion.push_back(t);
+    ros::Duration t(this->cpCompletion[i].Double());
+    msg.checkpoint_durations.push_back(t);
+
+    ros::Duration p(this->checkpoints[i]->PenaltyTime().Double());
+    msg.checkpoint_penalties.push_back(p);
   }
 
   this->taskRosPub.publish(msg);
@@ -220,8 +214,29 @@ void Task::Update(const common::Time &_time)
 /////////////////////////////////////////////////
 void Task::Skip()
 {
-  // Trigger skip on last checkpoint
-  this->checkpoints.back()->Skip();
+  // Skip all remaining up to last one
+  this->SkipUpTo(this->CheckpointCount());
+}
+
+/////////////////////////////////////////////////
+void Task::SkipUpTo(const size_t _lastSkipped)
+{
+  while (this->current <= _lastSkipped)
+  {
+    if (this->current > 0)
+    {
+      this->checkpoints[this->current - 1]->Skip();
+
+      // Apply time penalty
+      this->ApplyPenaltyTime();
+
+      gzmsg << "Task [" << this->Number() << "] - Checkpoint ["
+            << this->current << "] - Skipped" << std::endl;
+      this->cpCompletion.push_back(common::Time::Zero);
+    }
+
+    this->current++;
+  }
 }
 
 /////////////////////////////////////////////////
@@ -237,23 +252,23 @@ size_t Task::CurrentCheckpointId() const
 }
 
 /////////////////////////////////////////////////
-common::Time Task::GetCheckpointCompletion(const size_t index) const
+common::Time Task::GetCheckpointCompletion(const size_t _index) const
 {
-  if (index < this->checkpointsCompletion.size())
+  if (_index < this->cpCompletion.size())
   {
-    return this->checkpointsCompletion[index];
+    return this->cpCompletion[_index];
   }
   return common::Time::Zero;
 }
 
 /////////////////////////////////////////////////
-bool Task::GetCheckpointRestarted(const size_t index) const
+common::Time Task::GetCheckpointPenalty(const size_t _index) const
 {
-  if (index < this->checkpointsCompletion.size())
+  if (_index < this->CheckpointCount())
   {
-    return this->checkpoints[index]->Restarted();
+    return this->checkpoints[_index]->PenaltyTime();
   }
-  return false;
+  return common::Time::Zero;
 }
 
 //////////////////////////////////////////////////
@@ -271,5 +286,27 @@ void Task::OnStartBox(ConstIntPtr &_msg)
 
   // Now the checkpoint starts
   this->Start(world->GetSimTime(), 1);
+}
+
+//////////////////////////////////////////////////
+void Task::ApplyPenaltyTime()
+{
+  if (this->previousPenalty == common::Time::Zero)
+  {
+    this->previousPenalty = common::Time(30);
+  }
+  else
+  {
+    this->previousPenalty += common::Time(10);
+  }
+
+  // Increment the task's total penalty (to be used for checking timeout)
+  this->totalPenalty += this->previousPenalty;
+
+  // Increment the checkpoint's penalty (to be used by scoring)
+  this->checkpoints[this->current - 1]->Restart(this->previousPenalty);
+
+  gzmsg << "Applied penalty time of [" << this->previousPenalty << "]"
+        << std::endl;
 }
 

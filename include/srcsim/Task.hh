@@ -61,23 +61,31 @@ namespace gazebo
     /// \return Index of current checkpoint.
     public: size_t CurrentCheckpointId() const;
 
-    /// \brief Return the completion time of a checkpoint.
+    /// \brief Return the total time taken to complete a checkpoint.
     /// \param[in] _index Index of the checkpoint in the array (0~n-1)
-    /// \return The competion time
+    /// \return The competion time, zero if it wasn't complete.
     public: common::Time GetCheckpointCompletion(const size_t index) const;
 
-    /// \brief Return whether a checkpoint has been restarted.
+    /// \brief Return the total time penalty taken by a checkpoint.
     /// \param[in] _index Index of the checkpoint in the array (0~n-1)
-    /// \return True if the checkpoint was restarted.
-    public: bool GetCheckpointRestarted(const size_t index) const;
+    /// \return The sum of all penalties for a checkpoint.
+    public: common::Time GetCheckpointPenalty(const size_t index) const;
 
     /// \brief Return this task's number.
     /// \return Task number.
     public: virtual size_t Number() const = 0;
 
+    /// \brief Skip all remaining checkpoints up to the given one, inclusive.
+    /// \param[in] _lastSkipped Last one to be skipped
+    public: void SkipUpTo(const size_t _lastSkipped);
+
     /// \brief Callback when messages are received from the BoxContainsPlugin.
     /// \param[in] _msg 1 if robot is inside box, 0 otherwise.
     private: void OnStartBox(ConstIntPtr &_msg);
+
+    /// \brief Increment penalty time for current checkpoint, based on current
+    /// `previousPenalty`.
+    private: void ApplyPenaltyTime();
 
     /// \brief Vector of checkpoints for this task.
     /// checkpoints[0]: Checkpoint 1
@@ -90,9 +98,10 @@ namespace gazebo
     /// hasn't started, Count+1 means that the task has finished.
     protected: size_t current = 0;
 
-    /// \brief Vector of times when checkpoints were completed.
+    /// \brief Vector of total times each checkpoint took to complete. That
+    /// doesn't include time penalties.
     /// Time is zero for skipped checkpoints.
-    private: std::vector<common::Time> checkpointsCompletion;
+    private: std::vector<common::Time> cpCompletion;
 
     /// \brief Time when the task started
     private: common::Time startTime;
@@ -105,6 +114,13 @@ namespace gazebo
 
     /// \brief True if task has timed out before completion.
     private: bool timedOut = false;
+
+    /// \brief Total time penalty due to resets and skips
+    private: common::Time totalPenalty;
+
+    /// \brief Previous time penalty due to resets and skips. This carries
+    /// over from one task to the next.
+    private: static common::Time previousPenalty;
 
     /// \brief Ros node handle
     private: std::unique_ptr<ros::NodeHandle> rosNode;
