@@ -169,6 +169,7 @@ void Task::Update(const common::Time &_time)
   {
     elapsed = this->timeout;
     this->current = this->checkpoints.size() + 1;
+    this->Skip();
   }
   else
   {
