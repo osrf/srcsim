@@ -35,7 +35,7 @@
   <include file="$(find ihmc_valkyrie_ros)/launch/val_wholebody_control_gazebo.launch"/>
 
   <group if="$(arg grasping_init)">
-    <node name="$(anon grasping_init)" pkg="val_deploy" type="delayed_roslaunch.sh" required="true" args="$(arg grasping_init_wait_time) srcsim grasping_init.launch" output="screen"/>
+    <node name="$(anon grasping_init)" pkg="val_deploy" type="delayed_roslaunch.sh" required="true" args="$(arg grasping_init_wait_time) srcsim grasping_init_wait.launch" output="screen"/>
   </group>
 
   <!--

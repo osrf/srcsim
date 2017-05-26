@@ -105,12 +105,12 @@
     </include>
 
 
-    
+
 
     <!-- TASK 1 -->
 
     <!-- Task 1 start - Box plugin -->
-    
+
 
     <plugin name="boxT1Start" filename="libBoxContainsPlugin.so">
       <entity>valkyrie</entity>
@@ -142,9 +142,9 @@
 
 
     <!-- Satellite -->
-    
 
-    
+
+
 
 <model name="satellite_dish">
 
@@ -463,7 +463,7 @@
 
 
     <!-- Checkpoint 1 - Box plugin -->
-    
+
 
     <plugin name="boxT1CP1" filename="libBoxContainsPlugin.so">
       <entity>valkyrie</entity>
@@ -599,19 +599,19 @@
     </include>
 
 
-    
+
 
     <!-- /TASK 1 -->
-    
 
-    
 
-    
+
+
+
 
     <!-- Finals plugin -->
     <plugin name="finals" filename="libFinalsPlugin.so">
 
-      
+
         <task1>
           <timeout>1800</timeout>
 
@@ -650,11 +650,11 @@
             </skip_robot_pose>
           </checkpoint4>
         </task1>
-      
 
-      
 
-      
+
+
+
 
     </plugin>
 
