@@ -45,6 +45,10 @@ Task::Task(const sdf::ElementPtr &_sdf)
 
   this->taskRosPub = this->rosNode->advertise<srcsim::Task>(
       "/srcsim/finals/task", 1000);
+
+  this->forceCpCompletionRosSub = this->rosNode->subscribe(
+      "/srcsim/finals/force_checkpoint_completion", 1,
+      &Task::OnForceCpCompletionRosMsg, this);
 }
 
 /////////////////////////////////////////////////
@@ -164,7 +168,14 @@ void Task::Update(const common::Time &_time)
   else
   {
     // Check if current checkpoint is complete
-    if (this->checkpoints[this->current - 1]->Check())
+    bool completed = this->checkpoints[this->current - 1]->Check();
+    if (this->forceCpCompletion) {
+      gzmsg << "Force checkpoint completion based on ROS message." << std::endl;
+      completed = true;
+      // Reset flag until next ROS message is received
+      this->forceCpCompletion = false;
+    }
+    if (completed)
     {
       gzmsg << "Task [" << this->Number() << "] - Checkpoint [" << this->current
             << "] - Completed (" << _time << ")" << std::endl;
@@ -311,3 +322,8 @@ void Task::ApplyPenaltyTime()
         << std::endl;
 }
 
+/////////////////////////////////////////////////
+void Task::OnForceCpCompletionRosMsg(const std_msgs::Empty::ConstPtr &)
+{
+  this->forceCpCompletion = true;
+}
