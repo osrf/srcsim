@@ -5,6 +5,18 @@
 * Add publishing of Score message
     * [Pull request 69](https://bitbucket.org/osrf/srcsim/pull-requests/69)
 
+* Higher surfaces, different cable plug
+    * [Pull request 77](https://bitbucket.org/osrf/srcsim/pull-requests/77)
+
+* Wait for ihmc controller to be ready before launching grasp controller
+    * [Pull request 81](https://bitbucket.org/osrf/srcsim/pull-requests/81)
+
+* Logging: remove <sdf> from <plugin>
+    * [Pull request 78](https://bitbucket.org/osrf/srcsim/pull-requests/78)
+
+* Publish multisense transforms
+    * [Pull request 72](https://bitbucket.org/osrf/srcsim/pull-requests/72)
+
 ### SRC Sim 0.5.0 (2017-05-16)
 
 * Task 1 changes
