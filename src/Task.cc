@@ -111,7 +111,7 @@ void Task::Start(const common::Time &_time, const size_t _checkpoint)
     this->startTime = _time;
 
   // Check if there are checkpoints being skipped
-  this->SkipUpTo(_checkpoint - 1);
+  this->SkipUpTo(_checkpoint - 1, true);
 
   // Checkpoint
   this->current = _checkpoint;
@@ -158,8 +158,8 @@ void Task::Update(const common::Time &_time)
   if (this->timedOut)
   {
     elapsed = this->timeout;
-    this->current = this->checkpoints.size() + 1;
-    this->Skip();
+    // No penalty when skipping due to timeout
+    this->Skip(false);
   }
   else
   {
@@ -170,10 +170,10 @@ void Task::Update(const common::Time &_time)
             << "] - Completed (" << _time << ")" << std::endl;
 
       // Sanity check
-      if (this->cpCompletion.size() >= this->checkpoints.size())
+      if (this->cpDuration.size() >= this->checkpoints.size())
         gzerr << "Too many checkpoint completions!" << std::endl;
 
-      this->cpCompletion.push_back(_time -
+      this->cpDuration.push_back(_time -
           this->checkpoints[this->current - 1]->StartTime());
 
       this->current++;
@@ -199,9 +199,9 @@ void Task::Update(const common::Time &_time)
   msg.start_time.fromSec(this->startTime.Double());
   msg.elapsed_time.fromSec(elapsed.Double());
 
-  for (size_t i = 0; i < this->cpCompletion.size(); ++i)
+  for (size_t i = 0; i < this->cpDuration.size(); ++i)
   {
-    ros::Duration t(this->cpCompletion[i].Double());
+    ros::Duration t(this->cpDuration[i].Double());
     msg.checkpoint_durations.push_back(t);
 
     ros::Duration p(this->checkpoints[i]->PenaltyTime().Double());
@@ -212,14 +212,14 @@ void Task::Update(const common::Time &_time)
 }
 
 /////////////////////////////////////////////////
-void Task::Skip()
+void Task::Skip(const bool _penalty)
 {
   // Skip all remaining up to last one
-  this->SkipUpTo(this->CheckpointCount());
+  this->SkipUpTo(this->CheckpointCount(), _penalty);
 }
 
 /////////////////////////////////////////////////
-void Task::SkipUpTo(const size_t _lastSkipped)
+void Task::SkipUpTo(const size_t _lastSkipped, const bool _penalty)
 {
   while (this->current <= _lastSkipped)
   {
@@ -228,11 +228,12 @@ void Task::SkipUpTo(const size_t _lastSkipped)
       this->checkpoints[this->current - 1]->Skip();
 
       // Apply time penalty
-      this->ApplyPenaltyTime();
+      if (_penalty)
+        this->ApplyPenaltyTime();
 
       gzmsg << "Task [" << this->Number() << "] - Checkpoint ["
             << this->current << "] - Skipped" << std::endl;
-      this->cpCompletion.push_back(common::Time::Zero);
+      this->cpDuration.push_back(common::Time::Zero);
     }
 
     this->current++;
@@ -254,9 +255,9 @@ size_t Task::CurrentCheckpointId() const
 /////////////////////////////////////////////////
 common::Time Task::GetCheckpointCompletion(const size_t _index) const
 {
-  if (_index < this->cpCompletion.size())
+  if (_index < this->cpDuration.size())
   {
-    return this->cpCompletion[_index];
+    return this->cpDuration[_index];
   }
   return common::Time::Zero;
 }
