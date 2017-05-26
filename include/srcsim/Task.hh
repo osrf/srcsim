@@ -30,6 +30,8 @@
 
 #include <gazebo/transport/transport.hh>
 
+#include <std_msgs/Empty.h>
+
 #include "Checkpoint.hh"
 
 namespace gazebo
@@ -142,6 +144,17 @@ namespace gazebo
 
     /// \brief Mutex used to protect the update loop
     private: std::mutex updateMutex;
+
+    /// \brief Ros force checkpoint completion subscriber
+    private: ros::Subscriber forceCpCompletionRosSub;
+
+    /// \brief Callback when a force checkpoint completion message is received.
+    /// \param[in] _msg Force checkpoint completion message
+    private: void OnForceCpCompletionRosMsg(
+        const std_msgs::Empty::ConstPtr &_msg);
+
+    /// \brief Flag to indicate forcing checkpoint completion.
+    private: bool forceCpCompletion = false;
   };
 }
 #endif
