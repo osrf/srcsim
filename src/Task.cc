@@ -45,10 +45,6 @@ Task::Task(const sdf::ElementPtr &_sdf)
 
   this->taskRosPub = this->rosNode->advertise<srcsim::Task>(
       "/srcsim/finals/task", 1000);
-
-  this->forceCpCompletionRosSub = this->rosNode->subscribe(
-      "/srcsim/finals/force_checkpoint_completion", 1,
-      &Task::OnForceCpCompletionRosMsg, this);
 }
 
 /////////////////////////////////////////////////
@@ -120,6 +116,10 @@ void Task::Start(const common::Time &_time, const size_t _checkpoint)
   // Checkpoint
   this->current = _checkpoint;
 
+  this->forceCpCompletionRosSub = this->rosNode->subscribe(
+      "/srcsim/finals/force_checkpoint_completion", 1,
+      &Task::OnForceCpCompletionRosMsg, this);
+
   gzmsg << "Task [" << this->Number() << "] - Checkpoint [" << this->current
         << "] - Started (" << _time << ")" << std::endl;
 }
@@ -184,8 +184,15 @@ void Task::Update(const common::Time &_time)
       if (this->cpDuration.size() >= this->checkpoints.size())
         gzerr << "Too many checkpoint completions!" << std::endl;
 
-      this->cpDuration.push_back(_time -
-          this->checkpoints[this->current - 1]->StartTime());
+      auto duration = _time - this->checkpoints[this->current - 1]->StartTime();
+
+      // It is possible that 2 checkpoints are completed at the same time and
+      // we end up with start time == end time. Add a millisecond so this doesn't
+      // get flagged as skipped.
+      if (duration == common::Time::Zero)
+        duration = common::Time(0.001);
+
+      this->cpDuration.push_back(duration);
 
       this->current++;
 
@@ -210,11 +217,18 @@ void Task::Update(const common::Time &_time)
   msg.start_time.fromSec(this->startTime.Double());
   msg.elapsed_time.fromSec(elapsed.Double());
 
-  for (size_t i = 0; i < this->cpDuration.size(); ++i)
-  {
-    ros::Duration t(this->cpDuration[i].Double());
-    msg.checkpoint_durations.push_back(t);
+  auto min = std::min(this->current, this->CheckpointCount());
 
+  for (size_t i = 0; i < min; ++i)
+  {
+    // Publish duration for all finished cps
+    if (i < this->cpDuration.size())
+    {
+      ros::Duration t(this->cpDuration[i].Double());
+      msg.checkpoint_durations.push_back(t);
+    }
+
+    // Publish penalty for all cps including the current one
     ros::Duration p(this->checkpoints[i]->PenaltyTime().Double());
     msg.checkpoint_penalties.push_back(p);
   }
