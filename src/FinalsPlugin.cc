@@ -232,7 +232,10 @@ bool FinalsPlugin::OnStartTaskRosRequest(srcsim::StartTask::Request &_req,
     if (this->current > 0)
     {
       if (this->tasks[this->current - 1])
-        this->tasks[this->current - 1]->Skip();
+      {
+        // Apply penalty when skipping a whole task
+        this->tasks[this->current - 1]->Skip(true);
+      }
 
       gzmsg << "Task [" << unsigned(this->current)  << "] - Skipped (" << time
             << ")" << std::endl;

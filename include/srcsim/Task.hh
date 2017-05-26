@@ -53,7 +53,8 @@ namespace gazebo
     public: void Update(const common::Time &_time);
 
     /// \brief Skip this task
-    public: void Skip();
+    /// \param[in] _penalty True if skip penalty should be applied.
+    public: void Skip(const bool _penalty);
 
     /// \brief Return the number of checkpoints in this task.
     /// \return Number of checkpoints.
@@ -78,8 +79,9 @@ namespace gazebo
     public: virtual size_t Number() const = 0;
 
     /// \brief Skip all remaining checkpoints up to the given one, inclusive.
-    /// \param[in] _lastSkipped Last one to be skipped
-    public: void SkipUpTo(const size_t _lastSkipped);
+    /// \param[in] _lastSkipped Id of last checkpoint to be skipped (1..n).
+    /// \param[in] _penalty True if skip penalty should be applied.
+    public: void SkipUpTo(const size_t _lastSkipped, const bool _penalty);
 
     /// \brief Callback when messages are received from the BoxContainsPlugin.
     /// \param[in] _msg 1 if robot is inside box, 0 otherwise.
@@ -103,7 +105,7 @@ namespace gazebo
     /// \brief Vector of total times each checkpoint took to complete. That
     /// doesn't include time penalties.
     /// Time is zero for skipped checkpoints.
-    private: std::vector<common::Time> cpCompletion;
+    private: std::vector<common::Time> cpDuration;
 
     /// \brief Time when the task started
     private: common::Time startTime;
