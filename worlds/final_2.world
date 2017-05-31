@@ -5214,11 +5214,14 @@
         <izz>0.0695</izz>
       </inertia>
     </inertial>
-    <collision name="collision">
+
+    <collision name="center">
+      <pose>0 0.045 0 1.57 0 0</pose>
       <geometry>
-        <mesh>
-          <uri>model://src_habitat/meshes/wheel_valve_large.dae</uri>
-        </mesh>
+        <cylinder>
+          <length>0.09</length>
+          <radius>0.038</radius>
+        </cylinder>
       </geometry>
       <surface>
         <friction>
@@ -5236,7 +5239,418 @@
           </ode>
         </contact>
       </surface>
+
     </collision>
+
+
+
+    <collision name="circle_0">
+      <pose>0.15 0.065 0.0 0 -0.0 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.092</length>
+          <radius>0.022</radius>
+        </cylinder>
+      </geometry>
+      <surface>
+        <friction>
+          <ode>
+            <mu>1</mu>
+            <mu2>1</mu2>
+          </ode>
+        </friction>
+        <contact>
+          <ode>
+            <kp>1000000.0</kp>
+            <kd>100.0</kd>
+            <max_vel>0.01</max_vel>
+            <min_depth>0.001</min_depth>
+          </ode>
+        </contact>
+      </surface>
+
+    </collision>
+
+
+
+    <collision name="circle_1">
+      <pose>0.1299038105676658 0.065 0.07499999999999998 0 -0.5235987755982988 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.092</length>
+          <radius>0.022</radius>
+        </cylinder>
+      </geometry>
+      <surface>
+        <friction>
+          <ode>
+            <mu>1</mu>
+            <mu2>1</mu2>
+          </ode>
+        </friction>
+        <contact>
+          <ode>
+            <kp>1000000.0</kp>
+            <kd>100.0</kd>
+            <max_vel>0.01</max_vel>
+            <min_depth>0.001</min_depth>
+          </ode>
+        </contact>
+      </surface>
+
+    </collision>
+
+
+
+    <collision name="circle_2">
+      <pose>0.07500000000000001 0.065 0.12990381056766578 0 -1.0471975511965976 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.092</length>
+          <radius>0.022</radius>
+        </cylinder>
+      </geometry>
+      <surface>
+        <friction>
+          <ode>
+            <mu>1</mu>
+            <mu2>1</mu2>
+          </ode>
+        </friction>
+        <contact>
+          <ode>
+            <kp>1000000.0</kp>
+            <kd>100.0</kd>
+            <max_vel>0.01</max_vel>
+            <min_depth>0.001</min_depth>
+          </ode>
+        </contact>
+      </surface>
+
+    </collision>
+
+
+
+    <collision name="circle_3">
+      <pose>9.184850993605149e-18 0.065 0.15 0 -1.5707963267948966 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.092</length>
+          <radius>0.022</radius>
+        </cylinder>
+      </geometry>
+      <surface>
+        <friction>
+          <ode>
+            <mu>1</mu>
+            <mu2>1</mu2>
+          </ode>
+        </friction>
+        <contact>
+          <ode>
+            <kp>1000000.0</kp>
+            <kd>100.0</kd>
+            <max_vel>0.01</max_vel>
+            <min_depth>0.001</min_depth>
+          </ode>
+        </contact>
+      </surface>
+
+    </collision>
+
+
+
+    <collision name="circle_4">
+      <pose>-0.07499999999999997 0.065 0.1299038105676658 0 -2.0943951023931953 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.092</length>
+          <radius>0.022</radius>
+        </cylinder>
+      </geometry>
+      <surface>
+        <friction>
+          <ode>
+            <mu>1</mu>
+            <mu2>1</mu2>
+          </ode>
+        </friction>
+        <contact>
+          <ode>
+            <kp>1000000.0</kp>
+            <kd>100.0</kd>
+            <max_vel>0.01</max_vel>
+            <min_depth>0.001</min_depth>
+          </ode>
+        </contact>
+      </surface>
+
+    </collision>
+
+
+
+    <collision name="circle_5">
+      <pose>-0.12990381056766576 0.065 0.07500000000000005 0 -2.617993877991494 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.092</length>
+          <radius>0.022</radius>
+        </cylinder>
+      </geometry>
+      <surface>
+        <friction>
+          <ode>
+            <mu>1</mu>
+            <mu2>1</mu2>
+          </ode>
+        </friction>
+        <contact>
+          <ode>
+            <kp>1000000.0</kp>
+            <kd>100.0</kd>
+            <max_vel>0.01</max_vel>
+            <min_depth>0.001</min_depth>
+          </ode>
+        </contact>
+      </surface>
+
+    </collision>
+
+
+
+    <collision name="circle_6">
+      <pose>-0.15 0.065 1.8369701987210297e-17 0 -3.141592653589793 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.092</length>
+          <radius>0.022</radius>
+        </cylinder>
+      </geometry>
+      <surface>
+        <friction>
+          <ode>
+            <mu>1</mu>
+            <mu2>1</mu2>
+          </ode>
+        </friction>
+        <contact>
+          <ode>
+            <kp>1000000.0</kp>
+            <kd>100.0</kd>
+            <max_vel>0.01</max_vel>
+            <min_depth>0.001</min_depth>
+          </ode>
+        </contact>
+      </surface>
+
+    </collision>
+
+
+
+    <collision name="circle_7">
+      <pose>-0.1299038105676658 0.065 -0.07499999999999996 0 -3.665191429188092 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.092</length>
+          <radius>0.022</radius>
+        </cylinder>
+      </geometry>
+      <surface>
+        <friction>
+          <ode>
+            <mu>1</mu>
+            <mu2>1</mu2>
+          </ode>
+        </friction>
+        <contact>
+          <ode>
+            <kp>1000000.0</kp>
+            <kd>100.0</kd>
+            <max_vel>0.01</max_vel>
+            <min_depth>0.001</min_depth>
+          </ode>
+        </contact>
+      </surface>
+
+    </collision>
+
+
+
+    <collision name="circle_8">
+      <pose>-0.07500000000000007 0.065 -0.12990381056766576 0 -4.1887902047863905 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.092</length>
+          <radius>0.022</radius>
+        </cylinder>
+      </geometry>
+      <surface>
+        <friction>
+          <ode>
+            <mu>1</mu>
+            <mu2>1</mu2>
+          </ode>
+        </friction>
+        <contact>
+          <ode>
+            <kp>1000000.0</kp>
+            <kd>100.0</kd>
+            <max_vel>0.01</max_vel>
+            <min_depth>0.001</min_depth>
+          </ode>
+        </contact>
+      </surface>
+
+    </collision>
+
+
+
+    <collision name="circle_9">
+      <pose>-2.7554552980815445e-17 0.065 -0.15 0 -4.71238898038469 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.092</length>
+          <radius>0.022</radius>
+        </cylinder>
+      </geometry>
+      <surface>
+        <friction>
+          <ode>
+            <mu>1</mu>
+            <mu2>1</mu2>
+          </ode>
+        </friction>
+        <contact>
+          <ode>
+            <kp>1000000.0</kp>
+            <kd>100.0</kd>
+            <max_vel>0.01</max_vel>
+            <min_depth>0.001</min_depth>
+          </ode>
+        </contact>
+      </surface>
+
+    </collision>
+
+
+
+    <collision name="circle_10">
+      <pose>0.0749999999999999 0.065 -0.12990381056766584 0 -5.235987755982988 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.092</length>
+          <radius>0.022</radius>
+        </cylinder>
+      </geometry>
+      <surface>
+        <friction>
+          <ode>
+            <mu>1</mu>
+            <mu2>1</mu2>
+          </ode>
+        </friction>
+        <contact>
+          <ode>
+            <kp>1000000.0</kp>
+            <kd>100.0</kd>
+            <max_vel>0.01</max_vel>
+            <min_depth>0.001</min_depth>
+          </ode>
+        </contact>
+      </surface>
+
+    </collision>
+
+
+
+    <collision name="circle_11">
+      <pose>0.12990381056766576 0.065 -0.07500000000000007 0 -5.759586531581287 0</pose>
+      <geometry>
+        <cylinder>
+          <length>0.092</length>
+          <radius>0.022</radius>
+        </cylinder>
+      </geometry>
+      <surface>
+        <friction>
+          <ode>
+            <mu>1</mu>
+            <mu2>1</mu2>
+          </ode>
+        </friction>
+        <contact>
+          <ode>
+            <kp>1000000.0</kp>
+            <kd>100.0</kd>
+            <max_vel>0.01</max_vel>
+            <min_depth>0.001</min_depth>
+          </ode>
+        </contact>
+      </surface>
+
+    </collision>
+
+
+
+
+
+    <collision name="cross_0">
+      <pose>0.0 0.065 0.0 0 -0.0 0</pose>
+      <geometry>
+        <box>
+          <size>0.3 0.03 0.042</size>
+        </box>
+      </geometry>
+      <surface>
+        <friction>
+          <ode>
+            <mu>1</mu>
+            <mu2>1</mu2>
+          </ode>
+        </friction>
+        <contact>
+          <ode>
+            <kp>1000000.0</kp>
+            <kd>100.0</kd>
+            <max_vel>0.01</max_vel>
+            <min_depth>0.001</min_depth>
+          </ode>
+        </contact>
+      </surface>
+
+    </collision>
+
+
+
+    <collision name="cross_1">
+      <pose>0.0 0.065 0.0 0 -1.5707963267948966 0</pose>
+      <geometry>
+        <box>
+          <size>0.3 0.03 0.042</size>
+        </box>
+      </geometry>
+      <surface>
+        <friction>
+          <ode>
+            <mu>1</mu>
+            <mu2>1</mu2>
+          </ode>
+        </friction>
+        <contact>
+          <ode>
+            <kp>1000000.0</kp>
+            <kd>100.0</kd>
+            <max_vel>0.01</max_vel>
+            <min_depth>0.001</min_depth>
+          </ode>
+        </contact>
+      </surface>
+
+    </collision>
+
+
+
+
     <visual name="visual">
       <geometry>
         <mesh>
