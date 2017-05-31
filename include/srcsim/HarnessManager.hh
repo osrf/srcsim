@@ -99,10 +99,10 @@ namespace gazebo
     /// \brief Pointer to model being harnessed (hardcoded valkyrie)
     private: gazebo::physics::ModelPtr model;
 
-    /// \brief Stores latest sensor message
-    private: double lastSensor = 0.0;
+    /// \brief Stores force on the ankle from latest sensor message.
+    private: double latestAnkleForce = 0.0;
 
-    /// \brief Number of iterations to check sensor efore being sure that robot
+    /// \brief Number of iterations to check sensor before being sure that robot
     /// has been lowered or is standing.
     private: const unsigned int itThreshold = 500;
 
