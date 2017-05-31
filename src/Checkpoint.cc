@@ -38,27 +38,27 @@ Checkpoint::Checkpoint(const sdf::ElementPtr &_sdf)
   }
 
   // Get models to delete when checkpoint begins
-  if (_sdf && _sdf->HasElement("delete_model"))
+  if (_sdf && _sdf->HasElement("delete_entity"))
   {
-    auto elem = _sdf->GetElement("delete_model");
+    auto elem = _sdf->GetElement("delete_entity");
     while (elem)
     {
-      this->deleteModels.push_back(elem->Get<std::string>());
+      this->deleteEntities.push_back(elem->Get<std::string>());
 
-      elem = elem->GetNextElement("delete_model");
+      elem = elem->GetNextElement("delete_entity");
     }
   }
 
   // Get models to insert when checkpoint begins
-  if (_sdf && _sdf->HasElement("insert_model"))
+  if (_sdf && _sdf->HasElement("insert_entity"))
   {
-    auto elem = _sdf->GetElement("insert_model");
+    auto elem = _sdf->GetElement("insert_entity");
     while (elem)
     {
       auto inner = elem->GetFirstElement();
-      this->insertModels.push_back(inner->ToString(""));
+      this->insertEntities.push_back(inner->ToString(""));
 
-      elem = elem->GetNextElement("insert_model");
+      elem = elem->GetNextElement("insert_entity");
     }
   }
 }
@@ -66,47 +66,49 @@ Checkpoint::Checkpoint(const sdf::ElementPtr &_sdf)
 /////////////////////////////////////////////////
 void Checkpoint::Start()
 {
-  if (this->insertModels.empty() && this->deleteModels.empty())
+  if (this->insertEntities.empty() && this->deleteEntities.empty())
     return;
 
   auto tmpGzNode = transport::NodePtr(new transport::Node());
   tmpGzNode->Init();
 
-  // Delete models
-  for (auto modelName : this->deleteModels)
+  // Delete entities
+  for (auto entityName : this->deleteEntities)
   {
-    transport::requestNoReply(tmpGzNode, "entity_delete", modelName);
-    gzmsg << "Requested to delete [" << modelName << "]" << std::endl;
+    transport::requestNoReply(tmpGzNode, "entity_delete", entityName);
+    gzmsg << "Requested to delete [" << entityName << "]" << std::endl;
   }
-  this->deleteModels.clear();
+  this->deleteEntities.clear();
 
-  // Insert models
-  if (this->insertModels.empty())
+  // Insert entities
+  if (this->insertEntities.empty())
     return;
 
   auto factoryPub = tmpGzNode->Advertise<msgs::Factory>("~/factory");
+  auto lightFactoryPub = tmpGzNode->Advertise<msgs::Light>("~/factory/light");
 
-  for (const auto &modelStr : this->insertModels)
+  for (const auto &entityStr : this->insertEntities)
   {
     auto sdfStr =
         "<sdf version='" + std::string(SDF_VERSION) + "'>"
-        + modelStr
+        + entityStr
         + "</sdf>";
 
-    // Get model name for debug message
+    // Get entity name for debug message
     std::string name;
 
-    sdf::SDFPtr modelSDF(new sdf::SDF);
-    modelSDF->SetFromString(sdfStr);
+    sdf::SDFPtr entitySDF(new sdf::SDF);
+    entitySDF->SetFromString(sdfStr);
 
-    if (!modelSDF || !modelSDF->Root())
+    if (!entitySDF || !entitySDF->Root())
     {
-      gzerr << "Failed to parse model SDF: " << std::endl << modelStr
+      gzerr << "Failed to parse entity SDF: " << std::endl << entityStr
             << std::endl;
       continue;
     }
 
-    auto root = modelSDF->Root();
+    auto root = entitySDF->Root();
+    sdf::ElementPtr light;
 
     if (root->HasElement("include"))
     {
@@ -116,19 +118,32 @@ void Checkpoint::Start()
     {
       name = root->GetElement("model")->Get<std::string>("name");
     }
+    else if (root->HasElement("light"))
+    {
+      light = root->GetElement("light");
+      name = light->Get<std::string>("name");
+    }
     else
     {
-      gzerr << "Failed to parse model SDF: " << std::endl << modelStr
+      gzerr << "Invalid entity SDF: " << std::endl << entityStr
             << std::endl;
       continue;
     }
 
-    msgs::Factory msg;
-    msg.set_sdf(sdfStr);
-    factoryPub->Publish(msg);
-    gzmsg << "Requested to insert model [" << name << "]" << std::endl;
+    if (!light)
+    {
+      msgs::Factory msg;
+      msg.set_sdf(sdfStr);
+      factoryPub->Publish(msg);
+    }
+    else
+    {
+      msgs::Light msg = msgs::LightFromSDF(light);
+      lightFactoryPub->Publish(msg);
+    }
+    gzmsg << "Requested to insert entity [" << name << "]" << std::endl;
   }
-  this->insertModels.clear();
+  this->insertEntities.clear();
   factoryPub.reset();
   tmpGzNode->Fini();
   tmpGzNode.reset();

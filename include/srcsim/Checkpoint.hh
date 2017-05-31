@@ -62,13 +62,13 @@ namespace gazebo
     /// \brief The pose the robot should be in when this checkpoint is skipped.
     private: ignition::math::Pose3d robotSkipPose;
 
-    /// \brief List of names of models which should be deleted when this
+    /// \brief List of names of entities which should be deleted when this
     /// checkpoint starts.
-    private: std::vector<std::string> deleteModels;
+    private: std::vector<std::string> deleteEntities;
 
-    /// \brief List of SDF file strings of models which should be inserted when
+    /// \brief List of SDF file strings of entities which should be inserted when
     /// this checkpoint starts.
-    private: std::vector<std::string> insertModels;
+    private: std::vector<std::string> insertEntities;
 
     /// \brief Whether this checkpoint has been restarted.
     private: bool restarted = false;
