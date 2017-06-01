@@ -47,12 +47,17 @@ namespace gazebo
     /// \brief Call this the first time the checkpoint is checked.
     public: virtual void Start();
 
-    /// \brief Flag this checkpoint as restarted (for scoring).
-    public: virtual void Restart();
+    /// \brief Restart this checkpoint, and increment the total penalty time.
+    /// \param[in] _penalty Penalty time to add
+    public: virtual void Restart(const common::Time &_penalty);
 
-    /// \brief Get whether this checkpoint has been restarted.
-    /// \return True if it has been restarted.
-    public: bool Restarted();
+    /// \brief Get the total penalty time for this checkpoint.
+    /// \return The total penalty time.
+    public: common::Time PenaltyTime() const;
+
+    /// \brief Get the sim time when this checkpoint started.
+    /// \return Start time
+    public: common::Time StartTime() const;
 
     /// \brief The pose the robot should be in when this checkpoint is
     /// restarted. This is only used by the first checkpoint of a task, otherwise
@@ -70,8 +75,11 @@ namespace gazebo
     /// this checkpoint starts.
     private: std::vector<std::string> insertEntities;
 
-    /// \brief Whether this checkpoint has been restarted.
-    private: bool restarted = false;
+    /// \brief Total penalty time.
+    private: common::Time totalPenalty;
+
+    /// \brief Sim time when the checkpoint started
+    private: common::Time startTime;
   };
 
   /// \brief A checkpoint tied to a BoxContainsPlugin.

@@ -53,7 +53,8 @@ namespace gazebo
     public: bool Check();
 
     /// \brief Reharness at start box
-    public: void Restart();
+    /// \param[in] _penalty Penalty time to add
+    public: void Restart(const common::Time &_penalty);
   };
 
   /// \brief Task 3, Checkpoint 2: Open the door

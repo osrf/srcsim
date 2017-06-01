@@ -50,7 +50,8 @@ namespace gazebo
     public: bool Check();
 
     /// \brief Reharness at start box
-    public: void Restart();
+    /// \param[in] _penalty Penalty time to add
+    public: void Restart(const common::Time &_penalty);
   };
 
   /// \brief Task 2, Checkpoint 2: Place panel near cable

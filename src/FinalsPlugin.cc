@@ -232,7 +232,10 @@ bool FinalsPlugin::OnStartTaskRosRequest(srcsim::StartTask::Request &_req,
     if (this->current > 0)
     {
       if (this->tasks[this->current - 1])
-        this->tasks[this->current - 1]->Skip();
+      {
+        // Apply penalty when skipping a whole task
+        this->tasks[this->current - 1]->Skip(true);
+      }
 
       gzmsg << "Task [" << unsigned(this->current)  << "] - Skipped (" << time
             << ")" << std::endl;
@@ -284,30 +287,37 @@ void FinalsPlugin::OnUpdate(const common::UpdateInfo &_info)
     // Add completion time for all past checkpoints
     for (size_t j = 1; j <= this->tasks[i-1]->CheckpointCount(); ++j)
     {
-      if (i == this->current && j >= this->tasks[i-1]->CurrentCheckpointId()) {
-        // Skip the current (and future) checkpoints of the current task
+      // Skip the future checkpoints of the current task
+      if (i == this->current && j > this->tasks[i-1]->CurrentCheckpointId())
+      {
         continue;
       }
-      ros::Time t(this->tasks[i-1]->GetCheckpointCompletion(j-1).Double());
-      msg.checkpoints_completion.push_back(t);
-      msg.checkpoints_restarted.push_back(
-          this->tasks[i-1]->GetCheckpointRestarted(j-1));
+      // Skip completion for current checkpoint (it's not complete)
+      if (!(i == this->current && j == this->tasks[i-1]->CurrentCheckpointId()))
+      {
+        ros::Duration t(this->tasks[i-1]->GetCheckpointCompletion(j-1).Double());
+        msg.checkpoint_durations.push_back(t);
+      }
+
+      // Add penalty for all previous and current checkpoint
+      ros::Duration p(this->tasks[i-1]->GetCheckpointPenalty(j-1).Double());
+      msg.checkpoint_penalties.push_back(p);
     }
   }
 
   // Compute score based on checkpoint completion times from all tasks
   msg.score = 0;
   uint8_t last_checkpoint_score = 0;
-  for (size_t i = 0; i < msg.checkpoints_completion.size(); ++i)
+  for (size_t i = 0; i < msg.checkpoint_durations.size(); ++i)
   {
     // End winning streak in case the checkpoint has been restarted.
     // The checkpoint itself will still be scored.
-    if (msg.checkpoints_restarted[i])
+    if (!msg.checkpoint_penalties[i].isZero())
     {
       last_checkpoint_score = 0;
     }
 
-    if (msg.checkpoints_completion[i].isZero())
+    if (msg.checkpoint_durations[i].isZero())
     {
       // End winning streak in case of incomplete checkpoints
       last_checkpoint_score = 0;
@@ -317,6 +327,10 @@ void FinalsPlugin::OnUpdate(const common::UpdateInfo &_info)
       // Next checkpoint gets one more point than previous checkpoint
       last_checkpoint_score += 1;
       msg.score += last_checkpoint_score;
+
+      // Checkpoint completion time plus its penalties
+      msg.total_completion_time += msg.checkpoint_durations[i] +
+                                   msg.checkpoint_penalties[i];
     }
   }
   this->scoreRosPub.publish(msg);
