@@ -27,6 +27,9 @@
     * Add publishing of Score message
         * [Pull request 69](https://bitbucket.org/osrf/srcsim/pull-requests/69)
 
+    * Time penalties on skip and reset
+        * [Pull request 82](https://bitbucket.org/osrf/srcsim/pull-requests/82)
+
     * Re-harness
         * [Pull request 79](https://bitbucket.org/osrf/srcsim/pull-requests/79)
 
