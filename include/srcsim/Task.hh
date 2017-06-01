@@ -62,9 +62,14 @@ namespace gazebo
     public: size_t CurrentCheckpointId() const;
 
     /// \brief Return the completion time of a checkpoint.
-    /// \param[in] _index Index of the checkpoint
+    /// \param[in] _index Index of the checkpoint in the array (0~n-1)
     /// \return The competion time
-    public: common::Time GetCheckpointCompletion(size_t index) const;
+    public: common::Time GetCheckpointCompletion(const size_t index) const;
+
+    /// \brief Return whether a checkpoint has been restarted.
+    /// \param[in] _index Index of the checkpoint in the array (0~n-1)
+    /// \return True if the checkpoint was restarted.
+    public: bool GetCheckpointRestarted(const size_t index) const;
 
     /// \brief Return this task's number.
     /// \return Task number.
@@ -83,7 +88,7 @@ namespace gazebo
 
     /// \brief Current checkpoint number, starting from 1. Zero means the task
     /// hasn't started, Count+1 means that the task has finished.
-    protected: size_t current = 0;
+    private: size_t current = 0;
 
     /// \brief Vector of times when checkpoints were completed.
     /// Time is zero for skipped checkpoints.
@@ -118,6 +123,9 @@ namespace gazebo
 
     /// \brief Flag to indicate whether the robot has reached the start box.
     private: bool startBox = false;
+
+    /// \brief Mutex used to protect the update loop
+    private: std::mutex updateMutex;
   };
 }
 #endif

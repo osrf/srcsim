@@ -47,6 +47,18 @@ namespace gazebo
     /// \brief Call this the first time the checkpoint is checked.
     public: virtual void Start();
 
+    /// \brief Flag this checkpoint as restarted (for scoring).
+    public: virtual void Restart();
+
+    /// \brief Get whether this checkpoint has been restarted.
+    /// \return True if it has been restarted.
+    public: bool Restarted();
+
+    /// \brief The pose the robot should be in when this checkpoint is
+    /// restarted. This is only used by the first checkpoint of a task, otherwise
+    /// we start from the skip pose of the previous task.
+    protected: ignition::math::Pose3d robotStartPose;
+
     /// \brief The pose the robot should be in when this checkpoint is skipped.
     private: ignition::math::Pose3d robotSkipPose;
 
@@ -55,8 +67,11 @@ namespace gazebo
     private: std::vector<std::string> deleteEntities;
 
     /// \brief List of SDF file strings of entities which should be inserted when
-    // this checkpoint starts.
+    /// this checkpoint starts.
     private: std::vector<std::string> insertEntities;
+
+    /// \brief Whether this checkpoint has been restarted.
+    private: bool restarted = false;
   };
 
   /// \brief A checkpoint tied to a BoxContainsPlugin.

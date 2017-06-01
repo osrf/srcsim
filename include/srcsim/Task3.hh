@@ -51,6 +51,9 @@ namespace gazebo
 
     /// \brief Check whether the robot is on the top of the stairs.
     public: bool Check();
+
+    /// \brief Reharness at start box
+    public: void Restart();
   };
 
   /// \brief Task 3, Checkpoint 2: Open the door

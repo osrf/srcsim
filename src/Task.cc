@@ -48,13 +48,27 @@ Task::Task(const sdf::ElementPtr &_sdf)
 /////////////////////////////////////////////////
 void Task::Start(const common::Time &_time, const size_t _checkpoint)
 {
+  std::lock_guard<std::mutex> lock(this->updateMutex);
   // Double-check that we're not going back to a previous checkpoint
-  if (_checkpoint <= this->current)
+  if (_checkpoint < this->current)
   {
     gzerr << "Trying to start task [" << unsigned(this->Number()) <<
         "] checkpoint [" << unsigned(_checkpoint) <<
         "], and current checkpoint is [" << unsigned(this->current) << "]. " <<
         "It's not possible to go back to a previous checkpoint." << std::endl;
+    return;
+  }
+
+  // Restarting current checkpoint
+  if (_checkpoint == this->current)
+  {
+    // Trigger skip on previous cp to rearrange world
+    if (this->current > 1)
+      this->checkpoints[this->current - 2]->Skip();
+
+    // Flag this checkpoint as restarted (for scoring)
+    this->checkpoints[this->current - 1]->Restart();
+
     return;
   }
 
@@ -119,8 +133,24 @@ void Task::Start(const common::Time &_time, const size_t _checkpoint)
 /////////////////////////////////////////////////
 void Task::Update(const common::Time &_time)
 {
-  if (this->current < 1 || this->current > this->checkpoints.size())
+  std::lock_guard<std::mutex> lock(this->updateMutex);
+  // Task has finished
+  if (this->current > this->checkpoints.size())
     return;
+
+  // While in start box (before time starts counting)
+  if (this->current < 1)
+  {
+    // Publish ROS task message with zero CP and start time
+    srcsim::Task msg;
+    msg.task = this->Number();
+    msg.current_checkpoint = this->current;
+    msg.start_time.fromSec(0);
+    msg.elapsed_time.fromSec(0);
+
+    this->taskRosPub.publish(msg);
+    return;
+  }
 
   // Terminate start transport
   if (this->gzNode)
@@ -139,6 +169,7 @@ void Task::Update(const common::Time &_time)
   {
     elapsed = this->timeout;
     this->current = this->checkpoints.size() + 1;
+    this->Skip();
   }
   else
   {
@@ -206,13 +237,23 @@ size_t Task::CurrentCheckpointId() const
 }
 
 /////////////////////////////////////////////////
-common::Time Task::GetCheckpointCompletion(size_t index) const
+common::Time Task::GetCheckpointCompletion(const size_t index) const
 {
   if (index < this->checkpointsCompletion.size())
   {
     return this->checkpointsCompletion[index];
   }
   return common::Time::Zero;
+}
+
+/////////////////////////////////////////////////
+bool Task::GetCheckpointRestarted(const size_t index) const
+{
+  if (index < this->checkpointsCompletion.size())
+  {
+    return this->checkpoints[index]->Restarted();
+  }
+  return false;
 }
 
 //////////////////////////////////////////////////
