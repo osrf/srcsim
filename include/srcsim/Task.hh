@@ -100,7 +100,7 @@ namespace gazebo
 
     /// \brief Current checkpoint number, starting from 1. Zero means the task
     /// hasn't started, Count+1 means that the task has finished.
-    protected: size_t current = 0;
+    private: size_t current = 0;
 
     /// \brief Vector of total times each checkpoint took to complete. That
     /// doesn't include time penalties.

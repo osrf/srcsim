@@ -2,11 +2,42 @@
 
 ### SRC Sim 0.X.X (2017-XX-XX)
 
-* Add publishing of Score message
-    * [Pull request 69](https://bitbucket.org/osrf/srcsim/pull-requests/69)
+* Task 1 changes
+    * No changes to tutorial needed
+    * Task 1: Enable / disable satellite plugin on demand
+        * [Pull request 85](https://bitbucket.org/osrf/srcsim/pull-requests/85)
 
-* Re-harness
-    * [Pull request 79](https://bitbucket.org/osrf/srcsim/pull-requests/79)
+* Task 2 changes
+    * No changes to tutorial needed
+    * Task 2: Insert habitat lamp on demand
+        * [Pull request 86](https://bitbucket.org/osrf/srcsim/pull-requests/86)
+
+    * Higher array surface, different cable plug
+        * [Pull request 77](https://bitbucket.org/osrf/srcsim/pull-requests/77)
+
+* Task 3 changes
+    * No changes to tutorial needed
+    * Task 3: Simple shape collisions for valve
+        * [Pull request 84](https://bitbucket.org/osrf/srcsim/pull-requests/84)
+
+    * Higher table surface
+        * [Pull request 77](https://bitbucket.org/osrf/srcsim/pull-requests/77)
+
+* Others
+    * Add publishing of Score message
+        * [Pull request 69](https://bitbucket.org/osrf/srcsim/pull-requests/69)
+
+    * Re-harness
+        * [Pull request 79](https://bitbucket.org/osrf/srcsim/pull-requests/79)
+
+    * Wait for ihmc controller to be ready before launching grasp controller
+        * [Pull request 81](https://bitbucket.org/osrf/srcsim/pull-requests/81)
+
+    * Logging: remove <sdf> from <plugin>
+        * [Pull request 78](https://bitbucket.org/osrf/srcsim/pull-requests/78)
+
+    * Publish multisense transforms
+        * [Pull request 72](https://bitbucket.org/osrf/srcsim/pull-requests/72)
 
 ### SRC Sim 0.5.0 (2017-05-16)
 

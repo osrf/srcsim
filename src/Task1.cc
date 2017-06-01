@@ -104,8 +104,9 @@ bool Task1CP2::Check()
     this->gzNode = transport::NodePtr(new transport::Node());
     this->gzNode->Init();
 
+    // Enable satellite plugin
     auto togglePub = this->gzNode->Advertise<msgs::Int>(
-        "/task1/checkpoint2/toggle");
+        "/task1/checkpoint2/enable");
 
     msgs::Int msg;
     msg.set_data(1);
@@ -141,8 +142,9 @@ bool Task1CP3::Check()
     this->gzNode = transport::NodePtr(new transport::Node());
     this->gzNode->Init();
 
+    // Disable satellite plugin
     auto togglePub = this->gzNode->Advertise<msgs::Int>(
-        "/task1/checkpoint2/toggle");
+        "/task1/checkpoint2/enable");
 
     msgs::Int msg;
     msg.set_data(0);

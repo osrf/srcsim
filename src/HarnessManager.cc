@@ -39,7 +39,7 @@ HarnessManager::HarnessManager()
   this->model = world->GetModel("valkyrie");
   if (!this->model)
   {
-    gzerr << "Failed to get model pointe."
+    gzerr << "Failed to get model pointer."
         << std::endl;
     return;
   }
@@ -82,7 +82,7 @@ HarnessManager::~HarnessManager()
 //////////////////////////////////////////////////
 void HarnessManager::OnSensorMsg(ConstWrenchStampedPtr &_msg)
 {
-  this->lastSensor = _msg->wrench().force().z();
+  this->latestAnkleForce = _msg->wrench().force().z();
 }
 
 //////////////////////////////////////////////////
@@ -208,20 +208,20 @@ bool HarnessManager::IsDetached()
 //////////////////////////////////////////////////
 bool HarnessManager::IsAttached()
 {
-  return this->model->GetJoint("harness_joint") != nullptr;
+  return !this->IsDetached();
 }
 
 //////////////////////////////////////////////////
 bool HarnessManager::IsLowered()
 {
-  this->itLowering = this->lastSensor > 50 ? this->itLowering + 1 : 0;
+  this->itLowering = this->latestAnkleForce > 50 ? this->itLowering + 1 : 0;
   return this->itLowering >= this->itThreshold;
 }
 
 //////////////////////////////////////////////////
 bool HarnessManager::IsStanding()
 {
-  this->itStanding = this->lastSensor > 250 ? this->itStanding + 1 : 0;
+  this->itStanding = this->latestAnkleForce > 500 ? this->itStanding + 1 : 0;
   return this->itStanding >= this->itThreshold;
 }
 
