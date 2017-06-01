@@ -15,6 +15,7 @@
  *
 */
 
+#include "srcsim/HarnessManager.hh"
 #include "srcsim/Task1.hh"
 
 using namespace gazebo;
@@ -72,6 +73,16 @@ bool Task1CP1::Check()
 }
 
 /////////////////////////////////////////////////
+void Task1CP1::Restart()
+{
+  // This is the 1st CP of the task: reharness back at start box
+  HarnessManager::Instance()->NewGoal(
+      ignition::math::Pose3d(0, 0, 1.257, 0, 0, 0));
+
+  Checkpoint::Restart();
+}
+
+/////////////////////////////////////////////////
 void Task1CP2::OnSatelliteRosMsg(const srcsim::Satellite &_msg)
 {
   this->oneAxisDone = _msg.yaw_completed || _msg.pitch_completed;
@@ -91,8 +102,9 @@ bool Task1CP2::Check()
     this->gzNode = transport::NodePtr(new transport::Node());
     this->gzNode->Init();
 
+    // Enable satellite plugin
     auto togglePub = this->gzNode->Advertise<msgs::Int>(
-        "/task1/checkpoint2/toggle");
+        "/task1/checkpoint2/enable");
 
     msgs::Int msg;
     msg.set_data(1);
@@ -128,8 +140,9 @@ bool Task1CP3::Check()
     this->gzNode = transport::NodePtr(new transport::Node());
     this->gzNode->Init();
 
+    // Disable satellite plugin
     auto togglePub = this->gzNode->Advertise<msgs::Int>(
-        "/task1/checkpoint2/toggle");
+        "/task1/checkpoint2/enable");
 
     msgs::Int msg;
     msg.set_data(0);
