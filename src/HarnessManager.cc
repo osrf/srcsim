@@ -221,7 +221,7 @@ bool HarnessManager::IsLowered()
 //////////////////////////////////////////////////
 bool HarnessManager::IsStanding()
 {
-  this->itStanding = this->latestAnkleForce > 250 ? this->itStanding + 1 : 0;
+  this->itStanding = this->latestAnkleForce > 500 ? this->itStanding + 1 : 0;
   return this->itStanding >= this->itThreshold;
 }
 
