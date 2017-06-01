@@ -1,6 +1,6 @@
 ## SRC Sim
 
-### SRC Sim 0.X.X (2017-XX-XX)
+### SRC Sim 0.6.0 (2017-06-01)
 
 * Task 1 changes
     * No changes to tutorial needed
@@ -24,11 +24,17 @@
         * [Pull request 77](https://bitbucket.org/osrf/srcsim/pull-requests/77)
 
 * Others
+    * [Task 1 tutorial updated](https://bitbucket.org/osrf/srcsim/wiki/finals_task1)
+    * [Task 2 tutorial updated](https://bitbucket.org/osrf/srcsim/wiki/finals_task2)
+    * [Task 3 tutorial updated](https://bitbucket.org/osrf/srcsim/wiki/finals_task3)
     * Add publishing of Score message
         * [Pull request 69](https://bitbucket.org/osrf/srcsim/pull-requests/69)
 
     * Time penalties on skip and reset
         * [Pull request 82](https://bitbucket.org/osrf/srcsim/pull-requests/82)
+
+    * Add ROS subscriber to force current checkpoint completion (for debugging)
+        * [Pull request 83](https://bitbucket.org/osrf/srcsim/pull-requests/83)
 
     * Re-harness
         * [Pull request 79](https://bitbucket.org/osrf/srcsim/pull-requests/79)
