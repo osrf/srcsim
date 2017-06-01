@@ -332,8 +332,8 @@ void Task::ApplyPenaltyTime()
   // Increment the checkpoint's penalty (to be used by scoring)
   this->checkpoints[this->current - 1]->Restart(this->previousPenalty);
 
-  gzmsg << "Applied penalty time of [" << this->previousPenalty << "]"
-        << std::endl;
+  gzmsg << "Applied penalty time of [" << int(this->previousPenalty.Double())
+        << "] seconds" << std::endl;
 }
 
 /////////////////////////////////////////////////
