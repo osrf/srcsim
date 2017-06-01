@@ -16,6 +16,7 @@
 */
 
 #include <gazebo/common/Console.hh>
+#include <gazebo/physics/PhysicsEngine.hh>
 
 #include <ros/time.h>
 #include <srcsim/Score.h>
@@ -48,6 +49,14 @@ void FinalsPlugin::Load(physics::WorldPtr _world, sdf::ElementPtr _sdf)
 
   this->world = _world;
   this->product = 1;
+
+  // Set solver tolerance
+  if (_sdf->HasElement("sor_lcp_tolerance"))
+  {
+    double sor_lcp_tolerance = _sdf->Get<double>("sor_lcp_tolerance");
+    auto physics = world->GetPhysicsEngine();
+    physics->SetParam("sor_lcp_tolerance", sor_lcp_tolerance);
+  }
 
   // Task 1
   if (_sdf->HasElement("task1"))

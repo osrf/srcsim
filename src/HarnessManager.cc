@@ -186,7 +186,7 @@ void HarnessManager::TriggerAttach()
 void HarnessManager::TriggerLower()
 {
   msgs::GzString msg;
-  msg.set_data("-0.05");
+  msg.set_data("-0.10");
   this->lowerGzPub->Publish(msg);
 }
 
