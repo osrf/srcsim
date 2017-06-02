@@ -15,6 +15,7 @@
  *
 */
 
+#include "srcsim/HarnessManager.hh"
 #include "srcsim/Task1.hh"
 
 using namespace gazebo;
@@ -74,6 +75,16 @@ bool Task1CP1::Check()
 }
 
 /////////////////////////////////////////////////
+void Task1CP1::Restart(const common::Time &_penalty)
+{
+  // This is the 1st CP of the task: reharness back at start box
+  HarnessManager::Instance()->NewGoal(
+      ignition::math::Pose3d(0, 0, 1.257, 0, 0, 0));
+
+  Checkpoint::Restart(_penalty);
+}
+
+/////////////////////////////////////////////////
 void Task1CP2::OnSatelliteRosMsg(const srcsim::Satellite &_msg)
 {
   this->oneAxisDone = _msg.yaw_completed || _msg.pitch_completed;
@@ -85,6 +96,8 @@ bool Task1CP2::Check()
   // First time
   if (!this->satelliteRosSub && !this->oneAxisDone)
   {
+    this->Start();
+
     // Subscribe to satellite msgs
     this->rosNode.reset(new ros::NodeHandle());
     this->satelliteRosSub = this->rosNode->subscribe(
