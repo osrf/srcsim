@@ -17,7 +17,11 @@
 
 #include <gazebo/common/Console.hh>
 
+#include <ros/time.h>
+#include <srcsim/Score.h>
+
 #include "srcsim/FinalsPlugin.hh"
+#include "srcsim/HarnessManager.hh"
 #include "srcsim/Task1.hh"
 #include "srcsim/Task2.hh"
 #include "srcsim/Task3.hh"
@@ -101,10 +105,17 @@ void FinalsPlugin::Load(physics::WorldPtr _world, sdf::ElementPtr _sdf)
   this->startTaskRosService = this->rosNode->advertiseService(
       "/srcsim/finals/start_task", &FinalsPlugin::OnStartTaskRosRequest, this);
 
+  this->scoreRosPub = this->rosNode->advertise<srcsim::Score>(
+      "/srcsim/finals/score", 1000);
+
   this->taskRosSub = this->rosNode->subscribe("/srcsim/finals/task", 10,
       &FinalsPlugin::OnTaskRosMsg, this);
 
-  gzmsg << "Finals plugin loaded. Call start service to start a task."
+  // Trigger update at every world iteration
+  this->updateConnection = event::Events::ConnectWorldUpdateBegin(
+      std::bind(&FinalsPlugin::OnUpdate, this, std::placeholders::_1));
+
+  gzmsg << "Finals plugin loaded. Wait for harness to be lowered."
         << std::endl;
 }
 
@@ -169,7 +180,7 @@ bool FinalsPlugin::OnStartTaskRosRequest(srcsim::StartTask::Request &_req,
     return true;
   }
 
-  if (_req.task_id == this->current && _req.checkpoint_id <=
+  if (_req.task_id == this->current && _req.checkpoint_id <
       this->tasks[_req.task_id - 1]->CurrentCheckpointId())
   {
     gzerr << "Trying to start task [" << unsigned(this->current) <<
@@ -178,6 +189,20 @@ bool FinalsPlugin::OnStartTaskRosRequest(srcsim::StartTask::Request &_req,
         this->tasks[_req.task_id - 1]->CurrentCheckpointId() << "]. " <<
         "It's not possible to go back to a previous checkpoint." << std::endl;
     _res.success = false;
+    return true;
+  }
+
+  auto time = this->world->GetSimTime();
+
+  // Restarting current checkpoint
+  if (_req.task_id == this->current && _req.checkpoint_id ==
+      this->tasks[_req.task_id - 1]->CurrentCheckpointId())
+  {
+    gzmsg << "Task [" << unsigned(this->current)  << "] checkpoint [" <<
+        this->tasks[_req.task_id - 1]->CurrentCheckpointId() << "] " <<
+        "Restarted" << std::endl;
+    this->tasks[this->current - 1]->Start(time, _req.checkpoint_id);
+    _res.success = true;
     return true;
   }
 
@@ -201,28 +226,22 @@ bool FinalsPlugin::OnStartTaskRosRequest(srcsim::StartTask::Request &_req,
     return true;
   }
 
-  auto time = this->world->GetSimTime();
-
   // Tasks being skipped
   while (this->current < _req.task_id)
   {
     if (this->current > 0)
     {
       if (this->tasks[this->current - 1])
-        this->tasks[this->current - 1]->Skip();
+      {
+        // Apply penalty when skipping a whole task
+        this->tasks[this->current - 1]->Skip(true);
+      }
 
       gzmsg << "Task [" << unsigned(this->current)  << "] - Skipped (" << time
             << ")" << std::endl;
     }
 
     this->current++;
-  }
-
-  // Start update
-  if (!this->updateConnection)
-  {
-    this->updateConnection = event::Events::ConnectWorldUpdateBegin(
-        std::bind(&FinalsPlugin::OnUpdate, this, std::placeholders::_1));
   }
 
   this->current = _req.task_id;
@@ -237,10 +256,84 @@ bool FinalsPlugin::OnStartTaskRosRequest(srcsim::StartTask::Request &_req,
 /////////////////////////////////////////////////
 void FinalsPlugin::OnUpdate(const common::UpdateInfo &_info)
 {
+  static bool initialized = false;
+  if (!initialized && _info.simTime > this->deharnessTime)
+  {
+    HarnessManager::Instance()->NewGoal(
+        ignition::math::Pose3d(0, 0, 1.257, 0, 0, 0));
+    initialized = true;
+  }
+
+  if (initialized)
+    HarnessManager::Instance()->Update(_info.simTime);
+
   if (this->current == 0)
     return;
 
   this->tasks[this->current - 1]->Update(_info.simTime);
+
+  // Publish ROS score message
+  srcsim::Score msg;
+
+  // Check up to the current task
+  for (auto i = 1; i <= this->current; ++i)
+  {
+    // Skip tasks which haven't been created
+    if (!this->tasks[i-1])
+    {
+      continue;
+    }
+
+    // Add completion time for all past checkpoints
+    for (size_t j = 1; j <= this->tasks[i-1]->CheckpointCount(); ++j)
+    {
+      // Skip the future checkpoints of the current task
+      if (i == this->current && j > this->tasks[i-1]->CurrentCheckpointId())
+      {
+        continue;
+      }
+      // Skip completion for current checkpoint (it's not complete)
+      if (!(i == this->current && j == this->tasks[i-1]->CurrentCheckpointId()))
+      {
+        ros::Duration t(this->tasks[i-1]->GetCheckpointCompletion(j-1).Double());
+        msg.checkpoint_durations.push_back(t);
+      }
+
+      // Add penalty for all previous and current checkpoint
+      ros::Duration p(this->tasks[i-1]->GetCheckpointPenalty(j-1).Double());
+      msg.checkpoint_penalties.push_back(p);
+    }
+  }
+
+  // Compute score based on checkpoint completion times from all tasks
+  msg.score = 0;
+  uint8_t last_checkpoint_score = 0;
+  for (size_t i = 0; i < msg.checkpoint_durations.size(); ++i)
+  {
+    // End winning streak in case the checkpoint has been restarted.
+    // The checkpoint itself will still be scored.
+    if (!msg.checkpoint_penalties[i].isZero())
+    {
+      last_checkpoint_score = 0;
+    }
+
+    if (msg.checkpoint_durations[i].isZero())
+    {
+      // End winning streak in case of incomplete checkpoints
+      last_checkpoint_score = 0;
+    }
+    else
+    {
+      // Next checkpoint gets one more point than previous checkpoint
+      last_checkpoint_score += 1;
+      msg.score += last_checkpoint_score;
+
+      // Checkpoint completion time plus its penalties
+      msg.total_completion_time += msg.checkpoint_durations[i] +
+                                   msg.checkpoint_penalties[i];
+    }
+  }
+  this->scoreRosPub.publish(msg);
 }
 
 /////////////////////////////////////////////////

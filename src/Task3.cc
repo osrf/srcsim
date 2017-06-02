@@ -23,6 +23,7 @@
 
 #include <srcsim/Leak.h>
 
+#include "srcsim/HarnessManager.hh"
 #include "srcsim/Task3.hh"
 
 using namespace gazebo;
@@ -110,11 +111,22 @@ bool Task3CP1::Check()
 }
 
 /////////////////////////////////////////////////
+void Task3CP1::Restart(const common::Time &_penalty)
+{
+  // This is the 1st CP of the task: reharness back at start box
+  HarnessManager::Instance()->NewGoal(this->robotStartPose);
+
+  Checkpoint::Restart(_penalty);
+}
+
+/////////////////////////////////////////////////
 bool Task3CP2::Check()
 {
   // First time
   if (!this->valveJoint || !this->hingeJoint)
   {
+    this->Start();
+
     auto world = physics::get_world();
 
     if (!world)
@@ -184,6 +196,8 @@ void Task3CP2::Skip()
   }
 
   this->hingeJoint->SetForce(0, 100000);
+
+  Checkpoint::Skip();
 }
 
 /////////////////////////////////////////////////
@@ -204,6 +218,8 @@ bool Task3CP5::Check()
   // First time
   if (!this->cameraGzSub)
   {
+    this->Start();
+
     // Gazebo node
     this->gzNode = transport::NodePtr(new transport::Node());
     this->gzNode->Init();
@@ -289,6 +305,8 @@ bool Task3CP7::Check()
   // First time
   if (!this->sensor || !this->buttonJoint)
   {
+    this->Start();
+
     this->world = physics::get_world();
 
     if (!this->world)

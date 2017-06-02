@@ -18,6 +18,7 @@
 #include <gazebo/physics/physics.hh>
 #include <gazebo/sensors/SensorManager.hh>
 
+#include "srcsim/HarnessManager.hh"
 #include "srcsim/Task2.hh"
 
 using namespace gazebo;
@@ -90,6 +91,15 @@ bool Task2CP1::Check()
 }
 
 /////////////////////////////////////////////////
+void Task2CP1::Restart(const common::Time &_penalty)
+{
+  // This is the 1st CP of the task: reharness back at start box
+  HarnessManager::Instance()->NewGoal(this->robotStartPose);
+
+  Checkpoint::Restart(_penalty);
+}
+
+/////////////////////////////////////////////////
 Task2CP2::Task2CP2(const sdf::ElementPtr &_sdf) : BoxCheckpoint(_sdf)
 {
   if (_sdf && _sdf->HasElement("panel_pose"))
@@ -138,6 +148,8 @@ bool Task2CP3::Check()
   // First time
   if (!this->panelGzSub && !this->panelDone)
   {
+    this->Start();
+
     this->gzNode = transport::NodePtr(new transport::Node());
     this->gzNode->Init();
 
@@ -211,6 +223,8 @@ bool Task2CP5::Check()
   // First time
   if (!this->sensor)
   {
+    this->Start();
+
     this->world = physics::get_world();
 
     if (this->world)

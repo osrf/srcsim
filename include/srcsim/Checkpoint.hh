@@ -44,8 +44,42 @@ namespace gazebo
     /// override the function to move other objects too.
     public: virtual void Skip();
 
+    /// \brief Call this the first time the checkpoint is checked.
+    public: virtual void Start();
+
+    /// \brief Restart this checkpoint, and increment the total penalty time.
+    /// \param[in] _penalty Penalty time to add
+    public: virtual void Restart(const common::Time &_penalty);
+
+    /// \brief Get the total penalty time for this checkpoint.
+    /// \return The total penalty time.
+    public: common::Time PenaltyTime() const;
+
+    /// \brief Get the sim time when this checkpoint started.
+    /// \return Start time
+    public: common::Time StartTime() const;
+
+    /// \brief The pose the robot should be in when this checkpoint is
+    /// restarted. This is only used by the first checkpoint of a task, otherwise
+    /// we start from the skip pose of the previous task.
+    protected: ignition::math::Pose3d robotStartPose;
+
     /// \brief The pose the robot should be in when this checkpoint is skipped.
-    public: ignition::math::Pose3d robotSkipPose;
+    private: ignition::math::Pose3d robotSkipPose;
+
+    /// \brief List of names of entities which should be deleted when this
+    /// checkpoint starts.
+    private: std::vector<std::string> deleteEntities;
+
+    /// \brief List of SDF file strings of entities which should be inserted when
+    /// this checkpoint starts.
+    private: std::vector<std::string> insertEntities;
+
+    /// \brief Total penalty time.
+    private: common::Time totalPenalty;
+
+    /// \brief Sim time when the checkpoint started
+    private: common::Time startTime;
   };
 
   /// \brief A checkpoint tied to a BoxContainsPlugin.
