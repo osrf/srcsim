@@ -95,6 +95,8 @@ Task3::Task3(const sdf::ElementPtr &_sdf) : Task(_sdf)
   std::unique_ptr<Task3CP8> cp8(new Task3CP8(cp8Elem));
   this->checkpoints.push_back(std::move(cp8));
 
+  this->logFilter =
+      "air_leak_detector*|habitat_door*|leak_patch_tool*|valkyrie*";
   gzmsg << "Task [3] created" << std::endl;
 }
 
@@ -111,12 +113,12 @@ bool Task3CP1::Check()
 }
 
 /////////////////////////////////////////////////
-void Task3CP1::Restart()
+void Task3CP1::Restart(const common::Time &_penalty)
 {
   // This is the 1st CP of the task: reharness back at start box
   HarnessManager::Instance()->NewGoal(this->robotStartPose);
 
-  Checkpoint::Restart();
+  Checkpoint::Restart(_penalty);
 }
 
 /////////////////////////////////////////////////

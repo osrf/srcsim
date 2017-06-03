@@ -75,6 +75,7 @@ Task2::Task2(const sdf::ElementPtr &_sdf) : Task(_sdf)
   std::unique_ptr<Task2CP6> cp6(new Task2CP6(cp6Elem));
   this->checkpoints.push_back(std::move(cp6));
 
+  this->logFilter = "solar_panel*|valkyrie*";
   gzmsg << "Task [2] created" << std::endl;
 }
 
@@ -91,12 +92,12 @@ bool Task2CP1::Check()
 }
 
 /////////////////////////////////////////////////
-void Task2CP1::Restart()
+void Task2CP1::Restart(const common::Time &_penalty)
 {
   // This is the 1st CP of the task: reharness back at start box
   HarnessManager::Instance()->NewGoal(this->robotStartPose);
 
-  Checkpoint::Restart();
+  Checkpoint::Restart(_penalty);
 }
 
 /////////////////////////////////////////////////

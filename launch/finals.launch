@@ -21,7 +21,8 @@
     <env name="GAZEBO_MODEL_PATH" value="$(env GAZEBO_MODEL_PATH):$(find srcsim)/models"/>
     <env name="GAZEBO_PLUGIN_PATH" value="$(find srcsim)/plugins"/>
     <arg name="debug" value="$(arg debug)" />
-    <arg name="extra_gazebo_args" default="$(arg extra_gazebo_args)"/>
+    <!-- Log at 40 Hz and only log valkyrie at first -->
+    <arg name="extra_gazebo_args" default='$(arg extra_gazebo_args) --record_period 0.025 --record_filter "valkyrie*"'/>
     <arg name="paused" value="$(arg paused)" />
     <arg name="verbose" value="$(arg verbose)" />
     <arg name="gui" value="$(arg gui)" />
