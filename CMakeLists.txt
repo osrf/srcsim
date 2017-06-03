@@ -17,7 +17,7 @@ endif()
 find_package(catkin REQUIRED COMPONENTS ${COMPONENT_LIST})
 
 set (SRCSIM_MAJOR_VERSION 0)
-set (SRCSIM_MINOR_VERSION 5)
+set (SRCSIM_MINOR_VERSION 6)
 set (SRCSIM_PATCH_VERSION 0)
 set (SRCSIM_VERSION_FULL ${SRCSIM_MAJOR_VERSION}.${SRCSIM_MINOR_VERSION}.${SRCSIM_PATCH_VERSION})
 
@@ -32,6 +32,7 @@ endif()
 add_message_files(
   FILES
   Console.msg
+  Harness.msg
   Leak.msg
   Satellite.msg
   Score.msg
@@ -129,6 +130,7 @@ if(NOT BUILD_MSGS_ONLY)
   set(finals_plugin_name FinalsPlugin)
   add_library(${finals_plugin_name} SHARED
     src/FinalsPlugin.cc
+    src/HarnessManager.cc
     src/Task.cc
     src/Task1.cc
     src/Task2.cc

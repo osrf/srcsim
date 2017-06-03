@@ -16,21 +16,27 @@
 */
 
 #include <gazebo/common/Console.hh>
-#include <gazebo/physics/Model.hh>
 #include <gazebo/physics/PhysicsIface.hh>
 #include <gazebo/physics/World.hh>
 
 #include "srcsim/Checkpoint.hh"
+#include "srcsim/HarnessManager.hh"
 
 using namespace gazebo;
 
 /////////////////////////////////////////////////
 Checkpoint::Checkpoint(const sdf::ElementPtr &_sdf)
 {
-  // Get robot pose
+  // Get robot skip pose
   if (_sdf && _sdf->HasElement("skip_robot_pose"))
   {
     this->robotSkipPose = _sdf->Get<ignition::math::Pose3d>("skip_robot_pose");
+  }
+
+  // Get robot start pose
+  if (_sdf && _sdf->HasElement("start_robot_pose"))
+  {
+    this->robotStartPose = _sdf->Get<ignition::math::Pose3d>("start_robot_pose");
   }
 
   // Get models to delete when checkpoint begins
@@ -60,8 +66,26 @@ Checkpoint::Checkpoint(const sdf::ElementPtr &_sdf)
 }
 
 /////////////////////////////////////////////////
+common::Time Checkpoint::StartTime() const
+{
+  return this->startTime;
+}
+
+/////////////////////////////////////////////////
 void Checkpoint::Start()
 {
+  auto world = physics::get_world();
+  if (!world)
+  {
+    gzerr << "Failed to get world pointer, can't start checkpoint."
+        << std::endl;
+    return;
+  }
+
+  // Now the checkpoint starts
+  this->startTime = world->GetSimTime();
+
+  // Insert / delete entities
   if (this->insertEntities.empty() && this->deleteEntities.empty())
     return;
 
@@ -155,22 +179,19 @@ void Checkpoint::Skip()
     return;
 
   // Teleport robot
-  // TODO: Reset joints
-  auto world = physics::get_world();
-  if (!world)
-  {
-    gzerr << "Failed to get world pointer, robot won't be teleported."
-        << std::endl;
-    return;
-  }
-  auto robot = world->GetModel("valkyrie");
-  if (!robot)
-  {
-    gzerr << "Failed to get model pointer, robot won't be teleported."
-        << std::endl;
-    return;
-  }
-  robot->SetWorldPose(this->robotSkipPose);
+  HarnessManager::Instance()->NewGoal(this->robotSkipPose);
+}
+
+/////////////////////////////////////////////////
+void Checkpoint::Restart(const common::Time &_penalty)
+{
+  this->totalPenalty += _penalty;
+}
+
+/////////////////////////////////////////////////
+common::Time Checkpoint::PenaltyTime() const
+{
+  return this->totalPenalty;
 }
 
 /////////////////////////////////////////////////
