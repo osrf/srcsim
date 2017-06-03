@@ -95,6 +95,8 @@ Task3::Task3(const sdf::ElementPtr &_sdf) : Task(_sdf)
   std::unique_ptr<Task3CP8> cp8(new Task3CP8(cp8Elem));
   this->checkpoints.push_back(std::move(cp8));
 
+  this->logFilter =
+      "air_leak_detector*|habitat_door*|leak_patch_tool*|valkyrie*";
   gzmsg << "Task [3] created" << std::endl;
 }
 
