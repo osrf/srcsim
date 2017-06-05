@@ -4,9 +4,18 @@
   # Requires the following global variables:
   # $satellite_frame
 
+  # If $task is 2 or 3:
+  # * Model is static
+  # * No collisions
+  # * No joints
+  # * No plugins
 %>
 
 <model name="satellite_dish">
+
+<% if ($task == '2' || $task == '3') %>
+  <static>true</static>
+<% end %>
 
   <pose>
     <%= $satellite_frame[0, 2] %>
@@ -18,6 +27,7 @@
   </pose>
 
   <link name="base">
+<% if ($task == '0' || $task == '1') %>
     <inertial>
       <pose>0 -0.6077 0.3193 0 0 0</pose>
       <inertia>
@@ -41,6 +51,7 @@
         </mesh>
       </geometry>
     </collision>
+<% end %>
     <visual name="visual">
       <geometry>
         <mesh>
@@ -56,6 +67,7 @@
 
   <link name="pivot">
     <pose>0 0 1.595 0 0 0</pose>
+<% if ($task == '0' || $task == '1') %>
     <inertial>
       <inertia>
         <ixx>0.00073</ixx>
@@ -79,6 +91,7 @@
         </mesh>
       </geometry>
     </collision>
+<% end %>
     <visual name="visual">
       <pose>0 0 -1.595 0 0 0</pose>
       <geometry>
@@ -95,6 +108,7 @@
 
   <link name="dish">
     <pose>0 0 1.595 0.43 0 0</pose>
+<% if ($task == '0' || $task == '1') %>
     <inertial>
       <pose>0 0.2 0 0 0 0</pose>
       <inertia>
@@ -119,6 +133,7 @@
         </mesh>
       </geometry>
     </collision>
+<% end %>
     <visual name="visual">
       <pose>0 -0.6519041 -1.451541 -0.43 0 0</pose>
       <geometry>
@@ -135,6 +150,7 @@
 
   <link name="wheel_yaw">
     <pose>-0.2 -1.725 0.91 0.52 0 0</pose>
+<% if ($task == '0' || $task == '1') %>
     <inertial>
       <inertia>
         <ixx>0.0123</ixx>
@@ -175,6 +191,7 @@
         </cylinder>
       </geometry>
     </collision>
+<% end %>
     <visual name="visual">
       <pose>0.2 1.060 -1.64 -0.52 0 0</pose>
       <geometry>
@@ -191,6 +208,7 @@
 
   <link name="wheel_pitch">
     <pose>0.2 -1.725 0.91 0.52 0 0</pose>
+<% if ($task == '0' || $task == '1') %>
     <inertial>
       <inertia>
         <ixx>0.0123</ixx>
@@ -231,6 +249,7 @@
         </cylinder>
       </geometry>
     </collision>
+<% end %>
     <visual name="visual">
       <pose>-0.2 1.060 -1.64 -0.52 0 0</pose>
       <geometry>
@@ -245,6 +264,7 @@
     </visual>
   </link>
 
+<% if ($task == '0' || $task == '1') %>
   <joint name="dish_yaw" type="revolute">
     <parent>base</parent>
     <child>pivot</child>
@@ -318,5 +338,6 @@
     <frequency>100</frequency>
 
   </plugin>
+<% end %>
 
 </model>

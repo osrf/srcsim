@@ -28,12 +28,12 @@
     TOPLEVEL_BINDING.eval %Q(#{k} = "#{v}")
   end
 
-  task = '0'
+  $task = '0'
   if (defined? t)
-    task = t
+    $task = t
   end
 
-  seed = rand(0..100000)
+  seed = rand(0..10000000)
   if (defined? s)
     seed = s.to_i
   end
@@ -453,18 +453,16 @@
       nextBling()
     %>
 
-    <%
-      if (task == '0' || task == '1')
-    %>
-
     <!-- TASK 1 -->
-
-    <!-- Task 1 start - Box plugin -->
     <%
       t1start_frame = $current_frame * $current_walkway["tOriginExit"] *
                       TMatrix(0, 0.5, 0)
     %>
 
+    <%
+      if ($task == '0' || $task == '1')
+    %>
+    <!-- Task 1 start - Box plugin -->
     <plugin name="boxT1Start" filename="libBoxContainsPlugin.so">
       <entity>valkyrie</entity>
       <namespace>task1/start</namespace>
@@ -478,6 +476,7 @@
       </pose>
       <size><%= walkway_length %> 1 <%= box_height %></size>
     </plugin>
+    <% end %>
 
     <!-- Walkway -->
     <%=
@@ -496,12 +495,15 @@
 
     <%= fromFile("satellite.erb") %>
 
-    <!-- Checkpoint 1 - Box plugin -->
     <%
       t1cp1_frame = $satellite_frame * TMatrix(0, -2.4, Math::PI * 0.5)
       t1cp2_frame = t1cp1_frame
     %>
 
+    <%
+      if ($task == '0' || $task == '1')
+    %>
+    <!-- Checkpoint 1 - Box plugin -->
     <plugin name="boxT1CP1" filename="libBoxContainsPlugin.so">
       <entity>valkyrie</entity>
       <namespace>task1/checkpoint1</namespace>
@@ -515,6 +517,7 @@
       </pose>
       <size>1 1 <%= box_height %></size>
     </plugin>
+    <% end %>
 
     <!-- Bling -->
     <%=
@@ -544,6 +547,9 @@
       nextWalkway($finish_walkways, false)
     %>
 
+    <%
+      if ($task == '0' || $task == '1')
+    %>
     <!-- Checkpoint 4 - Box plugin -->
     <plugin name="boxT1CP4" filename="libBoxContainsPlugin.so">
       <entity>valkyrie</entity>
@@ -558,6 +564,7 @@
       </pose>
       <size><%= finish_walkway_length %> <%= finish_walkway_length %> <%= box_height %></size>
     </plugin>
+    <% end %>
 
     <!-- Bling -->
     <%=
@@ -578,32 +585,21 @@
     %>
 
     <!-- /TASK 1 -->
-    <%
-      end
-    %>
-
-    <%
-      if (task == '0' || task == '2')
-    %>
 
     <!-- TASK 2 -->
 
     <%
       # Get from task 1
-      if (task == '0')
-        t2cp1_start_frame = t1cp4_frame
-      # Or zero for task-2-only world
-      else
-        t2cp1_start_frame = TMatrix(0, 0, 0)
-      end
-    %>
+      t2cp1_start_frame = t1cp4_frame
 
-    <!-- Task 2 start - Box plugin -->
-    <%
       t2start_frame = $current_frame * $current_walkway["tOriginExit"] *
                       TMatrix(0, 0.5, 0)
     %>
 
+    <%
+      if ($task == '0' || $task == '2')
+    %>
+    <!-- Task 2 start - Box plugin -->
     <plugin name="boxT2Start" filename="libBoxContainsPlugin.so">
       <entity>valkyrie</entity>
       <namespace>task2/start</namespace>
@@ -617,6 +613,7 @@
       </pose>
       <size><%= walkway_length %> 1 <%= box_height %></size>
     </plugin>
+    <% end %>
 
     <!-- Walkway -->
     <%=
@@ -742,11 +739,14 @@
 
 <%= fromFile("cable.erb") %>
 
-    <!-- Checkpoint 2 - Box plugin -->
     <%
       panel_goal_frame = array_frame
     %>
 
+    <%
+      if ($task == '0' || $task == '2')
+    %>
+    <!-- Checkpoint 2 - Box plugin -->
     <plugin name="boxT2CP2" filename="libBoxContainsPlugin.so">
       <entity>solar_panel</entity>
       <namespace>task2/checkpoint2</namespace>
@@ -760,6 +760,7 @@
       </pose>
       <size>1.47 0.95 0.45</size>
     </plugin>
+    <% end %>
 
     <!-- Bling -->
     <%=
@@ -793,6 +794,9 @@
       nextWalkway($finish_walkways, false)
     %>
 
+    <%
+      if ($task == '0' || $task == '2')
+    %>
     <!-- Checkpoint 6 - Box plugin -->
     <plugin name="boxT2CP6" filename="libBoxContainsPlugin.so">
       <entity>valkyrie</entity>
@@ -807,6 +811,7 @@
       </pose>
       <size><%= finish_walkway_length %> <%= finish_walkway_length %> <%= box_height %></size>
     </plugin>
+    <% end %>
 
     <!-- Bling -->
     <%=
@@ -827,19 +832,13 @@
     %>
 
     <!-- /TASK 2 -->
-    <%
-      end
-    %>
 
-    <%
-      if (task == '0' || task == '3')
-    %>
 
     <!-- TASK 3 -->
 
     <%
       # Get from task 2
-      if (task == '0')
+      if ($task == '0')
         t3cp1_start_frame = t2cp6_frame
       # Or zero for task-3-only world
       else
@@ -847,12 +846,15 @@
       end
     %>
 
-    <!-- Task 3 start - Box plugin -->
     <%
       t3start_frame = $current_frame * $current_walkway["tOriginExit"] *
                       TMatrix(0, 0.5, 0)
     %>
 
+    <%
+      if ($task == '0' || $task == '3')
+    %>
+    <!-- Task 3 start - Box plugin -->
     <plugin name="boxT3Start" filename="libBoxContainsPlugin.so">
       <entity>valkyrie</entity>
       <namespace>task3/start</namespace>
@@ -866,6 +868,7 @@
       </pose>
       <size><%= walkway_length %> 1 <%= box_height %></size>
     </plugin>
+    <% end %>
 
     <!-- Walkway -->
     <%=
@@ -888,12 +891,15 @@
 
     <%= fromFile("habitat.erb") %>
 
-    <!-- Checkpoint 1 - Climb the stairs -->
     <%
       t3cp1_frame = $habitat_frame * TMatrix(-6.68, -3.12, Math::PI / 2.0)
       t3cp2_frame = t3cp1_frame
     %>
 
+    <%
+      if ($task == '0' || $task == '3')
+    %>
+    <!-- Checkpoint 1 - Climb the stairs -->
     <plugin name="boxT3CP1" filename="libBoxContainsPlugin.so">
       <entity>valkyrie</entity>
       <namespace>task3/checkpoint1</namespace>
@@ -958,17 +964,15 @@
       </pose>
       <size><%= finish_box_3_length %> <%= finish_box_3_length %> <%= box_height %></size>
     </plugin>
+    <% end %>
 
     <!-- /TASK 3 -->
-    <%
-      end
-    %>
 
     <!-- Finals plugin -->
     <plugin name="finals" filename="libFinalsPlugin.so">
 
       <%
-        if (task == '0' || task == '1')
+        if ($task == '0' || $task == '1')
       %>
         <task1>
           <timeout>1800</timeout>
@@ -1013,7 +1017,7 @@
       %>
 
       <%
-        if (task == '0' || task == '2')
+        if ($task == '0' || $task == '2')
       %>
         <task2>
           <timeout>3600</timeout>
@@ -1107,7 +1111,7 @@
       %>
 
       <%
-        if (task == '0' || task == '3')
+        if ($task == '0' || $task == '3')
       %>
         <task3>
           <timeout>7200</timeout>

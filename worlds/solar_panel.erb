@@ -5,6 +5,13 @@
   # $solar_panel_frame
   # $solar_panel_pos_z
 
+  # If $task is 1 or 3:
+  # * Model is static
+  # * No collisions
+  # * No joints
+  # * No plugins
+  # * No sensors
+
   # Print inertial element based on a box
   def printInertialBox(_com_x, _com_y, _com_z, _mass, _len_x, _len_y, _len_z)
     "<inertial>\n"\
@@ -64,6 +71,10 @@
 
 <model name="solar_panel">
 
+<% if ($task == '1' || $task == '3') %>
+  <static>true</static>
+<% end %>
+
   <pose>
     <%= $solar_panel_frame[0, 2] %>
     <%= $solar_panel_frame[1, 2] %>
@@ -75,6 +86,7 @@
 
   <link name="base">
 
+<% if ($task == '0' || $task == '2') %>
     <%= printInertialBox(0, 0, 0.04, base_mass, 0.406, 0.1, 0.05) %>
 
     <collision name="collision">
@@ -98,6 +110,7 @@
         </contact>
       </surface>
     </collision>
+<% end %>
     <visual name="visual">
       <geometry>
         <mesh>
@@ -110,16 +123,19 @@
       </geometry>
     </visual>
 
+<% if ($task == '0' || $task == '2') %>
     <sensor name="base_sensor" type="contact">
       <contact>
         <collision>collision</collision>
       </contact>
     </sensor>
+<% end %>
 
   </link>
 
   <link name="panel_01">
 
+<% if ($task == '0' || $task == '2') %>
     <%=
       printInertialBox(
           large_panel_com_x,
@@ -152,6 +168,7 @@
         </contact>
       </surface>
     </collision>
+<% end %>
     <visual name="panel_visual">
       <geometry>
         <mesh>
@@ -163,6 +180,7 @@
         </mesh>
       </geometry>
     </visual>
+<% if ($task == '0' || $task == '2') %>
     <collision name="button_housing_collision">
       <geometry>
         <mesh>
@@ -184,6 +202,7 @@
         </contact>
       </surface>
     </collision>
+<% end %>
     <visual name="button_housing_visual">
       <geometry>
         <mesh>
@@ -196,17 +215,20 @@
       </geometry>
     </visual>
 
+<% if ($task == '0' || $task == '2') %>
     <sensor name="panel1_sensor" type="contact">
       <contact>
         <collision>panel_collision</collision>
       </contact>
     </sensor>
+<% end %>
 
   </link>
 
 
   <link name="panel_02">
 
+<% if ($task == '0' || $task == '2') %>
     <%= printInertialBox(
           large_panel_com_x,
           -large_panel_com_y,
@@ -238,6 +260,7 @@
         </contact>
       </surface>
     </collision>
+<% end %>
     <visual name="visual">
       <geometry>
         <mesh>
@@ -250,6 +273,7 @@
       </geometry>
     </visual>
 
+<% if ($task == '0' || $task == '2') %>
     <collision name="outlet">
       <pose>0.13675 0 0.369 <%= Math::PI / 2.0 %> 0 0</pose>
       <geometry>
@@ -281,6 +305,7 @@
         <collision>outlet</collision>
       </contact>
     </sensor>
+<% end %>
 
   </link>
 
@@ -288,6 +313,7 @@
 
     <pose>0.2 0.03 0.2 0 0 0</pose>
 
+<% if ($task == '0' || $task == '2') %>
     <%= printInertialBox(
           -small_panel_com_x,
           -small_panel_com_y,
@@ -320,6 +346,7 @@
         </contact>
       </surface>
     </collision>
+<% end %>
     <visual name="visual">
       <pose>-0.2 -0.03 -0.2 0 0 0</pose>
       <geometry>
@@ -338,6 +365,7 @@
 
     <pose>0.2 -0.03 0.2 0 0 0</pose>
 
+<% if ($task == '0' || $task == '2') %>
     <%= printInertialBox(
           -small_panel_com_x,
           small_panel_com_y,
@@ -370,6 +398,7 @@
         </contact>
       </surface>
     </collision>
+<% end %>
     <visual name="visual">
       <pose>-0.2 0.03 -0.2 0 0 0</pose>
       <geometry>
@@ -388,6 +417,7 @@
 
     <pose>-0.2 0.03 0.2 0 0 0</pose>
 
+<% if ($task == '0' || $task == '2') %>
     <%= printInertialBox(
           small_panel_com_x,
           -small_panel_com_y,
@@ -420,6 +450,7 @@
         </contact>
       </surface>
     </collision>
+<% end %>
     <visual name="visual">
       <pose>0.2 -0.03 -0.2 0 0 0</pose>
       <geometry>
@@ -438,6 +469,7 @@
 
     <pose>-0.2 -0.03 0.2 0 0 0</pose>
 
+<% if ($task == '0' || $task == '2') %>
     <%= printInertialBox(
           small_panel_com_x,
           small_panel_com_y,
@@ -470,6 +502,7 @@
         </contact>
       </surface>
     </collision>
+<% end %>
     <visual name="visual">
       <pose>0.2 0.03 -0.2 0 0 0</pose>
       <geometry>
@@ -489,6 +522,7 @@
 
     <pose>-0.155 0 0.4 0 0 0</pose>
 
+<% if ($task == '0' || $task == '2') %>
     <%= printInertialBox(0, 0, 0.017, button_mass, 0.07, 0.07, 0.03) %>
 
     <collision name="collision">
@@ -513,6 +547,7 @@
         </contact>
       </surface>
     </collision>
+<% end %>
     <visual name="visual">
       <pose>0.155 0 -0.4 0 0 0</pose>
       <geometry>
@@ -526,11 +561,13 @@
       </geometry>
     </visual>
 
+<% if ($task == '0' || $task == '2') %>
     <sensor name="button_contact" type="contact">
       <contact>
         <collision>collision</collision>
       </contact>
     </sensor>
+<% end %>
 
   </link>
 
@@ -538,6 +575,7 @@
     panel_joint_damping = 0.1
   %>
 
+<% if ($task == '0' || $task == '2') %>
   <joint name="base_panel_01" type="revolute">
     <pose>0 0.0455 0.095 0 0 0</pose>
     <parent>base</parent>
@@ -677,5 +715,6 @@
     <time>0.5</time>
     <namespace>task2/checkpoint1</namespace>
   </plugin>
+<% end %>
 
 </model>

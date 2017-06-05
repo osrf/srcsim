@@ -4,6 +4,13 @@
   # Requires the following global variables:
   # $habitat_frame
 
+  # If $task is 1 or 2:
+  # * Model is static
+  # * No collisions
+  # * No joints
+  # * No plugins
+  # * No sensors
+
   # Print surface params
   def printSurface()
     "      <surface>\n"\
@@ -62,6 +69,7 @@
 
   <link name="base">
 
+<% if ($task == '0' || $task == '3') %>
     <!-- Stairs collisions -->
 
     <%
@@ -1592,6 +1600,7 @@
         </box>
       </geometry>
     </collision>
+<% end %>
 
     <!-- VISUALS -->
 
@@ -1707,6 +1716,10 @@
 <!-- Door -->
 <model name="habitat_door">
 
+<% if ($task == '1' || $task == '2') %>
+  <static>true</static>
+<% end %>
+
   <pose>
     <%= door_frame[0, 2] %>
     <%= door_frame[1, 2] %>
@@ -1719,6 +1732,7 @@
   <!-- door body -->
   <link name="base">
 
+<% if ($task == '0' || $task == '3') %>
     <inertial>
       <mass>18</mass>
       <inertia>
@@ -1744,6 +1758,7 @@
         </contact>
       </surface>
     </collision>
+<% end %>
 
     <visual name="visual">
       <pose><%= door_vis_pos_x %> <%= door_vis_pos_y %> <%= door_vis_pos_z %> 0 0 0</pose>
@@ -1762,6 +1777,7 @@
   <!-- door valve -->
   <link name="valve">
     <pose><%= valve_pos_x %> <%= valve_pos_y %> <%= valve_pos_z %> 0 0 3.14</pose>
+<% if ($task == '0' || $task == '3') %>
     <inertial>
       <mass>7.8219</mass>
       <pose>0 0.0615 0 0 0 0</pose>
@@ -1844,6 +1860,7 @@
 <%
     end
 %>
+<% end %>
 
     <visual name="visual">
       <geometry>
@@ -1854,6 +1871,7 @@
     </visual>
   </link>
 
+<% if ($task == '0' || $task == '3') %>
   <!-- Joint connecting the valve and the door -->
   <joint name="valve_hinge" type="revolute">
     <parent>base</parent>
@@ -1894,6 +1912,7 @@
     <parent>world</parent>
     <child>base</child>
   </joint>
+<% end %>
 
 </model>
 
