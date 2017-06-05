@@ -227,6 +227,13 @@ bool Task2CP5::Check()
     this->Start();
 
     this->world = physics::get_world();
+  auto cableModel = world->GetModel(this->cable);
+
+
+  for (auto it : cableModel->GetLinks())
+  {
+    gzdbg << it->GetName() << "   " << it->GetRelativePose() << std::endl;
+  }
 
     if (this->world)
     {

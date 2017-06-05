@@ -10,7 +10,7 @@
   # * No joints
   # * No plugins
   # * No sensors
-  # TODO: change link configuration
+  # * Link visuals placed as if they have fallen
 
   def printBlackMaterial()
     "<material>\n"\
@@ -137,12 +137,51 @@
         cylinder_material = printDarkBlueMaterial()
       end
 
+      link_pose = x.to_s + ' ' + y.to_s + ' 0 0 ' + (Math::PI * 0.5).to_s + ' ' + t.to_s
+
+      # Predefined poses when it's only visuals to look like it naturally fell.
+      if ($task == '1' || $task == '3')
+        if link == 1
+          link_pose = '-0 1e-06 0 -2.80462 1.1017 -2.19913'
+        elsif link == 2
+          link_pose = '0.07623 0.04867 -0.042666 3.01631 0.389371 1.96508'
+        elsif link == 3
+          link_pose = '0.102234 0.018696 -0.134456 2.15276 1.41466 1.18077'
+        elsif link == 4
+          link_pose = '0.158855 -0.063287 -0.143003 1.57068 1.52887 2.2955'
+        elsif link == 5
+          link_pose = '0.233716 0.003014 -0.143002 1.57078 1.52814 2.48127'
+        elsif link == 6
+          link_pose = '0.295052 0.081995 -0.143002 -1.57105 1.55762 -2.52998'
+        elsif link == 7
+          link_pose = '0.352491 0.000137 -0.143002 -1.571 1.55762 -2.51334'
+        elsif link == 8
+          link_pose = '0.411281 -0.080757 -0.143002 1.57165 1.56672 2.51172'
+        elsif link == 9
+          link_pose = '0.470254 4e-06 -0.143002 1.57099 1.56672 2.51398'
+        elsif link == 10
+          link_pose = '0.528991 0.080936 -0.143002 -1.57305 1.56954 -2.51577'
+        elsif link == 11
+          link_pose = '0.587749 1.9e-05 -0.143002 -1.57312 1.56954 -2.51451'
+        elsif link == 12
+          link_pose = '0.646616 -0.080819 -0.143002 1.57375 1.5704 2.51607'
+        elsif link == 13
+          link_pose = '0.705406 7.4e-05 -0.143002 1.58353 1.5704 2.54078'
+        elsif link == 14
+          link_pose = '0.762984 0.081836 -0.143002 -1.61202 1.57067 -2.5503'
+        elsif link == 15
+          link_pose = '0.822101 0.001181 -0.143002 0.030649 1.42018 -0.939112'
+        elsif link == 16
+          link_pose = '0.877983 -0.080381 -0.128004 -1.57062 1.42593 -0.586724'
+        end
+      end
+
       parent = link - 1
       child = link
 %>
 
   <link name="link_<%= link %>">
-    <pose><%= x %> <%= y %> 0 0 <%= Math::PI * 0.5 %> <%= t %></pose>
+    <pose><%= link_pose %></pose>
 <% if ($task == '0' || $task == '2') %>
     <inertial>
       <pose>0 0 <%= length / 2 %> 0 0 0</pose>

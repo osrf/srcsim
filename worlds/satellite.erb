@@ -9,6 +9,12 @@
   # * No collisions
   # * No joints
   # * No plugins
+
+  # Randomized values
+  yaw_friction = rand(2.0...3.0)
+  pitch_friction = rand(2.0...3.0)
+  yaw_target = rand(-1.65...2.20)
+  pitch_target = rand(-0.2...1.25)
 %>
 
 <model name="satellite_dish">
@@ -297,7 +303,7 @@
     <axis>
       <xyz>0 0 -1</xyz>
       <dynamics>
-        <friction><%= rand(2.0...3.0) %></friction>
+        <friction><%= yaw_friction %></friction>
       </dynamics>
     </axis>
   </joint>
@@ -308,7 +314,7 @@
     <axis>
       <xyz>0 0 -1</xyz>
       <dynamics>
-        <friction><%= rand(2.0...3.0) %></friction>
+        <friction><%= pitch_friction %></friction>
       </dynamics>
     </axis>
   </joint>
@@ -322,11 +328,11 @@
 
     <yaw_ratio>0.1</yaw_ratio>
     <yaw_pid>1000 0 10</yaw_pid>
-    <yaw_target><%= rand(-1.65...2.20) %></yaw_target>
+    <yaw_target><%= yaw_target %></yaw_target>
 
     <pitch_ratio>0.1</pitch_ratio>
     <pitch_pid>1000 100 10</pitch_pid>
-    <pitch_target><%= rand(-0.2...1.25) %></pitch_target>
+    <pitch_target><%= pitch_target %></pitch_target>
 
     <!-- Tolerance in degrees -->
     <tolerance>5</tolerance>
