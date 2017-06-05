@@ -3,6 +3,7 @@
   <model name="mars_rock_2">
     <static>true</static>
     <link name="link">
+<!--
       <collision name="collision">
         <geometry>
           <mesh>
@@ -11,6 +12,7 @@
           </mesh>
         </geometry>
       </collision>
+-->
       <visual name="visual">
         <geometry>
           <mesh>
