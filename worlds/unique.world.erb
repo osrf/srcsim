@@ -33,6 +33,12 @@
     task = t
   end
 
+  seed = rand(0..100000)
+  if (defined? s)
+    seed = s.to_i
+  end
+  srand(seed)
+
   ###############################################
   #                                             #
   #             IMPORT OTHER FILES              #
@@ -364,8 +370,10 @@
   # Starting point
   $current_frame = TMatrix(0.09, 0, Math::PI)
 %>
+<!-- Seed: <%= seed %> -->
 <sdf version="1.6">
   <world name="SRC_finals">
+
 
     <physics type="ode">
       <real_time_update_rate>1000.0</real_time_update_rate>
