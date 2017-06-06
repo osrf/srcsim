@@ -93,6 +93,8 @@ void HarnessManager::NewGoal(const ignition::math::Pose3d &_pose)
 
   this->goalChanged = true;
   this->goal = _pose;
+
+  gzmsg << "[Harness] Received new goal [" << _pose << "]" << std::endl;
 }
 
 //////////////////////////////////////////////////
@@ -154,7 +156,9 @@ void HarnessManager::Update(const common::Time &_time)
   }
   else if (this->transition == DETACH_TO_NONE && this->IsDetached())
   {
-    gzmsg << "[Harness] Detached" << std::endl;
+    gzmsg << "[Harness | " <<
+        _time.FormattedString(common::Time::MINUTES, common::Time::MILLISECONDS)
+        << "] Detached!" << std::endl;
     this->transition = NONE;
   }
 

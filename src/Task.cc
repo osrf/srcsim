@@ -255,11 +255,11 @@ void Task::SkipUpTo(const size_t _lastSkipped, const bool _penalty)
   {
     if (this->current > 0)
     {
-      this->checkpoints[this->current - 1]->Skip();
-
-      // Apply time penalty
+      // Apply time penalty (this calls restart on the current checkpoint)
       if (_penalty)
         this->ApplyPenaltyTime();
+
+      this->checkpoints[this->current - 1]->Skip();
 
       gzmsg << "Task [" << this->Number() << "] - Checkpoint ["
             << this->current << "] - Skipped" << std::endl;
