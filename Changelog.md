@@ -1,5 +1,11 @@
 ## SRC Sim
 
+### SRC Sim 0.X.X (2017-XX-XX)
+
+* Others
+    * Use log filtering to decrease log size
+        * [Pull request 80](https://bitbucket.org/osrf/srcsim/pull-requests/80)
+
 ### SRC Sim 0.6.0 (2017-06-01)
 
 * Task 1 changes

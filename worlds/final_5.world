@@ -4849,10 +4849,10 @@
 
 
     <collision name="wall_5">
-      <pose>-5.93 -1.04 2.9 0 0 -0.525</pose>
+      <pose>-5.82 -0.94 2.9 0 0 -0.495</pose>
       <geometry>
         <box>
-          <size>0.16 0.5 2.2 </size>
+          <size>0.16 0.3 2.2 </size>
         </box>
       </geometry>
       <surface>
@@ -6101,7 +6101,7 @@
 <model name="leak">
   <static>true</static>
 
-  <pose>25.037302381188255 -15.884638896568699 3.6065050836189485 0 0 0</pose>
+  <pose>25.037302381188255 -15.884638896568699 3.4065050836189485 0 0 0</pose>
 
   <link name="base">
 

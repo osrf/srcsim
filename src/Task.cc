@@ -17,6 +17,7 @@
 
 #include <gazebo/physics/PhysicsIface.hh>
 #include <gazebo/physics/World.hh>
+#include <gazebo/util/LogRecord.hh>
 #include <srcsim/Task.h>
 #include <std_msgs/Time.h>
 
@@ -153,6 +154,10 @@ void Task::Update(const common::Time &_time)
     this->togglePub.reset();
     this->gzNode->Fini();
     this->gzNode.reset();
+
+    // Start logging task models
+    gazebo::util::LogRecord::Instance()->SetFilter(this->logFilter);
+
   }
 
   // Timeout
@@ -250,11 +255,11 @@ void Task::SkipUpTo(const size_t _lastSkipped, const bool _penalty)
   {
     if (this->current > 0)
     {
-      this->checkpoints[this->current - 1]->Skip();
-
-      // Apply time penalty
+      // Apply time penalty (this calls restart on the current checkpoint)
       if (_penalty)
         this->ApplyPenaltyTime();
+
+      this->checkpoints[this->current - 1]->Skip();
 
       gzmsg << "Task [" << this->Number() << "] - Checkpoint ["
             << this->current << "] - Skipped" << std::endl;

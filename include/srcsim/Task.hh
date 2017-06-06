@@ -102,6 +102,12 @@ namespace gazebo
     /// hasn't started, Count+1 means that the task has finished.
     private: size_t current = 0;
 
+    /// \brief Gazebo transport node for communication.
+    protected: transport::NodePtr gzNode;
+
+    /// \brief Filter to only log a few models during this task
+    protected: std::string logFilter;
+
     /// \brief Vector of total times each checkpoint took to complete. That
     /// doesn't include time penalties.
     /// Time is zero for skipped checkpoints.
@@ -131,9 +137,6 @@ namespace gazebo
 
     /// \brief Ros publisher which publishes the task's status.
     private: ros::Publisher taskRosPub;
-
-    /// \brief Gazebo transport node for communication.
-    protected: transport::NodePtr gzNode;
 
     /// \brief Gazebo subscriber of box contains messages.
     private: transport::SubscriberPtr boxSub;

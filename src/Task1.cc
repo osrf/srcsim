@@ -57,6 +57,8 @@ Task1::Task1(const sdf::ElementPtr &_sdf) : Task(_sdf)
   std::unique_ptr<Task1CP4> cp4(new Task1CP4(cp4Elem));
   this->checkpoints.push_back(std::move(cp4));
 
+  this->logFilter = "satellite_dish*|valkyrie*";
+
   gzmsg << "Task [1] created" << std::endl;
 }
 
