@@ -112,9 +112,15 @@ namespace gazebo
   {
     using Checkpoint::Checkpoint;
 
+    /// \brief Destructor
+    public: virtual ~Task3CP5();
+
     /// \brief Check whether the detector has detected the leak.
     /// \return True if the checkpoint is complete.
     public: bool Check();
+
+    /// \brief Report the location of the leak
+    public: void Skip();
 
     /// \brief Callback when a logical camera message is received,
     /// \param[in] _msg Logical camera message.
@@ -131,6 +137,10 @@ namespace gazebo
 
     /// \brief Ros publisher of leak messages
     private: ros::Publisher leakRosPub;
+
+    /// \brief Ros publisher of leak pose messages. This is used only
+    /// if checkpoint 5 is skipped.
+    private: ros::Publisher leakPoseRosPub;
 
     /// \brief Topic for camera msgs
     private: std::string cameraGzTopic =
@@ -158,6 +168,13 @@ namespace gazebo
     /// resulting output is 1 on a point on the antena, and minValue on the far
     /// corner of the frustum.
     private: double factor;
+
+    /// \brief Set this to true to stop the leakPoseThread thread.
+    private: bool stopLeakPosePub = false;
+
+    /// \brief This thread will publish the lead pose, relative to Val's
+    /// pelvis, if checkpoint 5 is skipped.
+    private: std::thread *leakPoseThread = nullptr;
   };
 
   /// \brief Task 3, Checkpoint 6: Lift patch tool
