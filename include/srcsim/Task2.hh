@@ -82,11 +82,17 @@ namespace gazebo
   /// \brief Task 2, Checkpoint 3: Deploy solar panel
   class Task2CP3 : public Checkpoint
   {
-    using Checkpoint::Checkpoint;
+    /// \brief Constructor
+    /// \param[in] _sdf Pointer to SDF element for this checkpoint.
+    public: Task2CP3(const sdf::ElementPtr &_sdf);
 
     /// \brief Check whether the solar panel has been deployed.
     /// \return True if the checkpoint is complete.
     public: bool Check();
+
+    /// \brief Place panel back on the array. It should be still locked.
+    /// \param[in] _penalty Penalty time to add
+    public: void Restart(const common::Time &_penalty);
 
     /// \brief Skip this checkpoint. This deploys the solar panel.
     public: void Skip();
@@ -98,6 +104,9 @@ namespace gazebo
 
     /// \brief Whether the checkpoint is complete or not.
     private: bool panelDone = false;
+
+    /// \brief Panel pose when the checkpoint is restarted (on array).
+    private: ignition::math::Pose3d panelRestartPose;
 
     /// \brief Gazebo transport node for communication.
     private: transport::NodePtr gzNode;

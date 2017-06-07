@@ -168,6 +168,18 @@ void Task2CP2::Skip()
 }
 
 /////////////////////////////////////////////////
+Task2CP3::Task2CP3(const sdf::ElementPtr &_sdf) : Checkpoint(_sdf)
+{
+  if (_sdf && _sdf->HasElement("panel_restart_pose"))
+  {
+    this->panelRestartPose =
+        _sdf->Get<ignition::math::Pose3d>("panel_restart_pose");
+  }
+  else
+    gzwarn << "Missing <panel_restart_pose>, using default value" << std::endl;
+}
+
+/////////////////////////////////////////////////
 void Task2CP3::OnSolarPanelGzMsg(ConstIntPtr &/*_msg*/)
 {
   this->panelDone = true;
@@ -207,6 +219,28 @@ bool Task2CP3::Check()
   }
 
   return this->panelDone;
+}
+
+/////////////////////////////////////////////////
+void Task2CP3::Restart(const common::Time &_penalty)
+{
+  auto world = physics::get_world();
+  if (!world)
+  {
+    gzerr << "Failed to get world" << std::endl;
+    return;
+  }
+
+  auto panel = world->GetModel("solar_panel");
+  if (!panel)
+  {
+    gzerr << "Failed to get [solar_panel] model" << std::endl;
+    return;
+  }
+
+  panel->SetWorldPose(this->panelRestartPose);
+
+  Checkpoint::Restart(_penalty);
 }
 
 /////////////////////////////////////////////////
