@@ -65,11 +65,18 @@ namespace gazebo
     /// \return True if the checkpoint is complete.
     public: bool Check();
 
+    /// \brief Place panel back on the rover.
+    /// \param[in] _penalty Penalty time to add
+    public: void Restart(const common::Time &_penalty);
+
     /// \brief Skip this checkpoint. This places the solar panel on the array.
     public: void Skip();
 
-    /// \brief
+    /// \brief Panel pose when the checkpoint is skipped (on array).
     private: ignition::math::Pose3d panelSkipPose;
+
+    /// \brief Panel pose when the checkpoint is restarted (on rover).
+    private: ignition::math::Pose3d panelRestartPose;
   };
 
   /// \brief Task 2, Checkpoint 3: Deploy solar panel

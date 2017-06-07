@@ -1038,14 +1038,22 @@
               0
               <%= Math::atan2(t2cp2_frame[1, 0], t2cp2_frame[0, 0]) %>
             </skip_robot_pose>
-            <panel_pose>
+            <panel_restart_pose>
+              <%= $solar_panel_frame[0, 2] %>
+              <%= $solar_panel_frame[1, 2] %>
+              <%= $solar_panel_pos_z %>
+              0
+              0
+              <%= Math::atan2($solar_panel_frame[1, 0], $solar_panel_frame[0, 0]) %>
+            </panel_restart_pose>
+            <panel_skip_pose>
               <%= t2cp2_panel_skip_frame[0, 2] %>
               <%= t2cp2_panel_skip_frame[1, 2] %>
               <%= t2cp2_panel_skip_z_pos %>
               0
               0
               <%= Math::atan2(t2cp2_panel_skip_frame[1, 0], t2cp2_panel_skip_frame[0, 0]) %>
-            </panel_pose>
+            </panel_skip_pose>
           </checkpoint2>
 
           <checkpoint3>

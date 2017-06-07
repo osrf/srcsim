@@ -103,16 +103,46 @@ void Task2CP1::Restart(const common::Time &_penalty)
 /////////////////////////////////////////////////
 Task2CP2::Task2CP2(const sdf::ElementPtr &_sdf) : BoxCheckpoint(_sdf)
 {
-  if (_sdf && _sdf->HasElement("panel_pose"))
-    this->panelSkipPose = _sdf->Get<ignition::math::Pose3d>("panel_pose");
+  if (_sdf && _sdf->HasElement("panel_skip_pose"))
+    this->panelSkipPose = _sdf->Get<ignition::math::Pose3d>("panel_skip_pose");
   else
-    gzwarn << "Missing <panel_pose>, using default value" << std::endl;
+    gzwarn << "Missing <panel_skip_pose>, using default value" << std::endl;
+
+  if (_sdf && _sdf->HasElement("panel_restart_pose"))
+  {
+    this->panelRestartPose =
+        _sdf->Get<ignition::math::Pose3d>("panel_restart_pose");
+  }
+  else
+    gzwarn << "Missing <panel_restart_pose>, using default value" << std::endl;
 }
 
 /////////////////////////////////////////////////
 bool Task2CP2::Check()
 {
   return this->CheckBox("/task2/checkpoint2");
+}
+
+/////////////////////////////////////////////////
+void Task2CP2::Restart(const common::Time &_penalty)
+{
+  auto world = physics::get_world();
+  if (!world)
+  {
+    gzerr << "Failed to get world" << std::endl;
+    return;
+  }
+
+  auto panel = world->GetModel("solar_panel");
+  if (!panel)
+  {
+    gzerr << "Failed to get [solar_panel] model" << std::endl;
+    return;
+  }
+
+  panel->SetWorldPose(this->panelRestartPose);
+
+  Checkpoint::Restart(_penalty);
 }
 
 /////////////////////////////////////////////////
