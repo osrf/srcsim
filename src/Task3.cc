@@ -245,7 +245,6 @@ bool Task3CP5::Check()
     // ROS node
     if (!this->rosNode)
     {
-std::cout << "Creating ros node 1\n";
       this->rosNode.reset(new ros::NodeHandle());
     }
 
