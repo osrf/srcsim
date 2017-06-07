@@ -121,12 +121,21 @@ namespace gazebo
   /// \brief Task 2, Checkpoint 4: Lift cable
   class Task2CP4 : public TouchCheckpoint
   {
-    using TouchCheckpoint::TouchCheckpoint;
+    /// \brief Constructor
+    /// \param[in] _sdf Pointer to SDF element for this checkpoint.
+    public: Task2CP4(const sdf::ElementPtr &_sdf);
+
+    /// \brief Place panel back on the array, deployed. Reset cable pose.
+    /// \param[in] _penalty Penalty time to add
+    public: void Restart(const common::Time &_penalty);
 
     /// \brief Check whether the cable's tip has been touching the robot and
     /// nothing else for long enough.
     /// \return True if the checkpoint is complete.
     public: bool Check();
+
+    /// \brief Panel pose when the checkpoint is restarted (on array).
+    private: ignition::math::Pose3d panelRestartPose;
   };
 
   /// \brief Task 2, Checkpoint 5: Plug cable

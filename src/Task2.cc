@@ -273,9 +273,56 @@ void Task2CP3::Skip()
 }
 
 /////////////////////////////////////////////////
+Task2CP4::Task2CP4(const sdf::ElementPtr &_sdf) : TouchCheckpoint(_sdf)
+{
+  if (_sdf && _sdf->HasElement("panel_restart_pose"))
+  {
+    this->panelRestartPose =
+        _sdf->Get<ignition::math::Pose3d>("panel_restart_pose");
+  }
+  else
+    gzwarn << "Missing <panel_restart_pose>, using default value" << std::endl;
+}
+
+/////////////////////////////////////////////////
 bool Task2CP4::Check()
 {
   return this->CheckTouch("/task2/checkpoint4");
+}
+
+/////////////////////////////////////////////////
+void Task2CP4::Restart(const common::Time &_penalty)
+{
+  auto world = physics::get_world();
+  if (!world)
+  {
+    gzerr << "Failed to get world" << std::endl;
+    return;
+  }
+
+  auto panel = world->GetModel("solar_panel");
+  if (!panel)
+  {
+    gzerr << "Failed to get [solar_panel] model" << std::endl;
+    return;
+  }
+
+  auto cable = world->GetModel("solar_panel_cable");
+  if (!cable)
+  {
+    gzerr << "Failed to get [solar_panel_cable] model" << std::endl;
+    return;
+  }
+
+  panel->SetWorldPose(this->panelRestartPose);
+
+  cable->Reset();
+  for (auto link : cable->GetLinks())
+  {
+    link->Reset();
+  }
+
+  Checkpoint::Restart(_penalty);
 }
 
 /////////////////////////////////////////////////
