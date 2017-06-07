@@ -1110,9 +1110,45 @@
 
       <%
         if (task == '0' || task == '3')
+
+          $table_frame = $habitat_frame *
+                         TMatrix(rand(-1.5..1.5),
+                                 rand(-1.5..1.5),
+                                 rand(-Math::PI..Math::PI))
+          $table_top_z = $table_pos_z + 0.7
+
+          b = [-1, 1].sample
+
+          $air_leak_detector_frame = $table_frame *
+              TMatrix(b*rand(0.1..0.6),
+                      rand(0..0.3),
+                      rand(-Math::PI..Math::PI))
+
+          $leak_patch_tool_frame = $table_frame *
+              TMatrix(-b*rand(0.1..0.6),
+                      rand(0..0.3),
+                      rand(-Math::PI..Math::PI))
       %>
         <task3>
           <timeout>7200</timeout>
+
+          <detector_on_table>
+            <%= $air_leak_detector_frame[0, 2] %>
+            <%= $air_leak_detector_frame[1, 2] %>
+            <%= $table_top_z %>
+            0
+            0
+            <%= Math::atan2($air_leak_detector_frame[1, 0], $air_leak_detector_frame[0, 0]) %>
+          </detector_on_table>
+
+          <patch_tool_on_table>
+            <%= $leak_patch_tool_frame[0, 2] %>
+            <%= $leak_patch_tool_frame[1, 2] %>
+            <%= $table_top_z + 0.1 %>
+            0
+            0
+            <%= Math::atan2($leak_patch_tool_frame[1, 0], $leak_patch_tool_frame[0, 0]) %>
+          </patch_tool_on_table>
 
           <checkpoint1>
             <start_robot_pose>
@@ -1180,10 +1216,6 @@
             <!-- Table -->
             <insert_entity>
                 <%
-                  $table_frame = $habitat_frame *
-                                 TMatrix(rand(-1.5..1.5),
-                                         rand(-1.5..1.5),
-                                         rand(-Math::PI..Math::PI))
                 %>
                 <include>
                   <pose>
@@ -1200,38 +1232,22 @@
 
             <!-- Air leak detector -->
             <insert_entity>
-                <%
-                  b = [-1, 1].sample
-                  $air_leak_detector_frame = $table_frame *
-                      TMatrix(b*rand(0.1..0.6),
-                              rand(0..0.3),
-                              rand(-Math::PI..Math::PI))
-                  $table_top_z = $table_pos_z + 0.7
-                %>
-
-                <%= fromFile("air_leak_detector.erb") %>
+              <%= fromFile("air_leak_detector.erb") %>
             </insert_entity>
 
             <!-- Leak patch tool -->
             <insert_entity>
-                <%
-                  $leak_patch_tool_frame = $table_frame *
-                      TMatrix(-b*rand(0.1..0.6),
-                              rand(0..0.3),
-                              rand(-Math::PI..Math::PI))
-                %>
-
-                <include>
-                  <pose>
-                    <%= $leak_patch_tool_frame[0, 2] %>
-                    <%= $leak_patch_tool_frame[1, 2] %>
-                    <%= $table_top_z + 0.1 %>
-                    0
-                    0
-                    <%= Math::atan2($leak_patch_tool_frame[1, 0], $leak_patch_tool_frame[0, 0]) %>
-                  </pose>
-                  <uri>model://leak_patch_tool</uri>
-                </include>
+              <include>
+                <pose>
+                  <%= $leak_patch_tool_frame[0, 2] %>
+                  <%= $leak_patch_tool_frame[1, 2] %>
+                  <%= $table_top_z + 0.1 %>
+                  0
+                  0
+                  <%= Math::atan2($leak_patch_tool_frame[1, 0], $leak_patch_tool_frame[0, 0]) %>
+                </pose>
+                <uri>model://leak_patch_tool</uri>
+              </include>
             </insert_entity>
 
             <!-- Leak -->

@@ -30,6 +30,75 @@
 
 using namespace gazebo;
 
+// Pose of the detector on the table
+ignition::math::Pose3d detectorOnTable;
+
+// Pose of the patch tool on the table
+ignition::math::Pose3d patchToolOnTable;
+
+/////////////////////////////////////////////////
+// Teleport detector to table
+void toolsToTable()
+{
+  auto world = physics::get_world();
+  if (!world)
+  {
+    gzerr << "Failed to get world" << std::endl;
+    return;
+  }
+
+  auto detector = world->GetModel("air_leak_detector");
+  if (!detector)
+  {
+    gzerr << "Failed to get [air_leak_detector] model" << std::endl;
+    return;
+  }
+
+  auto tool = world->GetModel("leak_patch_tool");
+  if (!tool)
+  {
+    gzerr << "Failed to get [leak_patch_tool] model" << std::endl;
+    return;
+  }
+
+  detector->SetWorldPose(detectorOnTable);
+  tool->SetWorldPose(patchToolOnTable);
+}
+
+/////////////////////////////////////////////////
+// Unlock and push door
+void openDoor()
+{
+  // Remove lock
+  auto world = physics::get_world();
+
+  if (!world)
+  {
+    gzerr << "Failed to get world" << std::endl;
+    return;
+  }
+
+  auto door = world->GetModel("habitat_door");
+  if (!door)
+  {
+    gzerr << "Failed to get model [habitat_door]" << std::endl;
+    return;
+  }
+
+  door->RemoveJoint("door_lock");
+
+  // Push door
+  auto hingeJoint = door->GetJoint("door_hinge");
+  if (!hingeJoint)
+  {
+    gzerr << "Failed to get joint [hinge_joint]" << std::endl;
+    return;
+  }
+
+  auto angle = hingeJoint->GetAngle(0).Radian();
+  hingeJoint->SetForce(0, 100000 * (1.0 - angle / (M_PI * 0.5)));
+}
+
 /////////////////////////////////////////////////
 Task3::Task3(const sdf::ElementPtr &_sdf) : Task(_sdf)
 {
@@ -63,6 +132,15 @@ Task3::Task3(const sdf::ElementPtr &_sdf) : Task(_sdf)
 
     if (_sdf->HasElement("checkpoint8"))
       cp8Elem = _sdf->GetElement("checkpoint8");
+
+    if (_sdf->HasElement("detector_on_table"))
+      detectorOnTable = _sdf->Get<ignition::math::Pose3d>("detector_on_table");
+
+    if (_sdf->HasElement("patch_tool_on_table"))
+    {
+      patchToolOnTable =
+          _sdf->Get<ignition::math::Pose3d>("patch_tool_on_table");
+    }
   }
 
   // Checkpoint 1: Climb the stairs
@@ -173,33 +251,7 @@ bool Task3CP2::Check()
 /////////////////////////////////////////////////
 void Task3CP2::Skip()
 {
-  // Remove lock
-  auto world = physics::get_world();
-
-  if (!world)
-  {
-    gzerr << "Failed to get world" << std::endl;
-    return;
-  }
-
-  this->model = world->GetModel("habitat_door");
-  if (!this->model)
-  {
-    gzerr << "Failed to get model [habitat_door]" << std::endl;
-    return;
-  }
-
-  this->model->RemoveJoint("door_lock");
-
-  // Push door
-  this->hingeJoint = model->GetJoint("door_hinge");
-  if (!this->hingeJoint)
-  {
-    gzerr << "Failed to get joint [hinge_joint]" << std::endl;
-    return;
-  }
-
-  this->hingeJoint->SetForce(0, 100000);
+  openDoor();
 
   Checkpoint::Skip();
 }
@@ -211,9 +263,25 @@ bool Task3CP3::Check()
 }
 
 /////////////////////////////////////////////////
+void Task3CP3::Restart(const common::Time &_penalty)
+{
+  openDoor();
+
+  Checkpoint::Restart(_penalty);
+}
+
+/////////////////////////////////////////////////
 bool Task3CP4::Check()
 {
   return this->CheckTouch("/task3/checkpoint4");
+}
+
+/////////////////////////////////////////////////
+void Task3CP4::Restart(const common::Time &_penalty)
+{
+  toolsToTable();
+
+  Checkpoint::Restart(_penalty);
 }
 
 /////////////////////////////////////////////////
@@ -269,6 +337,14 @@ bool Task3CP5::Check()
   }
 
   return this->detected;
+}
+
+/////////////////////////////////////////////////
+void Task3CP5::Restart(const common::Time &_penalty)
+{
+  toolsToTable();
+
+  Checkpoint::Restart(_penalty);
 }
 
 /////////////////////////////////////////////////
@@ -392,6 +468,14 @@ bool Task3CP6::Check()
 }
 
 /////////////////////////////////////////////////
+void Task3CP6::Restart(const common::Time &_penalty)
+{
+  toolsToTable();
+
+  Checkpoint::Restart(_penalty);
+}
+
+/////////////////////////////////////////////////
 bool Task3CP7::Check()
 {
   // First time
@@ -507,6 +591,14 @@ bool Task3CP7::Check()
 
   // Check if it has been pressing for long enough
   return simTime - this->fixStart > this->targetTime;
+}
+
+/////////////////////////////////////////////////
+void Task3CP7::Restart(const common::Time &_penalty)
+{
+  toolsToTable();
+
+  Checkpoint::Restart(_penalty);
 }
 
 /////////////////////////////////////////////////
