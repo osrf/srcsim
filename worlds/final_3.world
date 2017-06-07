@@ -6070,6 +6070,7 @@
     <target>valkyrie</target>
     <time>0.5</time>
     <namespace>task3/checkpoint4</namespace>
+    <enabled>true</enabled>
   </plugin>
 
 </model>
