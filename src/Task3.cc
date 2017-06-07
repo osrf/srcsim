@@ -24,7 +24,7 @@
 
 #include <srcsim/Leak.h>
 
-#include "geometry_msgs/Pose.h"
+#include "geometry_msgs/Point.h"
 #include "srcsim/HarnessManager.hh"
 #include "srcsim/Task3.hh"
 
@@ -313,7 +313,7 @@ void Task3CP5::PublishLeakPose()
   }
 
   // Publisher for ROS leak pose messages
-  this->leakPoseRosPub = this->rosNode->advertise<geometry_msgs::Pose>(
+  this->leakPoseRosPub = this->rosNode->advertise<geometry_msgs::Point>(
       "/task3/checkpoint5/leak_pose", 1000);
 
   auto pelvis = world->GetModel("valkyrie")->GetLink("pelvis");
@@ -326,15 +326,10 @@ void Task3CP5::PublishLeakPose()
     auto leakWorldPose = leak->GetWorldPose();
     auto leakPoseInPelvisFrame = leakWorldPose - pelvisWorldPose;
 
-    geometry_msgs::Pose msg;
-    msg.position.x = leakPoseInPelvisFrame.pos.x;
-    msg.position.y = leakPoseInPelvisFrame.pos.y;
-    msg.position.z = leakPoseInPelvisFrame.pos.z;
-
-    msg.orientation.x = leakPoseInPelvisFrame.rot.x;
-    msg.orientation.y = leakPoseInPelvisFrame.rot.y;
-    msg.orientation.z = leakPoseInPelvisFrame.rot.z;
-    msg.orientation.w = leakPoseInPelvisFrame.rot.w;
+    geometry_msgs::Point msg;
+    msg.x = leakPoseInPelvisFrame.pos.x;
+    msg.y = leakPoseInPelvisFrame.pos.y;
+    msg.z = leakPoseInPelvisFrame.pos.z;
 
     this->leakPoseRosPub.publish(msg);
     gazebo::common::Time::MSleep(1000);
