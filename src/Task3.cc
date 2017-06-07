@@ -17,12 +17,14 @@
 
 #include <gazebo/physics/Joint.hh>
 #include <gazebo/physics/Model.hh>
+#include <gazebo/physics/Link.hh>
 #include <gazebo/physics/PhysicsIface.hh>
 #include <gazebo/physics/World.hh>
 #include <gazebo/sensors/SensorManager.hh>
 
 #include <srcsim/Leak.h>
 
+#include "geometry_msgs/Pose.h"
 #include "srcsim/HarnessManager.hh"
 #include "srcsim/Task3.hh"
 
@@ -217,10 +219,10 @@ bool Task3CP4::Check()
 /////////////////////////////////////////////////
 Task3CP5::~Task3CP5()
 {
-  if (!this->stopLeakPosePub && this->leadPoseThread)
+  if (!this->stopLeakPosePub && this->leakPoseThread)
   {
     this->stopLeakPosePub = true;
-    this->leakPoseThread.join();
+    this->leakPoseThread->join();
   }
 }
 
@@ -243,6 +245,7 @@ bool Task3CP5::Check()
     // ROS node
     if (!this->rosNode)
     {
+std::cout << "Creating ros node 1\n";
       this->rosNode.reset(new ros::NodeHandle());
     }
 
@@ -292,6 +295,13 @@ void Task3CP5::PublishLeakPose()
     return;
   }
 
+  // Wait for the leak model to appear
+  for (int i = 0; i < 50 && !world->GetModel("leak"); ++i)
+  {
+    gazebo::common::Time::MSleep(500);
+  }
+
+  // Make sure it exists.
   if (!world->GetModel("leak"))
   {
     gzerr << "Missing leak model\n";
@@ -304,23 +314,20 @@ void Task3CP5::PublishLeakPose()
   }
 
   // Publisher for ROS leak pose messages
-  if (!this->leakPoseRosPub)
-  {
-    this->leakRosPub = this->rosNode->advertise<ros::geometry_msgs::Pose>(
-        "/task3/checkpoint5/leak_pose", 1000);
-  }
+  this->leakPoseRosPub = this->rosNode->advertise<geometry_msgs::Pose>(
+      "/task3/checkpoint5/leak_pose", 1000);
 
   auto pelvis = world->GetModel("valkyrie")->GetLink("pelvis");
   auto leak = world->GetModel("leak");
 
-  // Keep publising the pose
-  while (!this->stopPosePub)
+  // Keep publising the pose of the leak model in the pelvis frame
+  while (!this->stopLeakPosePub)
   {
     auto pelvisWorldPose = pelvis->GetWorldPose();
     auto leakWorldPose = leak->GetWorldPose();
     auto leakPoseInPelvisFrame = leakWorldPose - pelvisWorldPose;
 
-    ros::geometry_msgs::Pose msg;
+    geometry_msgs::Pose msg;
     msg.position.x = leakPoseInPelvisFrame.pos.x;
     msg.position.y = leakPoseInPelvisFrame.pos.y;
     msg.position.z = leakPoseInPelvisFrame.pos.z;
@@ -330,18 +337,19 @@ void Task3CP5::PublishLeakPose()
     msg.orientation.z = leakPoseInPelvisFrame.rot.z;
     msg.orientation.w = leakPoseInPelvisFrame.rot.w;
 
-    this->leakPoseRosPub->publish(msg);
+    this->leakPoseRosPub.publish(msg);
     gazebo::common::Time::MSleep(1000);
   }
 }
 
 /////////////////////////////////////////////////
-bool Task3CP5::Skip()
+void Task3CP5::Skip()
 {
   // Create a thread that will publish leak pose information until the end
   // of the round.
   this->stopLeakPosePub = false;
   this->leakPoseThread = new std::thread(&Task3CP5::PublishLeakPose, this);
+  Checkpoint::Skip();
 }
 
 //////////////////////////////////////////////////

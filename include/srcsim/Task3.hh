@@ -19,6 +19,7 @@
 #define SRC_TASK3_HH_
 
 #include <vector>
+#include <thread>
 
 #include <ignition/math/Helpers.hh>
 #include <ignition/math/Pose3.hh>
@@ -121,6 +122,9 @@ namespace gazebo
 
     /// \brief Report the location of the leak
     public: void Skip();
+
+    /// \brief Publish the leak pose, when this checkpoint is skipped.
+    private: void PublishLeakPose();
 
     /// \brief Callback when a logical camera message is received,
     /// \param[in] _msg Logical camera message.
