@@ -57,9 +57,7 @@ namespace gazebo
   /// \brief Task 2, Checkpoint 2: Place panel near cable
   class Task2CP2 : public BoxCheckpoint
   {
-    /// \brief Constructor
-    /// \param[in] _sdf Pointer to SDF element for this checkpoint.
-    public: Task2CP2(const sdf::ElementPtr &_sdf);
+    using BoxCheckpoint::BoxCheckpoint;
 
     /// \brief Check whether the panel is within reach of the cable.
     /// \return True if the checkpoint is complete.
@@ -71,20 +69,12 @@ namespace gazebo
 
     /// \brief Skip this checkpoint. This places the solar panel on the array.
     public: void Skip();
-
-    /// \brief Panel pose when the checkpoint is skipped (on array).
-    private: ignition::math::Pose3d panelSkipPose;
-
-    /// \brief Panel pose when the checkpoint is restarted (on rover).
-    private: ignition::math::Pose3d panelRestartPose;
   };
 
   /// \brief Task 2, Checkpoint 3: Deploy solar panel
   class Task2CP3 : public Checkpoint
   {
-    /// \brief Constructor
-    /// \param[in] _sdf Pointer to SDF element for this checkpoint.
-    public: Task2CP3(const sdf::ElementPtr &_sdf);
+    using Checkpoint::Checkpoint;
 
     /// \brief Check whether the solar panel has been deployed.
     /// \return True if the checkpoint is complete.
@@ -105,9 +95,6 @@ namespace gazebo
     /// \brief Whether the checkpoint is complete or not.
     private: bool panelDone = false;
 
-    /// \brief Panel pose when the checkpoint is restarted (on array).
-    private: ignition::math::Pose3d panelRestartPose;
-
     /// \brief Gazebo transport node for communication.
     private: transport::NodePtr gzNode;
 
@@ -121,21 +108,16 @@ namespace gazebo
   /// \brief Task 2, Checkpoint 4: Lift cable
   class Task2CP4 : public TouchCheckpoint
   {
-    /// \brief Constructor
-    /// \param[in] _sdf Pointer to SDF element for this checkpoint.
-    public: Task2CP4(const sdf::ElementPtr &_sdf);
-
-    /// \brief Place panel back on the array, deployed. Reset cable pose.
-    /// \param[in] _penalty Penalty time to add
-    public: void Restart(const common::Time &_penalty);
+    using TouchCheckpoint::TouchCheckpoint;
 
     /// \brief Check whether the cable's tip has been touching the robot and
     /// nothing else for long enough.
     /// \return True if the checkpoint is complete.
     public: bool Check();
 
-    /// \brief Panel pose when the checkpoint is restarted (on array).
-    private: ignition::math::Pose3d panelRestartPose;
+    /// \brief Place panel back on the array, deployed. Reset cable pose.
+    /// \param[in] _penalty Penalty time to add
+    public: void Restart(const common::Time &_penalty);
   };
 
   /// \brief Task 2, Checkpoint 5: Plug cable
@@ -146,6 +128,10 @@ namespace gazebo
     /// \brief Check whether the robot is in the final box region.
     /// \return True if the checkpoint is complete.
     public: bool Check();
+
+    /// \brief Place panel back on the array, deployed. Reset cable pose.
+    /// \param[in] _penalty Penalty time to add
+    public: void Restart(const common::Time &_penalty);
 
     /// \brief Whether the checkpoint is complete or not.
     private: bool done = false;

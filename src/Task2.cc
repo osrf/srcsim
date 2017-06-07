@@ -23,6 +23,79 @@
 
 using namespace gazebo;
 
+// Pose of panel when it is teleported to be on the rover
+ignition::math::Pose3d panelOnRover;
+
+// Pose of the panel when it is teleported to be on the array
+ignition::math::Pose3d panelOnArray;
+
+/////////////////////////////////////////////////
+// Teleport panel to rover
+void panelToRover()
+{
+  auto world = physics::get_world();
+  if (!world)
+  {
+    gzerr << "Failed to get world" << std::endl;
+    return;
+  }
+
+  auto panel = world->GetModel("solar_panel");
+  if (!panel)
+  {
+    gzerr << "Failed to get [solar_panel] model" << std::endl;
+    return;
+  }
+
+  panel->SetWorldPose(panelOnRover);
+}
+
+/////////////////////////////////////////////////
+// Teleport panel to array
+void panelToArray()
+{
+  auto world = physics::get_world();
+  if (!world)
+  {
+    gzerr << "Failed to get world" << std::endl;
+    return;
+  }
+
+  auto panel = world->GetModel("solar_panel");
+  if (!panel)
+  {
+    gzerr << "Failed to get [solar_panel] model" << std::endl;
+    return;
+  }
+
+  panel->SetWorldPose(panelOnArray);
+}
+
+/////////////////////////////////////////////////
+// Reset cable
+void resetCable()
+{
+  auto world = physics::get_world();
+  if (!world)
+  {
+    gzerr << "Failed to get world" << std::endl;
+    return;
+  }
+
+  auto cable = world->GetModel("solar_panel_cable");
+  if (!cable)
+  {
+    gzerr << "Failed to get [solar_panel_cable] model" << std::endl;
+    return;
+  }
+
+  cable->Reset();
+  for (auto link : cable->GetLinks())
+  {
+    link->Reset();
+  }
+}
+
 /////////////////////////////////////////////////
 Task2::Task2(const sdf::ElementPtr &_sdf) : Task(_sdf)
 {
@@ -49,6 +122,12 @@ Task2::Task2(const sdf::ElementPtr &_sdf) : Task(_sdf)
 
     if (_sdf->HasElement("checkpoint6"))
       cp6Elem = _sdf->GetElement("checkpoint6");
+
+    if (_sdf->HasElement("panel_on_rover"))
+      panelOnRover = _sdf->Get<ignition::math::Pose3d>("panel_on_rover");
+
+    if (_sdf->HasElement("panel_on_array"))
+      panelOnArray = _sdf->Get<ignition::math::Pose3d>("panel_on_array");
   }
 
   // Checkpoint 1: Lift solar panel
@@ -101,23 +180,6 @@ void Task2CP1::Restart(const common::Time &_penalty)
 }
 
 /////////////////////////////////////////////////
-Task2CP2::Task2CP2(const sdf::ElementPtr &_sdf) : BoxCheckpoint(_sdf)
-{
-  if (_sdf && _sdf->HasElement("panel_skip_pose"))
-    this->panelSkipPose = _sdf->Get<ignition::math::Pose3d>("panel_skip_pose");
-  else
-    gzwarn << "Missing <panel_skip_pose>, using default value" << std::endl;
-
-  if (_sdf && _sdf->HasElement("panel_restart_pose"))
-  {
-    this->panelRestartPose =
-        _sdf->Get<ignition::math::Pose3d>("panel_restart_pose");
-  }
-  else
-    gzwarn << "Missing <panel_restart_pose>, using default value" << std::endl;
-}
-
-/////////////////////////////////////////////////
 bool Task2CP2::Check()
 {
   return this->CheckBox("/task2/checkpoint2");
@@ -126,21 +188,7 @@ bool Task2CP2::Check()
 /////////////////////////////////////////////////
 void Task2CP2::Restart(const common::Time &_penalty)
 {
-  auto world = physics::get_world();
-  if (!world)
-  {
-    gzerr << "Failed to get world" << std::endl;
-    return;
-  }
-
-  auto panel = world->GetModel("solar_panel");
-  if (!panel)
-  {
-    gzerr << "Failed to get [solar_panel] model" << std::endl;
-    return;
-  }
-
-  panel->SetWorldPose(this->panelRestartPose);
+  panelToRover();
 
   Checkpoint::Restart(_penalty);
 }
@@ -148,35 +196,10 @@ void Task2CP2::Restart(const common::Time &_penalty)
 /////////////////////////////////////////////////
 void Task2CP2::Skip()
 {
-  auto world = physics::get_world();
-  if (!world)
-  {
-    gzerr << "Failed to get world" << std::endl;
-    return;
-  }
-
-  auto panel = world->GetModel("solar_panel");
-  if (!panel)
-  {
-    gzerr << "Failed to get [solar_panel] model" << std::endl;
-    return;
-  }
-
-  panel->SetWorldPose(this->panelSkipPose);
+  panelToArray();
+  resetCable();
 
   Checkpoint::Skip();
-}
-
-/////////////////////////////////////////////////
-Task2CP3::Task2CP3(const sdf::ElementPtr &_sdf) : Checkpoint(_sdf)
-{
-  if (_sdf && _sdf->HasElement("panel_restart_pose"))
-  {
-    this->panelRestartPose =
-        _sdf->Get<ignition::math::Pose3d>("panel_restart_pose");
-  }
-  else
-    gzwarn << "Missing <panel_restart_pose>, using default value" << std::endl;
 }
 
 /////////////////////////////////////////////////
@@ -224,21 +247,8 @@ bool Task2CP3::Check()
 /////////////////////////////////////////////////
 void Task2CP3::Restart(const common::Time &_penalty)
 {
-  auto world = physics::get_world();
-  if (!world)
-  {
-    gzerr << "Failed to get world" << std::endl;
-    return;
-  }
-
-  auto panel = world->GetModel("solar_panel");
-  if (!panel)
-  {
-    gzerr << "Failed to get [solar_panel] model" << std::endl;
-    return;
-  }
-
-  panel->SetWorldPose(this->panelRestartPose);
+  panelToArray();
+  resetCable();
 
   Checkpoint::Restart(_penalty);
 }
@@ -269,19 +279,10 @@ void Task2CP3::Skip()
 
   this->enableGzPub.reset();
 
-  Checkpoint::Skip();
-}
+  panelToArray();
+  resetCable();
 
-/////////////////////////////////////////////////
-Task2CP4::Task2CP4(const sdf::ElementPtr &_sdf) : TouchCheckpoint(_sdf)
-{
-  if (_sdf && _sdf->HasElement("panel_restart_pose"))
-  {
-    this->panelRestartPose =
-        _sdf->Get<ignition::math::Pose3d>("panel_restart_pose");
-  }
-  else
-    gzwarn << "Missing <panel_restart_pose>, using default value" << std::endl;
+  Checkpoint::Skip();
 }
 
 /////////////////////////////////////////////////
@@ -293,34 +294,8 @@ bool Task2CP4::Check()
 /////////////////////////////////////////////////
 void Task2CP4::Restart(const common::Time &_penalty)
 {
-  auto world = physics::get_world();
-  if (!world)
-  {
-    gzerr << "Failed to get world" << std::endl;
-    return;
-  }
-
-  auto panel = world->GetModel("solar_panel");
-  if (!panel)
-  {
-    gzerr << "Failed to get [solar_panel] model" << std::endl;
-    return;
-  }
-
-  auto cable = world->GetModel("solar_panel_cable");
-  if (!cable)
-  {
-    gzerr << "Failed to get [solar_panel_cable] model" << std::endl;
-    return;
-  }
-
-  panel->SetWorldPose(this->panelRestartPose);
-
-  cable->Reset();
-  for (auto link : cable->GetLinks())
-  {
-    link->Reset();
-  }
+  panelToArray();
+  resetCable();
 
   Checkpoint::Restart(_penalty);
 }
@@ -451,6 +426,15 @@ bool Task2CP5::Check()
   gzmsg << "The cable plug has been fixed to the outlet" << std::endl;
 
   return this->done;
+}
+
+/////////////////////////////////////////////////
+void Task2CP5::Restart(const common::Time &_penalty)
+{
+  panelToArray();
+  resetCable();
+
+  Checkpoint::Restart(_penalty);
 }
 
 /////////////////////////////////////////////////

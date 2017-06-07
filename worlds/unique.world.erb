@@ -703,9 +703,9 @@
                     tArraySlotOrigin
       $array_z_offset = 0.2
 
-      t2cp2_panel_skip_frame = array_frame *
+      panel_on_array_frame = array_frame *
           TMatrix(rand(-0.4...-0.05), rand(-0.27...-0.12), rand(-Math::PI...Math::PI));
-      t2cp2_panel_skip_z_pos = 0.7 + $array_z_offset
+      panel_on_array_pos_z = 0.7 + $array_z_offset
 
       t2cp2_frame = array_frame * TMatrix(0, -1.2, Math::PI * 0.5);
       t2cp3_frame = t2cp2_frame
@@ -1010,6 +1010,24 @@
         <task2>
           <timeout>3600</timeout>
 
+          <panel_on_rover>
+            <%= $solar_panel_frame[0, 2] %>
+            <%= $solar_panel_frame[1, 2] %>
+            <%= $solar_panel_pos_z %>
+            0
+            0
+            <%= Math::atan2($solar_panel_frame[1, 0], $solar_panel_frame[0, 0]) %>
+          </panel_on_rover>
+
+          <panel_on_array>
+            <%= panel_on_array_frame[0, 2] %>
+            <%= panel_on_array_frame[1, 2] %>
+            <%= panel_on_array_pos_z %>
+            0
+            0
+            <%= Math::atan2(panel_on_array_frame[1, 0], panel_on_array_frame[0, 0]) %>
+          </panel_on_array>
+
           <checkpoint1>
             <start_robot_pose>
               <%= t2cp1_start_frame[0, 2] %>
@@ -1038,22 +1056,6 @@
               0
               <%= Math::atan2(t2cp2_frame[1, 0], t2cp2_frame[0, 0]) %>
             </skip_robot_pose>
-            <panel_restart_pose>
-              <%= $solar_panel_frame[0, 2] %>
-              <%= $solar_panel_frame[1, 2] %>
-              <%= $solar_panel_pos_z %>
-              0
-              0
-              <%= Math::atan2($solar_panel_frame[1, 0], $solar_panel_frame[0, 0]) %>
-            </panel_restart_pose>
-            <panel_skip_pose>
-              <%= t2cp2_panel_skip_frame[0, 2] %>
-              <%= t2cp2_panel_skip_frame[1, 2] %>
-              <%= t2cp2_panel_skip_z_pos %>
-              0
-              0
-              <%= Math::atan2(t2cp2_panel_skip_frame[1, 0], t2cp2_panel_skip_frame[0, 0]) %>
-            </panel_skip_pose>
           </checkpoint2>
 
           <checkpoint3>
@@ -1065,15 +1067,6 @@
               0
               <%= Math::atan2(t2cp3_frame[1, 0], t2cp3_frame[0, 0]) %>
             </skip_robot_pose>
-            <!-- back to array as if the previous cp had been skipped -->
-            <panel_restart_pose>
-              <%= t2cp2_panel_skip_frame[0, 2] %>
-              <%= t2cp2_panel_skip_frame[1, 2] %>
-              <%= t2cp2_panel_skip_z_pos %>
-              0
-              0
-              <%= Math::atan2(t2cp2_panel_skip_frame[1, 0], t2cp2_panel_skip_frame[0, 0]) %>
-            </panel_restart_pose>
           </checkpoint3>
 
           <checkpoint4>
@@ -1085,14 +1078,6 @@
               0
               <%= Math::atan2(t2cp3_frame[1, 0], t2cp3_frame[0, 0]) %>
             </skip_robot_pose>
-            <panel_restart_pose>
-              <%= t2cp2_panel_skip_frame[0, 2] %>
-              <%= t2cp2_panel_skip_frame[1, 2] %>
-              <%= t2cp2_panel_skip_z_pos %>
-              0
-              0
-              <%= Math::atan2(t2cp2_panel_skip_frame[1, 0], t2cp2_panel_skip_frame[0, 0]) %>
-            </panel_restart_pose>
           </checkpoint4>
 
           <checkpoint5>
