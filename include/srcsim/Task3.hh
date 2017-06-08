@@ -95,6 +95,10 @@ namespace gazebo
 
     /// \brief Check whether the robot is on the other side of the door
     public: bool Check();
+
+    /// \brief Place tools back on the table.
+    /// \param[in] _penalty Penalty time to add
+    public: void Restart(const common::Time &_penalty);
   };
 
   /// \brief Task 3, Checkpoint 4: Lift detector
@@ -106,6 +110,10 @@ namespace gazebo
     /// nothing else for long enough.
     /// \return True if the checkpoint is complete.
     public: bool Check();
+
+    /// \brief Place tools back on the table.
+    /// \param[in] _penalty Penalty time to add
+    public: void Restart(const common::Time &_penalty);
   };
 
   /// \brief Task 3, Checkpoint 5: Detect leak
@@ -119,6 +127,10 @@ namespace gazebo
     /// \brief Check whether the detector has detected the leak.
     /// \return True if the checkpoint is complete.
     public: bool Check();
+
+    /// \brief Place tools back on the table.
+    /// \param[in] _penalty Penalty time to add
+    public: void Restart(const common::Time &_penalty);
 
     /// \brief Report the location of the leak
     public: void Skip();
@@ -190,6 +202,10 @@ namespace gazebo
     /// nothing else for long enough.
     /// \return True if the checkpoint is complete.
     public: bool Check();
+
+    /// \brief Place tools back on the table.
+    /// \param[in] _penalty Penalty time to add
+    public: void Restart(const common::Time &_penalty);
   };
 
   /// \brief Task 3, Checkpoint 7: Patch leak
@@ -200,6 +216,10 @@ namespace gazebo
     /// \brief Check whether the robot is in the final box region.
     /// \return True if the checkpoint is complete.
     public: bool Check();
+
+    /// \brief Place tools back on the table.
+    /// \param[in] _penalty Penalty time to add
+    public: void Restart(const common::Time &_penalty);
 
     /// \brief Pointer to contact sensor
     private: sensors::ContactSensorPtr sensor;

@@ -57,19 +57,18 @@ namespace gazebo
   /// \brief Task 2, Checkpoint 2: Place panel near cable
   class Task2CP2 : public BoxCheckpoint
   {
-    /// \brief Constructor
-    /// \param[in] _sdf Pointer to SDF element for this checkpoint.
-    public: Task2CP2(const sdf::ElementPtr &_sdf);
+    using BoxCheckpoint::BoxCheckpoint;
 
     /// \brief Check whether the panel is within reach of the cable.
     /// \return True if the checkpoint is complete.
     public: bool Check();
 
+    /// \brief Place panel back on the rover.
+    /// \param[in] _penalty Penalty time to add
+    public: void Restart(const common::Time &_penalty);
+
     /// \brief Skip this checkpoint. This places the solar panel on the array.
     public: void Skip();
-
-    /// \brief
-    private: ignition::math::Pose3d panelSkipPose;
   };
 
   /// \brief Task 2, Checkpoint 3: Deploy solar panel
@@ -80,6 +79,10 @@ namespace gazebo
     /// \brief Check whether the solar panel has been deployed.
     /// \return True if the checkpoint is complete.
     public: bool Check();
+
+    /// \brief Place panel back on the array. It should be still locked.
+    /// \param[in] _penalty Penalty time to add
+    public: void Restart(const common::Time &_penalty);
 
     /// \brief Skip this checkpoint. This deploys the solar panel.
     public: void Skip();
@@ -111,6 +114,10 @@ namespace gazebo
     /// nothing else for long enough.
     /// \return True if the checkpoint is complete.
     public: bool Check();
+
+    /// \brief Place panel back on the array, deployed. Reset cable pose.
+    /// \param[in] _penalty Penalty time to add
+    public: void Restart(const common::Time &_penalty);
   };
 
   /// \brief Task 2, Checkpoint 5: Plug cable
@@ -121,6 +128,10 @@ namespace gazebo
     /// \brief Check whether the robot is in the final box region.
     /// \return True if the checkpoint is complete.
     public: bool Check();
+
+    /// \brief Place panel back on the array, deployed. Reset cable pose.
+    /// \param[in] _penalty Penalty time to add
+    public: void Restart(const common::Time &_penalty);
 
     /// \brief Whether the checkpoint is complete or not.
     private: bool done = false;
