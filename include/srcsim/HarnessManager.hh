@@ -72,6 +72,9 @@ namespace gazebo
     /// \return True if standing
     public: bool IsStanding();
 
+    /// \brief Reset joint positions to neutral configuration.
+    public: void ResetJointPositions();
+
     /// \brief Callback when receiving wrench message from ankle.
     /// \param[in] _msg The message
     private: void OnSensorMsg(ConstWrenchStampedPtr &_msg);
