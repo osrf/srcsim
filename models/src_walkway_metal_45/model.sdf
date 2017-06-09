@@ -5,7 +5,6 @@
     <link name="link">
       <collision name="collision">
         <geometry>
-          <pose>0 0.762 0.076075 0 0 0</pose>
           <polyline>
             <height>0.15215</height>
 
