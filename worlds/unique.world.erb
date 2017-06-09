@@ -201,6 +201,10 @@
   walkway_height = 0.152151
   $walkway_pos_z = -0.052151
 
+  # Polyline arrays
+  $left_poly = []
+  $right_poly = []
+
   # Keep track of how many walkways have been added
   $walkway_count = 0
 
@@ -219,6 +223,12 @@
       # Transformation from origin to the 2nd slot to place objects
       "tOriginSlot2" => TMatrix(-walkway_length * 0.5,
                                  walkway_length * 0.5, Math::PI/2),
+      # List of corners on the left, for polyline generation
+      "left_pts" => [Vector[-0.762, 1.524, 1]],
+      # List of corners on the right, for polyline generation
+      "right_pts" => [Vector[0.762, 0, 1]],
+      # Extra point in case this is the last walkway on the path
+      "last_pt" => Vector[walkway_length * 0.5, walkway_length, 1],
       # SDF model
       "model" => "walkway_metal_straight"
     },
@@ -230,6 +240,11 @@
       "tOriginSlot1" => TMatrix(-walkway_length * 0.5,
                                  walkway_length * 0.5, Math::PI/2),
       "tOriginSlot2" => TMatrix(0, walkway_length, 0),
+      "left_pts" => [Vector[-walkway_length * 0.5, walkway_length, 1],
+                     Vector[walkway_length * 0.5, walkway_length, 1],
+                    ],
+      "right_pts" => [],
+      "last_pt" => nil,
       "model" => "walkway_metal_90"
     },
     "+90" => {
@@ -240,6 +255,10 @@
       "tOriginSlot1" => TMatrix(-walkway_length * 0.5,
                                  walkway_length * 0.5, Math::PI/2),
       "tOriginSlot2" => TMatrix(0, walkway_length, 0),
+      "left_pts" => [],
+      "right_pts" => [Vector[walkway_length * 0.5, walkway_length, 1],
+                      Vector[-walkway_length * 0.5, walkway_length, 1]],
+      "last_pt" => Vector[-walkway_length * 0.5, 0, 1],
       "model" => "walkway_metal_90"
     },
     "-45" => {
@@ -251,6 +270,12 @@
                                  walkway_length * 0.5, Math::PI/2),
       "tOriginSlot2" => TMatrix(-walkway_length * 0.40,
                                  walkway_length * 0.89, Math::PI/4),
+      "left_pts" => [Vector[-0.762, 1.07763, 1],
+                     Vector[0, 1.8396, 1],
+                    ],
+      "right_pts" => [Vector[0.762, 0, 1],
+                      Vector[0.762, 0.45, 1]],
+      "last_pt" => Vector[1.07763, 0.763, 1],
       "model" => "walkway_metal_45"
     },
     "+45" => {
@@ -262,6 +287,11 @@
                                  walkway_length * 0.5, Math::PI/2),
       "tOriginSlot2" => TMatrix(-walkway_length * 0.40,
                                  walkway_length * 0.89, Math::PI/4),
+      "left_pts" => [Vector[0.762, 0.45, 1],
+                     Vector[0.762, 0, 1]],
+      "right_pts" => [Vector[0, 1.8396, 1],
+                      Vector[-0.762, 1.07763, 1]],
+      "last_pt" => Vector[-walkway_length * 0.5, 0, 1],
       "model" => "walkway_metal_45"
     },
   }
@@ -274,6 +304,14 @@
       "tOriginExit" => TMatrix(-finish_walkway_length * 0.5, 0, Math::PI/2),
       "tOriginSlot1" => TMatrix(0, finish_walkway_length * 0.5, 0),
       "tOriginSlot2" => TMatrix(0, -finish_walkway_length * 0.5, Math::PI),
+      "left_pts" => [Vector[finish_walkway_length * 0.5, -finish_walkway_length * 0.5, 1],
+                     Vector[-finish_walkway_length * 0.5, -finish_walkway_length * 0.5, 1],
+                     Vector[-finish_walkway_length * 0.5, -walkway_length * 0.5, 1]
+                    ],
+      "right_pts" => [Vector[finish_walkway_length * 0.5, walkway_length * 0.5, 1],
+                      Vector[finish_walkway_length * 0.5, finish_walkway_length * 0.5, 1],
+                      Vector[-finish_walkway_length * 0.5, finish_walkway_length * 0.5, 1],
+                    ],
       "model" => "walkway_finish_opposite"
     },
     "-90" => {
@@ -282,6 +320,13 @@
       "tOriginExit" => TMatrix(0, finish_walkway_length * 0.5, 0),
       "tOriginSlot1" => TMatrix(-finish_walkway_length * 0.5, 0, Math::PI/2),
       "tOriginSlot2" => TMatrix(0, -finish_walkway_length * 0.5, Math::PI),
+      "left_pts" => [Vector[finish_walkway_length * 0.5, -finish_walkway_length * 0.5, 1],
+                     Vector[-finish_walkway_length * 0.5, -finish_walkway_length * 0.5, 1],
+                     Vector[-finish_walkway_length * 0.5, finish_walkway_length * 0.5, 1],
+                     Vector[-walkway_length * 0.5, finish_walkway_length * 0.5, 1]
+                    ],
+      "right_pts" => [Vector[finish_walkway_length * 0.5, walkway_length * 0.5, 1],
+                      Vector[finish_walkway_length * 0.5, finish_walkway_length * 0.5, 1]],
       "model" => "walkway_finish_adjacent"
     },
     "+90" => {
@@ -290,6 +335,13 @@
       "tOriginExit" => TMatrix(finish_walkway_length * 0.5, 0, -Math::PI/2),
       "tOriginSlot1" => TMatrix(0, -finish_walkway_length * 0.5, Math::PI),
       "tOriginSlot2" => TMatrix(-finish_walkway_length * 0.5, 0, Math::PI/2),
+      "left_pts" => [Vector[finish_walkway_length * 0.5, finish_walkway_length * 0.5, 1],
+                     Vector[finish_walkway_length * 0.5, walkway_length * 0.5, 1]],
+      "right_pts" => [Vector[-walkway_length * 0.5, finish_walkway_length * 0.5, 1],
+                      Vector[-finish_walkway_length * 0.5, finish_walkway_length * 0.5, 1],
+                      Vector[-finish_walkway_length * 0.5, -finish_walkway_length * 0.5, 1],
+                      Vector[finish_walkway_length * 0.5, -finish_walkway_length * 0.5, 1],
+                     ],
       "model" => "walkway_finish_adjacent"
     },
   }
@@ -339,6 +391,22 @@
 
     # Take tile transform into account
     $current_frame = $current_frame * $current_walkway["tEntranceOrigin"]
+
+    # Store points on polyline arrays
+
+    # left
+    left_pts_transformed = []
+    for pt in $current_walkway["left_pts"]
+      left_pts_transformed << $current_frame * pt
+    end
+    $left_poly += left_pts_transformed
+
+    # right
+    right_pts_transformed = []
+    for pt in $current_walkway["right_pts"]
+      right_pts_transformed << $current_frame * pt
+    end
+    $right_poly += right_pts_transformed
 
     $walkway_count += 1
 
@@ -436,6 +504,23 @@
       # Start with a straight walkway
       $current_walkway = $finish_walkways["straight"]
       $total_angle = $current_walkway["angle"]
+
+      # Store points on polyline arrays
+
+      # left
+      left_pts_transformed = []
+      for pt in $current_walkway["left_pts"]
+        left_pts_transformed << $current_frame * pt
+      end
+      $left_poly += left_pts_transformed
+
+      # right
+      right_pts_transformed = []
+      for pt in $current_walkway["right_pts"]
+        right_pts_transformed << $current_frame * pt
+      end
+      $right_poly += right_pts_transformed
+
       $walkway_count += 1
       printWalkway()
     %>
@@ -876,6 +961,36 @@
     <%=
       nextWalkway($walkways, false, Math::PI / 4.0)
     %>
+
+    <!-- All walkway visuals have been inserted, now add polyline collision -->
+    <%
+      # Last point
+      last_pt_transformed = []
+      if $current_walkway["last_pt"]
+        last_pt_transformed << $current_frame * $current_walkway["last_pt"]
+      end
+
+      # Polyline list goes along the whole left, and comes back from the right
+      final_poly = $left_poly + last_pt_transformed + $right_poly.reverse
+    %>
+
+    <model name="walkway_collisions">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <polyline>
+              <height>0.15215</height>
+
+             <% for pt in final_poly %>
+              <point><%= pt[0] %> <%= pt[1] %></point>
+             <% end %>
+
+            </polyline>
+          </geometry>
+        </collision>
+      </link>
+    </model>
 
     <!-- Habitat -->
     <%
