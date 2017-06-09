@@ -138,7 +138,7 @@
       0
       -1.5707963267948968
       </pose>
-      <uri>model://walkway_metal_45</uri>
+      <uri>model://src_walkway_metal_45</uri>
     </include>
 
 
@@ -506,7 +506,7 @@
       0
       1.5707963267948966
       </pose>
-      <uri>model://walkway_metal_45</uri>
+      <uri>model://src_walkway_metal_45</uri>
     </include>
 
 
@@ -654,7 +654,7 @@
       0
       0.7853981633974484
       </pose>
-      <uri>model://walkway_metal_45</uri>
+      <uri>model://src_walkway_metal_45</uri>
     </include>
 
 
@@ -1446,7 +1446,7 @@
       0
       1.5707963267948966
       </pose>
-      <uri>model://walkway_metal_45</uri>
+      <uri>model://src_walkway_metal_45</uri>
     </include>
 
 
