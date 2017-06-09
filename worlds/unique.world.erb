@@ -230,7 +230,7 @@
       # Extra point in case this is the last walkway on the path
       "last_pt" => Vector[walkway_length * 0.5, walkway_length, 1],
       # SDF model
-      "model" => "walkway_metal_straight"
+      "model" => "src_walkway_metal_straight"
     },
     "-90" => {
       "angle" => -Math::PI/2,
@@ -245,7 +245,7 @@
                     ],
       "right_pts" => [],
       "last_pt" => nil,
-      "model" => "walkway_metal_90"
+      "model" => "src_walkway_metal_90"
     },
     "+90" => {
       "angle" => Math::PI/2,
@@ -259,7 +259,7 @@
       "right_pts" => [Vector[walkway_length * 0.5, walkway_length, 1],
                       Vector[-walkway_length * 0.5, walkway_length, 1]],
       "last_pt" => Vector[-walkway_length * 0.5, 0, 1],
-      "model" => "walkway_metal_90"
+      "model" => "src_walkway_metal_90"
     },
     "-45" => {
       "angle" => -Math::PI/4,
@@ -276,7 +276,7 @@
       "right_pts" => [Vector[0.762, 0, 1],
                       Vector[0.762, 0.45, 1]],
       "last_pt" => Vector[1.07763, 0.763, 1],
-      "model" => "walkway_metal_45"
+      "model" => "src_walkway_metal_45"
     },
     "+45" => {
       "angle" => Math::PI/4,
@@ -292,7 +292,7 @@
       "right_pts" => [Vector[0, 1.8396, 1],
                       Vector[-0.762, 1.07763, 1]],
       "last_pt" => Vector[-walkway_length * 0.5, 0, 1],
-      "model" => "walkway_metal_45"
+      "model" => "src_walkway_metal_45"
     },
   }
 

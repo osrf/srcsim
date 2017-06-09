@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <model name="src_walkway_metal_straight">
+    <static>true</static>
+    <link name="link">
+      <visual name="visual">
+         <geometry>
+           <mesh>
+             <scale>0.001 0.001 0.001</scale>
+             <uri>model://walkway_metal_straight/meshes/mesh.obj</uri>
+           </mesh>
+         </geometry>
+       </visual>
+    </link>
+  </model>
+</sdf>
