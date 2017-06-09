@@ -312,6 +312,7 @@
                       Vector[finish_walkway_length * 0.5, finish_walkway_length * 0.5, 1],
                       Vector[-finish_walkway_length * 0.5, finish_walkway_length * 0.5, 1],
                     ],
+      "last_pt" => Vector[walkway_length * 0.5, walkway_length, 1],
       "model" => "walkway_finish_opposite"
     },
     "-90" => {
@@ -327,6 +328,7 @@
                     ],
       "right_pts" => [Vector[finish_walkway_length * 0.5, walkway_length * 0.5, 1],
                       Vector[finish_walkway_length * 0.5, finish_walkway_length * 0.5, 1]],
+      "last_pt" => Vector[walkway_length * 0.5, walkway_length, 1],
       "model" => "walkway_finish_adjacent"
     },
     "+90" => {
@@ -342,6 +344,7 @@
                       Vector[-finish_walkway_length * 0.5, -finish_walkway_length * 0.5, 1],
                       Vector[finish_walkway_length * 0.5, -finish_walkway_length * 0.5, 1],
                      ],
+      "last_pt" => Vector[finish_walkway_length * 0.5, -walkway_length * 0.5, 1],
       "model" => "walkway_finish_adjacent"
     },
   }
@@ -962,41 +965,10 @@
       nextWalkway($walkways, false, Math::PI / 4.0)
     %>
 
-    <!-- All walkway visuals have been inserted, now add polyline collision -->
-    <%
-      # Last point
-      last_pt_transformed = []
-      if $current_walkway["last_pt"]
-        last_pt_transformed << $current_frame * $current_walkway["last_pt"]
-      end
-
-      # Polyline list goes along the whole left, and comes back from the right
-      final_poly = $left_poly + last_pt_transformed + $right_poly.reverse
-    %>
-
-    <model name="walkway_collisions">
-      <static>true</static>
-      <link name="link">
-        <collision name="collision">
-          <geometry>
-            <polyline>
-              <height>0.15215</height>
-
-             <% for pt in final_poly %>
-              <point><%= pt[0] %> <%= pt[1] %></point>
-             <% end %>
-
-            </polyline>
-          </geometry>
-        </collision>
-      </link>
-    </model>
-
     <!-- Habitat -->
     <%
       tHabitatSlotOrigin = TMatrix(6.7, 5.7, 0);
-      $current_frame = $current_frame * $current_walkway["tOriginExit"]
-      $habitat_frame = $current_frame *
+      $habitat_frame = $current_frame * $current_walkway["tOriginExit"] *
                        tHabitatSlotOrigin
     %>
 
@@ -1077,6 +1049,37 @@
     <%
       end
     %>
+
+    <!-- All walkway visuals have been inserted, now add polyline collision -->
+    <%
+      # Last point
+      last_pt_transformed = []
+      if $current_walkway["last_pt"]
+        last_pt_transformed << $current_frame * $current_walkway["last_pt"]
+      end
+
+      # Polyline list goes along the whole left, and comes back from the right
+      final_poly = $left_poly + last_pt_transformed + $right_poly.reverse
+    %>
+
+    <model name="walkway_collisions">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <pose>0 0 <%= $walkway_pos_z %> 0 0 0</pose>
+          <geometry>
+            <polyline>
+              <height>0.15215</height>
+
+             <% for pt in final_poly %>
+              <point><%= pt[0] %> <%= pt[1] %></point>
+             <% end %>
+
+            </polyline>
+          </geometry>
+        </collision>
+      </link>
+    </model>
 
     <!-- Finals plugin -->
     <plugin name="finals" filename="libFinalsPlugin.so">

@@ -2062,6 +2062,56 @@
     <!-- /TASK 3 -->
 
 
+    <!-- All walkway visuals have been inserted, now add polyline collision -->
+
+
+    <model name="walkway_collisions">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <pose>0 0 -0.052151 0 0 0</pose>
+          <geometry>
+            <polyline>
+              <height>0.15215</height>
+
+
+              <point>-1.4339999999999997 1.5240000000000002</point>
+
+              <point>1.6140000000000003 1.5239999999999998</point>
+
+              <point>1.614 0.7619999999999998</point>
+
+              <point>2.0577205812019046 0.7600874077302024</point>
+
+              <point>2.375918632735851 1.0782854592641486</point>
+
+              <point>3.1379181133459104 1.840284939874208</point>
+
+              <point>4.2155276346707735 1.840263726670772</point>
+
+              <point>4.216255954655395 0.3169930854352757</point>
+
+              <point>3.7717474187980957 0.31885277626979647</point>
+
+              <point>3.4535493672641495 0.000654724735850154</point>
+
+              <point>2.69154988665409 -0.761344755874209</point>
+
+              <point>1.6139403653292272 -0.7613235426707732</point>
+
+              <point>1.6139999999999999 -1.5240000000000002</point>
+
+              <point>-1.4340000000000002 -1.5239999999999998</point>
+
+              <point>-1.434 -0.7619999999999998</point>
+
+
+            </polyline>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+
     <!-- Finals plugin -->
     <plugin name="finals" filename="libFinalsPlugin.so">
 
