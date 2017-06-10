@@ -1,13 +1,13 @@
 <?xml version="1.0" ?>
-<sdf version="1.5">
-  <model name="walkway_finish_adjacent">
+<sdf version="1.6">
+  <model name="src_walkway_metal_90">
     <static>true</static>
     <link name="link">
       <collision name="collision">
-        <pose>0 0 0.076075 0 0 0</pose>
+        <pose>0 0.762 0.076075 0 0 0</pose>
         <geometry>
           <box>
-            <size>3.048 3.048 0.15215</size>
+            <size>1.524 1.524 0.15215</size>
           </box>
         </geometry>
         <surface>
@@ -23,13 +23,13 @@
       </collision>
 
       <visual name="visual">
-        <geometry>
-          <mesh>
-            <scale>0.001 0.001 0.001</scale>
-            <uri>model://walkway_finish_adjacent/meshes/walkway_finish_adjacent.obj</uri>
-          </mesh>
-        </geometry>
-      </visual>
+         <geometry>
+           <mesh>
+             <scale>0.001 0.001 0.001</scale>
+             <uri>model://src_walkway_metal_90/meshes/mesh.obj</uri>
+           </mesh>
+         </geometry>
+       </visual>
     </link>
   </model>
 </sdf>
