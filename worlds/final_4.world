@@ -5921,6 +5921,8 @@
             0.27033792772905973
           </patch_tool_on_table>
 
+          <leak_model_name>leak</leak_model_name>
+
           <checkpoint1>
             <start_robot_pose>
               15.923211730333634

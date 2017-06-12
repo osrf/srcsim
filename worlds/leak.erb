@@ -2,7 +2,7 @@
   # Template for leak model for SRC finals world
 
   # Requires the following global variables:
-  # $habitat_frame, $table_pos_z
+  # $habitat_frame, $table_pos_z, $leak_model_name
 
   # start and end points of the line
   pt_0 = $habitat_frame * TMatrix(-4.781079, 3.018834, 0)
@@ -22,7 +22,7 @@
 
 %>
 
-<model name="leak">
+<model name="<%= $leak_model_name %>">
   <static>true</static>
 
   <pose><%= x %> <%= y %> <%= z %> 0 0 0</pose>

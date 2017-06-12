@@ -367,6 +367,8 @@
   robot_z_pos = 1.257
   robot_z_pos_habitat = 2.957
 
+  $leak_model_name = "leak"
+
   # Starting point
   $current_frame = TMatrix(0.09, 0, Math::PI)
 %>
@@ -1156,6 +1158,8 @@
             0
             <%= Math::atan2($leak_patch_tool_frame[1, 0], $leak_patch_tool_frame[0, 0]) %>
           </patch_tool_on_table>
+
+          <leak_model_name><%= $leak_model_name %></leak_model_name>
 
           <checkpoint1>
             <start_robot_pose>
