@@ -138,7 +138,7 @@
       0
       -1.5707963267948968
       </pose>
-      <uri>model://walkway_metal_straight</uri>
+      <uri>model://src_walkway_metal_straight</uri>
     </include>
 
 
@@ -506,7 +506,7 @@
       0
       2.356194490192345
       </pose>
-      <uri>model://walkway_metal_45</uri>
+      <uri>model://src_walkway_metal_45</uri>
     </include>
 
 
@@ -639,7 +639,7 @@
       0
       -2.3561944901923453
       </pose>
-      <uri>model://walkway_metal_straight</uri>
+      <uri>model://src_walkway_metal_straight</uri>
     </include>
 
 
@@ -654,7 +654,7 @@
       0
       1.5707963267948963
       </pose>
-      <uri>model://walkway_metal_45</uri>
+      <uri>model://src_walkway_metal_45</uri>
     </include>
 
 
@@ -1386,7 +1386,7 @@
       0
       -1.570796326794897
       </pose>
-      <uri>model://walkway_metal_straight</uri>
+      <uri>model://src_walkway_metal_straight</uri>
     </include>
 
 
@@ -1401,7 +1401,7 @@
       0
       -1.570796326794897
       </pose>
-      <uri>model://walkway_metal_straight</uri>
+      <uri>model://src_walkway_metal_straight</uri>
     </include>
 
 
@@ -1446,7 +1446,7 @@
       0
       -1.570796326794897
       </pose>
-      <uri>model://walkway_metal_straight</uri>
+      <uri>model://src_walkway_metal_straight</uri>
     </include>
 
 
@@ -3704,7 +3704,7 @@
       0
       -1.570796326794897
       </pose>
-      <uri>model://walkway_metal_45</uri>
+      <uri>model://src_walkway_metal_45</uri>
     </include>
 
 
@@ -3837,7 +3837,7 @@
       0
       -0.7853981633974487
       </pose>
-      <uri>model://walkway_metal_45</uri>
+      <uri>model://src_walkway_metal_45</uri>
     </include>
 
 
@@ -3852,7 +3852,7 @@
       0
       2.356194490192345
       </pose>
-      <uri>model://walkway_metal_45</uri>
+      <uri>model://src_walkway_metal_45</uri>
     </include>
 
 
