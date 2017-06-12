@@ -3888,6 +3888,17 @@
           <size>2.46997 0.317063 0.21 </size>
         </box>
       </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e+06</kp>
+            <kd>100.0</kd>
+            <max_vel>1</max_vel>
+            <min_depth>0</min_depth>
+          </ode>
+        </contact>
+      </surface>
+
     </collision>
 
 
@@ -3899,6 +3910,17 @@
           <size>2.46997 0.317063 0.21 </size>
         </box>
       </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e+06</kp>
+            <kd>100.0</kd>
+            <max_vel>1</max_vel>
+            <min_depth>0</min_depth>
+          </ode>
+        </contact>
+      </surface>
+
     </collision>
 
 
@@ -3910,6 +3932,17 @@
           <size>2.46997 0.317063 0.21 </size>
         </box>
       </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e+06</kp>
+            <kd>100.0</kd>
+            <max_vel>1</max_vel>
+            <min_depth>0</min_depth>
+          </ode>
+        </contact>
+      </surface>
+
     </collision>
 
 
@@ -3921,6 +3954,17 @@
           <size>2.46997 0.317063 0.21 </size>
         </box>
       </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e+06</kp>
+            <kd>100.0</kd>
+            <max_vel>1</max_vel>
+            <min_depth>0</min_depth>
+          </ode>
+        </contact>
+      </surface>
+
     </collision>
 
 
@@ -3932,6 +3976,17 @@
           <size>2.46997 0.317063 0.21 </size>
         </box>
       </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e+06</kp>
+            <kd>100.0</kd>
+            <max_vel>1</max_vel>
+            <min_depth>0</min_depth>
+          </ode>
+        </contact>
+      </surface>
+
     </collision>
 
 
@@ -3943,6 +3998,17 @@
           <size>2.46997 0.317063 0.21 </size>
         </box>
       </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e+06</kp>
+            <kd>100.0</kd>
+            <max_vel>1</max_vel>
+            <min_depth>0</min_depth>
+          </ode>
+        </contact>
+      </surface>
+
     </collision>
 
 
@@ -3954,6 +4020,17 @@
           <size>2.46997 0.317063 0.21 </size>
         </box>
       </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e+06</kp>
+            <kd>100.0</kd>
+            <max_vel>1</max_vel>
+            <min_depth>0</min_depth>
+          </ode>
+        </contact>
+      </surface>
+
     </collision>
 
 
@@ -3965,6 +4042,17 @@
           <size>2.46997 0.317063 0.21 </size>
         </box>
       </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e+06</kp>
+            <kd>100.0</kd>
+            <max_vel>1</max_vel>
+            <min_depth>0</min_depth>
+          </ode>
+        </contact>
+      </surface>
+
     </collision>
 
 
@@ -3980,6 +4068,17 @@
           <size>20.0 10.0 0.21 </size>
         </box>
       </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e+06</kp>
+            <kd>100.0</kd>
+            <max_vel>1</max_vel>
+            <min_depth>0</min_depth>
+          </ode>
+        </contact>
+      </surface>
+
     </collision>
 
 
@@ -3991,6 +4090,17 @@
           <size>8.0 2.0 0.21 </size>
         </box>
       </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e+06</kp>
+            <kd>100.0</kd>
+            <max_vel>1</max_vel>
+            <min_depth>0</min_depth>
+          </ode>
+        </contact>
+      </surface>
+
     </collision>
 
     <!-- Rail collisions -->
