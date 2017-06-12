@@ -31,6 +31,9 @@ namespace gazebo
     /// \param[in] _sdf SDF element for this checkpoint.
     public: Checkpoint(const sdf::ElementPtr &_sdf);
 
+    /// \brief Default destructor
+    public: virtual ~Checkpoint() = default;
+
     /// \brief Check whether checkpoint has been completed.
     /// Any publishers or subscribers are created the first time this is
     /// called, and cleaned up once it returns true.

@@ -33,6 +33,12 @@
     task = t
   end
 
+  seed = rand(0..10000000)
+  if (defined? s)
+    seed = s.to_i
+  end
+  srand(seed)
+
   ###############################################
   #                                             #
   #             IMPORT OTHER FILES              #
@@ -214,7 +220,7 @@
       "tOriginSlot2" => TMatrix(-walkway_length * 0.5,
                                  walkway_length * 0.5, Math::PI/2),
       # SDF model
-      "model" => "walkway_metal_straight"
+      "model" => "src_walkway_metal_straight"
     },
     "-90" => {
       "angle" => -Math::PI/2,
@@ -224,7 +230,7 @@
       "tOriginSlot1" => TMatrix(-walkway_length * 0.5,
                                  walkway_length * 0.5, Math::PI/2),
       "tOriginSlot2" => TMatrix(0, walkway_length, 0),
-      "model" => "walkway_metal_90"
+      "model" => "src_walkway_metal_90"
     },
     "+90" => {
       "angle" => Math::PI/2,
@@ -234,7 +240,7 @@
       "tOriginSlot1" => TMatrix(-walkway_length * 0.5,
                                  walkway_length * 0.5, Math::PI/2),
       "tOriginSlot2" => TMatrix(0, walkway_length, 0),
-      "model" => "walkway_metal_90"
+      "model" => "src_walkway_metal_90"
     },
     "-45" => {
       "angle" => -Math::PI/4,
@@ -245,7 +251,7 @@
                                  walkway_length * 0.5, Math::PI/2),
       "tOriginSlot2" => TMatrix(-walkway_length * 0.40,
                                  walkway_length * 0.89, Math::PI/4),
-      "model" => "walkway_metal_45"
+      "model" => "src_walkway_metal_45"
     },
     "+45" => {
       "angle" => Math::PI/4,
@@ -256,7 +262,7 @@
                                  walkway_length * 0.5, Math::PI/2),
       "tOriginSlot2" => TMatrix(-walkway_length * 0.40,
                                  walkway_length * 0.89, Math::PI/4),
-      "model" => "walkway_metal_45"
+      "model" => "src_walkway_metal_45"
     },
   }
 
@@ -364,6 +370,7 @@
   # Starting point
   $current_frame = TMatrix(0.09, 0, Math::PI)
 %>
+<!-- Seed: <%= seed %> -->
 <sdf version="1.6">
   <world name="SRC_finals">
 
@@ -703,9 +710,9 @@
                     tArraySlotOrigin
       $array_z_offset = 0.2
 
-      t2cp2_panel_skip_frame = array_frame *
+      panel_on_array_frame = array_frame *
           TMatrix(rand(-0.4...-0.05), rand(-0.27...-0.12), rand(-Math::PI...Math::PI));
-      t2cp2_panel_skip_z_pos = 0.7 + $array_z_offset
+      panel_on_array_pos_z = 0.7 + $array_z_offset
 
       t2cp2_frame = array_frame * TMatrix(0, -1.2, Math::PI * 0.5);
       t2cp3_frame = t2cp2_frame
@@ -1011,6 +1018,24 @@
         <task2>
           <timeout>3600</timeout>
 
+          <panel_on_rover>
+            <%= $solar_panel_frame[0, 2] %>
+            <%= $solar_panel_frame[1, 2] %>
+            <%= $solar_panel_pos_z %>
+            0
+            0
+            <%= Math::atan2($solar_panel_frame[1, 0], $solar_panel_frame[0, 0]) %>
+          </panel_on_rover>
+
+          <panel_on_array>
+            <%= panel_on_array_frame[0, 2] %>
+            <%= panel_on_array_frame[1, 2] %>
+            <%= panel_on_array_pos_z %>
+            0
+            0
+            <%= Math::atan2(panel_on_array_frame[1, 0], panel_on_array_frame[0, 0]) %>
+          </panel_on_array>
+
           <checkpoint1>
             <start_robot_pose>
               <%= t2cp1_start_frame[0, 2] %>
@@ -1039,14 +1064,6 @@
               0
               <%= Math::atan2(t2cp2_frame[1, 0], t2cp2_frame[0, 0]) %>
             </skip_robot_pose>
-            <panel_pose>
-              <%= t2cp2_panel_skip_frame[0, 2] %>
-              <%= t2cp2_panel_skip_frame[1, 2] %>
-              <%= t2cp2_panel_skip_z_pos %>
-              0
-              0
-              <%= Math::atan2(t2cp2_panel_skip_frame[1, 0], t2cp2_panel_skip_frame[0, 0]) %>
-            </panel_pose>
           </checkpoint2>
 
           <checkpoint3>
@@ -1101,9 +1118,45 @@
 
       <%
         if (task == '0' || task == '3')
+
+          $table_frame = $habitat_frame *
+                         TMatrix(rand(-1.5..1.5),
+                                 rand(-1.5..1.5),
+                                 rand(-Math::PI..Math::PI))
+          $table_top_z = $table_pos_z + 0.7
+
+          b = [-1, 1].sample
+
+          $air_leak_detector_frame = $table_frame *
+              TMatrix(b*rand(0.1..0.6),
+                      rand(0..0.3),
+                      rand(-Math::PI..Math::PI))
+
+          $leak_patch_tool_frame = $table_frame *
+              TMatrix(-b*rand(0.1..0.6),
+                      rand(0..0.3),
+                      rand(-Math::PI..Math::PI))
       %>
         <task3>
           <timeout>7200</timeout>
+
+          <detector_on_table>
+            <%= $air_leak_detector_frame[0, 2] %>
+            <%= $air_leak_detector_frame[1, 2] %>
+            <%= $table_top_z %>
+            0
+            0
+            <%= Math::atan2($air_leak_detector_frame[1, 0], $air_leak_detector_frame[0, 0]) %>
+          </detector_on_table>
+
+          <patch_tool_on_table>
+            <%= $leak_patch_tool_frame[0, 2] %>
+            <%= $leak_patch_tool_frame[1, 2] %>
+            <%= $table_top_z + 0.1 %>
+            0
+            0
+            <%= Math::atan2($leak_patch_tool_frame[1, 0], $leak_patch_tool_frame[0, 0]) %>
+          </patch_tool_on_table>
 
           <checkpoint1>
             <start_robot_pose>
@@ -1171,10 +1224,6 @@
             <!-- Table -->
             <insert_entity>
                 <%
-                  $table_frame = $habitat_frame *
-                                 TMatrix(rand(-1.5..1.5),
-                                         rand(-1.5..1.5),
-                                         rand(-Math::PI..Math::PI))
                 %>
                 <include>
                   <pose>
@@ -1191,38 +1240,22 @@
 
             <!-- Air leak detector -->
             <insert_entity>
-                <%
-                  b = [-1, 1].sample
-                  $air_leak_detector_frame = $table_frame *
-                      TMatrix(b*rand(0.1..0.6),
-                              rand(0..0.3),
-                              rand(-Math::PI..Math::PI))
-                  $table_top_z = $table_pos_z + 0.7
-                %>
-
-                <%= fromFile("air_leak_detector.erb") %>
+              <%= fromFile("air_leak_detector.erb") %>
             </insert_entity>
 
             <!-- Leak patch tool -->
             <insert_entity>
-                <%
-                  $leak_patch_tool_frame = $table_frame *
-                      TMatrix(-b*rand(0.1..0.6),
-                              rand(0..0.3),
-                              rand(-Math::PI..Math::PI))
-                %>
-
-                <include>
-                  <pose>
-                    <%= $leak_patch_tool_frame[0, 2] %>
-                    <%= $leak_patch_tool_frame[1, 2] %>
-                    <%= $table_top_z + 0.1 %>
-                    0
-                    0
-                    <%= Math::atan2($leak_patch_tool_frame[1, 0], $leak_patch_tool_frame[0, 0]) %>
-                  </pose>
-                  <uri>model://leak_patch_tool</uri>
-                </include>
+              <include>
+                <pose>
+                  <%= $leak_patch_tool_frame[0, 2] %>
+                  <%= $leak_patch_tool_frame[1, 2] %>
+                  <%= $table_top_z + 0.1 %>
+                  0
+                  0
+                  <%= Math::atan2($leak_patch_tool_frame[1, 0], $leak_patch_tool_frame[0, 0]) %>
+                </pose>
+                <uri>model://leak_patch_tool</uri>
+              </include>
             </insert_entity>
 
             <!-- Leak -->

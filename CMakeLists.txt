@@ -17,12 +17,12 @@ endif()
 find_package(catkin REQUIRED COMPONENTS ${COMPONENT_LIST})
 
 set (SRCSIM_MAJOR_VERSION 0)
-set (SRCSIM_MINOR_VERSION 6)
+set (SRCSIM_MINOR_VERSION 7)
 set (SRCSIM_PATCH_VERSION 0)
 set (SRCSIM_VERSION_FULL ${SRCSIM_MAJOR_VERSION}.${SRCSIM_MINOR_VERSION}.${SRCSIM_PATCH_VERSION})
 
 if(NOT BUILD_MSGS_ONLY)
-  find_package(gazebo REQUIRED)
+  find_package(gazebo 7.8.0 REQUIRED)
 endif()
 
 ########################

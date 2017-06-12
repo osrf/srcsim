@@ -17,16 +17,87 @@
 
 #include <gazebo/physics/Joint.hh>
 #include <gazebo/physics/Model.hh>
+#include <gazebo/physics/Link.hh>
 #include <gazebo/physics/PhysicsIface.hh>
 #include <gazebo/physics/World.hh>
 #include <gazebo/sensors/SensorManager.hh>
 
 #include <srcsim/Leak.h>
 
+#include "geometry_msgs/Point.h"
 #include "srcsim/HarnessManager.hh"
 #include "srcsim/Task3.hh"
 
 using namespace gazebo;
+
+// Pose of the detector on the table
+ignition::math::Pose3d detectorOnTable;
+
+// Pose of the patch tool on the table
+ignition::math::Pose3d patchToolOnTable;
+
+/////////////////////////////////////////////////
+// Teleport detector to table
+void toolsToTable()
+{
+  auto world = physics::get_world();
+  if (!world)
+  {
+    gzerr << "Failed to get world" << std::endl;
+    return;
+  }
+
+  auto detector = world->GetModel("air_leak_detector");
+  if (!detector)
+  {
+    gzerr << "Failed to get [air_leak_detector] model" << std::endl;
+    return;
+  }
+
+  auto tool = world->GetModel("leak_patch_tool");
+  if (!tool)
+  {
+    gzerr << "Failed to get [leak_patch_tool] model" << std::endl;
+    return;
+  }
+
+  detector->SetWorldPose(detectorOnTable);
+  tool->SetWorldPose(patchToolOnTable);
+}
+
+/////////////////////////////////////////////////
+// Unlock and push door
+void openDoor()
+{
+  // Remove lock
+  auto world = physics::get_world();
+
+  if (!world)
+  {
+    gzerr << "Failed to get world" << std::endl;
+    return;
+  }
+
+  auto door = world->GetModel("habitat_door");
+  if (!door)
+  {
+    gzerr << "Failed to get model [habitat_door]" << std::endl;
+    return;
+  }
+
+  door->RemoveJoint("door_lock");
+
+  // Push door
+  auto hingeJoint = door->GetJoint("door_hinge");
+  if (!hingeJoint)
+  {
+    gzerr << "Failed to get joint [hinge_joint]" << std::endl;
+    return;
+  }
+
+  auto angle = hingeJoint->GetAngle(0).Radian();
+  hingeJoint->SetForce(0, 100000 * (1.0 - angle / (M_PI * 0.5)));
+}
 
 /////////////////////////////////////////////////
 Task3::Task3(const sdf::ElementPtr &_sdf) : Task(_sdf)
@@ -61,6 +132,15 @@ Task3::Task3(const sdf::ElementPtr &_sdf) : Task(_sdf)
 
     if (_sdf->HasElement("checkpoint8"))
       cp8Elem = _sdf->GetElement("checkpoint8");
+
+    if (_sdf->HasElement("detector_on_table"))
+      detectorOnTable = _sdf->Get<ignition::math::Pose3d>("detector_on_table");
+
+    if (_sdf->HasElement("patch_tool_on_table"))
+    {
+      patchToolOnTable =
+          _sdf->Get<ignition::math::Pose3d>("patch_tool_on_table");
+    }
   }
 
   // Checkpoint 1: Climb the stairs
@@ -171,33 +251,7 @@ bool Task3CP2::Check()
 /////////////////////////////////////////////////
 void Task3CP2::Skip()
 {
-  // Remove lock
-  auto world = physics::get_world();
-
-  if (!world)
-  {
-    gzerr << "Failed to get world" << std::endl;
-    return;
-  }
-
-  this->model = world->GetModel("habitat_door");
-  if (!this->model)
-  {
-    gzerr << "Failed to get model [habitat_door]" << std::endl;
-    return;
-  }
-
-  this->model->RemoveJoint("door_lock");
-
-  // Push door
-  this->hingeJoint = model->GetJoint("door_hinge");
-  if (!this->hingeJoint)
-  {
-    gzerr << "Failed to get joint [hinge_joint]" << std::endl;
-    return;
-  }
-
-  this->hingeJoint->SetForce(0, 100000);
+  openDoor();
 
   Checkpoint::Skip();
 }
@@ -209,9 +263,35 @@ bool Task3CP3::Check()
 }
 
 /////////////////////////////////////////////////
+void Task3CP3::Restart(const common::Time &_penalty)
+{
+  openDoor();
+
+  Checkpoint::Restart(_penalty);
+}
+
+/////////////////////////////////////////////////
 bool Task3CP4::Check()
 {
   return this->CheckTouch("/task3/checkpoint4");
+}
+
+/////////////////////////////////////////////////
+void Task3CP4::Restart(const common::Time &_penalty)
+{
+  toolsToTable();
+
+  Checkpoint::Restart(_penalty);
+}
+
+/////////////////////////////////////////////////
+Task3CP5::~Task3CP5()
+{
+  if (!this->stopLeakPosePub && this->leakPoseThread)
+  {
+    this->stopLeakPosePub = true;
+    this->leakPoseThread->join();
+  }
 }
 
 /////////////////////////////////////////////////
@@ -231,7 +311,10 @@ bool Task3CP5::Check()
         &Task3CP5::OnCameraGzMsg, this);
 
     // ROS node
-    this->rosNode.reset(new ros::NodeHandle());
+    if (!this->rosNode)
+    {
+      this->rosNode.reset(new ros::NodeHandle());
+    }
 
     // Publish ROS leak messages
     this->leakRosPub = this->rosNode->advertise<srcsim::Leak>(
@@ -254,6 +337,89 @@ bool Task3CP5::Check()
   }
 
   return this->detected;
+}
+
+/////////////////////////////////////////////////
+void Task3CP5::Restart(const common::Time &_penalty)
+{
+  toolsToTable();
+
+  Checkpoint::Restart(_penalty);
+}
+
+/////////////////////////////////////////////////
+void Task3CP5::PublishLeakPose()
+{
+  auto world = physics::get_world();
+
+  if (!world)
+  {
+    gzerr << "Failed to get world" << std::endl;
+    return;
+  }
+
+  if (!world->GetModel("valkyrie"))
+  {
+    gzerr << "Missing valkyrie model\n";
+    return;
+  }
+
+  if (!world->GetModel("valkyrie")->GetLink("pelvis"))
+  {
+    gzerr << "Valkyrie is missing the pelvis link\n";
+    return;
+  }
+
+  // Wait for the leak model to appear
+  for (int i = 0; i < 50 && !world->GetModel("leak"); ++i)
+  {
+    gazebo::common::Time::MSleep(500);
+  }
+
+  // Make sure it exists.
+  if (!world->GetModel("leak"))
+  {
+    gzerr << "Missing leak model\n";
+    return;
+  }
+
+  if (!this->rosNode)
+  {
+    this->rosNode.reset(new ros::NodeHandle());
+  }
+
+  // Publisher for ROS leak pose messages
+  this->leakPoseRosPub = this->rosNode->advertise<geometry_msgs::Point>(
+      "/task3/checkpoint5/leak_pose", 1000);
+
+  auto pelvis = world->GetModel("valkyrie")->GetLink("pelvis");
+  auto leak = world->GetModel("leak");
+
+  // Keep publising the pose of the leak model in the pelvis frame
+  while (!this->stopLeakPosePub)
+  {
+    auto pelvisWorldPose = pelvis->GetWorldPose();
+    auto leakWorldPose = leak->GetWorldPose();
+    auto leakPoseInPelvisFrame = leakWorldPose - pelvisWorldPose;
+
+    geometry_msgs::Point msg;
+    msg.x = leakPoseInPelvisFrame.pos.x;
+    msg.y = leakPoseInPelvisFrame.pos.y;
+    msg.z = leakPoseInPelvisFrame.pos.z;
+
+    this->leakPoseRosPub.publish(msg);
+    gazebo::common::Time::MSleep(1000);
+  }
+}
+
+/////////////////////////////////////////////////
+void Task3CP5::Skip()
+{
+  // Create a thread that will publish leak pose information until the end
+  // of the round.
+  this->stopLeakPosePub = false;
+  this->leakPoseThread = new std::thread(&Task3CP5::PublishLeakPose, this);
+  Checkpoint::Skip();
 }
 
 //////////////////////////////////////////////////
@@ -299,6 +465,14 @@ void Task3CP5::OnCameraGzMsg(ConstLogicalCameraImagePtr &_msg)
 bool Task3CP6::Check()
 {
   return this->CheckTouch("/task3/checkpoint6");
+}
+
+/////////////////////////////////////////////////
+void Task3CP6::Restart(const common::Time &_penalty)
+{
+  toolsToTable();
+
+  Checkpoint::Restart(_penalty);
 }
 
 /////////////////////////////////////////////////
@@ -417,6 +591,14 @@ bool Task3CP7::Check()
 
   // Check if it has been pressing for long enough
   return simTime - this->fixStart > this->targetTime;
+}
+
+/////////////////////////////////////////////////
+void Task3CP7::Restart(const common::Time &_penalty)
+{
+  toolsToTable();
+
+  Checkpoint::Restart(_penalty);
 }
 
 /////////////////////////////////////////////////

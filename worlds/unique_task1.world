@@ -1,5 +1,6 @@
 <?xml version="1.0" ?>
 
+<!-- Seed: 9877851 -->
 <sdf version="1.6">
   <world name="SRC_finals">
 
@@ -41,7 +42,7 @@
     <!-- A global light source -->
     <light type="directional" name="sun">
       <cast_shadows>true</cast_shadows>
-      <pose>0 0 1000 -0.11143662174684987 -0.8707398172430749 0</pose>
+      <pose>0 0 1000 0.7817335731201613 -1.0831029034142978 0</pose>
       <diffuse>0.8 0.8 0.8 1</diffuse>
       <specular>0.2 0.2 0.2 1</specular>
       <attenuation>
@@ -79,14 +80,14 @@
     <include>
       <name>bling_1</name>
       <pose>
-      0.08999999999999972
-      -2.324
+      0.08999999999999976
+      -2.024
       0
       0
       0
-      -2.3561944901923453
+      3.141592653589793
       </pose>
-      <uri>model://mars_crate_long</uri>
+      <uri>model://mars_rock_2</uri>
     </include>
 
 
@@ -101,7 +102,7 @@
       0
       -2.4492935982947064e-16
       </pose>
-      <uri>model://mars_rock_1</uri>
+      <uri>model://mars_crate</uri>
     </include>
 
 
@@ -137,7 +138,7 @@
       0
       -1.5707963267948968
       </pose>
-      <uri>model://walkway_metal_45</uri>
+      <uri>model://src_walkway_metal_45</uri>
     </include>
 
 
@@ -417,7 +418,7 @@
     <axis>
       <xyz>0 0 -1</xyz>
       <dynamics>
-        <friction>2.1350530850627893</friction>
+        <friction>2.3327122263698614</friction>
       </dynamics>
     </axis>
   </joint>
@@ -428,7 +429,7 @@
     <axis>
       <xyz>0 0 -1</xyz>
       <dynamics>
-        <friction>2.2079557643358045</friction>
+        <friction>2.1479594493886456</friction>
       </dynamics>
     </axis>
   </joint>
@@ -442,11 +443,11 @@
 
     <yaw_ratio>0.1</yaw_ratio>
     <yaw_pid>1000 0 10</yaw_pid>
-    <yaw_target>-0.0707670122966555</yaw_target>
+    <yaw_target>0.8004106410488818</yaw_target>
 
     <pitch_ratio>0.1</pitch_ratio>
     <pitch_pid>1000 100 10</pitch_pid>
-    <pitch_target>0.9189273569336316</pitch_target>
+    <pitch_target>1.2027483985723992</pitch_target>
 
     <!-- Tolerance in degrees -->
     <tolerance>5</tolerance>
@@ -483,14 +484,14 @@
     <include>
       <name>bling_3</name>
       <pose>
-      2.3760000000000003
-      1.5619999999999998
+      2.376000000000001
+      1.8619999999999997
       0
       0
       0
-      0.785398163397448
+      -2.4492935982947064e-16
       </pose>
-      <uri>model://mars_crate_long</uri>
+      <uri>model://mars_rock_3</uri>
     </include>
 
 
@@ -505,7 +506,7 @@
       0
       -2.356194490192345
       </pose>
-      <uri>model://walkway_metal_straight</uri>
+      <uri>model://src_walkway_metal_straight</uri>
     </include>
 
 
@@ -513,14 +514,14 @@
     <include>
       <name>bling_4</name>
       <pose>
-      2.6318912875253813
-      -1.8999435390029178
+      2.561180609406726
+      -1.9706542171215724
       0
       0
       0
       2.356194490192345
       </pose>
-      <uri>model://mars_rock_1</uri>
+      <uri>model://mars_rock_2</uri>
     </include>
 
 
@@ -528,14 +529,14 @@
     <include>
       <name>bling_5</name>
       <pose>
-      4.7701821938335005
-      0.23834736730520178
+      4.345918125121572
+      -0.18591670140672678
       0
       0
       0
       -0.7853981633974484
       </pose>
-      <uri>model://mars_rock_3</uri>
+      <uri>model://mars_rock_2</uri>
     </include>
 
 
@@ -573,14 +574,14 @@
     <include>
       <name>bling_6</name>
       <pose>
-      6.430468916059514
-      -4.055205008059516
+      3.2145472752230955
+      -4.550179754890098
       0
       0
       0
-      -2.3561944901923453
+      2.356194490192345
       </pose>
-      <uri>model://mars_crate</uri>
+      <uri>model://mars_rock_3</uri>
     </include>
 
 
@@ -588,12 +589,12 @@
     <include>
       <name>bling_7</name>
       <pose>
-      3.2145472752230955
-      -4.550179754890098
+      6.925443662890098
+      -4.550179754890099
       0
       0
       0
-      2.356194490192345
+      -2.3561944901923453
       </pose>
       <uri>model://mars_rock_3</uri>
     </include>

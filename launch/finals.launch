@@ -15,6 +15,9 @@
   <arg name="walk_test" default="false"/>
   <arg name="final_number" default="1"/>
   <arg name="world_name" value="$(find srcsim)/worlds/final_$(arg final_number).world"/>
+  <arg name="controller_manager_wait_time" default="7" />
+  <arg name="topic_creator_wait_time" default="5" />
+  <arg name="urdf_spawn_wait_time" default="9" />
 
   <include file="$(find val_gazebo)/launch/val_sim_gazebo_sync.launch" pass_all_args="false">
     <env name="GAZEBO_RESOURCE_PATH" value="$(find srcsim)/worlds"/>
@@ -27,6 +30,9 @@
     <arg name="verbose" value="$(arg verbose)" />
     <arg name="gui" value="$(arg gui)" />
     <arg name="world_name" value="$(arg world_name)" />
+    <arg name="controller_manager_wait_time" value="$(arg controller_manager_wait_time)" />
+    <arg name="topic_creator_wait_time" value="$(arg topic_creator_wait_time)" />
+    <arg name="urdf_spawn_wait_time" value="$(arg urdf_spawn_wait_time)" />
   </include>
 
   <include file="$(find ihmc_valkyrie_ros)/launch/valkyrie_ros_api.launch" pass_all_args="false">

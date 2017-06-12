@@ -2,9 +2,31 @@
 
 ### SRC Sim 0.X.X (2017-XX-XX)
 
+* Task 3 changes
+    * Task 3: Fix leak height
+        * [Pull request 88](https://bitbucket.org/osrf/srcsim/pull-requests/88)
+
+    * Task 3: Fix habitat entrance collision
+        * [Pull request 89](https://bitbucket.org/osrf/srcsim/pull-requests/89)
+
+    * Task 3: Fix habitat entrance collision
+        * [Pull request 89](https://bitbucket.org/osrf/srcsim/pull-requests/89)
+
+    * Task 3: Start detector plugin enabled to avoid race condition
+        * [Pull request 90](https://bitbucket.org/osrf/srcsim/pull-requests/90)
+
+    * Skip task 3 checkpoint 5
+        * [Pull request 94](https://bitbucket.org/osrf/srcsim/pull-requests/94)
+
 * Others
     * Use log filtering to decrease log size
         * [Pull request 80](https://bitbucket.org/osrf/srcsim/pull-requests/80)
+
+    * Require gazebo 7.8
+        * [Pull request 93](https://bitbucket.org/osrf/srcsim/pull-requests/93)
+
+    * Fix skipping before leaving the start box
+        * [Pull request 87](https://bitbucket.org/osrf/srcsim/pull-requests/87)
 
 ### SRC Sim 0.6.0 (2017-06-01)
 

@@ -93,6 +93,8 @@ void HarnessManager::NewGoal(const ignition::math::Pose3d &_pose)
 
   this->goalChanged = true;
   this->goal = _pose;
+
+  gzmsg << "[Harness] Received new goal [" << _pose << "]" << std::endl;
 }
 
 //////////////////////////////////////////////////
@@ -127,7 +129,9 @@ void HarnessManager::Update(const common::Time &_time)
   {
     gzmsg << "[Harness | " <<
         _time.FormattedString(common::Time::MINUTES, common::Time::MILLISECONDS)
-        << "] Attached ... ";
+        << "] Attached ... "
+        << " resetting joint positions ... ";
+    this->ResetJointPositions();
     this->TriggerLower();
     std::cout << "lowering" << std::endl;
     this->transition = LOWER_TO_STAND;
@@ -154,13 +158,62 @@ void HarnessManager::Update(const common::Time &_time)
   }
   else if (this->transition == DETACH_TO_NONE && this->IsDetached())
   {
-    gzmsg << "[Harness] Detached" << std::endl;
+    gzmsg << "[Harness | " <<
+        _time.FormattedString(common::Time::MINUTES, common::Time::MILLISECONDS)
+        << "] Detached!" << std::endl;
     this->transition = NONE;
   }
 
   srcsim::Harness msg;
   msg.status = this->transition;
   this->statusRosPub.publish(msg);
+}
+
+//////////////////////////////////////////////////
+void HarnessManager::ResetJointPositions()
+{
+  std::string prefix = this->model->GetScopedName() + "::";
+  std::map<std::string, double> jps;
+  jps.insert(std::make_pair(prefix + "leftHipYaw", -0.01));
+  jps.insert(std::make_pair(prefix + "leftHipRoll", -0.06));
+  jps.insert(std::make_pair(prefix + "leftHipPitch", -0.51));
+  jps.insert(std::make_pair(prefix + "leftKneePitch", 1.13));
+  jps.insert(std::make_pair(prefix + "leftAnklePitch", -0.61));
+  jps.insert(std::make_pair(prefix + "leftAnkleRoll", 0.0));
+  jps.insert(std::make_pair(prefix + "rightHipYaw", 0.01));
+  jps.insert(std::make_pair(prefix + "rightHipRoll", 0.05));
+  jps.insert(std::make_pair(prefix + "rightHipPitch", -0.51));
+  jps.insert(std::make_pair(prefix + "rightKneePitch", 1.13));
+  jps.insert(std::make_pair(prefix + "rightAnklePitch", -0.61));
+  jps.insert(std::make_pair(prefix + "rightAnkleRoll", 0.0));
+  // The pelvis is the root of the urdf,
+  // but the harness is attached to the torso
+  // Due to a limitation of Joint::SetPosition,
+  // it won't work properly to set the joints in between torso and pelvis
+  // but the legs should swing down and settle properly
+  // jps.insert(std::make_pair(prefix + "torsoYaw", 0.0));
+  // jps.insert(std::make_pair(prefix + "torsoPitch", 0.0));
+  // jps.insert(std::make_pair(prefix + "torsoRoll", 0.0));
+  jps.insert(std::make_pair(prefix + "leftShoulderPitch", 0.07));
+  jps.insert(std::make_pair(prefix + "leftShoulderRoll", -1.45));
+  jps.insert(std::make_pair(prefix + "leftShoulderYaw", 0.07));
+  jps.insert(std::make_pair(prefix + "leftElbowPitch", -1.03));
+  jps.insert(std::make_pair(prefix + "leftForearmYaw", 0.39));
+  jps.insert(std::make_pair(prefix + "leftWristRoll", 0.0));
+  jps.insert(std::make_pair(prefix + "leftWristPitch", 0.0));
+  jps.insert(std::make_pair(prefix + "lowerNeckPitch", 0.0));
+  jps.insert(std::make_pair(prefix + "neckYaw", 0.0));
+  jps.insert(std::make_pair(prefix + "upperNeckPitch", 0.0));
+  jps.insert(std::make_pair(prefix + "hokuyo_joint", 0.0));
+  jps.insert(std::make_pair(prefix + "rightShoulderPitch", 0.10));
+  jps.insert(std::make_pair(prefix + "rightShoulderRoll", 1.42));
+  jps.insert(std::make_pair(prefix + "rightShoulderYaw", 0.08));
+  jps.insert(std::make_pair(prefix + "rightElbowPitch", 1.06));
+  jps.insert(std::make_pair(prefix + "rightForearmYaw", 0.39));
+  jps.insert(std::make_pair(prefix + "rightWristRoll", 0.0));
+  jps.insert(std::make_pair(prefix + "rightWristPitch", 0.0));
+  this->model->SetJointPositions(jps);
+  this->model->ResetPhysicsStates();
 }
 
 //////////////////////////////////////////////////
