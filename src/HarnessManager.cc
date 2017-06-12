@@ -212,7 +212,8 @@ void HarnessManager::ResetJointPositions()
   jps.insert(std::make_pair(prefix + "rightForearmYaw", 0.39));
   jps.insert(std::make_pair(prefix + "rightWristRoll", 0.0));
   jps.insert(std::make_pair(prefix + "rightWristPitch", 0.0));
-  model->SetJointPositions(jps);
+  this->model->SetJointPositions(jps);
+  this->model->ResetPhysicsStates();
 }
 
 //////////////////////////////////////////////////
