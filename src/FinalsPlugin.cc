@@ -54,7 +54,7 @@ void FinalsPlugin::Load(physics::WorldPtr _world, sdf::ElementPtr _sdf)
   if (_sdf->HasElement("sor_lcp_tolerance"))
   {
     double sor_lcp_tolerance = _sdf->Get<double>("sor_lcp_tolerance");
-    auto physics = world->GetPhysicsEngine();
+    auto physics = this->world->GetPhysicsEngine();
     physics->SetParam("sor_lcp_tolerance", sor_lcp_tolerance);
   }
 
