@@ -36,6 +36,9 @@ ignition::math::Pose3d detectorOnTable;
 // Pose of the patch tool on the table
 ignition::math::Pose3d patchToolOnTable;
 
+// Leak model name
+std::string leakModelName;
+
 /////////////////////////////////////////////////
 // Teleport detector to table
 void toolsToTable()
@@ -140,6 +143,17 @@ Task3::Task3(const sdf::ElementPtr &_sdf) : Task(_sdf)
     {
       patchToolOnTable =
           _sdf->Get<ignition::math::Pose3d>("patch_tool_on_table");
+    }
+
+    if (_sdf->HasElement("leak_model_name"))
+    {
+      leakModelName = _sdf->Get<std::string>("leak_model_name");
+    }
+    else
+    {
+      gzerr << "Missing <leak_model_name>, task won't be initialized."
+            << std::endl;
+      return;
     }
   }
 
@@ -371,13 +385,13 @@ void Task3CP5::PublishLeakPose()
   }
 
   // Wait for the leak model to appear
-  for (int i = 0; i < 50 && !world->GetModel("leak"); ++i)
+  for (int i = 0; i < 50 && !world->GetModel(leakModelName); ++i)
   {
     gazebo::common::Time::MSleep(500);
   }
 
   // Make sure it exists.
-  if (!world->GetModel("leak"))
+  if (!world->GetModel(leakModelName))
   {
     gzerr << "Missing leak model\n";
     return;
@@ -393,7 +407,7 @@ void Task3CP5::PublishLeakPose()
       "/task3/checkpoint5/leak_pose", 1000);
 
   auto pelvis = world->GetModel("valkyrie")->GetLink("pelvis");
-  auto leak = world->GetModel("leak");
+  auto leak = world->GetModel(leakModelName);
 
   // Keep publising the pose of the leak model in the pelvis frame
   while (!this->stopLeakPosePub)
@@ -429,7 +443,7 @@ void Task3CP5::OnCameraGzMsg(ConstLogicalCameraImagePtr &_msg)
 
   for (const auto &model : _msg->model())
   {
-    if (model.name() != "leak")
+    if (model.name() != leakModelName)
       continue;
 
     leakPos = msgs::ConvertIgn(model.pose().position());
@@ -520,6 +534,16 @@ bool Task3CP7::Check()
     {
       gzerr << "Failed to get joint [" << this->buttonJoint << "]"
             << std::endl;
+      return false;
+    }
+
+    if (!leakModelName.empty())
+    {
+      this->leak = leakModelName + "::base::collision";
+    }
+    else
+    {
+      gzerr << "Missing leakModelName, can't patch leak!" << std::endl;
       return false;
     }
   }
