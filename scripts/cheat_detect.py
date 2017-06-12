@@ -31,26 +31,32 @@ class CheatDetectNode(object):
 
         self.pubs = list()
         self.subs = list()
+        self.pub_counts = []
+        self.sub_counts = []
         for name, message_type in cheat_pubs.items():
             pub_info = {"name": name, "pub": None, }
             pub_info["pub"] = rospy.Publisher(name, message_type, queue_size=1)
             self.pubs.append(pub_info)
+            self.pub_counts.append(0)
         for name, message_type in cheat_subs.items():
             sub_info = {"name": name, "sub": None}
             sub_info["sub"] = rospy.Subscriber(name, message_type, self._callback)
             self.subs.append(sub_info)
+            self.sub_counts.append(0)
 
     def _callback(self, msg):
         rospy.logerr("Cheat detected (received message): %s", msg)
 
     def wait_for_cheaters(self):
         while not rospy.is_shutdown():
-            for pub in self.pubs:
-                if pub["pub"].get_num_connections() != 0:
+            for idx, pub in enumerate(self.pubs):
+                if pub["pub"].get_num_connections() != self.pub_counts[idx]:
                     rospy.logerr("Cheat detected (something subscribed) %r", pub["pub"].impl.get_stats())
-            for sub in self.subs:
-                if sub["sub"].get_num_connections() != 0:
+                    self.pub_counts[idx] = pub["pub"].get_num_connections()
+            for idx, sub in enumerate(self.subs):
+                if sub["sub"].get_num_connections() != self.sub_counts[idx]:
                     rospy.logerr("Cheat detected (something published) %r", sub["sub"].impl.get_stats())
+                    self.sub_counts[idx] = sub["sub"].get_num_connections()
             rospy.sleep(0.1)
 
 
