@@ -22,8 +22,6 @@ class CheatDetectNode(object):
                 "/gazebo/model_states": ModelStates,
                 "/gazebo/parameter_descriptions": ConfigDescription,
                 "/gazebo/parameter_updates": Config,
-                "/srcsim/finals/force_checkpoint_completion": Empty,
-                "/valkyrie/harness/attach": Pose,
         }
 
         cheat_subs = {
@@ -31,6 +29,8 @@ class CheatDetectNode(object):
                 "/valkyrie/harness/detach": Bool,
                 "/valkyrie/harness/velocity": Float32,
                 "/gazebo/set_model_state": ModelState,
+                "/valkyrie/harness/attach": Pose,
+                "/srcsim/finals/force_checkpoint_completion": Empty,
         }
 
         self.pubs = list()
