@@ -26,7 +26,6 @@ class CheatDetectNode(object):
 
         cheat_subs = {
                 "/gazebo/set_link_state": LinkState,
-                "/valkyrie/harness/detach": Bool,
                 "/valkyrie/harness/velocity": Float32,
                 "/gazebo/set_model_state": ModelState,
                 "/valkyrie/harness/attach": Pose,
