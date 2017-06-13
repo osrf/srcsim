@@ -10,6 +10,8 @@ from dynamic_reconfigure.msg import Config
 from dynamic_reconfigure.msg import ConfigDescription
 from std_msgs.msg import Float32
 from std_msgs.msg import Bool
+from std_msgs.msg import Empty
+from geometry_msgs.msg import Pose
 
 
 class CheatDetectNode(object):
@@ -20,6 +22,8 @@ class CheatDetectNode(object):
                 "/gazebo/model_states": ModelStates,
                 "/gazebo/parameter_descriptions": ConfigDescription,
                 "/gazebo/parameter_updates": Config,
+                "/srcsim/finals/force_checkpoint_completion": Empty,
+                "/valkyrie/harness/attach": Pose,
         }
 
         cheat_subs = {
