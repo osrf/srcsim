@@ -1,6 +1,33 @@
 ## SRC Sim
 
-### SRC Sim 0.X.X (2017-XX-XX)
+### SRC Sim 0.8.0 (2017-06-12)
+
+* Cheat detect
+    * [Pull request 103](https://bitbucket.org/osrf/srcsim/pull-requests/103)
+
+* Non-overlapping habitat floor collisions
+    * [Pull request 100](https://bitbucket.org/osrf/srcsim/pull-requests/100)
+
+* set solver tolerance to 0.1 for all worlds
+    * [Pull request 91](https://bitbucket.org/osrf/srcsim/pull-requests/91)
+
+* Reset joint positions after harnessing (all except the torso joints)
+    * [Pull request 99](https://bitbucket.org/osrf/srcsim/pull-requests/99)
+
+* Leak name variable
+    * [Pull request 102](https://bitbucket.org/osrf/srcsim/pull-requests/102)
+
+* Update launch wait times
+    * [Pull request 101](https://bitbucket.org/osrf/srcsim/pull-requests/101)
+
+* Polyline collision for 45 degrees walkway
+    * [Pull request 97](https://bitbucket.org/osrf/srcsim/pull-requests/97)
+
+* add exec_depend on joint_state_publisher for multisense hack
+    * [Pull request 96](https://bitbucket.org/osrf/srcsim/pull-requests/96)
+
+
+### SRC Sim 0.7.0 (2017-06-07)
 
 * Task 3 changes
     * Task 3: Fix leak height
