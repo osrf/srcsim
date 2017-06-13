@@ -54,4 +54,5 @@
   <!-- Launch image processing and robot_state_publisher for multisense camera -->
   <include file="$(find srcsim)/launch/multisense.launch" />
 
+  <node pkg="srcsim" name="cheat_detector" type="cheat_detect.py" output="screen"/>
 </launch>
