@@ -4,8 +4,8 @@
   # Requires the following global variables:
   # $habitat_frame
 
-  # Print surface params
-  def printSurface()
+  # Print manipulation surface params
+  def printManipSurface()
     "      <surface>\n"\
     "        <friction>\n"\
     "          <ode>\n"\
@@ -19,6 +19,20 @@
     "            <kd>100.0</kd>\n"\
     "            <max_vel>0.01</max_vel>\n"\
     "            <min_depth>0.001</min_depth>\n"\
+    "          </ode>\n"\
+    "        </contact>\n"\
+    "      </surface>\n"\
+  end
+
+  # Print walk surface params
+  def printWalkSurface()
+    "      <surface>\n"\
+    "        <contact>\n"\
+    "          <ode>\n"\
+    "            <kp>1e+06</kp>\n"\
+    "            <kd>100.0</kd>\n"\
+    "            <max_vel>1</max_vel>\n"\
+    "            <min_depth>0</min_depth>\n"\
     "          </ode>\n"\
     "        </contact>\n"\
     "      </surface>\n"\
@@ -82,6 +96,7 @@
           <size><%= size_x %> <%= size_y %> <%= size_z %> </size>
         </box>
       </geometry>
+<%=   printWalkSurface %>
     </collision>
 
     <% end %>
@@ -90,9 +105,9 @@
 
     <%
       size_x = 20.00
-      size_y = 8.00
+      size_y = 10.00
       pos_x = 2.00
-      pos_y = 0.155
+      pos_y = 1.155
       pos_z = pos_z + 0.1804
     %>
 
@@ -103,12 +118,14 @@
           <size><%= size_x %> <%= size_y %> <%= size_z %> </size>
         </box>
       </geometry>
+<%=   printWalkSurface %>
     </collision>
 
     <%
       pos_x = 0.00
+      pos_y = -4.845
       size_x = 8.00
-      size_y = 12.00
+      size_y = 2.00
     %>
 
     <collision name="floor_2">
@@ -118,6 +135,7 @@
           <size><%= size_x %> <%= size_y %> <%= size_z %> </size>
         </box>
       </geometry>
+<%=   printWalkSurface %>
     </collision>
 
     <!-- Rail collisions -->
@@ -1783,7 +1801,7 @@
           <radius>0.038</radius>
         </cylinder>
       </geometry>
-<%=   printSurface %>
+<%=   printManipSurface %>
     </collision>
 
 <%
@@ -1810,7 +1828,7 @@
           <radius><%= circle_radius %></radius>
         </cylinder>
       </geometry>
-<%=   printSurface %>
+<%=   printManipSurface %>
     </collision>
 
 <%
@@ -1838,7 +1856,7 @@
           <size><%= cross_size_x %> <%= cross_size_y %> <%= cross_size_z %></size>
         </box>
       </geometry>
-<%=   printSurface %>
+<%=   printManipSurface %>
     </collision>
 
 <%
